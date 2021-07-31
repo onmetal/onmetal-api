@@ -1,5 +1,5 @@
 /*
- * Copyright 2021.
+ * Copyright (c) 2021 by the OnMetal authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,16 @@ type RegionAvailability struct {
 	Region string `json:"region"`
 	// Zones is a list of zones in this region
 	Zones []ZoneAvailability `json:"availabilityZone"`
+}
+
+//+kubebuilder:object:generate=true
+
+// Location describes the location of a resource
+type Location struct {
+	// Region defines the region of a resource
+	Region string `json:"region"`
+	// AvailabilityZone is the availability zone of a resource
+	AvailabilityZone string `json:"availabilityZone"`
 }
 
 //+kubebuilder:object:generate=true

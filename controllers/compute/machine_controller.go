@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package network
+package compute
 
 import (
 	"context"
@@ -24,29 +24,29 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	networkv1alpha1 "github.com/onmetal/onmetal-api/apis/network/v1alpha1"
+	computev1alpha1 "github.com/onmetal/onmetal-api/apis/compute/v1alpha1"
 )
 
-// ReservedIPReconciler reconciles a ReservedIP object
-type ReservedIPReconciler struct {
+// MachineReconciler reconciles a Machine object
+type MachineReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups=network.onmetal.de,resources=reservedips,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=network.onmetal.de,resources=reservedips/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=network.onmetal.de,resources=reservedips/finalizers,verbs=update
+//+kubebuilder:rbac:groups=compute.onmetal.de,resources=machines,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=compute.onmetal.de,resources=machines/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=compute.onmetal.de,resources=machines/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
 // TODO(user): Modify the Reconcile function to compare the state specified by
-// the ReservedIP object against the actual cluster state, and then
+// the Machine object against the actual cluster state, and then
 // perform operations to make the cluster state reflect the state specified by
 // the user.
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
-func (r *ReservedIPReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *MachineReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
 	// your logic here
@@ -55,8 +55,8 @@ func (r *ReservedIPReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *ReservedIPReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *MachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&networkv1alpha1.ReservedIP{}).
+		For(&computev1alpha1.Machine{}).
 		Complete(r)
 }
