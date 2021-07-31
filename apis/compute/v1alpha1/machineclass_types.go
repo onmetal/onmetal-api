@@ -18,11 +18,15 @@ package v1alpha1
 
 import (
 	common "github.com/onmetal/onmetal-api/apis/common/v1alpha1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // MachineClassSpec defines the desired state of MachineClass
 type MachineClassSpec struct {
+	// Description is a short description of size constraint set
+	// +kubebuilder:validation:Optional
+	Description string `json:"description,omitempty"`
 	// Capabilities describes the features of the MachineClass
 	Capabilities []Capability `json:"capabilities"`
 }
@@ -36,11 +40,47 @@ type Capability struct {
 	// Value is the effective value of the capability
 	Value string `json:"value"`
 }
+type ConstraintValSpec struct {
+	Literal *string            `json:"-"`
+	Numeric *resource.Quantity `json:"-"`
+}
+
+type AggregateType string
+
+type ConstraintSpec struct {
+	// Path is a path to the struct field constraint will be applied to
+	// +kubebuilder:validation:Optional
+	Path string `json:"path,omitempty"`
+	// Aggregate defines whether collection values should be aggregated
+	// for constraint checks, in case if path defines selector for collection
+	// +kubebuilder:validation:Optional
+	// +kubebuilder:validation:Enum=avg;sum
+	Aggregate AggregateType `json:"agg,omitempty"`
+	// Equal contains an exact expected value
+	// +kubebuilder:validation:Optional
+	Equal *ConstraintValSpec `json:"eq,omitempty"`
+	// NotEqual contains an exact not expected value
+	// +kubebuilder:validation:Optional
+	NotEqual *ConstraintValSpec `json:"neq,omitempty"`
+	// LessThan contains an highest expected value, exclusive
+	// +kubebuilder:validation:Optional
+	LessThan *resource.Quantity `json:"lt,omitempty"`
+	// LessThan contains an highest expected value, inclusive
+	// +kubebuilder:validation:Optional
+	LessThanOrEqual *resource.Quantity `json:"lte,omitempty"`
+	// LessThan contains an lowest expected value, exclusive
+	// +kubebuilder:validation:Optional
+	GreaterThan *resource.Quantity `json:"gt,omitempty"`
+	// GreaterThanOrEqual contains an lowest expected value, inclusive
+	// +kubebuilder:validation:Optional
+	GreaterThanOrEqual *resource.Quantity `json:"gte,omitempty"`
+}
 
 // MachineClassStatus defines the observed state of MachineClass
 type MachineClassStatus struct {
 	// Availability describes the regions and zones where this MachineClass is available
 	Availability common.Availability `json:"availability,omitempty"`
+	Constraints  []ConstraintSpec    `json:"constraints,omitempty"`
 }
 
 //+kubebuilder:object:root=true
