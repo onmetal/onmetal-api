@@ -86,6 +86,9 @@ func (r *Reconciler) Reconcile(ctx context.Context, request reconcile.Request) (
 	r.setupOnce.Do(func() { r.setup(ctx) })
 	obj := reflect.New(r.objType).Interface().(client.Object)
 	r.client.Get(ctx, client.ObjectKey{Namespace: request.Namespace, Name: request.Name}, obj)
-	r.cache.ReplaceObject(obj)
+	_, oids := r.cache.ReplaceObject(obj)
+	for id := range oids {
+		r.cache.trigger.Trigger(id)
+	}
 	return ctrl.Result{}, nil
 }

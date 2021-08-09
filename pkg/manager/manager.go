@@ -23,6 +23,7 @@ import (
 
 type Manager struct {
 	manager.Manager
+	triggers   ReconcilationTrigger
 	ownerCache *OwnerCache
 }
 
@@ -31,10 +32,12 @@ func NewManager(config *rest.Config, options manager.Options) (*Manager, error) 
 	if err != nil {
 		return nil, err
 	}
-	oc := NewOwnerCache(mgr)
+	trig := NewReconcilationTrigger()
+	oc := NewOwnerCache(mgr, trig)
 	return &Manager{
 		Manager:    mgr,
 		ownerCache: oc,
+		triggers:   trig,
 	}, nil
 }
 
