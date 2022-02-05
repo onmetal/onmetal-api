@@ -18,13 +18,16 @@ package storage
 
 import (
 	"context"
-
+	"github.com/go-logr/logr"
+	storagev1alpha1 "github.com/onmetal/onmetal-api/apis/storage/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/log"
+)
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/apis/storage/v1alpha1"
+const (
+	volumeOwnerLabel = "storage.onmetal.de/volume-owner"
+	volumeFieldOwner = client.FieldOwner("storage.onmetal.de/volume")
 )
 
 // VolumeReconciler reconciles a Volume object
@@ -37,21 +40,14 @@ type VolumeReconciler struct {
 //+kubebuilder:rbac:groups=storage.onmetal.de,resources=volumes/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=storage.onmetal.de,resources=volumes/finalizers,verbs=update
 
-// Reconcile is part of the main kubernetes reconciliation loop which aims to
-// move the current state of the cluster closer to the desired state.
-// TODO(user): Modify the Reconcile function to compare the state specified by
-// the Volume object against the actual cluster state, and then
-// perform operations to make the cluster state reflect the state specified by
-// the user.
-//
-// For more details, check Reconcile and its Result here:
-// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
+// Reconcile is part of the main reconciliation loop for Volume types
 func (r *VolumeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
-
-	// your logic here
-
-	return ctrl.Result{}, nil
+	log := ctrl.LoggerFrom(ctx)
+	volume := &storagev1alpha1.Volume{}
+	if err := r.Get(ctx, req.NamespacedName, volume); err != nil {
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+	return r.reconcileExists(ctx, log, volume)
 }
 
 // SetupWithManager sets up the controller with the Manager.
@@ -59,4 +55,19 @@ func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&storagev1alpha1.Volume{}).
 		Complete(r)
+}
+
+func (r *VolumeReconciler) reconcileExists(ctx context.Context, log logr.Logger, volume *storagev1alpha1.Volume) (ctrl.Result, error) {
+	if !volume.DeletionTimestamp.IsZero() {
+		return r.delete(ctx, log, volume)
+	}
+	return r.reconcile(ctx, log, volume)
+}
+
+func (r *VolumeReconciler) delete(ctx context.Context, log logr.Logger, volume *storagev1alpha1.Volume) (ctrl.Result, error) {
+	return ctrl.Result{}, nil
+}
+
+func (r *VolumeReconciler) reconcile(ctx context.Context, log logr.Logger, volume *storagev1alpha1.Volume) (ctrl.Result, error) {
+	return ctrl.Result{}, nil
 }

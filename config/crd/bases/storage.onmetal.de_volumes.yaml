@@ -26,7 +26,7 @@ spec:
     - jsonPath: .spec.storagePool.name
       name: StoragePool
       type: string
-    - jsonPath: .spec.storageClass.name
+    - jsonPath: .spec.storageClassRef.name
       name: StorageClass
       type: string
     name: v1alpha1
@@ -49,6 +49,22 @@ spec:
           spec:
             description: VolumeSpec defines the desired state of Volume
             properties:
+              claimRef:
+                description: ClaimRef is the reference to the VolumeClaim used by
+                  the Volume.
+                properties:
+                  name:
+                    type: string
+                  uid:
+                    description: UID is a type that holds unique ID values, including
+                      UUIDs.  Because we don't ONLY use UUIDs, this is an alias to
+                      string.  Being a type captures intent and helps make sure that
+                      UIDs and names do not get conflated.
+                    type: string
+                required:
+                - name
+                - uid
+                type: object
               resources:
                 additionalProperties:
                   anyOf:
@@ -59,8 +75,8 @@ spec:
                 description: Resources is a description of the volume's resources
                   and capacity.
                 type: object
-              storageClass:
-                description: StorageClass is the storage class of a volume
+              storageClassRef:
+                description: StorageClassRef is the storage class of a volume
                 properties:
                   name:
                     description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
@@ -121,7 +137,7 @@ spec:
                   type: object
                 type: array
             required:
-            - storageClass
+            - storageClassRef
             - storagePool
             type: object
           status:
@@ -167,8 +183,16 @@ spec:
                   - type
                   type: object
                 type: array
+              phase:
+                description: Phase represents the VolumeClaim binding phase of a Volume.
+                enum:
+                - VolumePending
+                - VolumeAvailable
+                - VolumeBound
+                - VolumeFailed
+                type: string
               state:
-                description: VolumeState is a possible state a volume can be in.
+                description: State represents the infrastructure state of a Volume.
                 type: string
             type: object
         type: object

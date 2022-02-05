@@ -17,22 +17,33 @@
 package v1alpha1
 
 import (
-	v1 "k8s.io/api/core/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 )
+
+// VolumeClaimGK is a helper to easily access the GroupKind information of an VolumeClaim
+var VolumeClaimGK = schema.GroupKind{
+	Group: GroupVersion.Group,
+	Kind:  "VolumeClaim",
+}
 
 // VolumeClaimSpec defines the desired state of VolumeClaim
 type VolumeClaimSpec struct {
 	// VolumeRef is the reference to the Volume used by the VolumeClaim
-	VolumeRef v1.LocalObjectReference `json:"volumeRef,omitempty"`
+	VolumeRef corev1.LocalObjectReference `json:"volumeRef,omitempty"`
 	// Selector is a label query over volumes to consider for binding.
-	Selector metav1.LabelSelector `json:"selector,omitempty"`
+	Selector *metav1.LabelSelector `json:"selector,omitempty"`
+	// Resources are the requested Volume resources.
+	Resources corev1.ResourceList `json:"resources"`
+	// StorageClassRef references the StorageClass used by the Volume.
+	StorageClassRef corev1.LocalObjectReference `json:"storageClassRef"`
 }
 
 // VolumeClaimStatus defines the observed state of VolumeClaim
 type VolumeClaimStatus struct {
-	// VolumeClaimPhase represents the state a VolumeClaim can be in.
-	Phase VolumeClaimPhase `json:"phase,omitempty"`
+	// Phase represents the state a VolumeClaim can be in.
+	Phase VolumeClaimPhase `json:"state,omitempty"`
 }
 
 // VolumeClaimPhase represents the state a VolumeClaim can be in.
@@ -51,7 +62,7 @@ const (
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 //+kubebuilder:printcolumn:name="ReferencedVolume",type=string,JSONPath=`.spec.volumeRef.name`
-//+kubebuilder:printcolumn:name="Phase",type=string,JSONPath=`.status.phase`
+//+kubebuilder:printcolumn:name="Phase",type=string,JSONPath=`.status.state`
 //+kubebuilder:printcolumn:name="Age",type=date,JSONPath=`.metadata.creationTimestamp`
 
 // VolumeClaim is the Schema for the volumeclaims API

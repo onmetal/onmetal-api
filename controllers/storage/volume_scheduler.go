@@ -85,7 +85,7 @@ func (s *VolumeScheduler) schedule(ctx context.Context, log logr.Logger, volume 
 
 	list := &storagev1alpha1.StoragePoolList{}
 	if err := s.List(ctx, list,
-		client.MatchingFields{storagePoolStatusAvailableStorageClassesNameField: volume.Spec.StorageClass.Name},
+		client.MatchingFields{storagePoolStatusAvailableStorageClassesNameField: volume.Spec.StorageClassRef.Name},
 		client.MatchingLabels(volume.Spec.StoragePoolSelector),
 	); err != nil {
 		return ctrl.Result{}, fmt.Errorf("error listing storage pools: %w", err)
@@ -98,8 +98,8 @@ func (s *VolumeScheduler) schedule(ctx context.Context, log logr.Logger, volume 
 		}
 	}
 	if len(available) == 0 {
-		log.Info("No storage pool available for storage class", "StorageClass", volume.Spec.StorageClass.Name)
-		s.Events.Eventf(volume, corev1.EventTypeNormal, "CannotSchedule", "No StoragePool found for StorageClass %s", volume.Spec.StorageClass.Name)
+		log.Info("No storage pool available for storage class", "StorageClass", volume.Spec.StorageClassRef.Name)
+		s.Events.Eventf(volume, corev1.EventTypeNormal, "CannotSchedule", "No StoragePool found for StorageClass %s", volume.Spec.StorageClassRef.Name)
 		return ctrl.Result{}, nil
 	}
 
@@ -148,7 +148,7 @@ func (s *VolumeScheduler) enqueueMatchingUnscheduledVolumes(ctx context.Context,
 
 	for _, volume := range list.Items {
 		storagePoolSelector := labels.SelectorFromSet(volume.Spec.StoragePoolSelector)
-		if availableClassNames.Has(volume.Spec.StorageClass.Name) && storagePoolSelector.Matches(labels.Set(pool.Labels)) {
+		if availableClassNames.Has(volume.Spec.StorageClassRef.Name) && storagePoolSelector.Matches(labels.Set(pool.Labels)) {
 			queue.Add(ctrl.Request{NamespacedName: client.ObjectKeyFromObject(&volume)})
 		}
 	}
