@@ -25,11 +25,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-const (
-	volumeOwnerLabel = "storage.onmetal.de/volume-owner"
-	volumeFieldOwner = client.FieldOwner("storage.onmetal.de/volume")
-)
-
 // VolumeReconciler reconciles a Volume object
 type VolumeReconciler struct {
 	client.Client

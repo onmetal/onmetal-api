@@ -30,23 +30,17 @@ import (
 var _ = Describe("VolumeClaimScheduler", func() {
 	ns := SetupTest(ctx)
 
-	It("Should claim a volume matching the volumeclaim resource requirements", func() {
-		By("creating a storage pool")
-		storagePool := &storagev1alpha1.StoragePool{
+	var storagePool *storagev1alpha1.StoragePool
+	var volume *storagev1alpha1.Volume
+	var volumeClaim *storagev1alpha1.VolumeClaim
+
+	BeforeEach(func() {
+		storagePool = &storagev1alpha1.StoragePool{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-pool-",
 			},
 		}
-		Expect(k8sClient.Create(ctx, storagePool)).To(Succeed(), "failed to create storage pool")
-
-		By("patching the storage pool status to contain a storage class")
-		storagePoolBase := storagePool.DeepCopy()
-		storagePool.Status.AvailableStorageClasses = []corev1.LocalObjectReference{{Name: "my-volumeclass"}}
-		Expect(k8sClient.Status().Patch(ctx, storagePool, client.MergeFrom(storagePoolBase))).
-			To(Succeed(), "failed to patch storage pool status")
-
-		By("creating a volume w/ with a set of resources")
-		volume := &storagev1alpha1.Volume{
+		volume = &storagev1alpha1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "test-volume-",
@@ -60,16 +54,7 @@ var _ = Describe("VolumeClaimScheduler", func() {
 				},
 			},
 		}
-		Expect(k8sClient.Create(ctx, volume)).To(Succeed(), "failed to create volume")
-
-		By("patching the volume status to available")
-		volumeBase := volume.DeepCopy()
-		volume.Status.State = storagev1alpha1.VolumeStateAvailable
-		Expect(k8sClient.Status().Patch(ctx, volume, client.MergeFrom(volumeBase))).
-			To(Succeed(), "failed to patch volume status")
-
-		By("creating a volumeclaim which should claim the matching volume")
-		claim := &storagev1alpha1.VolumeClaim{
+		volumeClaim = &storagev1alpha1.VolumeClaim{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "test-volume-claim-",
@@ -84,31 +69,48 @@ var _ = Describe("VolumeClaimScheduler", func() {
 				},
 			},
 		}
-		Expect(k8sClient.Create(ctx, claim)).To(Succeed(), "failed to create volumeclaim")
+	})
+
+	It("Should claim a volume matching the volumeclaim resource requirements", func() {
+		By("creating a storage pool")
+		Expect(k8sClient.Create(ctx, storagePool)).To(Succeed(), "failed to create storage pool")
+
+		By("patching the storage pool status to contain a storage class")
+		storagePoolBase := storagePool.DeepCopy()
+		storagePool.Status.AvailableStorageClasses = []corev1.LocalObjectReference{{Name: "my-volumeclass"}}
+		Expect(k8sClient.Status().Patch(ctx, storagePool, client.MergeFrom(storagePoolBase))).
+			To(Succeed(), "failed to patch storage pool status")
+
+		By("creating a volume w/ a set of resources")
+		Expect(k8sClient.Create(ctx, volume)).To(Succeed(), "failed to create volume")
+
+		By("patching the volume status to available")
+		volumeBase := volume.DeepCopy()
+		volume.Status.State = storagev1alpha1.VolumeStateAvailable
+		Expect(k8sClient.Status().Patch(ctx, volume, client.MergeFrom(volumeBase))).
+			To(Succeed(), "failed to patch volume status")
+
+		By("creating a volumeclaim which should claim the matching volume")
+		Expect(k8sClient.Create(ctx, volumeClaim)).To(Succeed(), "failed to create volumeclaim")
 
 		By("waiting for the volume to reference the claim")
 		volumeKey := client.ObjectKeyFromObject(volume)
 		Eventually(func(g Gomega) {
 			Expect(k8sClient.Get(ctx, volumeKey, volume)).To(Succeed(), "failed to get volume")
-			g.Expect(volume.Spec.ClaimRef.Name).To(Equal(claim.Name))
-			g.Expect(volume.Spec.ClaimRef.UID).To(Equal(claim.UID))
+			g.Expect(volume.Spec.ClaimRef.Name).To(Equal(volumeClaim.Name))
+			g.Expect(volume.Spec.ClaimRef.UID).To(Equal(volumeClaim.UID))
 		}, timeout, interval).Should(Succeed())
 
 		By("waiting for the volumeclaim to reference the volume")
-		claimKey := client.ObjectKeyFromObject(claim)
+		claimKey := client.ObjectKeyFromObject(volumeClaim)
 		Eventually(func(g Gomega) {
-			Expect(k8sClient.Get(ctx, claimKey, claim)).To(Succeed(), "failed to get volumeclaim")
-			g.Expect(claim.Spec.VolumeRef.Name).To(Equal(volume.Name))
+			Expect(k8sClient.Get(ctx, claimKey, volumeClaim)).To(Succeed(), "failed to get volumeclaim")
+			g.Expect(volumeClaim.Spec.VolumeRef.Name).To(Equal(volume.Name))
 		}, timeout, interval).Should(Succeed())
 	})
 
 	It("Should not claim a volume if volumeclaim with matching resource requirements is found", func() {
 		By("creating a storage pool")
-		storagePool := &storagev1alpha1.StoragePool{
-			ObjectMeta: metav1.ObjectMeta{
-				GenerateName: "test-pool-",
-			},
-		}
 		Expect(k8sClient.Create(ctx, storagePool)).To(Succeed(), "failed to create storage pool")
 
 		By("patching the storage pool status to contain a storage class")
@@ -117,20 +119,9 @@ var _ = Describe("VolumeClaimScheduler", func() {
 		Expect(k8sClient.Status().Patch(ctx, storagePool, client.MergeFrom(storagePoolBase))).
 			To(Succeed(), "failed to patch storage pool status")
 
-		By("creating a volume w/ with a set of resources")
-		volume := &storagev1alpha1.Volume{
-			ObjectMeta: metav1.ObjectMeta{
-				Namespace:    ns.Name,
-				GenerateName: "test-volume-",
-			},
-			Spec: storagev1alpha1.VolumeSpec{
-				Resources: map[corev1.ResourceName]resource.Quantity{
-					"storage": resource.MustParse("10Gi"),
-				},
-				StorageClassRef: corev1.LocalObjectReference{
-					Name: "my-volumeclass",
-				},
-			},
+		By("creating a volume w/ a set of resources")
+		volume.Spec.Resources = map[corev1.ResourceName]resource.Quantity{
+			"storage": resource.MustParse("10Gi"),
 		}
 		Expect(k8sClient.Create(ctx, volume)).To(Succeed(), "failed to create volume")
 
@@ -141,22 +132,7 @@ var _ = Describe("VolumeClaimScheduler", func() {
 			To(Succeed(), "failed to patch volume status")
 
 		By("creating a volumeclaim which should claim the matching volume")
-		claim := &storagev1alpha1.VolumeClaim{
-			ObjectMeta: metav1.ObjectMeta{
-				Namespace:    ns.Name,
-				GenerateName: "test-volume-claim-",
-			},
-			Spec: storagev1alpha1.VolumeClaimSpec{
-				Resources: map[corev1.ResourceName]resource.Quantity{
-					"storage": resource.MustParse("100Gi"),
-				},
-				Selector: &metav1.LabelSelector{},
-				StorageClassRef: corev1.LocalObjectReference{
-					Name: "my-volumeclass",
-				},
-			},
-		}
-		Expect(k8sClient.Create(ctx, claim)).To(Succeed(), "failed to create volumeclaim")
+		Expect(k8sClient.Create(ctx, volumeClaim)).To(Succeed(), "failed to create volumeclaim")
 
 		By("waiting for the volume to reference the claim")
 		volumeKey := client.ObjectKeyFromObject(volume)
@@ -167,20 +143,15 @@ var _ = Describe("VolumeClaimScheduler", func() {
 		}, timeout, interval).Should(Succeed())
 
 		By("waiting for the volumeclaim to reference the volume")
-		claimKey := client.ObjectKeyFromObject(claim)
+		claimKey := client.ObjectKeyFromObject(volumeClaim)
 		Eventually(func(g Gomega) {
-			Expect(k8sClient.Get(ctx, claimKey, claim)).To(Succeed(), "failed to get volumeclaim")
-			g.Expect(claim.Spec.VolumeRef.Name).To(Equal(""))
+			Expect(k8sClient.Get(ctx, claimKey, volumeClaim)).To(Succeed(), "failed to get volumeclaim")
+			g.Expect(volumeClaim.Spec.VolumeRef.Name).To(Equal(""))
 		}, timeout, interval).Should(Succeed())
 	})
 
-	It("Should not claim a volume if volumeclaim if the volume status is not available", func() {
+	It("Should not claim a volume if the volume status is not set to available", func() {
 		By("creating a storage pool")
-		storagePool := &storagev1alpha1.StoragePool{
-			ObjectMeta: metav1.ObjectMeta{
-				GenerateName: "test-pool-",
-			},
-		}
 		Expect(k8sClient.Create(ctx, storagePool)).To(Succeed(), "failed to create storage pool")
 
 		By("patching the storage pool status to contain a storage class")
@@ -189,40 +160,17 @@ var _ = Describe("VolumeClaimScheduler", func() {
 		Expect(k8sClient.Status().Patch(ctx, storagePool, client.MergeFrom(storagePoolBase))).
 			To(Succeed(), "failed to patch storage pool status")
 
-		By("creating a volume w/ with a set of resources")
-		volume := &storagev1alpha1.Volume{
-			ObjectMeta: metav1.ObjectMeta{
-				Namespace:    ns.Name,
-				GenerateName: "test-volume-",
-			},
-			Spec: storagev1alpha1.VolumeSpec{
-				Resources: map[corev1.ResourceName]resource.Quantity{
-					"storage": resource.MustParse("10Gi"),
-				},
-				StorageClassRef: corev1.LocalObjectReference{
-					Name: "my-volumeclass",
-				},
-			},
-		}
+		By("creating a volume w/ a set of resources")
 		Expect(k8sClient.Create(ctx, volume)).To(Succeed(), "failed to create volume")
 
+		By("patching the volume status to available")
+		volumeBase := volume.DeepCopy()
+		volume.Status.State = storagev1alpha1.VolumeStatePending
+		Expect(k8sClient.Status().Patch(ctx, volume, client.MergeFrom(volumeBase))).
+			To(Succeed(), "failed to patch volume status")
+
 		By("creating a volumeclaim which should claim the matching volume")
-		claim := &storagev1alpha1.VolumeClaim{
-			ObjectMeta: metav1.ObjectMeta{
-				Namespace:    ns.Name,
-				GenerateName: "test-volume-claim-",
-			},
-			Spec: storagev1alpha1.VolumeClaimSpec{
-				Resources: map[corev1.ResourceName]resource.Quantity{
-					"storage": resource.MustParse("100Gi"),
-				},
-				Selector: &metav1.LabelSelector{},
-				StorageClassRef: corev1.LocalObjectReference{
-					Name: "my-volumeclass",
-				},
-			},
-		}
-		Expect(k8sClient.Create(ctx, claim)).To(Succeed(), "failed to create volumeclaim")
+		Expect(k8sClient.Create(ctx, volumeClaim)).To(Succeed(), "failed to create volumeclaim")
 
 		By("waiting for the volume to reference the claim")
 		volumeKey := client.ObjectKeyFromObject(volume)
@@ -233,20 +181,15 @@ var _ = Describe("VolumeClaimScheduler", func() {
 		}, timeout, interval).Should(Succeed())
 
 		By("waiting for the volumeclaim to reference the volume")
-		claimKey := client.ObjectKeyFromObject(claim)
+		claimKey := client.ObjectKeyFromObject(volumeClaim)
 		Eventually(func(g Gomega) {
-			Expect(k8sClient.Get(ctx, claimKey, claim)).To(Succeed(), "failed to get volumeclaim")
-			g.Expect(claim.Spec.VolumeRef.Name).To(Equal(""))
+			Expect(k8sClient.Get(ctx, claimKey, volumeClaim)).To(Succeed(), "failed to get volumeclaim")
+			g.Expect(volumeClaim.Spec.VolumeRef.Name).To(Equal(""))
 		}, timeout, interval).Should(Succeed())
 	})
 
-	It("Should not claim a volume the storageclasses are different", func() {
+	It("Should not claim a volume when the storageclasses are different", func() {
 		By("creating a storage pool")
-		storagePool := &storagev1alpha1.StoragePool{
-			ObjectMeta: metav1.ObjectMeta{
-				GenerateName: "test-pool-",
-			},
-		}
 		Expect(k8sClient.Create(ctx, storagePool)).To(Succeed(), "failed to create storage pool")
 
 		By("patching the storage pool status to contain a storage class")
@@ -255,21 +198,7 @@ var _ = Describe("VolumeClaimScheduler", func() {
 		Expect(k8sClient.Status().Patch(ctx, storagePool, client.MergeFrom(storagePoolBase))).
 			To(Succeed(), "failed to patch storage pool status")
 
-		By("creating a volume w/ with a set of resources")
-		volume := &storagev1alpha1.Volume{
-			ObjectMeta: metav1.ObjectMeta{
-				Namespace:    ns.Name,
-				GenerateName: "test-volume-",
-			},
-			Spec: storagev1alpha1.VolumeSpec{
-				Resources: map[corev1.ResourceName]resource.Quantity{
-					"storage": resource.MustParse("10Gi"),
-				},
-				StorageClassRef: corev1.LocalObjectReference{
-					Name: "my-volumeclass",
-				},
-			},
-		}
+		By("creating a volume w/ a set of resources")
 		Expect(k8sClient.Create(ctx, volume)).To(Succeed(), "failed to create volume")
 
 		By("patching the volume status to available")
@@ -279,22 +208,10 @@ var _ = Describe("VolumeClaimScheduler", func() {
 			To(Succeed(), "failed to patch volume status")
 
 		By("creating a volumeclaim which should claim the matching volume")
-		claim := &storagev1alpha1.VolumeClaim{
-			ObjectMeta: metav1.ObjectMeta{
-				Namespace:    ns.Name,
-				GenerateName: "test-volume-claim-",
-			},
-			Spec: storagev1alpha1.VolumeClaimSpec{
-				Resources: map[corev1.ResourceName]resource.Quantity{
-					"storage": resource.MustParse("100Gi"),
-				},
-				Selector: &metav1.LabelSelector{},
-				StorageClassRef: corev1.LocalObjectReference{
-					Name: "my-volumeclass2",
-				},
-			},
+		volumeClaim.Spec.StorageClassRef = corev1.LocalObjectReference{
+			Name: "my-volumeclass2",
 		}
-		Expect(k8sClient.Create(ctx, claim)).To(Succeed(), "failed to create volumeclaim")
+		Expect(k8sClient.Create(ctx, volumeClaim)).To(Succeed(), "failed to create volumeclaim")
 
 		By("waiting for the volume to reference the claim")
 		volumeKey := client.ObjectKeyFromObject(volume)
@@ -305,20 +222,15 @@ var _ = Describe("VolumeClaimScheduler", func() {
 		}, timeout, interval).Should(Succeed())
 
 		By("waiting for the volumeclaim to reference the volume")
-		claimKey := client.ObjectKeyFromObject(claim)
+		claimKey := client.ObjectKeyFromObject(volumeClaim)
 		Eventually(func(g Gomega) {
-			Expect(k8sClient.Get(ctx, claimKey, claim)).To(Succeed(), "failed to get volumeclaim")
-			g.Expect(claim.Spec.VolumeRef.Name).To(Equal(""))
+			Expect(k8sClient.Get(ctx, claimKey, volumeClaim)).To(Succeed(), "failed to get volumeclaim")
+			g.Expect(volumeClaim.Spec.VolumeRef.Name).To(Equal(""))
 		}, timeout, interval).Should(Succeed())
 	})
 
 	It("Should claim one volume out of two where the resources match", func() {
 		By("creating a storage pool")
-		storagePool := &storagev1alpha1.StoragePool{
-			ObjectMeta: metav1.ObjectMeta{
-				GenerateName: "test-pool-",
-			},
-		}
 		Expect(k8sClient.Create(ctx, storagePool)).To(Succeed(), "failed to create storage pool")
 
 		By("patching the storage pool status to contain a storage class")
@@ -327,21 +239,9 @@ var _ = Describe("VolumeClaimScheduler", func() {
 		Expect(k8sClient.Status().Patch(ctx, storagePool, client.MergeFrom(storagePoolBase))).
 			To(Succeed(), "failed to patch storage pool status")
 
-		By("creating a 10Gi volume")
-		volume := &storagev1alpha1.Volume{
-			ObjectMeta: metav1.ObjectMeta{
-				Namespace:    ns.Name,
-				GenerateName: "test-volume-",
-			},
-			Spec: storagev1alpha1.VolumeSpec{
-				Resources: map[corev1.ResourceName]resource.Quantity{
-					"storage": resource.MustParse("10Gi"),
-				},
-				StorageClassRef: corev1.LocalObjectReference{
-					Name: "my-volumeclass",
-				},
-			},
-		}
+		By("creating a 100Gi volume")
+		// create copy for second volume
+		volume2 := volume.DeepCopy()
 		Expect(k8sClient.Create(ctx, volume)).To(Succeed(), "failed to create volume")
 
 		By("patching the volume status to available")
@@ -350,20 +250,9 @@ var _ = Describe("VolumeClaimScheduler", func() {
 		Expect(k8sClient.Status().Patch(ctx, volume, client.MergeFrom(volumeBase))).
 			To(Succeed(), "failed to patch volume status")
 
-		By("creating a 100Gi volume")
-		volume2 := &storagev1alpha1.Volume{
-			ObjectMeta: metav1.ObjectMeta{
-				Namespace:    ns.Name,
-				GenerateName: "test-volume-",
-			},
-			Spec: storagev1alpha1.VolumeSpec{
-				Resources: map[corev1.ResourceName]resource.Quantity{
-					"storage": resource.MustParse("100Gi"),
-				},
-				StorageClassRef: corev1.LocalObjectReference{
-					Name: "my-volumeclass",
-				},
-			},
+		By("creating a 10Gi volume")
+		volume2.Spec.Resources = map[corev1.ResourceName]resource.Quantity{
+			"storage": resource.MustParse("10Gi"),
 		}
 		Expect(k8sClient.Create(ctx, volume2)).To(Succeed(), "failed to create volume")
 
@@ -374,44 +263,63 @@ var _ = Describe("VolumeClaimScheduler", func() {
 			To(Succeed(), "failed to patch volume status")
 
 		By("creating a volumeclaim which should claim the matching volume")
-		claim := &storagev1alpha1.VolumeClaim{
-			ObjectMeta: metav1.ObjectMeta{
-				Namespace:    ns.Name,
-				GenerateName: "test-volume-claim-",
-			},
-			Spec: storagev1alpha1.VolumeClaimSpec{
-				Resources: map[corev1.ResourceName]resource.Quantity{
-					"storage": resource.MustParse("100Gi"),
-				},
-				Selector: &metav1.LabelSelector{},
-				StorageClassRef: corev1.LocalObjectReference{
-					Name: "my-volumeclass",
-				},
-			},
-		}
-		Expect(k8sClient.Create(ctx, claim)).To(Succeed(), "failed to create volumeclaim")
+		Expect(k8sClient.Create(ctx, volumeClaim)).To(Succeed(), "failed to create volumeclaim")
 
-		By("waiting for the incorrect volume to not be claimed")
+		By("waiting for the correct volume to reference the claim")
 		volumeKey := client.ObjectKeyFromObject(volume)
 		Eventually(func(g Gomega) {
 			Expect(k8sClient.Get(ctx, volumeKey, volume)).To(Succeed(), "failed to get volume")
-			g.Expect(volume.Spec.ClaimRef.Name).To(Equal(""))
-			g.Expect(volume.Spec.ClaimRef.UID).To(Equal(types.UID("")))
+			g.Expect(volume.Spec.ClaimRef.Name).To(Equal(volumeClaim.Name))
+			g.Expect(volume.Spec.ClaimRef.UID).To(Equal(volumeClaim.UID))
 		}, timeout, interval).Should(Succeed())
 
-		By("waiting for the correct volume to reference the claim")
+		By("waiting for the incorrect volume to not be claimed")
 		volumeKey2 := client.ObjectKeyFromObject(volume2)
 		Eventually(func(g Gomega) {
 			Expect(k8sClient.Get(ctx, volumeKey2, volume2)).To(Succeed(), "failed to get volume")
-			g.Expect(volume2.Spec.ClaimRef.Name).To(Equal(claim.Name))
-			g.Expect(volume2.Spec.ClaimRef.UID).To(Equal(claim.UID))
+			g.Expect(volume2.Spec.ClaimRef.Name).To(Equal(""))
+			g.Expect(volume2.Spec.ClaimRef.UID).To(Equal(types.UID("")))
 		}, timeout, interval).Should(Succeed())
 
 		By("waiting for the volumeclaim to reference the volume")
-		claimKey := client.ObjectKeyFromObject(claim)
+		claimKey := client.ObjectKeyFromObject(volumeClaim)
 		Eventually(func(g Gomega) {
-			Expect(k8sClient.Get(ctx, claimKey, claim)).To(Succeed(), "failed to get volumeclaim")
-			g.Expect(claim.Spec.VolumeRef.Name).To(Equal(volume2.Name))
+			Expect(k8sClient.Get(ctx, claimKey, volumeClaim)).To(Succeed(), "failed to get volumeclaim")
+			g.Expect(volumeClaim.Spec.VolumeRef.Name).To(Equal(volume.Name))
+		}, timeout, interval).Should(Succeed())
+	})
+
+	It("Should not claim a volume when the volumeref is set", func() {
+		By("creating a storage pool")
+		Expect(k8sClient.Create(ctx, storagePool)).To(Succeed(), "failed to create storage pool")
+
+		By("patching the storage pool status to contain a storage class")
+		storagePoolBase := storagePool.DeepCopy()
+		storagePool.Status.AvailableStorageClasses = []corev1.LocalObjectReference{{Name: "my-volumeclass"}}
+		Expect(k8sClient.Status().Patch(ctx, storagePool, client.MergeFrom(storagePoolBase))).
+			To(Succeed(), "failed to patch storage pool status")
+
+		By("creating a volume w/ a set of resources")
+		volume.Spec.ClaimRef = storagev1alpha1.ClaimReference{
+			Name: "my-volume",
+			UID:  "12345",
+		}
+		Expect(k8sClient.Create(ctx, volume)).To(Succeed(), "failed to create volume")
+
+		By("patching the volume status to available")
+		volumeBase := volume.DeepCopy()
+		volume.Status.State = storagev1alpha1.VolumeStateAvailable
+		Expect(k8sClient.Status().Patch(ctx, volume, client.MergeFrom(volumeBase))).
+			To(Succeed(), "failed to patch volume status")
+
+		By("creating a volumeclaim w/ a volumeref")
+		Expect(k8sClient.Create(ctx, volumeClaim)).To(Succeed(), "failed to create volumeclaim")
+
+		By("waiting for the volumeclaim to reference the volume")
+		claimKey := client.ObjectKeyFromObject(volumeClaim)
+		Eventually(func(g Gomega) {
+			Expect(k8sClient.Get(ctx, claimKey, volumeClaim)).To(Succeed(), "failed to get volumeclaim")
+			g.Expect(volumeClaim.Spec.VolumeRef.Name).To(Equal(""))
 		}, timeout, interval).Should(Succeed())
 	})
 })
