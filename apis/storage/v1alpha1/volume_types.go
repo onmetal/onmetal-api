@@ -63,7 +63,7 @@ type VolumeStatus struct {
 }
 
 // VolumePhase represents the VolumeClaim binding phase of a Volume
-// +kubebuilder:validation:Enum=VolumePending;VolumeAvailable;VolumeBound;VolumeFailed
+// +kubebuilder:validation:Enum=Pending;Available;Bound;Failed
 type VolumePhase string
 
 const (
@@ -118,10 +118,11 @@ type VolumeCondition struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
-//+kubebuilder:printcolumn:name="State",type=string,JSONPath=`.status.state`
-//+kubebuilder:printcolumn:name="Age",type=date,JSONPath=`.metadata.creationTimestamp`
 //+kubebuilder:printcolumn:name="StoragePool",type=string,JSONPath=`.spec.storagePool.name`
 //+kubebuilder:printcolumn:name="StorageClass",type=string,JSONPath=`.spec.storageClassRef.name`
+//+kubebuilder:printcolumn:name="State",type=string,JSONPath=`.status.state`
+//+kubebuilder:printcolumn:name="Phase",type=string,JSONPath=`.status.phase`
+//+kubebuilder:printcolumn:name="Age",type=date,JSONPath=`.metadata.creationTimestamp`
 
 // Volume is the Schema for the volumes API
 type Volume struct {

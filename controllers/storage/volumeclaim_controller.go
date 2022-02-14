@@ -36,16 +36,9 @@ type VolumeClaimReconciler struct {
 //+kubebuilder:rbac:groups=storage.onmetal.de,resources=volumeclaims,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=storage.onmetal.de,resources=volumeclaims/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=storage.onmetal.de,resources=volumeclaims/finalizers,verbs=update
+//+kubebuilder:rbac:groups=storage.onmetal.de,resources=volumes,verbs=get;list
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
-// move the current state of the cluster closer to the desired state.
-// TODO(user): Modify the Reconcile function to compare the state specified by
-// the VolumeClaim object against the actual cluster state, and then
-// perform operations to make the cluster state reflect the state specified by
-// the user.
-//
-// For more details, check Reconcile and its Result here:
-// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.11.0/pkg/reconcile
 func (r *VolumeClaimReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
@@ -57,6 +50,7 @@ func (r *VolumeClaimReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 // SetupWithManager sets up the controller with the Manager.
 func (r *VolumeClaimReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
+		Named("volume-claim-controller").
 		For(&storagev1alpha1.VolumeClaim{}).
 		Complete(r)
 }
