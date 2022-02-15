@@ -19,8 +19,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"os"
-
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
@@ -55,6 +55,7 @@ const (
 	storagePoolController      = "storagepool"
 	storageClassController     = "storageclass"
 	volumeController           = "volume"
+	volumeClaimController      = "volumeclaim"
 	volumeScheduler            = "volumescheduler"
 	volumeClaimScheduler       = "volumeclaimscheduler"
 	reservedIPController       = "reservedip"
@@ -90,7 +91,7 @@ func main() {
 
 	controllers := switches.New(
 		machineClassController, machinePoolController, machineSchedulerController, storagePoolController,
-		storageClassController, volumeController, volumeScheduler, volumeClaimScheduler, reservedIPController,
+		storageClassController, volumeController, volumeClaimController, volumeScheduler, volumeClaimScheduler, reservedIPController,
 		securityGroupController, subnetController, machineController, routingDomainController, ipamRangeController,
 		gatewayController,
 	)
@@ -121,6 +122,8 @@ func main() {
 		setupLog.Error(err, "unable to create manager")
 		os.Exit(1)
 	}
+
+	var indexedFields = &sets.String{}
 
 	if controllers.Enabled(machineClassController) {
 		if err = (&computecontrollers.MachineClassReconciler{
@@ -169,10 +172,21 @@ func main() {
 	}
 	if controllers.Enabled(volumeController) {
 		if err = (&storagecontrollers.VolumeReconciler{
-			Client: mgr.GetClient(),
-			Scheme: mgr.GetScheme(),
+			Client:        mgr.GetClient(),
+			Scheme:        mgr.GetScheme(),
+			IndexedFields: indexedFields,
 		}).SetupWithManager(mgr); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Volume")
+			os.Exit(1)
+		}
+	}
+	if controllers.Enabled(volumeClaimController) {
+		if err = (&storagecontrollers.VolumeClaimReconciler{
+			Client:        mgr.GetClient(),
+			Scheme:        mgr.GetScheme(),
+			IndexedFields: indexedFields,
+		}).SetupWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VolumeClaim")
 			os.Exit(1)
 		}
 	}
@@ -187,6 +201,7 @@ func main() {
 		if err = (&storagecontrollers.VolumeClaimScheduler{
 			Client:        mgr.GetClient(),
 			EventRecorder: mgr.GetEventRecorderFor("volume-claim-scheduler"),
+			IndexedFields: indexedFields,
 		}).SetupWithManager(mgr); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VolumeClaimScheduler")
 		}
@@ -298,13 +313,7 @@ func main() {
 		setupLog.Error(err, "unable to create controller", "controller", "ClusterPrefix")
 		os.Exit(1)
 	}
-	if err = (&storagecontrollers.VolumeClaimReconciler{
-		Client: mgr.GetClient(),
-		Scheme: mgr.GetScheme(),
-	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "VolumeClaim")
-		os.Exit(1)
-	}
+
 	//+kubebuilder:scaffold:builder
 
 	if err = (&networkcontrollers.ClusterPrefixAllocationSchedulerReconciler{

@@ -25,6 +25,7 @@ import (
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/sets"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -37,7 +38,8 @@ import (
 // VolumeReconciler reconciles a Volume object
 type VolumeReconciler struct {
 	client.Client
-	Scheme *runtime.Scheme
+	Scheme        *runtime.Scheme
+	IndexedFields *sets.String
 }
 
 //+kubebuilder:rbac:groups=storage.onmetal.de,resources=volumes,verbs=get;list;watch;create;update;patch;delete
@@ -53,50 +55,6 @@ func (r *VolumeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 	return r.reconcileExists(ctx, log, volume)
-}
-
-const volumeSpecVolumeClaimNameRefField = ".spec.claimRef.name"
-
-// SetupWithManager sets up the controller with the Manager.
-func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager) error {
-	ctx := context.Background()
-	if err := mgr.GetFieldIndexer().IndexField(ctx, &storagev1alpha1.Volume{},
-		volumeSpecVolumeClaimNameRefField, func(object client.Object) []string {
-			volume := object.(*storagev1alpha1.Volume)
-			if volume.Spec.ClaimRef.Name == "" {
-				return nil
-			}
-			return []string{volume.Spec.ClaimRef.Name}
-		}); err != nil {
-		return err
-	}
-	return ctrl.NewControllerManagedBy(mgr).
-		Named("volume-controller").
-		For(&storagev1alpha1.Volume{}).
-		Watches(&source.Kind{Type: &storagev1alpha1.VolumeClaim{}},
-			handler.EnqueueRequestsFromMapFunc(func(object client.Object) []reconcile.Request {
-				volumeClaim := object.(*storagev1alpha1.VolumeClaim)
-				volumes := &storagev1alpha1.VolumeList{}
-				if err := r.List(ctx, volumes, &client.ListOptions{
-					FieldSelector: fields.OneTermEqualSelector(volumeSpecVolumeClaimNameRefField, volumeClaim.GetName()),
-					Namespace:     volumeClaim.GetNamespace(),
-				}); err != nil {
-					return []reconcile.Request{}
-				}
-				requests := make([]reconcile.Request, len(volumes.Items))
-				for i, item := range volumes.Items {
-					requests[i] = reconcile.Request{
-						NamespacedName: types.NamespacedName{
-							Name:      item.GetName(),
-							Namespace: item.GetNamespace(),
-						},
-					}
-				}
-				return requests
-			}),
-			builder.WithPredicates(predicate.ResourceVersionChangedPredicate{}),
-		).
-		Complete(r)
 }
 
 func (r *VolumeReconciler) reconcileExists(ctx context.Context, log logr.Logger, volume *storagev1alpha1.Volume) (ctrl.Result, error) {
@@ -137,7 +95,6 @@ func (r *VolumeReconciler) reconcile(ctx context.Context, log logr.Logger, volum
 		return ctrl.Result{}, nil
 	}
 	if claim.Spec.VolumeRef.Name == volume.Name && volume.Spec.ClaimRef.UID == claim.UID {
-		// VolumeClaim is properly bound to the volume
 		log.Info("synchronizing Volume: all is bound", "Volume", client.ObjectKeyFromObject(volume))
 		if err := r.updateVolumePhase(ctx, log, volume, storagev1alpha1.VolumeBound); err != nil {
 			return ctrl.Result{}, err
@@ -160,4 +117,49 @@ func (r *VolumeReconciler) updateVolumePhase(ctx context.Context, log logr.Logge
 	}
 	log.V(1).Info("patched volume phase", "Volume", client.ObjectKeyFromObject(volume), "Phase", phase)
 	return nil
+}
+
+// SetupWithManager sets up the controller with the Manager.
+func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	ctx := context.Background()
+	if !r.IndexedFields.Has(volumeSpecVolumeClaimNameRefField) {
+		if err := mgr.GetFieldIndexer().IndexField(ctx, &storagev1alpha1.Volume{},
+			volumeSpecVolumeClaimNameRefField, func(object client.Object) []string {
+				volume := object.(*storagev1alpha1.Volume)
+				if volume.Spec.ClaimRef.Name == "" {
+					return nil
+				}
+				return []string{volume.Spec.ClaimRef.Name}
+			}); err != nil {
+			return err
+		}
+		r.IndexedFields.Insert(volumeSpecVolumeClaimNameRefField)
+	}
+	return ctrl.NewControllerManagedBy(mgr).
+		Named("volume-controller").
+		For(&storagev1alpha1.Volume{}).
+		Watches(&source.Kind{Type: &storagev1alpha1.VolumeClaim{}},
+			handler.EnqueueRequestsFromMapFunc(func(object client.Object) []reconcile.Request {
+				volumeClaim := object.(*storagev1alpha1.VolumeClaim)
+				volumes := &storagev1alpha1.VolumeList{}
+				if err := r.List(ctx, volumes, &client.ListOptions{
+					FieldSelector: fields.OneTermEqualSelector(volumeSpecVolumeClaimNameRefField, volumeClaim.GetName()),
+					Namespace:     volumeClaim.GetNamespace(),
+				}); err != nil {
+					return []reconcile.Request{}
+				}
+				requests := make([]reconcile.Request, len(volumes.Items))
+				for i, item := range volumes.Items {
+					requests[i] = reconcile.Request{
+						NamespacedName: types.NamespacedName{
+							Name:      item.GetName(),
+							Namespace: item.GetNamespace(),
+						},
+					}
+				}
+				return requests
+			}),
+			builder.WithPredicates(predicate.ResourceVersionChangedPredicate{}),
+		).
+		Complete(r)
 }

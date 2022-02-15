@@ -23,6 +23,7 @@ import (
 	storagev1alpha1 "github.com/onmetal/onmetal-api/apis/storage/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/sets"
 	quotav1 "k8s.io/apiserver/pkg/quota/v1"
 	"k8s.io/client-go/tools/record"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -33,9 +34,12 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
+const volumeClaimSpecVolumeRefNameField = ".spec.volumeRef.name"
+
 type VolumeClaimScheduler struct {
 	client.Client
 	record.EventRecorder
+	IndexedFields *sets.String
 }
 
 //+kubebuilder:rbac:groups=storage.onmetal.de,resources=volumeclaims,verbs=get;list;watch;create;update;patch;delete
@@ -146,17 +150,18 @@ func (s *VolumeClaimScheduler) volumeSatisfiesClaim(volume *storagev1alpha1.Volu
 	return true
 }
 
-const volumeClaimSpecVolumeRefNameField = ".spec.volumeRef.name"
-
 // SetupWithManager sets up the controller with the Manager.
 func (s *VolumeClaimScheduler) SetupWithManager(mgr ctrl.Manager) error {
 	ctx := context.Background()
 	log := ctrl.Log.WithName("volume-claim-scheduler").WithName("setup")
-	if err := mgr.GetFieldIndexer().IndexField(ctx, &storagev1alpha1.VolumeClaim{}, volumeClaimSpecVolumeRefNameField, func(object client.Object) []string {
-		volumeClaim := object.(*storagev1alpha1.VolumeClaim)
-		return []string{volumeClaim.Spec.VolumeRef.Name}
-	}); err != nil {
-		return err
+	if !s.IndexedFields.Has(volumeClaimSpecVolumeRefNameField) {
+		if err := mgr.GetFieldIndexer().IndexField(ctx, &storagev1alpha1.VolumeClaim{}, volumeClaimSpecVolumeRefNameField, func(object client.Object) []string {
+			volumeClaim := object.(*storagev1alpha1.VolumeClaim)
+			return []string{volumeClaim.Spec.VolumeRef.Name}
+		}); err != nil {
+			return err
+		}
+		s.IndexedFields.Insert(volumeClaimSpecVolumeRefNameField)
 	}
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("volume-claim-scheduler").

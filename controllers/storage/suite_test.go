@@ -18,6 +18,7 @@ package storage
 
 import (
 	"context"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"path/filepath"
 	"testing"
 	"time"
@@ -107,15 +108,25 @@ func SetupTest(ctx context.Context) *corev1.Namespace {
 		})
 		Expect(err).ToNot(HaveOccurred())
 
+		var indexedFields = &sets.String{}
+
 		// register reconciler here
 		Expect((&VolumeClaimScheduler{
 			Client:        k8sManager.GetClient(),
 			EventRecorder: k8sManager.GetEventRecorderFor("volume-claim-scheduler"),
+			IndexedFields: indexedFields,
 		}).SetupWithManager(k8sManager)).To(Succeed())
 
 		Expect((&VolumeReconciler{
-			Client: k8sManager.GetClient(),
-			Scheme: k8sManager.GetScheme(),
+			Client:        k8sManager.GetClient(),
+			Scheme:        k8sManager.GetScheme(),
+			IndexedFields: indexedFields,
+		}).SetupWithManager(k8sManager)).To(Succeed())
+
+		Expect((&VolumeClaimReconciler{
+			Client:        k8sManager.GetClient(),
+			Scheme:        k8sManager.GetScheme(),
+			IndexedFields: indexedFields,
 		}).SetupWithManager(k8sManager)).To(Succeed())
 
 		Expect((&VolumeScheduler{

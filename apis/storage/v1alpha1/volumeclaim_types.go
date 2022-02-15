@@ -43,26 +43,26 @@ type VolumeClaimSpec struct {
 // VolumeClaimStatus defines the observed state of VolumeClaim
 type VolumeClaimStatus struct {
 	// Phase represents the state a VolumeClaim can be in.
-	Phase VolumeClaimPhase `json:"state,omitempty"`
+	Phase VolumeClaimPhase `json:"phase,omitempty"`
 }
 
 // VolumeClaimPhase represents the state a VolumeClaim can be in.
 type VolumeClaimPhase string
 
 const (
-	// VolumeClaimPhasePending is used for a VolumeClaim which is not yet bound.
-	VolumeClaimPhasePending VolumeClaimPhase = "Pending"
-	// VolumeClaimPhaseBound is used for a VolumeClaim which is bound to a Volume.
-	VolumeClaimPhaseBound VolumeClaimPhase = "Bound"
-	// VolumeClaimPhaseLost is used for a VolumeClaim that lost its underlying Volume. The claim was bound to a
+	// VolumeClaimPending is used for a VolumeClaim which is not yet bound.
+	VolumeClaimPending VolumeClaimPhase = "Pending"
+	// VolumeClaimBound is used for a VolumeClaim which is bound to a Volume.
+	VolumeClaimBound VolumeClaimPhase = "Bound"
+	// VolumeClaimLost is used for a VolumeClaim that lost its underlying Volume. The claim was bound to a
 	// Volume and this volume does not exist any longer and all data on it was lost.
-	VolumeClaimPhaseLost VolumeClaimPhase = "Lost"
+	VolumeClaimLost VolumeClaimPhase = "Lost"
 )
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 //+kubebuilder:printcolumn:name="ReferencedVolume",type=string,JSONPath=`.spec.volumeRef.name`
-//+kubebuilder:printcolumn:name="Phase",type=string,JSONPath=`.status.state`
+//+kubebuilder:printcolumn:name="Phase",type=string,JSONPath=`.status.phase`
 //+kubebuilder:printcolumn:name="Age",type=date,JSONPath=`.metadata.creationTimestamp`
 
 // VolumeClaim is the Schema for the volumeclaims API

@@ -20,7 +20,7 @@ spec:
     - jsonPath: .spec.volumeRef.name
       name: ReferencedVolume
       type: string
-    - jsonPath: .status.state
+    - jsonPath: .status.phase
       name: Phase
       type: string
     - jsonPath: .metadata.creationTimestamp
@@ -125,7 +125,7 @@ spec:
           status:
             description: VolumeClaimStatus defines the observed state of VolumeClaim
             properties:
-              state:
+              phase:
                 description: Phase represents the state a VolumeClaim can be in.
                 type: string
             type: object
