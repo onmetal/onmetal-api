@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-logr/logr"
+	"github.com/onmetal/onmetal-api/pkg/fieldindexer"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/types"
@@ -35,8 +36,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
-
-const volumeSpecVolumeClaimNameRefField = ".spec.claimRef.name"
 
 // VolumeClaimReconciler reconciles a VolumeClaim object
 type VolumeClaimReconciler struct {
@@ -125,19 +124,6 @@ func (r *VolumeClaimReconciler) updateVolumeClaimPhase(ctx context.Context, log 
 // SetupWithManager sets up the controller with the Manager.
 func (r *VolumeClaimReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	ctx := context.Background()
-	if !r.IndexedFields.Has(volumeClaimSpecVolumeRefNameField) {
-		if err := mgr.GetFieldIndexer().IndexField(ctx, &storagev1alpha1.VolumeClaim{},
-			volumeClaimSpecVolumeRefNameField, func(object client.Object) []string {
-				claim := object.(*storagev1alpha1.VolumeClaim)
-				if claim.Spec.VolumeRef.Name == "" {
-					return nil
-				}
-				return []string{claim.Spec.VolumeRef.Name}
-			}); err != nil {
-			return err
-		}
-		r.IndexedFields.Insert(volumeClaimSpecVolumeRefNameField)
-	}
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("volumeclaim-controller").
 		For(&storagev1alpha1.VolumeClaim{}).
@@ -146,7 +132,7 @@ func (r *VolumeClaimReconciler) SetupWithManager(mgr ctrl.Manager) error {
 				volume := object.(*storagev1alpha1.Volume)
 				claims := &storagev1alpha1.VolumeClaimList{}
 				if err := r.List(ctx, claims, &client.ListOptions{
-					FieldSelector: fields.OneTermEqualSelector(volumeClaimSpecVolumeRefNameField, volume.GetName()),
+					FieldSelector: fields.OneTermEqualSelector(fieldindexer.VolumeClaimSpecVolumeRefNameField, volume.GetName()),
 					Namespace:     volume.GetNamespace(),
 				}); err != nil {
 					return []reconcile.Request{}

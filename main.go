@@ -19,7 +19,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"k8s.io/apimachinery/pkg/util/sets"
+	"github.com/onmetal/onmetal-api/pkg/fieldindexer"
 	"os"
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
@@ -123,8 +123,22 @@ func main() {
 		os.Exit(1)
 	}
 
-	var indexedFields = &sets.String{}
+	// Index fields
+	fieldIndexer := fieldindexer.NewIndexer(mgr)
+	if controllers.Enabled(volumeController) || controllers.Enabled(volumeClaimScheduler) {
+		if err := fieldIndexer.IndexFieldForVolume(); err != nil {
+			setupLog.Error(err, "unable to create fieldindex", "IndexField", fieldindexer.VolumeClaimSpecVolumeRefNameField)
+			os.Exit(1)
+		}
+	}
+	if controllers.Enabled(volumeClaimController) {
+		if err := fieldIndexer.IndexFieldForVolumeClaim(); err != nil {
+			setupLog.Error(err, "unable to create fieldindex", "IndexField", fieldindexer.VolumeSpecVolumeClaimNameRefField)
+			os.Exit(1)
+		}
+	}
 
+	// Register controllers
 	if controllers.Enabled(machineClassController) {
 		if err = (&computecontrollers.MachineClassReconciler{
 			Client: mgr.GetClient(),
@@ -172,9 +186,8 @@ func main() {
 	}
 	if controllers.Enabled(volumeController) {
 		if err = (&storagecontrollers.VolumeReconciler{
-			Client:        mgr.GetClient(),
-			Scheme:        mgr.GetScheme(),
-			IndexedFields: indexedFields,
+			Client: mgr.GetClient(),
+			Scheme: mgr.GetScheme(),
 		}).SetupWithManager(mgr); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Volume")
 			os.Exit(1)
@@ -182,9 +195,8 @@ func main() {
 	}
 	if controllers.Enabled(volumeClaimController) {
 		if err = (&storagecontrollers.VolumeClaimReconciler{
-			Client:        mgr.GetClient(),
-			Scheme:        mgr.GetScheme(),
-			IndexedFields: indexedFields,
+			Client: mgr.GetClient(),
+			Scheme: mgr.GetScheme(),
 		}).SetupWithManager(mgr); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VolumeClaim")
 			os.Exit(1)
@@ -201,7 +213,6 @@ func main() {
 		if err = (&storagecontrollers.VolumeClaimScheduler{
 			Client:        mgr.GetClient(),
 			EventRecorder: mgr.GetEventRecorderFor("volume-claim-scheduler"),
-			IndexedFields: indexedFields,
 		}).SetupWithManager(mgr); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VolumeClaimScheduler")
 		}

@@ -21,9 +21,9 @@ import (
 	"fmt"
 	"github.com/go-logr/logr"
 	storagev1alpha1 "github.com/onmetal/onmetal-api/apis/storage/v1alpha1"
+	"github.com/onmetal/onmetal-api/pkg/fieldindexer"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/util/sets"
 	quotav1 "k8s.io/apiserver/pkg/quota/v1"
 	"k8s.io/client-go/tools/record"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -34,12 +34,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
-const volumeClaimSpecVolumeRefNameField = ".spec.volumeRef.name"
-
 type VolumeClaimScheduler struct {
 	client.Client
 	record.EventRecorder
-	IndexedFields *sets.String
 }
 
 //+kubebuilder:rbac:groups=storage.onmetal.de,resources=volumeclaims,verbs=get;list;watch;create;update;patch;delete
@@ -154,15 +151,6 @@ func (s *VolumeClaimScheduler) volumeSatisfiesClaim(volume *storagev1alpha1.Volu
 func (s *VolumeClaimScheduler) SetupWithManager(mgr ctrl.Manager) error {
 	ctx := context.Background()
 	log := ctrl.Log.WithName("volume-claim-scheduler").WithName("setup")
-	if !s.IndexedFields.Has(volumeClaimSpecVolumeRefNameField) {
-		if err := mgr.GetFieldIndexer().IndexField(ctx, &storagev1alpha1.VolumeClaim{}, volumeClaimSpecVolumeRefNameField, func(object client.Object) []string {
-			volumeClaim := object.(*storagev1alpha1.VolumeClaim)
-			return []string{volumeClaim.Spec.VolumeRef.Name}
-		}); err != nil {
-			return err
-		}
-		s.IndexedFields.Insert(volumeClaimSpecVolumeRefNameField)
-	}
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("volume-claim-scheduler").
 		For(&storagev1alpha1.VolumeClaim{}, builder.WithPredicates(predicate.NewPredicateFuncs(func(object client.Object) bool {
@@ -190,7 +178,7 @@ func (s *VolumeClaimScheduler) SetupWithManager(mgr ctrl.Manager) error {
 				}
 				volumeClaims := &storagev1alpha1.VolumeClaimList{}
 				if err := s.List(ctx, volumeClaims, client.InNamespace(volume.Namespace), client.MatchingFields{
-					volumeClaimSpecVolumeRefNameField: "",
+					fieldindexer.VolumeClaimSpecVolumeRefNameField: "",
 				}); err != nil {
 					log.Error(err, "could not list empty VolumeClaims", "Namespace", volume.Namespace)
 					return nil

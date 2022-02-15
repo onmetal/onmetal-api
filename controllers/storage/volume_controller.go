@@ -21,11 +21,11 @@ import (
 	"fmt"
 	"github.com/go-logr/logr"
 	storagev1alpha1 "github.com/onmetal/onmetal-api/apis/storage/v1alpha1"
+	"github.com/onmetal/onmetal-api/pkg/fieldindexer"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/apimachinery/pkg/util/sets"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -38,8 +38,7 @@ import (
 // VolumeReconciler reconciles a Volume object
 type VolumeReconciler struct {
 	client.Client
-	Scheme        *runtime.Scheme
-	IndexedFields *sets.String
+	Scheme *runtime.Scheme
 }
 
 //+kubebuilder:rbac:groups=storage.onmetal.de,resources=volumes,verbs=get;list;watch;create;update;patch;delete
@@ -122,19 +121,6 @@ func (r *VolumeReconciler) updateVolumePhase(ctx context.Context, log logr.Logge
 // SetupWithManager sets up the controller with the Manager.
 func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	ctx := context.Background()
-	if !r.IndexedFields.Has(volumeSpecVolumeClaimNameRefField) {
-		if err := mgr.GetFieldIndexer().IndexField(ctx, &storagev1alpha1.Volume{},
-			volumeSpecVolumeClaimNameRefField, func(object client.Object) []string {
-				volume := object.(*storagev1alpha1.Volume)
-				if volume.Spec.ClaimRef.Name == "" {
-					return nil
-				}
-				return []string{volume.Spec.ClaimRef.Name}
-			}); err != nil {
-			return err
-		}
-		r.IndexedFields.Insert(volumeSpecVolumeClaimNameRefField)
-	}
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("volume-controller").
 		For(&storagev1alpha1.Volume{}).
@@ -143,7 +129,7 @@ func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager) error {
 				volumeClaim := object.(*storagev1alpha1.VolumeClaim)
 				volumes := &storagev1alpha1.VolumeList{}
 				if err := r.List(ctx, volumes, &client.ListOptions{
-					FieldSelector: fields.OneTermEqualSelector(volumeSpecVolumeClaimNameRefField, volumeClaim.GetName()),
+					FieldSelector: fields.OneTermEqualSelector(fieldindexer.VolumeSpecVolumeClaimNameRefField, volumeClaim.GetName()),
 					Namespace:     volumeClaim.GetNamespace(),
 				}); err != nil {
 					return []reconcile.Request{}

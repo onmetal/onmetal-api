@@ -18,7 +18,7 @@ package storage
 
 import (
 	"context"
-	"k8s.io/apimachinery/pkg/util/sets"
+	"github.com/onmetal/onmetal-api/pkg/fieldindexer"
 	"path/filepath"
 	"testing"
 	"time"
@@ -108,25 +108,25 @@ func SetupTest(ctx context.Context) *corev1.Namespace {
 		})
 		Expect(err).ToNot(HaveOccurred())
 
-		var indexedFields = &sets.String{}
+		// index fields here
+		fieldIndexer := fieldindexer.NewIndexer(k8sManager)
+		Expect(fieldIndexer.IndexFieldForVolume()).ToNot(HaveOccurred())
+		Expect(fieldIndexer.IndexFieldForVolumeClaim()).ToNot(HaveOccurred())
 
 		// register reconciler here
 		Expect((&VolumeClaimScheduler{
 			Client:        k8sManager.GetClient(),
 			EventRecorder: k8sManager.GetEventRecorderFor("volume-claim-scheduler"),
-			IndexedFields: indexedFields,
 		}).SetupWithManager(k8sManager)).To(Succeed())
 
 		Expect((&VolumeReconciler{
-			Client:        k8sManager.GetClient(),
-			Scheme:        k8sManager.GetScheme(),
-			IndexedFields: indexedFields,
+			Client: k8sManager.GetClient(),
+			Scheme: k8sManager.GetScheme(),
 		}).SetupWithManager(k8sManager)).To(Succeed())
 
 		Expect((&VolumeClaimReconciler{
-			Client:        k8sManager.GetClient(),
-			Scheme:        k8sManager.GetScheme(),
-			IndexedFields: indexedFields,
+			Client: k8sManager.GetClient(),
+			Scheme: k8sManager.GetScheme(),
 		}).SetupWithManager(k8sManager)).To(Succeed())
 
 		Expect((&VolumeScheduler{
