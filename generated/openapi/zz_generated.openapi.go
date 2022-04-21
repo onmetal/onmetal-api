@@ -41,7 +41,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/onmetal/onmetal-api/apis/common/v1alpha1.Toleration":                     schema_onmetal_api_apis_common_v1alpha1_Toleration(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EFIVar":                        schema_onmetal_api_apis_compute_v1alpha1_EFIVar(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EphemeralPrefixSource":         schema_onmetal_api_apis_compute_v1alpha1_EphemeralPrefixSource(ref),
-		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.IPSpec":                        schema_onmetal_api_apis_compute_v1alpha1_IPSpec(ref),
+		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.IPSource":                      schema_onmetal_api_apis_compute_v1alpha1_IPSource(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.Interface":                     schema_onmetal_api_apis_compute_v1alpha1_Interface(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.InterfaceStatus":               schema_onmetal_api_apis_compute_v1alpha1_InterfaceStatus(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.Machine":                       schema_onmetal_api_apis_compute_v1alpha1_Machine(ref),
@@ -616,7 +616,7 @@ func schema_onmetal_api_apis_compute_v1alpha1_EphemeralPrefixSource(ref common.R
 	}
 }
 
-func schema_onmetal_api_apis_compute_v1alpha1_IPSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_apis_compute_v1alpha1_IPSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1491,7 +1491,7 @@ func schema_onmetal_api_apis_compute_v1alpha1_NetworkInterfaceSpec(ref common.Re
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/apis/compute/v1alpha1.IPSpec"),
+										Ref:     ref("github.com/onmetal/onmetal-api/apis/compute/v1alpha1.IPSource"),
 									},
 								},
 							},
@@ -1502,7 +1502,7 @@ func schema_onmetal_api_apis_compute_v1alpha1_NetworkInterfaceSpec(ref common.Re
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.IPSpec", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.IPSource", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 

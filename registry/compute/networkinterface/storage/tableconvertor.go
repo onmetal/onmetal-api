@@ -32,12 +32,9 @@ var (
 
 	headers = []metav1.TableColumnDefinition{
 		{Name: "Name", Type: "string", Format: "name", Description: objectMetaSwaggerDoc["name"]},
-		{Name: "NetworkRef", Type: "string", Description: "The network this network interface is connected to"},
-		{Name: "MachineRef", Type: "string", Description: "The machine this network interface is used by"},
-		{Name: "IPFamilies", Type: "string", Description: "The IPFamilies this network interfaces supports"},
-		{Name: "IPs", Type: "string", Description: "The list of provided IPs which should be assigned to this network interface"},
-		{Name: "EphemeralIPs", Type: "string", Description: "The list of provided ephemeral IPs which should be assigned to this network interface"},
-		{Name: "EffectiveIPs", Type: "string", Description: "List of effective IPs of the network interface"},
+		{Name: "Network", Type: "string", Description: "The network this network interface is connected to"},
+		{Name: "Machine", Type: "string", Description: "The machine this network interface is used by"},
+		{Name: "IPs", Type: "string", Description: "List of effective IPs of the network interface"},
 		{Name: "Age", Type: "string", Format: "date", Description: objectMetaSwaggerDoc["creationTimestamp"]},
 	}
 )
@@ -70,29 +67,6 @@ func (c *convertor) ConvertToTable(ctx context.Context, obj runtime.Object, tabl
 		cells = append(cells, networkInterface.Spec.NetworkRef.Name)
 		if machineRefName := networkInterface.Spec.MachineRef.Name; machineRefName != "" {
 			cells = append(cells, machineRefName)
-		} else {
-			cells = append(cells, "<none>")
-		}
-		if ips := networkInterface.Spec.IPs; len(ips) == 0 {
-			var sips []string
-			for _, ip := range ips {
-				if ip.Value != nil {
-					sips = append(sips, ip.Value.String())
-				}
-			}
-			cells = append(cells, strings.Join(sips, ","))
-		} else {
-			cells = append(cells, "<none>")
-		}
-		// TODO: fix printcols for ephemeral IPs
-		if ips := networkInterface.Spec.IPs; len(ips) == 0 {
-			var sips []string
-			for _, ip := range ips {
-				if ip.EphemeralPrefix != nil && ip.EphemeralPrefix.PrefixTemplate != nil {
-					sips = append(sips, ip.Value.String())
-				}
-			}
-			cells = append(cells, strings.Join(sips, ","))
 		} else {
 			cells = append(cells, "<none>")
 		}

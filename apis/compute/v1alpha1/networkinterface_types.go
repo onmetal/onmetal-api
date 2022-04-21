@@ -33,10 +33,10 @@ type NetworkInterfaceSpec struct {
 	IPFamilies []corev1.IPFamily `json:"ipFamilies"`
 	// IPs is the list of provided IPs or EphemeralIPs which should be assigned to
 	// this NetworkInterface
-	IPs []IPSpec `json:"ips"`
+	IPs []IPSource `json:"ips"`
 }
 
-type IPSpec struct {
+type IPSource struct {
 	Value           *commonv1alpha1.IP     `json:"value,omitempty"`
 	EphemeralPrefix *EphemeralPrefixSource `json:"ephemeralPrefix,omitempty"`
 }

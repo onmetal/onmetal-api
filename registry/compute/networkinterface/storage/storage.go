@@ -36,13 +36,17 @@ type REST struct {
 	*genericregistry.Store
 }
 
+func (REST) ShortNames() []string {
+	return []string{"nic"}
+}
+
 func NewStorage(optsGetter generic.RESTOptionsGetter) (NetworkInteraceStorage, error) {
 	store := &genericregistry.Store{
 		NewFunc: func() runtime.Object {
 			return &compute.NetworkInterface{}
 		},
 		NewListFunc: func() runtime.Object {
-			return &compute.NetworkInterface{}
+			return &compute.NetworkInterfaceList{}
 		},
 		PredicateFunc:            networkinterface.MatchNetworkInterface,
 		DefaultQualifiedResource: compute.Resource("networkinterfaces"),

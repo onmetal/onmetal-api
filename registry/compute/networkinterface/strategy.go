@@ -69,8 +69,8 @@ func (networkInterfaceStrategy) PrepareForUpdate(ctx context.Context, obj, old r
 }
 
 func (networkInterfaceStrategy) Validate(ctx context.Context, obj runtime.Object) field.ErrorList {
-	machine := obj.(*compute.Machine)
-	return validation.ValidateMachine(machine)
+	networkInterface := obj.(*compute.NetworkInterface)
+	return validation.ValidateNetworkInterface(networkInterface)
 }
 
 func (networkInterfaceStrategy) WarningsOnCreate(ctx context.Context, obj runtime.Object) []string {
@@ -117,7 +117,9 @@ func (networkInterfaceStatusStrategy) PrepareForUpdate(ctx context.Context, obj,
 }
 
 func (networkInterfaceStatusStrategy) ValidateUpdate(ctx context.Context, obj, old runtime.Object) field.ErrorList {
-	return nil
+	newNetworkInterface := obj.(*compute.NetworkInterface)
+	oldNetworkInterface := old.(*compute.NetworkInterface)
+	return validation.ValidateNetworkInterfaceUpdate(newNetworkInterface, oldNetworkInterface)
 }
 
 func (networkInterfaceStatusStrategy) WarningsOnUpdate(cxt context.Context, obj, old runtime.Object) []string {
