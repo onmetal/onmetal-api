@@ -67,13 +67,21 @@ var _ = Describe("NetworkInterface", func() {
 			&compute.NetworkInterface{},
 			ContainElement(RequiredField("spec.ipFamilies")),
 		),
-		Entry("invalid ip families",
+		Entry("not supported ip family",
 			&compute.NetworkInterface{
 				Spec: compute.NetworkInterfaceSpec{
 					IPFamilies: []corev1.IPFamily{"foo"},
 				},
 			},
-			ContainElement(InvalidField("spec.ipFamilies[0]")),
+			ContainElement(NotSupportedField("spec.ipFamilies[0]")),
+		),
+		Entry("duplicate ip family",
+			&compute.NetworkInterface{
+				Spec: compute.NetworkInterfaceSpec{
+					IPFamilies: []corev1.IPFamily{"IPv4", "IPv4"},
+				},
+			},
+			ContainElement(DuplicateField("spec.ipFamilies[1]")),
 		),
 		Entry("missing ephemeral prefix name",
 			&compute.NetworkInterface{
@@ -117,5 +125,18 @@ var _ = Describe("NetworkInterface", func() {
 			errList := ValidateNetworkInterfaceUpdate(newNetworkInterface, oldNetworkInterface)
 			Expect(errList).To(match)
 		},
+		Entry("immutable networkRef if set",
+			&compute.NetworkInterface{
+				Spec: compute.NetworkInterfaceSpec{
+					NetworkRef: corev1.LocalObjectReference{Name: "foo"},
+				},
+			},
+			&compute.NetworkInterface{
+				Spec: compute.NetworkInterfaceSpec{
+					NetworkRef: corev1.LocalObjectReference{Name: "bar"},
+				},
+			},
+			ContainElement(ImmutableField("spec.networkRef")),
+		),
 	)
 })

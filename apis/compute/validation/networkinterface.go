@@ -20,8 +20,11 @@ import (
 	"github.com/onmetal/onmetal-api/apis/compute"
 	corev1 "k8s.io/api/core/v1"
 	apivalidation "k8s.io/apimachinery/pkg/api/validation"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 )
+
+var supportedServiceIPFamily = sets.NewString(string(corev1.IPv4Protocol), string(corev1.IPv6Protocol))
 
 // ValidateNetworkInterface validates a network interface object.
 func ValidateNetworkInterface(networkInterface *compute.NetworkInterface) field.ErrorList {
@@ -65,10 +68,18 @@ func validateNetworkInterfaceSpec(networkInterfaceSpec *compute.NetworkInterface
 		allErrs = append(allErrs, field.Required(fldPath.Child("ipFamilies"), "must provide at least one ip family"))
 	}
 
-	for i, family := range networkInterfaceSpec.IPFamilies {
-		if !IsIPFamilyValid(family) {
-			allErrs = append(allErrs, field.Invalid(fldPath.Child("ipFamilies").Index(i), networkInterfaceSpec.IPFamilies[i], "must be valid IPFamily"))
+	// ipfamilies stand alone validation
+	// must be either IPv4 or IPv6
+	seen := sets.String{}
+	for i, ipFamily := range networkInterfaceSpec.IPFamilies {
+		if !supportedServiceIPFamily.Has(string(ipFamily)) {
+			allErrs = append(allErrs, field.NotSupported(fldPath.Child("ipFamilies").Index(i), ipFamily, supportedServiceIPFamily.List()))
 		}
+		// no duplicate check also ensures that ipfamilies is dualstacked, in any order
+		if seen.Has(string(ipFamily)) {
+			allErrs = append(allErrs, field.Duplicate(fldPath.Child("ipFamilies").Index(i), ipFamily))
+		}
+		seen.Insert(string(ipFamily))
 	}
 
 	for i, ipSource := range networkInterfaceSpec.IPs {
@@ -86,9 +97,11 @@ func validateNetworkInterfaceSpec(networkInterfaceSpec *compute.NetworkInterface
 func validateNetworkInterfaceSpecUpdate(new, old *compute.NetworkInterfaceSpec, deletionTimestampSet bool, fldPath *field.Path) field.ErrorList {
 	var allErrs field.ErrorList
 
+	allErrs = append(allErrs, apivalidation.ValidateImmutableField(new.NetworkRef, old.NetworkRef, fldPath.Child("networkRef"))...)
+
 	return allErrs
 }
 
-func IsIPFamilyValid(family corev1.IPFamily) bool {
+func IsValidIPFamily(family corev1.IPFamily) bool {
 	return family == corev1.IPv4Protocol || family == corev1.IPv6Protocol
 }
