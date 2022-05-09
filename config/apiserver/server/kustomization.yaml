@@ -3,3 +3,7 @@ kind: Kustomization
 
 resources:
 - server.yaml
+images:
+- name: apiserver
+  newName: apiserver
+  newTag: latest

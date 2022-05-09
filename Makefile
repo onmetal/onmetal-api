@@ -114,7 +114,7 @@ run: manifests generate fmt vet ## Run a controller from your host.
 	go run ./main.go
 
 .PHONY: docker-build
-docker-build: test ## Build docker image with the manager.
+docker-build:  ## Build docker image with the manager.
 	docker build --target apiserver -t ${CONTROLLER_IMG} .
 	docker build --target manager -t ${APISERVER_IMG} .
 

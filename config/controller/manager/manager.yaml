@@ -32,7 +32,8 @@ spec:
           args:
             - --leader-elect
             - --controllers=*
-          image: controller:latest
+          image: localhost:5000/controller:latest
+          imagePullPolicy: IfNotPresent
           name: manager
           securityContext:
             allowPrivilegeEscalation: false

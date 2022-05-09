@@ -129,6 +129,15 @@ func (s *VolumeScheduler) schedule(ctx context.Context, log logr.Logger, volume 
 		return ctrl.Result{}, fmt.Errorf("error scheduling volume on pool: %w", err)
 	}
 
+	log.Info("---------------------------------------------->")
+	base = volume.DeepCopy()
+	volume.Status.State = storagev1alpha1.VolumeStateAvailable
+	volume.Status.Access = &storagev1alpha1.VolumeAccess{
+		VolumeAttributes: map[string]string{"wwn": "sdb1"},
+	}
+	if err := s.Status().Patch(ctx, volume, client.MergeFrom(base)); err != nil {
+		return ctrl.Result{}, fmt.Errorf("error patching volume state to pending: %w", err)
+	}
 	log.Info("Successfully assigned volume")
 	return ctrl.Result{}, nil
 }

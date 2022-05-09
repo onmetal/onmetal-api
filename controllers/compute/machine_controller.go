@@ -155,8 +155,28 @@ func (r *MachineReconciler) reconcile(ctx context.Context, log logr.Logger, mach
 		return ctrl.Result{}, fmt.Errorf("error patching machine status: %w", err)
 	}
 
+	if vaStatus := validateVaStatus(machine); vaStatus != nil {
+		machine.Status.VolumeAttachments = append(machine.Status.VolumeAttachments, *vaStatus)
+	}
+	machine.Status.State = computev1alpha1.MachineStateRunning
 	log.V(1).Info("Successfully reconciled")
 	return ctrl.Result{}, nil
+}
+
+func validateVaStatus(machine *computev1alpha1.Machine) *computev1alpha1.VolumeStatus {
+	if len(machine.Spec.Volumes) > 0 {
+		vaStatus := &computev1alpha1.VolumeStatus{
+			Name:     machine.Spec.Volumes[0].Name,
+			DeviceID: "sdb1_machine",
+		}
+		for _, va := range machine.Status.VolumeAttachments {
+			if va.Name == vaStatus.Name {
+				return nil
+			}
+		}
+		return vaStatus
+	}
+	return nil
 }
 
 // SetupWithManager sets up the controller with the Manager.

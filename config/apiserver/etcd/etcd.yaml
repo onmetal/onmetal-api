@@ -60,6 +60,7 @@ spec:
         name: etcd-data-dir
       spec:
         accessModes: [ "ReadWriteOnce" ]
+        storageClassName: csi-hostpath-sc
         resources:
           requests:
             storage: 1Gi
