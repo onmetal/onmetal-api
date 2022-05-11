@@ -42,9 +42,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/onmetal/onmetal-api/apis/common/v1alpha1.Toleration":                       schema_onmetal_api_apis_common_v1alpha1_Toleration(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EFIVar":                          schema_onmetal_api_apis_compute_v1alpha1_EFIVar(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EphemeralNetworkInterfaceSource": schema_onmetal_api_apis_compute_v1alpha1_EphemeralNetworkInterfaceSource(ref),
-		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.Interface":                       schema_onmetal_api_apis_compute_v1alpha1_Interface(ref),
-		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.InterfaceSource":                 schema_onmetal_api_apis_compute_v1alpha1_InterfaceSource(ref),
-		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.InterfaceStatus":                 schema_onmetal_api_apis_compute_v1alpha1_InterfaceStatus(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.Machine":                         schema_onmetal_api_apis_compute_v1alpha1_Machine(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.MachineClass":                    schema_onmetal_api_apis_compute_v1alpha1_MachineClass(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.MachineClassList":                schema_onmetal_api_apis_compute_v1alpha1_MachineClassList(ref),
@@ -57,16 +54,17 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.MachinePoolStatus":               schema_onmetal_api_apis_compute_v1alpha1_MachinePoolStatus(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.MachineSpec":                     schema_onmetal_api_apis_compute_v1alpha1_MachineSpec(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.MachineStatus":                   schema_onmetal_api_apis_compute_v1alpha1_MachineStatus(ref),
+		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.NetworkInterface":                schema_onmetal_api_apis_compute_v1alpha1_NetworkInterface(ref),
+		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.NetworkInterfaceSource":          schema_onmetal_api_apis_compute_v1alpha1_NetworkInterfaceSource(ref),
+		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.NetworkInterfaceStatus":          schema_onmetal_api_apis_compute_v1alpha1_NetworkInterfaceStatus(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.Volume":                          schema_onmetal_api_apis_compute_v1alpha1_Volume(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.VolumeSource":                    schema_onmetal_api_apis_compute_v1alpha1_VolumeSource(ref),
 		"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.VolumeStatus":                    schema_onmetal_api_apis_compute_v1alpha1_VolumeStatus(ref),
 		"github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.Prefix":                             schema_onmetal_api_apis_ipam_v1alpha1_Prefix(ref),
 		"github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixAllocation":                   schema_onmetal_api_apis_ipam_v1alpha1_PrefixAllocation(ref),
-		"github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixAllocationCondition":          schema_onmetal_api_apis_ipam_v1alpha1_PrefixAllocationCondition(ref),
 		"github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixAllocationList":               schema_onmetal_api_apis_ipam_v1alpha1_PrefixAllocationList(ref),
 		"github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixAllocationSpec":               schema_onmetal_api_apis_ipam_v1alpha1_PrefixAllocationSpec(ref),
 		"github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixAllocationStatus":             schema_onmetal_api_apis_ipam_v1alpha1_PrefixAllocationStatus(ref),
-		"github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixCondition":                    schema_onmetal_api_apis_ipam_v1alpha1_PrefixCondition(ref),
 		"github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixList":                         schema_onmetal_api_apis_ipam_v1alpha1_PrefixList(ref),
 		"github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixSpec":                         schema_onmetal_api_apis_ipam_v1alpha1_PrefixSpec(ref),
 		"github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixStatus":                       schema_onmetal_api_apis_ipam_v1alpha1_PrefixStatus(ref),
@@ -82,8 +80,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.IPSource":                     schema_onmetal_api_apis_networking_v1alpha1_IPSource(ref),
 		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.Network":                      schema_onmetal_api_apis_networking_v1alpha1_Network(ref),
 		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterface":             schema_onmetal_api_apis_networking_v1alpha1_NetworkInterface(ref),
-		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceBinding":      schema_onmetal_api_apis_networking_v1alpha1_NetworkInterfaceBinding(ref),
-		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceBindingList":  schema_onmetal_api_apis_networking_v1alpha1_NetworkInterfaceBindingList(ref),
 		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceList":         schema_onmetal_api_apis_networking_v1alpha1_NetworkInterfaceList(ref),
 		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceSpec":         schema_onmetal_api_apis_networking_v1alpha1_NetworkInterfaceSpec(ref),
 		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceStatus":       schema_onmetal_api_apis_networking_v1alpha1_NetworkInterfaceStatus(ref),
@@ -96,7 +92,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.VirtualIPSpec":                schema_onmetal_api_apis_networking_v1alpha1_VirtualIPSpec(ref),
 		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.VirtualIPStatus":              schema_onmetal_api_apis_networking_v1alpha1_VirtualIPStatus(ref),
 		"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.VirtualIPTemplateSpec":        schema_onmetal_api_apis_networking_v1alpha1_VirtualIPTemplateSpec(ref),
-		"github.com/onmetal/onmetal-api/apis/storage/v1alpha1.ClaimReference":                  schema_onmetal_api_apis_storage_v1alpha1_ClaimReference(ref),
 		"github.com/onmetal/onmetal-api/apis/storage/v1alpha1.Volume":                          schema_onmetal_api_apis_storage_v1alpha1_Volume(ref),
 		"github.com/onmetal/onmetal-api/apis/storage/v1alpha1.VolumeAccess":                    schema_onmetal_api_apis_storage_v1alpha1_VolumeAccess(ref),
 		"github.com/onmetal/onmetal-api/apis/storage/v1alpha1.VolumeClaim":                     schema_onmetal_api_apis_storage_v1alpha1_VolumeClaim(ref),
@@ -602,25 +597,30 @@ func schema_onmetal_api_apis_compute_v1alpha1_EFIVar(ref common.ReferenceCallbac
 				Properties: map[string]spec.Schema{
 					"name": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "Name is the name of the EFIVar.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"uuid": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
+							Description: "UUID is the uuid of the EFIVar.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"value": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Description: "Value is the value of the EFIVar.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
-				Required: []string{"value"},
+				Required: []string{"name", "uuid", "value"},
 			},
 		},
 	}
@@ -630,11 +630,13 @@ func schema_onmetal_api_apis_compute_v1alpha1_EphemeralNetworkInterfaceSource(re
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
+				Description: "EphemeralNetworkInterfaceSource is a definition for an ephemeral (i.e. coupled to the lifetime of the surrounding object) networking.NetworkInterface.",
+				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"networkInterfaceTemplate": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceTemplateSpec"),
+							Description: "NetworkInterfaceTemplate is the template definition of the networking.NetworkInterface.",
+							Ref:         ref("github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceTemplateSpec"),
 						},
 					},
 				},
@@ -642,108 +644,6 @@ func schema_onmetal_api_apis_compute_v1alpha1_EphemeralNetworkInterfaceSource(re
 		},
 		Dependencies: []string{
 			"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceTemplateSpec"},
-	}
-}
-
-func schema_onmetal_api_apis_compute_v1alpha1_Interface(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "Interface is the definition of a single interface",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"name": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Name is the name of the network interface.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"networkInterfaceRef": {
-						SchemaProps: spec.SchemaProps{
-							Description: "NetworkInterfaceRef instructs to use the NetworkInterface at the target reference.",
-							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
-						},
-					},
-					"ephemeral": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Ephemeral instructs to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) NetworkInterface to use.",
-							Ref:         ref("github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EphemeralNetworkInterfaceSource"),
-						},
-					},
-				},
-				Required: []string{"name"},
-			},
-		},
-		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EphemeralNetworkInterfaceSource", "k8s.io/api/core/v1.LocalObjectReference"},
-	}
-}
-
-func schema_onmetal_api_apis_compute_v1alpha1_InterfaceSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"networkInterfaceRef": {
-						SchemaProps: spec.SchemaProps{
-							Description: "NetworkInterfaceRef instructs to use the NetworkInterface at the target reference.",
-							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
-						},
-					},
-					"ephemeral": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Ephemeral instructs to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) NetworkInterface to use.",
-							Ref:         ref("github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EphemeralNetworkInterfaceSource"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EphemeralNetworkInterfaceSource", "k8s.io/api/core/v1.LocalObjectReference"},
-	}
-}
-
-func schema_onmetal_api_apis_compute_v1alpha1_InterfaceStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "InterfaceStatus reports the status of an InterfaceSource.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"name": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"ips": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/apis/common/v1alpha1.IP"),
-									},
-								},
-							},
-						},
-					},
-					"virtualIP": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("github.com/onmetal/onmetal-api/apis/common/v1alpha1.IP"),
-						},
-					},
-				},
-				Required: []string{"ips"},
-			},
-		},
-		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.IP"},
 	}
 }
 
@@ -896,7 +796,7 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineCondition(ref common.Refere
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "MachineCondition is one of the conditions of a Machine.",
+				Description: "MachineCondition is one of the conditions of a volume.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"type": {
@@ -918,7 +818,6 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineCondition(ref common.Refere
 					"reason": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Reason is a machine-readable indication of why the condition is in a certain state.",
-							Default:     "",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -926,7 +825,6 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineCondition(ref common.Refere
 					"message": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Message is a human-readable explanation of why the condition has a certain reason / state.",
-							Default:     "",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -938,13 +836,6 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineCondition(ref common.Refere
 							Format:      "int64",
 						},
 					},
-					"lastUpdateTime": {
-						SchemaProps: spec.SchemaProps{
-							Description: "LastUpdateTime is the last time a condition has been updated.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
-						},
-					},
 					"lastTransitionTime": {
 						SchemaProps: spec.SchemaProps{
 							Description: "LastTransitionTime is the last time the status of a condition has transitioned from one state to another.",
@@ -953,7 +844,7 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineCondition(ref common.Refere
 						},
 					},
 				},
-				Required: []string{"type", "status", "reason", "message"},
+				Required: []string{"type", "status"},
 			},
 		},
 		Dependencies: []string{
@@ -1103,13 +994,6 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachinePoolCondition(ref common.Re
 							Format:      "int64",
 						},
 					},
-					"lastUpdateTime": {
-						SchemaProps: spec.SchemaProps{
-							Description: "LastUpdateTime is the last time a condition has been updated.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
-						},
-					},
 					"lastTransitionTime": {
 						SchemaProps: spec.SchemaProps{
 							Description: "LastTransitionTime is the last time the status of a condition has transitioned from one state to another.",
@@ -1222,9 +1106,10 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachinePoolStatus(ref common.Refer
 				Properties: map[string]spec.Schema{
 					"state": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
+							Description: "Possible enum values:\n - `\"Error\"` marks a MachinePool in an error state.\n - `\"Offline\"` marks a MachinePool as offline.\n - `\"Pending\"` marks a MachinePool as pending readiness.\n - `\"Ready\"` marks a MachinePool as ready for accepting a Machine.",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"Error", "Offline", "Pending", "Ready"}},
 					},
 					"conditions": {
 						SchemaProps: spec.SchemaProps{
@@ -1293,7 +1178,6 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineSpec(ref common.ReferenceCa
 					"machinePoolRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "MachinePoolRef defines machine pool to run the machine in. If empty, a scheduler will figure out an appropriate pool to run the machine in.",
-							Default:     map[string]interface{}{},
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
@@ -1305,15 +1189,15 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineSpec(ref common.ReferenceCa
 							Format:      "",
 						},
 					},
-					"interfaces": {
+					"networkInterfaces": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Interfaces define a list of network interfaces present on the machine",
+							Description: "NetworkInterfaces define a list of network interfaces present on the machine",
 							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/apis/compute/v1alpha1.Interface"),
+										Ref:     ref("github.com/onmetal/onmetal-api/apis/compute/v1alpha1.NetworkInterface"),
 									},
 								},
 							},
@@ -1333,7 +1217,7 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineSpec(ref common.ReferenceCa
 							},
 						},
 					},
-					"ignition": {
+					"ignitionRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "IgnitionRef is a reference to a config map containing the ignition YAML for the machine to boot up. If key is empty, DefaultIgnitionKey will be used as fallback.",
 							Ref:         ref("github.com/onmetal/onmetal-api/apis/common/v1alpha1.ConfigMapKeySelector"),
@@ -1372,7 +1256,7 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineSpec(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.ConfigMapKeySelector", "github.com/onmetal/onmetal-api/apis/common/v1alpha1.Toleration", "github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EFIVar", "github.com/onmetal/onmetal-api/apis/compute/v1alpha1.Interface", "github.com/onmetal/onmetal-api/apis/compute/v1alpha1.Volume", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.ConfigMapKeySelector", "github.com/onmetal/onmetal-api/apis/common/v1alpha1.Toleration", "github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EFIVar", "github.com/onmetal/onmetal-api/apis/compute/v1alpha1.NetworkInterface", "github.com/onmetal/onmetal-api/apis/compute/v1alpha1.Volume", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
@@ -1385,13 +1269,15 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineStatus(ref common.Reference
 				Properties: map[string]spec.Schema{
 					"state": {
 						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
+							Description: "State is the state of the machine.\n\nPossible enum values:\n - `\"Error\"` means the machine is in an error state.\n - `\"Pending\"` means the Machine has been accepted by the system, but not yet completely started. This includes time before being bound to a MachinePool, as well as time spent setting up the Machine on that MachinePool.\n - `\"Running\"` means the machine is running on a MachinePool.\n - `\"Shutdown\"` means the machine is shut down.",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"Error", "Pending", "Running", "Shutdown"}},
 					},
 					"conditions": {
 						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
+							Description: "Conditions are the conditions of the machines.",
+							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
@@ -1402,14 +1288,15 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineStatus(ref common.Reference
 							},
 						},
 					},
-					"interfaces": {
+					"networkInterfaces": {
 						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
+							Description: "NetworkInterfaces is the list of network interface states for the machine.",
+							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/apis/compute/v1alpha1.InterfaceStatus"),
+										Ref:     ref("github.com/onmetal/onmetal-api/apis/compute/v1alpha1.NetworkInterfaceStatus"),
 									},
 								},
 							},
@@ -1417,7 +1304,8 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineStatus(ref common.Reference
 					},
 					"volumes": {
 						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
+							Description: "Volumes is the list of volume states for the machine.",
+							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
@@ -1432,7 +1320,113 @@ func schema_onmetal_api_apis_compute_v1alpha1_MachineStatus(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.InterfaceStatus", "github.com/onmetal/onmetal-api/apis/compute/v1alpha1.MachineCondition", "github.com/onmetal/onmetal-api/apis/compute/v1alpha1.VolumeStatus"},
+			"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.MachineCondition", "github.com/onmetal/onmetal-api/apis/compute/v1alpha1.NetworkInterfaceStatus", "github.com/onmetal/onmetal-api/apis/compute/v1alpha1.VolumeStatus"},
+	}
+}
+
+func schema_onmetal_api_apis_compute_v1alpha1_NetworkInterface(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "NetworkInterface is the definition of a single interface",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the network interface.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"networkInterfaceRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "NetworkInterfaceRef instructs to use the NetworkInterface at the target reference.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"ephemeral": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Ephemeral instructs to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) NetworkInterface to use.",
+							Ref:         ref("github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EphemeralNetworkInterfaceSource"),
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EphemeralNetworkInterfaceSource", "k8s.io/api/core/v1.LocalObjectReference"},
+	}
+}
+
+func schema_onmetal_api_apis_compute_v1alpha1_NetworkInterfaceSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"networkInterfaceRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "NetworkInterfaceRef instructs to use the NetworkInterface at the target reference.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+					"ephemeral": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Ephemeral instructs to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) NetworkInterface to use.",
+							Ref:         ref("github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EphemeralNetworkInterfaceSource"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/onmetal/onmetal-api/apis/compute/v1alpha1.EphemeralNetworkInterfaceSource", "k8s.io/api/core/v1.LocalObjectReference"},
+	}
+}
+
+func schema_onmetal_api_apis_compute_v1alpha1_NetworkInterfaceStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "NetworkInterfaceStatus reports the status of an NetworkInterfaceSource.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the NetworkInterface to whom the status belongs to.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"ips": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IPs are the ips allocated for the network interface.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/onmetal/onmetal-api/apis/common/v1alpha1.IP"),
+									},
+								},
+							},
+						},
+					},
+					"virtualIP": {
+						SchemaProps: spec.SchemaProps{
+							Description: "VirtualIP is the virtual ip allocated for the network interface.",
+							Ref:         ref("github.com/onmetal/onmetal-api/apis/common/v1alpha1.IP"),
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.IP"},
 	}
 }
 
@@ -1453,7 +1447,7 @@ func schema_onmetal_api_apis_compute_v1alpha1_Volume(ref common.ReferenceCallbac
 					},
 					"volumeClaimRef": {
 						SchemaProps: spec.SchemaProps{
-							Description: "VolumeClaim instructs the Volume to use a VolumeClaim as source for the attachment.",
+							Description: "VolumeClaimRef instructs the Volume to use a VolumeClaimRef as source for the attachment.",
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
@@ -1475,7 +1469,7 @@ func schema_onmetal_api_apis_compute_v1alpha1_VolumeSource(ref common.ReferenceC
 				Properties: map[string]spec.Schema{
 					"volumeClaimRef": {
 						SchemaProps: spec.SchemaProps{
-							Description: "VolumeClaim instructs the Volume to use a VolumeClaim as source for the attachment.",
+							Description: "VolumeClaimRef instructs the Volume to use a VolumeClaimRef as source for the attachment.",
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
@@ -1610,53 +1604,6 @@ func schema_onmetal_api_apis_ipam_v1alpha1_PrefixAllocation(ref common.Reference
 	}
 }
 
-func schema_onmetal_api_apis_ipam_v1alpha1_PrefixAllocationCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"type": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"status": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"message": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"lastTransitionTime": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
-						},
-					},
-				},
-				Required: []string{"type", "status"},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
-	}
-}
-
 func schema_onmetal_api_apis_ipam_v1alpha1_PrefixAllocationList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -1766,72 +1713,24 @@ func schema_onmetal_api_apis_ipam_v1alpha1_PrefixAllocationStatus(ref common.Ref
 							Ref:         ref("github.com/onmetal/onmetal-api/apis/common/v1alpha1.IPPrefix"),
 						},
 					},
-					"conditions": {
+					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Conditions represent various state aspects of a PrefixAllocation.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixAllocationCondition"),
-									},
-								},
-							},
+							Description: "Phase is the phase of the PrefixAllocation.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"lastPhaseTransitionTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LastPhaseTransitionTime is the last time the Phase changed values.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.IPPrefix", "github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixAllocationCondition"},
-	}
-}
-
-func schema_onmetal_api_apis_ipam_v1alpha1_PrefixCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"type": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"status": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"message": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"lastTransitionTime": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
-						},
-					},
-				},
-				Required: []string{"type", "status"},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.IPPrefix", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
@@ -1938,18 +1837,17 @@ func schema_onmetal_api_apis_ipam_v1alpha1_PrefixStatus(ref common.ReferenceCall
 				Description: "PrefixStatus defines the observed state of Prefix",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"conditions": {
+					"phase": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Conditions is a list of conditions of a Prefix.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixCondition"),
-									},
-								},
-							},
+							Description: "Phase is the PrefixPhase of the Prefix.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"lastPhaseTransitionTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LastPhaseTransitionTime is the last time the Phase changed values.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
 					"used": {
@@ -1970,7 +1868,7 @@ func schema_onmetal_api_apis_ipam_v1alpha1_PrefixStatus(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.IPPrefix", "github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixCondition"},
+			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.IPPrefix", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
@@ -2256,11 +2154,13 @@ func schema_onmetal_api_apis_networking_v1alpha1_EphemeralPrefixSource(ref commo
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
+				Description: "EphemeralPrefixSource contains the definition to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) Prefix.",
+				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"prefixTemplate": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixTemplateSpec"),
+							Description: "PrefixTemplate is the template for the Prefix.",
+							Ref:         ref("github.com/onmetal/onmetal-api/apis/ipam/v1alpha1.PrefixTemplateSpec"),
 						},
 					},
 				},
@@ -2275,11 +2175,13 @@ func schema_onmetal_api_apis_networking_v1alpha1_EphemeralVirtualIPSource(ref co
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
+				Description: "EphemeralVirtualIPSource contains the definition to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) VirtualIP.",
+				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"virtualIPTemplate": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("github.com/onmetal/onmetal-api/apis/networking/v1alpha1.VirtualIPTemplateSpec"),
+							Description: "VirtualIPTemplate is the template for the VirtualIP.",
+							Ref:         ref("github.com/onmetal/onmetal-api/apis/networking/v1alpha1.VirtualIPTemplateSpec"),
 						},
 					},
 				},
@@ -2396,115 +2298,6 @@ func schema_onmetal_api_apis_networking_v1alpha1_NetworkInterface(ref common.Ref
 		},
 		Dependencies: []string{
 			"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceSpec", "github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
-	}
-}
-
-func schema_onmetal_api_apis_networking_v1alpha1_NetworkInterfaceBinding(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "NetworkInterfaceBinding is the Schema for the networkinterfacebindings API",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
-						},
-					},
-					"networkRef": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/apis/common/v1alpha1.LocalUIDReference"),
-						},
-					},
-					"ips": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/apis/common/v1alpha1.IP"),
-									},
-								},
-							},
-						},
-					},
-					"virtualIPRef": {
-						SchemaProps: spec.SchemaProps{
-							Ref: ref("github.com/onmetal/onmetal-api/apis/common/v1alpha1.LocalUIDReference"),
-						},
-					},
-				},
-				Required: []string{"networkRef"},
-			},
-		},
-		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.IP", "github.com/onmetal/onmetal-api/apis/common/v1alpha1.LocalUIDReference", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
-	}
-}
-
-func schema_onmetal_api_apis_networking_v1alpha1_NetworkInterfaceBindingList(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "NetworkInterfaceBindingList contains a list of NetworkInterfaceBinding",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
-						},
-					},
-					"items": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceBinding"),
-									},
-								},
-							},
-						},
-					},
-				},
-				Required: []string{"items"},
-			},
-		},
-		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/networking/v1alpha1.NetworkInterfaceBinding", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
@@ -2994,36 +2787,6 @@ func schema_onmetal_api_apis_networking_v1alpha1_VirtualIPTemplateSpec(ref commo
 	}
 }
 
-func schema_onmetal_api_apis_storage_v1alpha1_ClaimReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ClaimReference points to a referenced VolumeClaim.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"name": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Name is the name of the referenced VolumeClaim.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"uid": {
-						SchemaProps: spec.SchemaProps{
-							Description: "UID is the UID of the referenced VolumeClaim.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-				},
-				Required: []string{"name", "uid"},
-			},
-		},
-	}
-}
-
 func schema_onmetal_api_apis_storage_v1alpha1_Volume(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -3081,7 +2844,6 @@ func schema_onmetal_api_apis_storage_v1alpha1_VolumeAccess(ref common.ReferenceC
 					"secretRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "SecretRef references the Secret containing the access credentials to consume a Volume.",
-							Default:     map[string]interface{}{},
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
@@ -3224,7 +2986,6 @@ func schema_onmetal_api_apis_storage_v1alpha1_VolumeClaimSpec(ref common.Referen
 					"volumeRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VolumeRef is the reference to the Volume used by the VolumeClaim",
-							Default:     map[string]interface{}{},
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
@@ -3526,13 +3287,6 @@ func schema_onmetal_api_apis_storage_v1alpha1_VolumePoolCondition(ref common.Ref
 							Format:      "int64",
 						},
 					},
-					"lastUpdateTime": {
-						SchemaProps: spec.SchemaProps{
-							Description: "LastUpdateTime is the last time a condition has been updated.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
-						},
-					},
 					"lastTransitionTime": {
 						SchemaProps: spec.SchemaProps{
 							Description: "LastTransitionTime is the last time the status of a condition has transitioned from one state to another.",
@@ -3747,15 +3501,13 @@ func schema_onmetal_api_apis_storage_v1alpha1_VolumeSpec(ref common.ReferenceCal
 					"volumePoolRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VolumePoolRef indicates which VolumePool to use for a volume. If unset, the scheduler will figure out a suitable VolumePoolRef.",
-							Default:     map[string]interface{}{},
 							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
 						},
 					},
 					"claimRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ClaimRef is the reference to the VolumeClaim used by the Volume.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("github.com/onmetal/onmetal-api/apis/storage/v1alpha1.ClaimReference"),
+							Ref:         ref("github.com/onmetal/onmetal-api/apis/common/v1alpha1.LocalUIDReference"),
 						},
 					},
 					"resources": {
@@ -3792,7 +3544,7 @@ func schema_onmetal_api_apis_storage_v1alpha1_VolumeSpec(ref common.ReferenceCal
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.Toleration", "github.com/onmetal/onmetal-api/apis/storage/v1alpha1.ClaimReference", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
+			"github.com/onmetal/onmetal-api/apis/common/v1alpha1.LocalUIDReference", "github.com/onmetal/onmetal-api/apis/common/v1alpha1.Toleration", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 

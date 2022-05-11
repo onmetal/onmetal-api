@@ -231,8 +231,8 @@ func main() {
 
 	if controllers.Enabled(volumeClaimScheduler) {
 		if err = (&storagecontrollers.VolumeClaimScheduler{
-			Client:        mgr.GetClient(),
-			EventRecorder: mgr.GetEventRecorderFor("volume-claim-scheduler"),
+			Client: mgr.GetClient(),
+			Events: mgr.GetEventRecorderFor("volume-claim-scheduler"),
 		}).SetupWithManager(mgr); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VolumeClaimScheduler")
 		}
@@ -278,6 +278,7 @@ func main() {
 		if err = (&ipamcontrollers.PrefixAllocationScheduler{
 			Client: mgr.GetClient(),
 			Scheme: mgr.GetScheme(),
+			Events: mgr.GetEventRecorderFor("prefix-allocation-scheduler"),
 		}).SetupWithManager(mgr); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PrefixAllocationScheduler")
 			os.Exit(1)
