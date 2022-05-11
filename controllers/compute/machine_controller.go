@@ -156,7 +156,7 @@ func (r *MachineReconciler) reconcile(ctx context.Context, log logr.Logger, mach
 	}
 
 	if vaStatus := validateVaStatus(machine); vaStatus != nil {
-		machine.Status.VolumeAttachments = append(machine.Status.VolumeAttachments, *vaStatus)
+		machine.Status.Volumes = append(machine.Status.Volumes, *vaStatus)
 	}
 	machine.Status.State = computev1alpha1.MachineStateRunning
 	log.V(1).Info("Successfully reconciled")
@@ -169,7 +169,7 @@ func validateVaStatus(machine *computev1alpha1.Machine) *computev1alpha1.VolumeS
 			Name:     machine.Spec.Volumes[0].Name,
 			DeviceID: "sdb1_machine",
 		}
-		for _, va := range machine.Status.VolumeAttachments {
+		for _, va := range machine.Status.Volumes {
 			if va.Name == vaStatus.Name {
 				return nil
 			}
