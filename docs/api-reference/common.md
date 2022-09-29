@@ -10,8 +10,7 @@
 </div>
 Resource Types:
 <ul></ul>
-<h3 id="common.api.onmetal.de/v1alpha1.ConfigMapKeySelector">ConfigMapKeySelector
-</h3>
+## ConfigMapKeySelector
 <div>
 <p>ConfigMapKeySelector is a reference to a specific &lsquo;key&rsquo; within a ConfigMap resource.
 In some instances, <code>key</code> is a required field.</p>
@@ -28,7 +27,7 @@ In some instances, <code>key</code> is a required field.</p>
 <td>
 <code>LocalObjectReference</code><br/>
 <em>
-<a href="https://v1-23.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -56,10 +55,9 @@ required.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="common.api.onmetal.de/v1alpha1.IP">IP
-</h3>
+## IP
 <p>
-(<em>Appears on:</em><a href="#common.api.onmetal.de/v1alpha1.IPRange">IPRange</a>)
+(<em>Appears on:</em><a href="#IPRange">IPRange</a>)
 </p>
 <div>
 <p>IP is an IP address.</p>
@@ -86,8 +84,7 @@ inet.af/netaddr.IP
 </tr>
 </tbody>
 </table>
-<h3 id="common.api.onmetal.de/v1alpha1.IPPrefix">IPPrefix
-</h3>
+## IPPrefix
 <div>
 <p>IPPrefix represents a network prefix.</p>
 </div>
@@ -113,8 +110,7 @@ inet.af/netaddr.IPPrefix
 </tr>
 </tbody>
 </table>
-<h3 id="common.api.onmetal.de/v1alpha1.IPRange">IPRange
-</h3>
+## IPRange
 <div>
 <p>IPRange is an IP range.</p>
 </div>
@@ -152,8 +148,7 @@ IP
 </tr>
 </tbody>
 </table>
-<h3 id="common.api.onmetal.de/v1alpha1.LocalUIDReference">LocalUIDReference
-</h3>
+## LocalUIDReference
 <div>
 <p>LocalUIDReference is a reference to another entity including its UID</p>
 </div>
@@ -191,8 +186,7 @@ k8s.io/apimachinery/pkg/types.UID
 </tr>
 </tbody>
 </table>
-<h3 id="common.api.onmetal.de/v1alpha1.SecretKeySelector">SecretKeySelector
-</h3>
+## SecretKeySelector
 <div>
 <p>SecretKeySelector is a reference to a specific &lsquo;key&rsquo; within a Secret resource.
 In some instances, <code>key</code> is a required field.</p>
@@ -209,7 +203,7 @@ In some instances, <code>key</code> is a required field.</p>
 <td>
 <code>LocalObjectReference</code><br/>
 <em>
-<a href="https://v1-23.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -237,8 +231,7 @@ required.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="common.api.onmetal.de/v1alpha1.Taint">Taint
-</h3>
+## Taint
 <div>
 <p>The resource pool this Taint is attached to has the &ldquo;effect&rdquo; on
 any resource that does not tolerate the Taint.</p>
@@ -290,10 +283,10 @@ Valid effects are NoSchedule, PreferNoSchedule and NoExecute.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="common.api.onmetal.de/v1alpha1.TaintEffect">TaintEffect
-(<code>string</code> alias)</h3>
+## TaintEffect
+(<code>string</code> alias)
 <p>
-(<em>Appears on:</em><a href="#common.api.onmetal.de/v1alpha1.Taint">Taint</a>, <a href="#common.api.onmetal.de/v1alpha1.Toleration">Toleration</a>)
+(<em>Appears on:</em><a href="#Taint">Taint</a>, <a href="#Toleration">Toleration</a>)
 </p>
 <div>
 </div>
@@ -311,8 +304,7 @@ Enforced by the scheduler.</p>
 </td>
 </tr></tbody>
 </table>
-<h3 id="common.api.onmetal.de/v1alpha1.Toleration">Toleration
-</h3>
+## Toleration
 <div>
 <p>The resource this Toleration is attached to tolerates any taint that matches
 the triple <key,value,effect> using the matching operator <operator>.</p>
@@ -381,10 +373,10 @@ When specified, allowed values are NoSchedule.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="common.api.onmetal.de/v1alpha1.TolerationOperator">TolerationOperator
-(<code>string</code> alias)</h3>
+## TolerationOperator
+(<code>string</code> alias)
 <p>
-(<em>Appears on:</em><a href="#common.api.onmetal.de/v1alpha1.Toleration">Toleration</a>)
+(<em>Appears on:</em><a href="#Toleration">Toleration</a>)
 </p>
 <div>
 <p>A toleration operator is the set of operators that can be used in a toleration.</p>

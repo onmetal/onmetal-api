@@ -59,7 +59,7 @@ The `config/samples` folder contains samples for all APIs supported by this proj
 running
 
 ```shell
-kubectl apply -f config/samples/SOME_RESOURCE.yaml
+kubectl apply -f config/samples/<RESOURCE>.yaml
 ```
 
 ## Rebuilding API Type and Manifests
@@ -90,9 +90,6 @@ You can automate running formatting tools in your IDE.
         "formatting.local": "github.com/onmetal",
     },
 ```
-
-- **Goland** -- go to `File -> Settings -> Tools -> File Watchers` and replace contents of `Arguments`
-  with `--local github.com/onmetal -w $FilePath$`
 
 ## Cleanup
 

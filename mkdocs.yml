@@ -1,21 +1,30 @@
-site_name: OnMetal API
+site_name: Gardener on Metal / onmetal-api
 repo_url: https://github.com/onmetal/onmetal-api/
 edit_uri: edit/main/docs/
 theme:
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
   name: material
   logo: assets/logo.png
+  favicon: assets/favicon.png
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
       primary: white
       toggle:
-        icon: material/toggle-switch-off-outline
+        icon: material/weather-night
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: black
       toggle:
-        icon: material/toggle-switch
+        icon: material/weather-sunny
         name: Switch to light mode
   font:
     text: 'Work Sans'
@@ -45,11 +54,18 @@ nav:
   - Developer Guide:
       - Local Setup: development/setup.md
       - Documentation: development/documentation.md
-      - Testing: development/testing.md
       - Contribution Guide: development/contribution.md
   - API Reference:
       - Overview: api-reference/overview.md
       - IPAM: api-reference/ipam.md
       - Compute: api-reference/compute.md
       - Storage: api-reference/storage.md
+      - Networking: api-reference/networking.md
       - Common: api-reference/common.md
+  - Main Documentation ⧉: https://onmetal.github.io/documentation/
+  - Landing Page ⧉: https://onmetal.github.io/
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/onmetal/cephlet

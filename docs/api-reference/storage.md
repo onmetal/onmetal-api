@@ -16,8 +16,7 @@ Resource Types:
 </li><li>
 <a href="#storage.api.onmetal.de/v1alpha1.VolumePool">VolumePool</a>
 </li></ul>
-<h3 id="storage.api.onmetal.de/v1alpha1.Volume">Volume
-</h3>
+## Volume
 <div>
 <p>Volume is the Schema for the volumes API</p>
 </div>
@@ -50,7 +49,7 @@ string
 <td>
 <code>metadata</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#objectmeta-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#objectmeta-v1-meta">
 Kubernetes meta/v1.ObjectMeta
 </a>
 </em>
@@ -77,7 +76,7 @@ VolumeSpec
 <td>
 <code>volumeClassRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -101,7 +100,7 @@ map[string]string
 <td>
 <code>volumePoolRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -126,7 +125,7 @@ github.com/onmetal/onmetal-api/apis/common/v1alpha1.LocalUIDReference
 <td>
 <code>resources</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#resourcelist-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourcelist-v1-core">
 Kubernetes core/v1.ResourceList
 </a>
 </em>
@@ -150,7 +149,7 @@ string
 <td>
 <code>imagePullSecretRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -201,8 +200,7 @@ VolumeStatus
 </tr>
 </tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumeClass">VolumeClass
-</h3>
+## VolumeClass
 <div>
 <p>VolumeClass is the Schema for the volumeclasses API</p>
 </div>
@@ -235,7 +233,7 @@ string
 <td>
 <code>metadata</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#objectmeta-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#objectmeta-v1-meta">
 Kubernetes meta/v1.ObjectMeta
 </a>
 </em>
@@ -249,7 +247,7 @@ Refer to the Kubernetes API documentation for the fields of the
 <td>
 <code>capabilities</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#resourcelist-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourcelist-v1-core">
 Kubernetes core/v1.ResourceList
 </a>
 </em>
@@ -260,8 +258,7 @@ Kubernetes core/v1.ResourceList
 </tr>
 </tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumePool">VolumePool
-</h3>
+## VolumePool
 <div>
 <p>VolumePool is the Schema for the volumepools API</p>
 </div>
@@ -294,7 +291,7 @@ string
 <td>
 <code>metadata</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#objectmeta-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#objectmeta-v1-meta">
 Kubernetes meta/v1.ObjectMeta
 </a>
 </em>
@@ -359,10 +356,9 @@ VolumePoolStatus
 </tr>
 </tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumeAccess">VolumeAccess
-</h3>
+## VolumeAccess
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.VolumeStatus">VolumeStatus</a>)
+(<em>Appears on:</em><a href="#VolumeStatus">VolumeStatus</a>)
 </p>
 <div>
 <p>VolumeAccess represents information on how to access a volume.</p>
@@ -379,7 +375,7 @@ VolumePoolStatus
 <td>
 <code>secretRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -412,10 +408,9 @@ map[string]string
 </tr>
 </tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumeCondition">VolumeCondition
-</h3>
+## VolumeCondition
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.VolumeStatus">VolumeStatus</a>)
+(<em>Appears on:</em><a href="#VolumeStatus">VolumeStatus</a>)
 </p>
 <div>
 <p>VolumeCondition is one of the conditions of a volume.</p>
@@ -445,7 +440,7 @@ VolumeConditionType
 <td>
 <code>status</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#conditionstatus-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#conditionstatus-v1-core">
 Kubernetes core/v1.ConditionStatus
 </a>
 </em>
@@ -491,7 +486,7 @@ int64
 <td>
 <code>lastTransitionTime</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#time-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#time-v1-meta">
 Kubernetes meta/v1.Time
 </a>
 </em>
@@ -502,18 +497,18 @@ Kubernetes meta/v1.Time
 </tr>
 </tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumeConditionType">VolumeConditionType
-(<code>string</code> alias)</h3>
+## VolumeConditionType
+(<code>string</code> alias)
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.VolumeCondition">VolumeCondition</a>)
+(<em>Appears on:</em><a href="#VolumeCondition">VolumeCondition</a>)
 </p>
 <div>
 <p>VolumeConditionType is a type a VolumeCondition can have.</p>
 </div>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumePhase">VolumePhase
-(<code>string</code> alias)</h3>
+## VolumePhase
+(<code>string</code> alias)
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.VolumeStatus">VolumeStatus</a>)
+(<em>Appears on:</em><a href="#VolumeStatus">VolumeStatus</a>)
 </p>
 <div>
 <p>VolumePhase represents the binding phase of a Volume.</p>
@@ -536,10 +531,9 @@ Kubernetes meta/v1.Time
 </td>
 </tr></tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumePoolCondition">VolumePoolCondition
-</h3>
+## VolumePoolCondition
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.VolumePoolStatus">VolumePoolStatus</a>)
+(<em>Appears on:</em><a href="#VolumePoolStatus">VolumePoolStatus</a>)
 </p>
 <div>
 <p>VolumePoolCondition is one of the conditions of a volume.</p>
@@ -569,7 +563,7 @@ VolumePoolConditionType
 <td>
 <code>status</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#conditionstatus-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#conditionstatus-v1-core">
 Kubernetes core/v1.ConditionStatus
 </a>
 </em>
@@ -615,7 +609,7 @@ int64
 <td>
 <code>lastTransitionTime</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#time-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#time-v1-meta">
 Kubernetes meta/v1.Time
 </a>
 </em>
@@ -626,18 +620,17 @@ Kubernetes meta/v1.Time
 </tr>
 </tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumePoolConditionType">VolumePoolConditionType
-(<code>string</code> alias)</h3>
+## VolumePoolConditionType
+(<code>string</code> alias)
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.VolumePoolCondition">VolumePoolCondition</a>)
+(<em>Appears on:</em><a href="#VolumePoolCondition">VolumePoolCondition</a>)
 </p>
 <div>
 <p>VolumePoolConditionType is a type a VolumePoolCondition can have.</p>
 </div>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumePoolSpec">VolumePoolSpec
-</h3>
+## VolumePoolSpec
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.VolumePool">VolumePool</a>)
+(<em>Appears on:</em><a href="#VolumePool">VolumePool</a>)
 </p>
 <div>
 <p>VolumePoolSpec defines the desired state of VolumePool</p>
@@ -677,10 +670,10 @@ will land in the VolumePool.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumePoolState">VolumePoolState
-(<code>string</code> alias)</h3>
+## VolumePoolState
+(<code>string</code> alias)
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.VolumePoolStatus">VolumePoolStatus</a>)
+(<em>Appears on:</em><a href="#VolumePoolStatus">VolumePoolStatus</a>)
 </p>
 <div>
 </div>
@@ -699,10 +692,9 @@ will land in the VolumePool.</p>
 <td></td>
 </tr></tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumePoolStatus">VolumePoolStatus
-</h3>
+## VolumePoolStatus
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.VolumePool">VolumePool</a>)
+(<em>Appears on:</em><a href="#VolumePool">VolumePool</a>)
 </p>
 <div>
 <p>VolumePoolStatus defines the observed state of VolumePool</p>
@@ -743,7 +735,7 @@ VolumePoolState
 <td>
 <code>availableVolumeClasses</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 []Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -756,7 +748,7 @@ VolumePoolState
 <td>
 <code>available</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#resourcelist-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourcelist-v1-core">
 Kubernetes core/v1.ResourceList
 </a>
 </em>
@@ -769,7 +761,7 @@ Kubernetes core/v1.ResourceList
 <td>
 <code>used</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#resourcelist-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourcelist-v1-core">
 Kubernetes core/v1.ResourceList
 </a>
 </em>
@@ -780,10 +772,9 @@ Kubernetes core/v1.ResourceList
 </tr>
 </tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumeSpec">VolumeSpec
-</h3>
+## VolumeSpec
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.Volume">Volume</a>, <a href="#storage.api.onmetal.de/v1alpha1.VolumeTemplateSpec">VolumeTemplateSpec</a>)
+(<em>Appears on:</em><a href="#Volume">Volume</a>, <a href="#VolumeTemplateSpec">VolumeTemplateSpec</a>)
 </p>
 <div>
 <p>VolumeSpec defines the desired state of Volume</p>
@@ -800,7 +791,7 @@ Kubernetes core/v1.ResourceList
 <td>
 <code>volumeClassRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -824,7 +815,7 @@ map[string]string
 <td>
 <code>volumePoolRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -849,7 +840,7 @@ github.com/onmetal/onmetal-api/apis/common/v1alpha1.LocalUIDReference
 <td>
 <code>resources</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#resourcelist-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourcelist-v1-core">
 Kubernetes core/v1.ResourceList
 </a>
 </em>
@@ -873,7 +864,7 @@ string
 <td>
 <code>imagePullSecretRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -909,10 +900,10 @@ covered by Tolerations will be considered to host the Volume.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumeState">VolumeState
-(<code>string</code> alias)</h3>
+## VolumeState
+(<code>string</code> alias)
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.VolumeStatus">VolumeStatus</a>)
+(<em>Appears on:</em><a href="#VolumeStatus">VolumeStatus</a>)
 </p>
 <div>
 <p>VolumeState represents the infrastructure state of a Volume.</p>
@@ -935,10 +926,9 @@ covered by Tolerations will be considered to host the Volume.</p>
 </td>
 </tr></tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumeStatus">VolumeStatus
-</h3>
+## VolumeStatus
 <p>
-(<em>Appears on:</em><a href="#storage.api.onmetal.de/v1alpha1.Volume">Volume</a>)
+(<em>Appears on:</em><a href="#Volume">Volume</a>)
 </p>
 <div>
 <p>VolumeStatus defines the observed state of Volume</p>
@@ -968,7 +958,7 @@ VolumeState
 <td>
 <code>lastStateTransitionTime</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#time-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#time-v1-meta">
 Kubernetes meta/v1.Time
 </a>
 </em>
@@ -994,7 +984,7 @@ VolumePhase
 <td>
 <code>lastPhaseTransitionTime</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#time-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#time-v1-meta">
 Kubernetes meta/v1.Time
 </a>
 </em>
@@ -1032,8 +1022,7 @@ This is set by the volume provider when the volume is provisioned.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="storage.api.onmetal.de/v1alpha1.VolumeTemplateSpec">VolumeTemplateSpec
-</h3>
+## VolumeTemplateSpec
 <div>
 <p>VolumeTemplateSpec is the specification of a Volume template.</p>
 </div>
@@ -1049,7 +1038,7 @@ This is set by the volume provider when the volume is provisioned.</p>
 <td>
 <code>metadata</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#objectmeta-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#objectmeta-v1-meta">
 Kubernetes meta/v1.ObjectMeta
 </a>
 </em>
@@ -1076,7 +1065,7 @@ VolumeSpec
 <td>
 <code>volumeClassRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -1100,7 +1089,7 @@ map[string]string
 <td>
 <code>volumePoolRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -1125,7 +1114,7 @@ github.com/onmetal/onmetal-api/apis/common/v1alpha1.LocalUIDReference
 <td>
 <code>resources</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#resourcelist-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#resourcelist-v1-core">
 Kubernetes core/v1.ResourceList
 </a>
 </em>
@@ -1149,7 +1138,7 @@ string
 <td>
 <code>imagePullSecretRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>

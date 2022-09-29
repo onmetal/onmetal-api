@@ -14,8 +14,7 @@ Resource Types:
 </li><li>
 <a href="#ipam.api.onmetal.de/v1alpha1.PrefixAllocation">PrefixAllocation</a>
 </li></ul>
-<h3 id="ipam.api.onmetal.de/v1alpha1.Prefix">Prefix
-</h3>
+## Prefix
 <div>
 <p>Prefix is the Schema for the prefixes API</p>
 </div>
@@ -48,7 +47,7 @@ string
 <td>
 <code>metadata</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#objectmeta-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#objectmeta-v1-meta">
 Kubernetes meta/v1.ObjectMeta
 </a>
 </em>
@@ -75,7 +74,7 @@ PrefixSpec
 <td>
 <code>ipFamily</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#ipfamily-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#ipfamily-v1-core">
 Kubernetes core/v1.IPFamily
 </a>
 </em>
@@ -113,7 +112,7 @@ int32
 <td>
 <code>parentRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -128,7 +127,7 @@ allocated by itself.</p>
 <td>
 <code>parentSelector</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#labelselector-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#labelselector-v1-meta">
 Kubernetes meta/v1.LabelSelector
 </a>
 </em>
@@ -154,8 +153,7 @@ PrefixStatus
 </tr>
 </tbody>
 </table>
-<h3 id="ipam.api.onmetal.de/v1alpha1.PrefixAllocation">PrefixAllocation
-</h3>
+## PrefixAllocation
 <div>
 <p>PrefixAllocation is the Schema for the prefixallocations API</p>
 </div>
@@ -188,7 +186,7 @@ string
 <td>
 <code>metadata</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#objectmeta-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#objectmeta-v1-meta">
 Kubernetes meta/v1.ObjectMeta
 </a>
 </em>
@@ -215,7 +213,7 @@ PrefixAllocationSpec
 <td>
 <code>ipFamily</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#ipfamily-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#ipfamily-v1-core">
 Kubernetes core/v1.IPFamily
 </a>
 </em>
@@ -253,7 +251,7 @@ int32
 <td>
 <code>prefixRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -266,7 +264,7 @@ Kubernetes core/v1.LocalObjectReference
 <td>
 <code>prefixSelector</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#labelselector-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#labelselector-v1-meta">
 Kubernetes meta/v1.LabelSelector
 </a>
 </em>
@@ -292,10 +290,10 @@ PrefixAllocationStatus
 </tr>
 </tbody>
 </table>
-<h3 id="ipam.api.onmetal.de/v1alpha1.PrefixAllocationPhase">PrefixAllocationPhase
-(<code>string</code> alias)</h3>
+## PrefixAllocationPhase
+(<code>string</code> alias)
 <p>
-(<em>Appears on:</em><a href="#ipam.api.onmetal.de/v1alpha1.PrefixAllocationStatus">PrefixAllocationStatus</a>)
+(<em>Appears on:</em><a href="#PrefixAllocationStatus">PrefixAllocationStatus</a>)
 </p>
 <div>
 <p>PrefixAllocationPhase is a phase a PrefixAllocation can be in.</p>
@@ -318,10 +316,9 @@ PrefixAllocationStatus
 </td>
 </tr></tbody>
 </table>
-<h3 id="ipam.api.onmetal.de/v1alpha1.PrefixAllocationSpec">PrefixAllocationSpec
-</h3>
+## PrefixAllocationSpec
 <p>
-(<em>Appears on:</em><a href="#ipam.api.onmetal.de/v1alpha1.PrefixAllocation">PrefixAllocation</a>)
+(<em>Appears on:</em><a href="#PrefixAllocation">PrefixAllocation</a>)
 </p>
 <div>
 <p>PrefixAllocationSpec defines the desired state of PrefixAllocation</p>
@@ -338,7 +335,7 @@ PrefixAllocationStatus
 <td>
 <code>ipFamily</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#ipfamily-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#ipfamily-v1-core">
 Kubernetes core/v1.IPFamily
 </a>
 </em>
@@ -376,7 +373,7 @@ int32
 <td>
 <code>prefixRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -389,7 +386,7 @@ Kubernetes core/v1.LocalObjectReference
 <td>
 <code>prefixSelector</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#labelselector-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#labelselector-v1-meta">
 Kubernetes meta/v1.LabelSelector
 </a>
 </em>
@@ -400,10 +397,9 @@ Kubernetes meta/v1.LabelSelector
 </tr>
 </tbody>
 </table>
-<h3 id="ipam.api.onmetal.de/v1alpha1.PrefixAllocationStatus">PrefixAllocationStatus
-</h3>
+## PrefixAllocationStatus
 <p>
-(<em>Appears on:</em><a href="#ipam.api.onmetal.de/v1alpha1.PrefixAllocation">PrefixAllocation</a>)
+(<em>Appears on:</em><a href="#PrefixAllocation">PrefixAllocation</a>)
 </p>
 <div>
 <p>PrefixAllocationStatus is the status of a PrefixAllocation.</p>
@@ -446,7 +442,7 @@ PrefixAllocationPhase
 <td>
 <code>lastPhaseTransitionTime</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#time-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#time-v1-meta">
 Kubernetes meta/v1.Time
 </a>
 </em>
@@ -457,10 +453,10 @@ Kubernetes meta/v1.Time
 </tr>
 </tbody>
 </table>
-<h3 id="ipam.api.onmetal.de/v1alpha1.PrefixPhase">PrefixPhase
-(<code>string</code> alias)</h3>
+## PrefixPhase
+(<code>string</code> alias)
 <p>
-(<em>Appears on:</em><a href="#ipam.api.onmetal.de/v1alpha1.PrefixStatus">PrefixStatus</a>)
+(<em>Appears on:</em><a href="#PrefixStatus">PrefixStatus</a>)
 </p>
 <div>
 <p>PrefixPhase is a phase a Prefix can be in.</p>
@@ -480,10 +476,9 @@ Kubernetes meta/v1.Time
 </td>
 </tr></tbody>
 </table>
-<h3 id="ipam.api.onmetal.de/v1alpha1.PrefixSpec">PrefixSpec
-</h3>
+## PrefixSpec
 <p>
-(<em>Appears on:</em><a href="#ipam.api.onmetal.de/v1alpha1.Prefix">Prefix</a>, <a href="#ipam.api.onmetal.de/v1alpha1.PrefixTemplateSpec">PrefixTemplateSpec</a>)
+(<em>Appears on:</em><a href="#Prefix">Prefix</a>, <a href="#PrefixTemplateSpec">PrefixTemplateSpec</a>)
 </p>
 <div>
 <p>PrefixSpec defines the desired state of Prefix</p>
@@ -500,7 +495,7 @@ Kubernetes meta/v1.Time
 <td>
 <code>ipFamily</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#ipfamily-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#ipfamily-v1-core">
 Kubernetes core/v1.IPFamily
 </a>
 </em>
@@ -538,7 +533,7 @@ int32
 <td>
 <code>parentRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -553,7 +548,7 @@ allocated by itself.</p>
 <td>
 <code>parentSelector</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#labelselector-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#labelselector-v1-meta">
 Kubernetes meta/v1.LabelSelector
 </a>
 </em>
@@ -564,10 +559,9 @@ Kubernetes meta/v1.LabelSelector
 </tr>
 </tbody>
 </table>
-<h3 id="ipam.api.onmetal.de/v1alpha1.PrefixStatus">PrefixStatus
-</h3>
+## PrefixStatus
 <p>
-(<em>Appears on:</em><a href="#ipam.api.onmetal.de/v1alpha1.Prefix">Prefix</a>)
+(<em>Appears on:</em><a href="#Prefix">Prefix</a>)
 </p>
 <div>
 <p>PrefixStatus defines the observed state of Prefix</p>
@@ -597,7 +591,7 @@ PrefixPhase
 <td>
 <code>lastPhaseTransitionTime</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#time-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#time-v1-meta">
 Kubernetes meta/v1.Time
 </a>
 </em>
@@ -621,8 +615,7 @@ Kubernetes meta/v1.Time
 </tr>
 </tbody>
 </table>
-<h3 id="ipam.api.onmetal.de/v1alpha1.PrefixTemplateSpec">PrefixTemplateSpec
-</h3>
+## PrefixTemplateSpec
 <div>
 </div>
 <table>
@@ -637,7 +630,7 @@ Kubernetes meta/v1.Time
 <td>
 <code>metadata</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#objectmeta-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#objectmeta-v1-meta">
 Kubernetes meta/v1.ObjectMeta
 </a>
 </em>
@@ -664,7 +657,7 @@ PrefixSpec
 <td>
 <code>ipFamily</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#ipfamily-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#ipfamily-v1-core">
 Kubernetes core/v1.IPFamily
 </a>
 </em>
@@ -702,7 +695,7 @@ int32
 <td>
 <code>parentRef</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#localobjectreference-v1-core">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#localobjectreference-v1-core">
 Kubernetes core/v1.LocalObjectReference
 </a>
 </em>
@@ -717,7 +710,7 @@ allocated by itself.</p>
 <td>
 <code>parentSelector</code><br/>
 <em>
-<a href="https://v1-21.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#labelselector-v1-meta">
+<a href="https://v1-24.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#labelselector-v1-meta">
 Kubernetes meta/v1.LabelSelector
 </a>
 </em>

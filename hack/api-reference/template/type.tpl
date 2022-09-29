@@ -1,9 +1,8 @@
 {{ define "type" }}
 
-<h3 id="{{ anchorIDForType . }}">
-    {{- .Name.Name }}
-    {{ if eq .Kind "Alias" }}(<code>{{.Underlying}}</code> alias){{ end -}}
-</h3>
+{{- print "## " .Name.Name }}
+{{ if eq .Kind "Alias" }}(<code>{{.Underlying}}</code> alias){{ end -}}
+
 {{ with (typeReferences .) }}
     <p>
         (<em>Appears on:</em>
@@ -11,7 +10,7 @@
         {{- range . -}}
             {{- if $prev -}}, {{ end -}}
             {{- $prev = . -}}
-            <a href="{{ linkForType . }}">{{ typeDisplayName . }}</a>
+            <a href="{{ print "#" .Name.Name }}">{{ typeDisplayName . }}</a>
         {{- end -}}
         )
     </p>
