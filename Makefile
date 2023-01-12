@@ -159,40 +159,32 @@ run: manifests generate fmt vet ## Run a controller from your host.
 .PHONY: docker-build
 docker-build: \
 	docker-build-onmetal-apiserver docker-build-onmetal-controller-manager \
-	docker-build-machinepoollet docker-build-machinebroker docker-build-orictl-machine \
-	docker-build-volumepoollet docker-build-volumebroker docker-build-orictl-volume ## Build docker image with the manager.
+	docker-build-machinepoollet docker-build-machinebroker \
+	docker-build-volumepoollet docker-build-volumebroker ## Build docker image with the manager.
 
 .PHONY: docker-build-onmetal-apiserver
 docker-build-onmetal-apiserver: ## Build onmetal-apiserver.
-	docker build --target apiserver -t ${APISERVER_IMG} .
+	docker build -t ${APISERVER_IMG} ./onmetal-apiserver
 
 .PHONY: docker-build-onmetal-controller-manager
 docker-build-onmetal-controller-manager: ## Build onmetal-controller-manager.
-	docker build --target manager -t ${CONTROLLER_IMG} .
+	docker build -t ${CONTROLLER_IMG} ./onmetal-controller-manager
 
 .PHONY: docker-build-machinepoollet
 docker-build-machinepoollet: ## Build machinepoollet image.
-	docker build --target machinepoollet -t ${MACHINEPOOLLET_IMG} .
+	docker build -t ${MACHINEPOOLLET_IMG} -f ./poollet/Dockerfile-machinepoollet ./poollet
 
 .PHONY: docker-build-machinebroker
 docker-build-machinebroker: ## Build machinebroker image.
-	docker build --target machinebroker -t ${MACHINEBROKER_IMG} .
-
-.PHONY: docker-build-orictl-machine
-docker-build-orictl-machine: ## Build orictl-machine image.
-	docker build --target orictl-machine -t ${ORICTL_MACHINE_IMG} .
+	docker build -t ${MACHINEBROKER_IMG} -f ./broker/Dockerfile-machinebroker ./broker
 
 .PHONY: docker-build-volumepoollet
 docker-build-volumepoollet: ## Build volumepoollet image.
-	docker build --target volumepoollet -t ${VOLUMEPOOLLET_IMG} .
+	docker build -t ${VOLUMEPOOLLET_IMG} -f ./poollet/Dockerfile-volumepoollet ./poollet
 
 .PHONY: docker-build-volumebroker
 docker-build-volumebroker: ## Build volumebroker image.
-	docker build --target volumebroker -t ${VOLUMEBROKER_IMG} .
-
-.PHONY: docker-build-orictl-volume
-docker-build-orictl-volume: ## Build orictl-volume image.
-	docker build --target orictl-volume -t ${ORICTL_VOLUME_IMG} .
+	docker build -t ${VOLUMEBROKER_IMG} -f ./broker/Dockerfile-volumebroker ./broker
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
@@ -223,11 +215,11 @@ undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/confi
 
 .PHONY: kind-build-apiserver
 kind-build-apiserver: ## Build the apiserver for usage in kind.
-	docker build --target apiserver -t apiserver .
+	docker build -t apiserver ./onmetal-apiserver
 
 .PHONY: kind-build-controller
 kind-build-controller: ## Build the controller for usage in kind.
-	docker build --target manager -t controller .
+	docker build -t controller ./onmetal-controller-manager
 
 .PHONY: kind-build
 kind-build: kind-build-apiserver kind-build-controller ## Build the apiserver and controller for usage in kind.

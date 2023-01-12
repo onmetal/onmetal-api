@@ -1,0 +1,25 @@
+name: Docker build onmetal-controller-manager
+
+on:
+  release:
+    types:
+      - published
+  push:
+    branches:
+      - main
+    tags:
+      - onmetal-controller-manager/v*
+    paths:
+      - 'onmetal-controller-manager/**'
+  pull_request_target:
+    types:
+      - labeled
+    paths:
+      - 'onmetal-controller-manager/**'
+
+jobs:
+  build-and-push:
+    uses: ./.github/workflows/publish-docker
+    with:
+      image-name: onmetal-api-controller-manager
+      context: ./onmetal-controller-manager

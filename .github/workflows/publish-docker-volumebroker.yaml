@@ -1,0 +1,26 @@
+name: Docker build volumebroker
+
+on:
+  release:
+    types:
+      - published
+  push:
+    branches:
+      - main
+    tags:
+      - broker/v*
+    paths:
+      - 'broker/**'
+  pull_request_target:
+    types:
+      - labeled
+    paths:
+      - 'broker/**'
+
+jobs:
+  build-and-push:
+    uses: ./.github/workflows/publish-docker
+    with:
+      image-name: onmetal-api-volumebroker
+      context: ./broker
+      file: ./broker/Dockerfile-volumebroker

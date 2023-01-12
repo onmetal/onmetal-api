@@ -1,0 +1,25 @@
+name: Docker build machinepoollet
+
+on:
+  release:
+    types:
+      - published
+  push:
+    branches:
+      - main
+    tags:
+      - poollet/v*
+    paths:
+      - 'poollet/**'
+  pull_request_target:
+    types:
+      - labeled
+    paths:
+      - 'poollet/**'
+
+jobs:
+  build-and-push:
+    uses: ./.github/workflows/publish-docker
+    with:
+      image-name: onmetal-api-machinepoollet
+      context: ./onmetal-machinepoollet

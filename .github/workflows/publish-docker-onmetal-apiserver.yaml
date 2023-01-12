@@ -1,0 +1,25 @@
+name: Docker build onmetal-apiserver
+
+on:
+  release:
+    types:
+      - published
+  push:
+    branches:
+      - main
+    tags:
+      - onmetal-apiserver/v*
+    paths:
+      - 'onmetal-apiserver/**'
+  pull_request_target:
+    types:
+      - labeled
+    paths:
+      - 'onmetal-apiserver/**'
+
+jobs:
+  build-and-push:
+    uses: ./.github/workflows/publish-docker
+    with:
+      image-name: onmetal-api-apiserver
+      context: ./onmetal-apiserver

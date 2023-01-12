@@ -16,12 +16,13 @@
 package endpoints_test
 
 import (
+	"sync/atomic"
+
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	"github.com/onmetal/onmetal-api/poollet/machinepoollet/endpoints"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"go.uber.org/atomic"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -83,7 +84,7 @@ var _ = Describe("LoadBalancerService", func() {
 		By("adding a listener")
 		var notifyCount atomic.Int32
 		eps.AddListener(endpoints.ListenerFunc(func() {
-			notifyCount.Inc()
+			notifyCount.Add(1)
 		}))
 
 		By("updating the service to include load balancer ingress items")
