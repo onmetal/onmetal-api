@@ -17,6 +17,8 @@ package envtest
 import (
 	"bufio"
 	"bytes"
+	"context"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -40,7 +42,7 @@ func init() {
 // readAPIServiceFiles reads the directories of APIService in options.Paths and adds the APIService structs to options.APIServices.
 func readAPIServiceFiles(options *APIServiceInstallOptions) error {
 	if len(options.Paths) > 0 {
-		apiServiceList, err := renderAPIServices(options)
+		apiServiceList, err := renderAPIServices(context.TODO(), options)
 		if err != nil {
 			return err
 		}
@@ -51,51 +53,37 @@ func readAPIServiceFiles(options *APIServiceInstallOptions) error {
 }
 
 // renderAPIServices iterate through options.Paths and extract all APIService files.
-func renderAPIServices(options *APIServiceInstallOptions) ([]*apiregistrationv1.APIService, error) {
-	var (
-		err   error
-		info  os.FileInfo
-		files []os.FileInfo
-	)
-
+func renderAPIServices(ctx context.Context, options *APIServiceInstallOptions) ([]*apiregistrationv1.APIService, error) {
 	type GVKN struct {
 		GVK  schema.GroupVersionKind
 		Name string
 	}
 
+	tmpDir, err := os.MkdirTemp("", "render-apisvc")
+	if err != nil {
+		return nil, fmt.Errorf("error creating temporary directory: %w", err)
+	}
+	defer func() {
+		if err := os.RemoveAll(tmpDir); err != nil {
+			log.Error(err, "Error removing temp directory: %w", err)
+		}
+	}()
+
 	apiServices := make(map[GVKN]*apiregistrationv1.APIService)
 
 	for _, path := range options.Paths {
-		var filePath = path
-
-		// Return the error if ErrorIfPathMissing exists
-		if info, err = os.Stat(path); os.IsNotExist(err) {
-			if options.ErrorIfPathMissing {
-				return nil, err
-			}
-			continue
+		res, err := GetPath(ctx, tmpDir, path)
+		if err != nil {
+			return nil, fmt.Errorf("error getting path %q: %w", path, err)
 		}
 
-		if !info.IsDir() {
-			filePath, files = filepath.Dir(path), []os.FileInfo{info}
-		} else {
-			entries, err := os.ReadDir(path)
-			if err != nil {
-				return nil, err
-			}
-
-			for _, entry := range entries {
-				file, err := entry.Info()
-				if err != nil {
-					return nil, err
-				}
-
-				files = append(files, file)
-			}
+		files, err := ReadDirRegularFiles(res)
+		if err != nil {
+			return nil, err
 		}
 
 		log.V(1).Info("reading APIServices from path", "path", path)
-		apiServiceList, err := readAPIServices(filePath, files)
+		apiServiceList, err := readAPIServices(res, files)
 		if err != nil {
 			return nil, err
 		}

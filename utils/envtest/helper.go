@@ -15,11 +15,87 @@
 package envtest
 
 import (
+	"context"
+	"fmt"
+	"os"
+
+	"github.com/hashicorp/go-getter/v2"
 	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
 	controllerruntime "sigs.k8s.io/controller-runtime"
 )
 
 var log = controllerruntime.Log.WithName("test-env")
+
+func GetPath(ctx context.Context, dst string, path string) (string, error) {
+	res, err := getter.DefaultClient.Get(ctx, &getter.Request{
+		Src:     path,
+		Dst:     dst,
+		GetMode: getter.ModeDir,
+		Inplace: true,
+	})
+	if err != nil {
+		return "", fmt.Errorf("error getting path %q: %w", path, err)
+	}
+
+	return res.Dst, nil
+}
+
+func IterateGetPaths(
+	ctx context.Context,
+	dst string,
+	paths []string,
+	f func(path, resolved string, err error) error,
+) error {
+	for _, path := range paths {
+		resolved, err := GetPath(ctx, dst, path)
+		if err := f(path, resolved, err); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func ReadDirRegularFiles(name string) ([]os.FileInfo, error) {
+	entries, err := os.ReadDir(name)
+	if err != nil {
+		return nil, fmt.Errorf("error reading entries of path %q: %w", name, err)
+	}
+
+	var files []os.FileInfo
+	for _, entry := range entries {
+		if !entry.Type().IsRegular() {
+			continue
+		}
+
+		file, err := entry.Info()
+		if err != nil {
+			return nil, fmt.Errorf("error reading file %s: %w", entry.Name(), err)
+		}
+
+		files = append(files, file)
+	}
+	return files, nil
+}
+
+func IterateDirFiles(name string, f func(info os.FileInfo, err error) error) error {
+	entries, err := os.ReadDir(name)
+	if err != nil {
+		return fmt.Errorf("error reading directory: %w", err)
+	}
+
+	for _, entry := range entries {
+		if !entry.Type().IsRegular() {
+			continue
+		}
+
+		info, err := entry.Info()
+		if err := f(info, err); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 // mergePaths merges two string slices containing paths.
 // This function makes no guarantees about order of the merged slice.

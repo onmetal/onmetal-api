@@ -1,3 +1,4 @@
+MODULES = api broker client-go onmetal-apiserver onmetal-controller-manager ori orictl poollet utils
 
 # Image URL to use all building/pushing image targets
 CONTROLLER_IMG ?= controller:latest
@@ -54,16 +55,16 @@ help: ## Display this help.
 FILE="config/machinepoollet-broker/broker-rbac/role.yaml"
 manifests: controller-gen ## Generate WebhookConfiguration, ClusterRole and CustomResourceDefinition objects.
 	# onmetal-controller-manager
-	$(CONTROLLER_GEN) rbac:roleName=manager-role webhook paths="./onmetal-controller-manager/controllers/...;./api/..." output:rbac:artifacts:config=config/controller/rbac
+	cd onmetal-controller-manager && $(CONTROLLER_GEN) rbac:roleName=manager-role paths="./controllers/..." output:rbac:artifacts:config=../config/controller/rbac
 
 	# machinepoollet-broker
-	$(CONTROLLER_GEN) rbac:roleName=manager-role paths="./poollet/machinepoollet/controllers/..." output:rbac:artifacts:config=config/machinepoollet-broker/poollet-rbac
-	$(CONTROLLER_GEN) rbac:roleName=broker-role paths="./broker/machinebroker/..." output:rbac:artifacts:config=config/machinepoollet-broker/broker-rbac
+	cd poollet && $(CONTROLLER_GEN) rbac:roleName=manager-role paths="./machinepoollet/controllers/..." output:rbac:artifacts:config=../config/machinepoollet-broker/poollet-rbac
+	cd broker && $(CONTROLLER_GEN) rbac:roleName=broker-role paths="./machinebroker/..." output:rbac:artifacts:config=../config/machinepoollet-broker/broker-rbac
 	./hack/replace.sh config/machinepoollet-broker/broker-rbac/role.yaml 's/ClusterRole/Role/g'
 
 	# volumepoollet-broker
-	$(CONTROLLER_GEN) rbac:roleName=manager-role paths="./poollet/volumepoollet/controllers/..." output:rbac:artifacts:config=config/volumepoollet-broker/poollet-rbac
-	$(CONTROLLER_GEN) rbac:roleName=broker-role paths="./broker/volumebroker/..." output:rbac:artifacts:config=config/volumepoollet-broker/broker-rbac
+	cd poollet && $(CONTROLLER_GEN) rbac:roleName=manager-role paths="./volumepoollet/controllers/..." output:rbac:artifacts:config=../config/volumepoollet-broker/poollet-rbac
+	cd broker && $(CONTROLLER_GEN) rbac:roleName=broker-role paths="./volumebroker/..." output:rbac:artifacts:config=../config/volumepoollet-broker/broker-rbac
 	./hack/replace.sh config/volumepoollet-broker/broker-rbac/role.yaml 's/ClusterRole/Role/g'
 
 .PHONY: generate
@@ -100,11 +101,11 @@ lint: ## Run golangci-lint on the code.
 
 .PHONY: clean
 clean: ## Clean any artifacts that can be regenerated.
-	rm -rf client-go/applyconfigurations
-	rm -rf client-go/informers
-	rm -rf client-go/listers
-	rm -rf client-go/onmetalapi
-	rm -rf client-go/openapi
+	rm -rf client-go/applyconfigurations/*
+	rm -rf client-go/informers/*
+	rm -rf client-go/listers/*
+	rm -rf client-go/onmetalapi/*
+	rm -rf client-go/openapi/*
 
 .PHONY: add-license
 add-license: addlicense ## Add license headers to all go files.
@@ -140,7 +141,12 @@ test: manifests generate fmt vet test-only ## Run tests.
 ENVTEST_ASSETS_DIR=$(shell pwd)/testbin
 .PHONY: test-only
 test-only: envtest ## Run *only* the tests - no generation, linting etc.
-	KUBEBUILDER_ASSETS="$(shell $(ENVTEST) use $(ENVTEST_K8S_VERSION) -p path)" go test ./... -coverprofile cover.out
+	@for module in $(MODULES); do \
+		( \
+			cd $$module && \
+			KUBEBUILDER_ASSETS="$(shell $(ENVTEST) use $(ENVTEST_K8S_VERSION) -p path)" go test ./... -coverprofile cover.out \
+	  	) \
+	done
 
 .PHONEY: openapi-extractor
 extract-openapi: openapi-extractor

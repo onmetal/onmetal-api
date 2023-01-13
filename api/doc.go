@@ -15,7 +15,3 @@
  */
 
 package api
-
-import (
-	_ "k8s.io/kube-openapi/cmd/openapi-gen/openapi-gen.go"
-)
