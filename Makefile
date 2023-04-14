@@ -131,16 +131,16 @@ check-license: addlicense ## Check that every file has a license header present.
 	find . -name '*.go' -exec $(ADDLICENSE) -check -c 'OnMetal authors' {} +
 
 .PHONY: check
-check: manifests generate add-license fmt lint test # Generate manifests, code, lint, add licenses, test
+check: generate manifests add-license fmt lint test # Generate manifests, code, lint, add licenses, test
 
 .PHONY: docs
 docs: gen-crd-api-reference-docs ## Run go generate to generate API reference documentation.
-	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/common/v1alpha1 -config ./hack/api-reference/common-config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/common.md
-	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/core/v1alpha1 -config ./hack/api-reference/core-config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/core.md
-	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/compute/v1alpha1 -config ./hack/api-reference/compute-config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/compute.md
-	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/storage/v1alpha1 -config ./hack/api-reference/storage-config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/storage.md
-	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/networking/v1alpha1 -config ./hack/api-reference/networking-config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/networking.md
-	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/ipam/v1alpha1 -config ./hack/api-reference/ipam-config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/ipam.md
+	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/common/v1alpha1 -config ./hack/api-reference/config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/common.md
+	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/core/v1alpha1 -config ./hack/api-reference/config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/core.md
+	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/storage/v1alpha1 -config ./hack/api-reference/config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/storage.md
+	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/networking/v1alpha1 -config ./hack/api-reference/config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/networking.md
+	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/ipam/v1alpha1 -config ./hack/api-reference/config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/ipam.md
+	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir ./api/compute/v1alpha1 -config ./hack/api-reference/config.json -template-dir ./hack/api-reference/template -out-file ./docs/api-reference/compute.md
 
 .PHONY: start-docs
 start-docs: ## Start the local mkdocs based development environment.
@@ -371,7 +371,7 @@ GOIMPORTS ?= $(LOCALBIN)/goimports
 
 ## Tool Versions
 KUSTOMIZE_VERSION ?= v5.0.0
-CODE_GENERATOR_VERSION ?= v0.26.1
+CODE_GENERATOR_VERSION ?= v0.26.3
 CONTROLLER_TOOLS_VERSION ?= v0.11.3
 VGOPATH_VERSION ?= v0.0.2
 GEN_CRD_API_REFERENCE_DOCS_VERSION ?= v0.3.0

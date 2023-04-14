@@ -20,6 +20,12 @@ const (
 	AnnotationsAnnotation = "volumebroker.api.onmetal.de/annotations"
 
 	CreatedLabel = "volumebroker.api.onmetal.de/created"
+
+	PurposeLabel = "machinebroker.api.onmetal.de/purpose"
+)
+
+const (
+	VolumeEncryptionPurpose = "volume-encryption"
 )
 
 const (
