@@ -23,6 +23,7 @@ import (
 
 	"github.com/go-logr/logr"
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	networkingclient "github.com/onmetal/onmetal-api/internal/client/networking"
@@ -33,8 +34,10 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/tools/record"
+	"k8s.io/client-go/util/workqueue"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 )
@@ -110,8 +113,19 @@ func (r *NetworkInterfaceReconciler) reconcile(ctx context.Context, log logr.Log
 		r.Event(nic, corev1.EventTypeNormal, events.VirtualIPNotReady, virtualIPNotReadyReason)
 	}
 
+	machineNotRunning, machineNotRunningReason, err := r.getMachineStatusNotRunning(ctx, nic)
+	if err != nil {
+		r.Eventf(nic, corev1.EventTypeWarning, events.ErrorGettingMachine, "Error getting machine : %v", err)
+		return ctrl.Result{}, nil
+	}
+	if machineNotRunningReason != "" {
+		r.Event(nic, corev1.EventTypeNormal, events.MachineNotRunning, machineNotRunningReason)
+	}
+
 	var state networkingv1alpha1.NetworkInterfaceState
-	if anyDependencyNotReady {
+	if machineNotRunning {
+		state = networkingv1alpha1.NetworkInterfaceStateError
+	} else if anyDependencyNotReady {
 		state = networkingv1alpha1.NetworkInterfaceStatePending
 	} else {
 		state = networkingv1alpha1.NetworkInterfaceStateAvailable
@@ -148,6 +162,22 @@ func (r *NetworkInterfaceReconciler) updateStatus(
 		return fmt.Errorf("error patching status: %w", err)
 	}
 	return nil
+}
+
+func (r *NetworkInterfaceReconciler) getMachineStatusNotRunning(ctx context.Context, nic *networkingv1alpha1.NetworkInterface) (bool, string, error) {
+	machine := &computev1alpha1.Machine{}
+	machineKey := client.ObjectKey{Namespace: nic.Namespace, Name: nic.Spec.MachineRef.Name}
+	if err := r.Get(ctx, machineKey, machine); err != nil {
+		if !apierrors.IsNotFound(err) {
+			return false, "", fmt.Errorf("error getting machine %s: %w", machineKey, err)
+		}
+		return false, fmt.Sprintf("Machine %s not found", machineKey.Name), nil
+	}
+
+	if machine != nil && machine.Status.State != computev1alpha1.MachineStateRunning {
+		return true, fmt.Sprintf("Machine %s is not in state %s but %s", machineKey.Name, computev1alpha1.MachineStateRunning, machine.Status.State), nil
+	}
+	return false, "", nil
 }
 
 func (r *NetworkInterfaceReconciler) getNetworkHandle(ctx context.Context, nic *networkingv1alpha1.NetworkInterface) (networkHandle string, notReadyReason string, err error) {
@@ -299,7 +329,56 @@ func (r *NetworkInterfaceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			&source.Kind{Type: &networkingv1alpha1.VirtualIP{}},
 			r.enqueueByNetworkInterfaceVirtualIPReferences(ctx, log),
 		).
+		Watches(
+			&source.Kind{Type: &computev1alpha1.Machine{}},
+			//r.enqueueByNetworkInterfaceMachineReferences(ctx, log),
+			handler.Funcs{
+				UpdateFunc: func(event event.UpdateEvent, queue workqueue.RateLimitingInterface) {
+					machine := event.ObjectNew.(*computev1alpha1.Machine)
+					r.enqueueByNetworkInterfaceMachineStatusReferences(ctx, machine, queue)
+				},
+			},
+		).
 		Complete(r)
+}
+
+func (r *NetworkInterfaceReconciler) enqueueByNetworkInterfaceMachineStatusReferences(ctx context.Context, machine *computev1alpha1.Machine, queue workqueue.RateLimitingInterface) {
+	log := ctrl.LoggerFrom(ctx)
+	nicList := &networkingv1alpha1.NetworkInterfaceList{}
+	if err := r.List(ctx, nicList,
+		client.InNamespace(machine.Namespace),
+		client.MatchingFields{networkingclient.NetworkInterfaceSpecMachineRefNameField: machine.Name},
+	); err != nil {
+		log.Error(err, "Error listing network interface using machine")
+		return
+	}
+
+	for _, nic := range nicList.Items {
+		queue.Add(ctrl.Request{NamespacedName: client.ObjectKeyFromObject(&nic)})
+	}
+}
+
+// not required, just for testing purpose
+func (r *NetworkInterfaceReconciler) enqueueByNetworkInterfaceMachineReferences(ctx context.Context, log logr.Logger) handler.EventHandler {
+	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+		machine := obj.(*computev1alpha1.Machine)
+		log = log.WithValues("MachineKey", client.ObjectKeyFromObject(machine))
+
+		nicList := &networkingv1alpha1.NetworkInterfaceList{}
+		if err := r.List(ctx, nicList,
+			client.InNamespace(machine.Namespace),
+			client.MatchingFields{networkingclient.NetworkInterfaceSpecMachineRefNameField: machine.Name},
+		); err != nil {
+			log.Error(err, "Error listing network interface using machine")
+			return nil
+		}
+
+		reqs := make([]ctrl.Request, 0, len(nicList.Items))
+		for _, nic := range nicList.Items {
+			reqs = append(reqs, ctrl.Request{NamespacedName: client.ObjectKeyFromObject(&nic)})
+		}
+		return reqs
+	})
 }
 
 func (r *NetworkInterfaceReconciler) enqueueByNetworkInterfaceVirtualIPReferences(ctx context.Context, log logr.Logger) handler.EventHandler {

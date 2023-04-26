@@ -18,6 +18,7 @@ const (
 	ErrorGettingNetworkHandle = "ErrorGettingNetworkHandle"
 	ErrorApplyingIPs          = "ErrorApplyingIPs"
 	ErrorApplyingVirtualIP    = "ErrorApplyingVirtualIP"
+	ErrorGettingMachine       = "ErrorGettingMachine"
 
 	ErrorNoPortsLeft = "ErrorNoPortsLeft"
 
@@ -27,4 +28,6 @@ const (
 
 	FailedBindingNetworkInterface = "FailedBindingNetworkInterface"
 	FailedBindingMachine          = "FailedBindingMachine"
+
+	MachineNotRunning = "MachineNotRunning"
 )

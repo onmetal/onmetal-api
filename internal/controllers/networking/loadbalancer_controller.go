@@ -26,8 +26,10 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/client-go/util/workqueue"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 )
@@ -116,11 +118,22 @@ func (r *LoadBalancerReconciler) findDestinations(ctx context.Context, log logr.
 		return nil, fmt.Errorf("error listing network interfaces: %w", err)
 	}
 
-	destinations := make([]commonv1alpha1.LocalUIDReference, 0, len(nicList.Items))
-	for _, nic := range nicList.Items {
+	filteredNic := filterNetworkInterfacesByStatus(nicList, networkingv1alpha1.NetworkInterfaceStateError)
+	destinations := make([]commonv1alpha1.LocalUIDReference, 0, len(filteredNic))
+	for _, nic := range filteredNic {
 		destinations = append(destinations, commonv1alpha1.LocalUIDReference{Name: nic.Name, UID: nic.UID})
 	}
 	return destinations, nil
+}
+
+func filterNetworkInterfacesByStatus(nicList *networkingv1alpha1.NetworkInterfaceList, state networkingv1alpha1.NetworkInterfaceState) []*networkingv1alpha1.NetworkInterface {
+	filtered := []*networkingv1alpha1.NetworkInterface{}
+	for _, nic := range nicList.Items {
+		if nic.Status.State != state {
+			filtered = append(filtered, &nic)
+		}
+	}
+	return filtered
 }
 
 func (r *LoadBalancerReconciler) getNetwork(ctx context.Context, log logr.Logger, loadBalancer *networkingv1alpha1.LoadBalancer) (*networkingv1alpha1.Network, error) {
@@ -167,7 +180,32 @@ func (r *LoadBalancerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			&source.Kind{Type: &networkingv1alpha1.NetworkInterface{}},
 			r.enqueueByLoadBalancerMatchingNetworkInterface(ctx, log),
 		).
+		Watches(
+			&source.Kind{Type: &networkingv1alpha1.NetworkInterface{}},
+			handler.Funcs{
+				UpdateFunc: func(event event.UpdateEvent, queue workqueue.RateLimitingInterface) {
+					nic := event.ObjectNew.(*networkingv1alpha1.NetworkInterface)
+					r.enqueueByNetworkInterfaceMachineStatusReferences(ctx, nic, queue)
+				},
+			},
+		).
 		Complete(r)
+}
+
+func (r *LoadBalancerReconciler) enqueueByNetworkInterfaceMachineStatusReferences(ctx context.Context, nic *networkingv1alpha1.NetworkInterface, queue workqueue.RateLimitingInterface) {
+	log := ctrl.LoggerFrom(ctx)
+	loadBalancerList := &networkingv1alpha1.LoadBalancerList{}
+	if err := r.List(ctx, loadBalancerList,
+		client.InNamespace(nic.Namespace),
+		client.MatchingFields{networking.LoadBalancerNetworkNameField: nic.Spec.NetworkRef.Name},
+	); err != nil {
+		log.Error(err, "Error listing loadbalancers for network")
+		return
+	}
+
+	for _, lb := range loadBalancerList.Items {
+		queue.Add(ctrl.Request{NamespacedName: client.ObjectKeyFromObject(&lb)})
+	}
 }
 
 func (r *LoadBalancerReconciler) enqueueByLoadBalancerMatchingNetworkInterface(ctx context.Context, log logr.Logger) handler.EventHandler {
