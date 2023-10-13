@@ -21,11 +21,11 @@ import (
 	"fmt"
 	"net/http"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/core/v1alpha1"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/core/v1beta1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/storage/v1beta1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
@@ -33,46 +33,46 @@ import (
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	ComputeV1alpha1() computev1alpha1.ComputeV1alpha1Interface
-	CoreV1alpha1() corev1alpha1.CoreV1alpha1Interface
-	IpamV1alpha1() ipamv1alpha1.IpamV1alpha1Interface
-	NetworkingV1alpha1() networkingv1alpha1.NetworkingV1alpha1Interface
-	StorageV1alpha1() storagev1alpha1.StorageV1alpha1Interface
+	ComputeV1beta1() computev1beta1.ComputeV1beta1Interface
+	CoreV1beta1() corev1beta1.CoreV1beta1Interface
+	IpamV1beta1() ipamv1beta1.IpamV1beta1Interface
+	NetworkingV1beta1() networkingv1beta1.NetworkingV1beta1Interface
+	StorageV1beta1() storagev1beta1.StorageV1beta1Interface
 }
 
 // Clientset contains the clients for groups.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	computeV1alpha1    *computev1alpha1.ComputeV1alpha1Client
-	coreV1alpha1       *corev1alpha1.CoreV1alpha1Client
-	ipamV1alpha1       *ipamv1alpha1.IpamV1alpha1Client
-	networkingV1alpha1 *networkingv1alpha1.NetworkingV1alpha1Client
-	storageV1alpha1    *storagev1alpha1.StorageV1alpha1Client
+	computeV1beta1    *computev1beta1.ComputeV1beta1Client
+	coreV1beta1       *corev1beta1.CoreV1beta1Client
+	ipamV1beta1       *ipamv1beta1.IpamV1beta1Client
+	networkingV1beta1 *networkingv1beta1.NetworkingV1beta1Client
+	storageV1beta1    *storagev1beta1.StorageV1beta1Client
 }
 
-// ComputeV1alpha1 retrieves the ComputeV1alpha1Client
-func (c *Clientset) ComputeV1alpha1() computev1alpha1.ComputeV1alpha1Interface {
-	return c.computeV1alpha1
+// ComputeV1beta1 retrieves the ComputeV1beta1Client
+func (c *Clientset) ComputeV1beta1() computev1beta1.ComputeV1beta1Interface {
+	return c.computeV1beta1
 }
 
-// CoreV1alpha1 retrieves the CoreV1alpha1Client
-func (c *Clientset) CoreV1alpha1() corev1alpha1.CoreV1alpha1Interface {
-	return c.coreV1alpha1
+// CoreV1beta1 retrieves the CoreV1beta1Client
+func (c *Clientset) CoreV1beta1() corev1beta1.CoreV1beta1Interface {
+	return c.coreV1beta1
 }
 
-// IpamV1alpha1 retrieves the IpamV1alpha1Client
-func (c *Clientset) IpamV1alpha1() ipamv1alpha1.IpamV1alpha1Interface {
-	return c.ipamV1alpha1
+// IpamV1beta1 retrieves the IpamV1beta1Client
+func (c *Clientset) IpamV1beta1() ipamv1beta1.IpamV1beta1Interface {
+	return c.ipamV1beta1
 }
 
-// NetworkingV1alpha1 retrieves the NetworkingV1alpha1Client
-func (c *Clientset) NetworkingV1alpha1() networkingv1alpha1.NetworkingV1alpha1Interface {
-	return c.networkingV1alpha1
+// NetworkingV1beta1 retrieves the NetworkingV1beta1Client
+func (c *Clientset) NetworkingV1beta1() networkingv1beta1.NetworkingV1beta1Interface {
+	return c.networkingV1beta1
 }
 
-// StorageV1alpha1 retrieves the StorageV1alpha1Client
-func (c *Clientset) StorageV1alpha1() storagev1alpha1.StorageV1alpha1Interface {
-	return c.storageV1alpha1
+// StorageV1beta1 retrieves the StorageV1beta1Client
+func (c *Clientset) StorageV1beta1() storagev1beta1.StorageV1beta1Interface {
+	return c.storageV1beta1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -119,23 +119,23 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 
 	var cs Clientset
 	var err error
-	cs.computeV1alpha1, err = computev1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.computeV1beta1, err = computev1beta1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
-	cs.coreV1alpha1, err = corev1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.coreV1beta1, err = corev1beta1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
-	cs.ipamV1alpha1, err = ipamv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.ipamV1beta1, err = ipamv1beta1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
-	cs.networkingV1alpha1, err = networkingv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.networkingV1beta1, err = networkingv1beta1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
-	cs.storageV1alpha1, err = storagev1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.storageV1beta1, err = storagev1beta1.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
@@ -160,11 +160,11 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.computeV1alpha1 = computev1alpha1.New(c)
-	cs.coreV1alpha1 = corev1alpha1.New(c)
-	cs.ipamV1alpha1 = ipamv1alpha1.New(c)
-	cs.networkingV1alpha1 = networkingv1alpha1.New(c)
-	cs.storageV1alpha1 = storagev1alpha1.New(c)
+	cs.computeV1beta1 = computev1beta1.New(c)
+	cs.coreV1beta1 = corev1beta1.New(c)
+	cs.ipamV1beta1 = ipamv1beta1.New(c)
+	cs.networkingV1beta1 = networkingv1beta1.New(c)
+	cs.storageV1beta1 = storagev1beta1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

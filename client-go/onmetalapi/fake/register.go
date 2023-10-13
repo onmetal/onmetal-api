@@ -18,11 +18,11 @@
 package fake
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -34,11 +34,11 @@ var scheme = runtime.NewScheme()
 var codecs = serializer.NewCodecFactory(scheme)
 
 var localSchemeBuilder = runtime.SchemeBuilder{
-	computev1alpha1.AddToScheme,
-	corev1alpha1.AddToScheme,
-	ipamv1alpha1.AddToScheme,
-	networkingv1alpha1.AddToScheme,
-	storagev1alpha1.AddToScheme,
+	computev1beta1.AddToScheme,
+	corev1beta1.AddToScheme,
+	ipamv1beta1.AddToScheme,
+	networkingv1beta1.AddToScheme,
+	storagev1beta1.AddToScheme,
 }
 
 // AddToScheme adds all types of this clientset into the given scheme. This allows composition

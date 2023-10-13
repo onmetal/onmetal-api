@@ -19,16 +19,16 @@ package fake
 
 import (
 	clientset "github.com/onmetal/onmetal-api/client-go/onmetalapi"
-	computev1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/compute/v1alpha1"
-	fakecomputev1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/compute/v1alpha1/fake"
-	corev1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/core/v1alpha1"
-	fakecorev1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/core/v1alpha1/fake"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/ipam/v1alpha1"
-	fakeipamv1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/ipam/v1alpha1/fake"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/networking/v1alpha1"
-	fakenetworkingv1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/networking/v1alpha1/fake"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/storage/v1alpha1"
-	fakestoragev1alpha1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/storage/v1alpha1/fake"
+	computev1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/compute/v1beta1"
+	fakecomputev1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/compute/v1beta1/fake"
+	corev1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/core/v1beta1"
+	fakecorev1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/core/v1beta1/fake"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/ipam/v1beta1"
+	fakeipamv1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/ipam/v1beta1/fake"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/networking/v1beta1"
+	fakenetworkingv1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/networking/v1beta1/fake"
+	storagev1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/storage/v1beta1"
+	fakestoragev1beta1 "github.com/onmetal/onmetal-api/client-go/onmetalapi/typed/storage/v1beta1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -86,27 +86,27 @@ var (
 	_ testing.FakeClient  = &Clientset{}
 )
 
-// ComputeV1alpha1 retrieves the ComputeV1alpha1Client
-func (c *Clientset) ComputeV1alpha1() computev1alpha1.ComputeV1alpha1Interface {
-	return &fakecomputev1alpha1.FakeComputeV1alpha1{Fake: &c.Fake}
+// ComputeV1beta1 retrieves the ComputeV1beta1Client
+func (c *Clientset) ComputeV1beta1() computev1beta1.ComputeV1beta1Interface {
+	return &fakecomputev1beta1.FakeComputeV1beta1{Fake: &c.Fake}
 }
 
-// CoreV1alpha1 retrieves the CoreV1alpha1Client
-func (c *Clientset) CoreV1alpha1() corev1alpha1.CoreV1alpha1Interface {
-	return &fakecorev1alpha1.FakeCoreV1alpha1{Fake: &c.Fake}
+// CoreV1beta1 retrieves the CoreV1beta1Client
+func (c *Clientset) CoreV1beta1() corev1beta1.CoreV1beta1Interface {
+	return &fakecorev1beta1.FakeCoreV1beta1{Fake: &c.Fake}
 }
 
-// IpamV1alpha1 retrieves the IpamV1alpha1Client
-func (c *Clientset) IpamV1alpha1() ipamv1alpha1.IpamV1alpha1Interface {
-	return &fakeipamv1alpha1.FakeIpamV1alpha1{Fake: &c.Fake}
+// IpamV1beta1 retrieves the IpamV1beta1Client
+func (c *Clientset) IpamV1beta1() ipamv1beta1.IpamV1beta1Interface {
+	return &fakeipamv1beta1.FakeIpamV1beta1{Fake: &c.Fake}
 }
 
-// NetworkingV1alpha1 retrieves the NetworkingV1alpha1Client
-func (c *Clientset) NetworkingV1alpha1() networkingv1alpha1.NetworkingV1alpha1Interface {
-	return &fakenetworkingv1alpha1.FakeNetworkingV1alpha1{Fake: &c.Fake}
+// NetworkingV1beta1 retrieves the NetworkingV1beta1Client
+func (c *Clientset) NetworkingV1beta1() networkingv1beta1.NetworkingV1beta1Interface {
+	return &fakenetworkingv1beta1.FakeNetworkingV1beta1{Fake: &c.Fake}
 }
 
-// StorageV1alpha1 retrieves the StorageV1alpha1Client
-func (c *Clientset) StorageV1alpha1() storagev1alpha1.StorageV1alpha1Interface {
-	return &fakestoragev1alpha1.FakeStorageV1alpha1{Fake: &c.Fake}
+// StorageV1beta1 retrieves the StorageV1beta1Client
+func (c *Clientset) StorageV1beta1() storagev1beta1.StorageV1beta1Interface {
+	return &fakestoragev1beta1.FakeStorageV1beta1{Fake: &c.Fake}
 }

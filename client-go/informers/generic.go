@@ -20,11 +20,11 @@ package informers
 import (
 	"fmt"
 
-	v1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	v1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
 )
@@ -55,53 +55,53 @@ func (f *genericInformer) Lister() cache.GenericLister {
 // TODO extend this to unknown resources with a client pool
 func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource) (GenericInformer, error) {
 	switch resource {
-	// Group=compute.api.onmetal.de, Version=v1alpha1
-	case v1alpha1.SchemeGroupVersion.WithResource("machines"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Compute().V1alpha1().Machines().Informer()}, nil
-	case v1alpha1.SchemeGroupVersion.WithResource("machineclasses"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Compute().V1alpha1().MachineClasses().Informer()}, nil
-	case v1alpha1.SchemeGroupVersion.WithResource("machinepools"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Compute().V1alpha1().MachinePools().Informer()}, nil
+	// Group=compute.api.onmetal.de, Version=v1beta1
+	case v1beta1.SchemeGroupVersion.WithResource("machines"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Compute().V1beta1().Machines().Informer()}, nil
+	case v1beta1.SchemeGroupVersion.WithResource("machineclasses"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Compute().V1beta1().MachineClasses().Informer()}, nil
+	case v1beta1.SchemeGroupVersion.WithResource("machinepools"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Compute().V1beta1().MachinePools().Informer()}, nil
 
-		// Group=core.api.onmetal.de, Version=v1alpha1
-	case corev1alpha1.SchemeGroupVersion.WithResource("resourcequotas"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Core().V1alpha1().ResourceQuotas().Informer()}, nil
+		// Group=core.api.onmetal.de, Version=v1beta1
+	case corev1beta1.SchemeGroupVersion.WithResource("resourcequotas"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Core().V1beta1().ResourceQuotas().Informer()}, nil
 
-		// Group=ipam.api.onmetal.de, Version=v1alpha1
-	case ipamv1alpha1.SchemeGroupVersion.WithResource("prefixes"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Ipam().V1alpha1().Prefixes().Informer()}, nil
-	case ipamv1alpha1.SchemeGroupVersion.WithResource("prefixallocations"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Ipam().V1alpha1().PrefixAllocations().Informer()}, nil
+		// Group=ipam.api.onmetal.de, Version=v1beta1
+	case ipamv1beta1.SchemeGroupVersion.WithResource("prefixes"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Ipam().V1beta1().Prefixes().Informer()}, nil
+	case ipamv1beta1.SchemeGroupVersion.WithResource("prefixallocations"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Ipam().V1beta1().PrefixAllocations().Informer()}, nil
 
-		// Group=networking.api.onmetal.de, Version=v1alpha1
-	case networkingv1alpha1.SchemeGroupVersion.WithResource("loadbalancers"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().LoadBalancers().Informer()}, nil
-	case networkingv1alpha1.SchemeGroupVersion.WithResource("loadbalancerroutings"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().LoadBalancerRoutings().Informer()}, nil
-	case networkingv1alpha1.SchemeGroupVersion.WithResource("natgateways"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().NATGateways().Informer()}, nil
-	case networkingv1alpha1.SchemeGroupVersion.WithResource("networks"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().Networks().Informer()}, nil
-	case networkingv1alpha1.SchemeGroupVersion.WithResource("networkinterfaces"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().NetworkInterfaces().Informer()}, nil
-	case networkingv1alpha1.SchemeGroupVersion.WithResource("networkpolicies"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().NetworkPolicies().Informer()}, nil
-	case networkingv1alpha1.SchemeGroupVersion.WithResource("virtualips"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().VirtualIPs().Informer()}, nil
+		// Group=networking.api.onmetal.de, Version=v1beta1
+	case networkingv1beta1.SchemeGroupVersion.WithResource("loadbalancers"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1beta1().LoadBalancers().Informer()}, nil
+	case networkingv1beta1.SchemeGroupVersion.WithResource("loadbalancerroutings"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1beta1().LoadBalancerRoutings().Informer()}, nil
+	case networkingv1beta1.SchemeGroupVersion.WithResource("natgateways"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1beta1().NATGateways().Informer()}, nil
+	case networkingv1beta1.SchemeGroupVersion.WithResource("networks"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1beta1().Networks().Informer()}, nil
+	case networkingv1beta1.SchemeGroupVersion.WithResource("networkinterfaces"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1beta1().NetworkInterfaces().Informer()}, nil
+	case networkingv1beta1.SchemeGroupVersion.WithResource("networkpolicies"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1beta1().NetworkPolicies().Informer()}, nil
+	case networkingv1beta1.SchemeGroupVersion.WithResource("virtualips"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1beta1().VirtualIPs().Informer()}, nil
 
-		// Group=storage.api.onmetal.de, Version=v1alpha1
-	case storagev1alpha1.SchemeGroupVersion.WithResource("buckets"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1alpha1().Buckets().Informer()}, nil
-	case storagev1alpha1.SchemeGroupVersion.WithResource("bucketclasses"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1alpha1().BucketClasses().Informer()}, nil
-	case storagev1alpha1.SchemeGroupVersion.WithResource("bucketpools"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1alpha1().BucketPools().Informer()}, nil
-	case storagev1alpha1.SchemeGroupVersion.WithResource("volumes"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1alpha1().Volumes().Informer()}, nil
-	case storagev1alpha1.SchemeGroupVersion.WithResource("volumeclasses"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1alpha1().VolumeClasses().Informer()}, nil
-	case storagev1alpha1.SchemeGroupVersion.WithResource("volumepools"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1alpha1().VolumePools().Informer()}, nil
+		// Group=storage.api.onmetal.de, Version=v1beta1
+	case storagev1beta1.SchemeGroupVersion.WithResource("buckets"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1beta1().Buckets().Informer()}, nil
+	case storagev1beta1.SchemeGroupVersion.WithResource("bucketclasses"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1beta1().BucketClasses().Informer()}, nil
+	case storagev1beta1.SchemeGroupVersion.WithResource("bucketpools"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1beta1().BucketPools().Informer()}, nil
+	case storagev1beta1.SchemeGroupVersion.WithResource("volumes"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1beta1().Volumes().Informer()}, nil
+	case storagev1beta1.SchemeGroupVersion.WithResource("volumeclasses"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1beta1().VolumeClasses().Informer()}, nil
+	case storagev1beta1.SchemeGroupVersion.WithResource("volumepools"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Storage().V1beta1().VolumePools().Informer()}, nil
 
 	}
 

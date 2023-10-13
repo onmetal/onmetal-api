@@ -23,7 +23,7 @@
 package openapi
 
 import (
-	v1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	v1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	common "k8s.io/kube-openapi/pkg/common"
@@ -32,405 +32,405 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"github.com/onmetal/onmetal-api/api/common/v1alpha1.ConfigMapKeySelector":             schema_onmetal_api_api_common_v1alpha1_ConfigMapKeySelector(ref),
-		"github.com/onmetal/onmetal-api/api/common/v1alpha1.IP":                               schema_onmetal_api_api_common_v1alpha1_IP(ref),
-		"github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix":                         schema_onmetal_api_api_common_v1alpha1_IPPrefix(ref),
-		"github.com/onmetal/onmetal-api/api/common/v1alpha1.IPRange":                          schema_onmetal_api_api_common_v1alpha1_IPRange(ref),
-		"github.com/onmetal/onmetal-api/api/common/v1alpha1.LocalUIDReference":                schema_onmetal_api_api_common_v1alpha1_LocalUIDReference(ref),
-		"github.com/onmetal/onmetal-api/api/common/v1alpha1.SecretKeySelector":                schema_onmetal_api_api_common_v1alpha1_SecretKeySelector(ref),
-		"github.com/onmetal/onmetal-api/api/common/v1alpha1.Taint":                            schema_onmetal_api_api_common_v1alpha1_Taint(ref),
-		"github.com/onmetal/onmetal-api/api/common/v1alpha1.Toleration":                       schema_onmetal_api_api_common_v1alpha1_Toleration(ref),
-		"github.com/onmetal/onmetal-api/api/common/v1alpha1.UIDReference":                     schema_onmetal_api_api_common_v1alpha1_UIDReference(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.DaemonEndpoint":                  schema_onmetal_api_api_compute_v1alpha1_DaemonEndpoint(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.EFIVar":                          schema_onmetal_api_api_compute_v1alpha1_EFIVar(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.EmptyDiskVolumeSource":           schema_onmetal_api_api_compute_v1alpha1_EmptyDiskVolumeSource(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.EphemeralNetworkInterfaceSource": schema_onmetal_api_api_compute_v1alpha1_EphemeralNetworkInterfaceSource(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.EphemeralVolumeSource":           schema_onmetal_api_api_compute_v1alpha1_EphemeralVolumeSource(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.Machine":                         schema_onmetal_api_api_compute_v1alpha1_Machine(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineClass":                    schema_onmetal_api_api_compute_v1alpha1_MachineClass(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineClassList":                schema_onmetal_api_api_compute_v1alpha1_MachineClassList(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineExecOptions":              schema_onmetal_api_api_compute_v1alpha1_MachineExecOptions(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineList":                     schema_onmetal_api_api_compute_v1alpha1_MachineList(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePool":                     schema_onmetal_api_api_compute_v1alpha1_MachinePool(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolAddress":              schema_onmetal_api_api_compute_v1alpha1_MachinePoolAddress(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolCondition":            schema_onmetal_api_api_compute_v1alpha1_MachinePoolCondition(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolDaemonEndpoints":      schema_onmetal_api_api_compute_v1alpha1_MachinePoolDaemonEndpoints(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolList":                 schema_onmetal_api_api_compute_v1alpha1_MachinePoolList(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolSpec":                 schema_onmetal_api_api_compute_v1alpha1_MachinePoolSpec(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolStatus":               schema_onmetal_api_api_compute_v1alpha1_MachinePoolStatus(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineSpec":                     schema_onmetal_api_api_compute_v1alpha1_MachineSpec(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineStatus":                   schema_onmetal_api_api_compute_v1alpha1_MachineStatus(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.NetworkInterface":                schema_onmetal_api_api_compute_v1alpha1_NetworkInterface(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.NetworkInterfaceSource":          schema_onmetal_api_api_compute_v1alpha1_NetworkInterfaceSource(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.NetworkInterfaceStatus":          schema_onmetal_api_api_compute_v1alpha1_NetworkInterfaceStatus(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.Volume":                          schema_onmetal_api_api_compute_v1alpha1_Volume(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.VolumeSource":                    schema_onmetal_api_api_compute_v1alpha1_VolumeSource(ref),
-		"github.com/onmetal/onmetal-api/api/compute/v1alpha1.VolumeStatus":                    schema_onmetal_api_api_compute_v1alpha1_VolumeStatus(ref),
-		"github.com/onmetal/onmetal-api/api/core/v1alpha1.ObjectSelector":                     schema_onmetal_api_api_core_v1alpha1_ObjectSelector(ref),
-		"github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceQuota":                      schema_onmetal_api_api_core_v1alpha1_ResourceQuota(ref),
-		"github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceQuotaList":                  schema_onmetal_api_api_core_v1alpha1_ResourceQuotaList(ref),
-		"github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceQuotaSpec":                  schema_onmetal_api_api_core_v1alpha1_ResourceQuotaSpec(ref),
-		"github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceQuotaStatus":                schema_onmetal_api_api_core_v1alpha1_ResourceQuotaStatus(ref),
-		"github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceScopeSelector":              schema_onmetal_api_api_core_v1alpha1_ResourceScopeSelector(ref),
-		"github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceScopeSelectorRequirement":   schema_onmetal_api_api_core_v1alpha1_ResourceScopeSelectorRequirement(ref),
-		"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.Prefix":                             schema_onmetal_api_api_ipam_v1alpha1_Prefix(ref),
-		"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixAllocation":                   schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocation(ref),
-		"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixAllocationList":               schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationList(ref),
-		"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixAllocationSpec":               schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationSpec(ref),
-		"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixAllocationStatus":             schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationStatus(ref),
-		"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixList":                         schema_onmetal_api_api_ipam_v1alpha1_PrefixList(ref),
-		"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixSpec":                         schema_onmetal_api_api_ipam_v1alpha1_PrefixSpec(ref),
-		"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixStatus":                       schema_onmetal_api_api_ipam_v1alpha1_PrefixStatus(ref),
-		"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixTemplateSpec":                 schema_onmetal_api_api_ipam_v1alpha1_PrefixTemplateSpec(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.EphemeralPrefixSource":        schema_onmetal_api_api_networking_v1alpha1_EphemeralPrefixSource(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.EphemeralVirtualIPSource":     schema_onmetal_api_api_networking_v1alpha1_EphemeralVirtualIPSource(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.IPBlock":                      schema_onmetal_api_api_networking_v1alpha1_IPBlock(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.IPSource":                     schema_onmetal_api_api_networking_v1alpha1_IPSource(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancer":                 schema_onmetal_api_api_networking_v1alpha1_LoadBalancer(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerDestination":      schema_onmetal_api_api_networking_v1alpha1_LoadBalancerDestination(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerList":             schema_onmetal_api_api_networking_v1alpha1_LoadBalancerList(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerPort":             schema_onmetal_api_api_networking_v1alpha1_LoadBalancerPort(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerRouting":          schema_onmetal_api_api_networking_v1alpha1_LoadBalancerRouting(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerRoutingList":      schema_onmetal_api_api_networking_v1alpha1_LoadBalancerRoutingList(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerSpec":             schema_onmetal_api_api_networking_v1alpha1_LoadBalancerSpec(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerStatus":           schema_onmetal_api_api_networking_v1alpha1_LoadBalancerStatus(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerTargetRef":        schema_onmetal_api_api_networking_v1alpha1_LoadBalancerTargetRef(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NATGateway":                   schema_onmetal_api_api_networking_v1alpha1_NATGateway(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NATGatewayList":               schema_onmetal_api_api_networking_v1alpha1_NATGatewayList(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NATGatewaySpec":               schema_onmetal_api_api_networking_v1alpha1_NATGatewaySpec(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NATGatewayStatus":             schema_onmetal_api_api_networking_v1alpha1_NATGatewayStatus(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.Network":                      schema_onmetal_api_api_networking_v1alpha1_Network(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterface":             schema_onmetal_api_api_networking_v1alpha1_NetworkInterface(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceList":         schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceList(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceSpec":         schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceSpec(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceStatus":       schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceStatus(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceTemplateSpec": schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceTemplateSpec(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkList":                  schema_onmetal_api_api_networking_v1alpha1_NetworkList(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeering":               schema_onmetal_api_api_networking_v1alpha1_NetworkPeering(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeeringClaimRef":       schema_onmetal_api_api_networking_v1alpha1_NetworkPeeringClaimRef(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeeringNetworkRef":     schema_onmetal_api_api_networking_v1alpha1_NetworkPeeringNetworkRef(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeeringStatus":         schema_onmetal_api_api_networking_v1alpha1_NetworkPeeringStatus(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicy":                schema_onmetal_api_api_networking_v1alpha1_NetworkPolicy(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyCondition":       schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyCondition(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyEgressRule":      schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyEgressRule(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyIngressRule":     schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyIngressRule(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyList":            schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyList(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyPeer":            schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyPeer(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyPort":            schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyPort(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicySpec":            schema_onmetal_api_api_networking_v1alpha1_NetworkPolicySpec(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyStatus":          schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyStatus(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkSpec":                  schema_onmetal_api_api_networking_v1alpha1_NetworkSpec(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkStatus":                schema_onmetal_api_api_networking_v1alpha1_NetworkStatus(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.PrefixSource":                 schema_onmetal_api_api_networking_v1alpha1_PrefixSource(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIP":                    schema_onmetal_api_api_networking_v1alpha1_VirtualIP(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPList":                schema_onmetal_api_api_networking_v1alpha1_VirtualIPList(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPSource":              schema_onmetal_api_api_networking_v1alpha1_VirtualIPSource(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPSpec":                schema_onmetal_api_api_networking_v1alpha1_VirtualIPSpec(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPStatus":              schema_onmetal_api_api_networking_v1alpha1_VirtualIPStatus(ref),
-		"github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPTemplateSpec":        schema_onmetal_api_api_networking_v1alpha1_VirtualIPTemplateSpec(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.Bucket":                          schema_onmetal_api_api_storage_v1alpha1_Bucket(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketAccess":                    schema_onmetal_api_api_storage_v1alpha1_BucketAccess(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketClass":                     schema_onmetal_api_api_storage_v1alpha1_BucketClass(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketClassList":                 schema_onmetal_api_api_storage_v1alpha1_BucketClassList(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketCondition":                 schema_onmetal_api_api_storage_v1alpha1_BucketCondition(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketList":                      schema_onmetal_api_api_storage_v1alpha1_BucketList(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketPool":                      schema_onmetal_api_api_storage_v1alpha1_BucketPool(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketPoolList":                  schema_onmetal_api_api_storage_v1alpha1_BucketPoolList(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketPoolSpec":                  schema_onmetal_api_api_storage_v1alpha1_BucketPoolSpec(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketPoolStatus":                schema_onmetal_api_api_storage_v1alpha1_BucketPoolStatus(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketSpec":                      schema_onmetal_api_api_storage_v1alpha1_BucketSpec(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketStatus":                    schema_onmetal_api_api_storage_v1alpha1_BucketStatus(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketTemplateSpec":              schema_onmetal_api_api_storage_v1alpha1_BucketTemplateSpec(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.Volume":                          schema_onmetal_api_api_storage_v1alpha1_Volume(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeAccess":                    schema_onmetal_api_api_storage_v1alpha1_VolumeAccess(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeClass":                     schema_onmetal_api_api_storage_v1alpha1_VolumeClass(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeClassList":                 schema_onmetal_api_api_storage_v1alpha1_VolumeClassList(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeCondition":                 schema_onmetal_api_api_storage_v1alpha1_VolumeCondition(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeEncryption":                schema_onmetal_api_api_storage_v1alpha1_VolumeEncryption(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeList":                      schema_onmetal_api_api_storage_v1alpha1_VolumeList(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePool":                      schema_onmetal_api_api_storage_v1alpha1_VolumePool(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePoolCondition":             schema_onmetal_api_api_storage_v1alpha1_VolumePoolCondition(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePoolList":                  schema_onmetal_api_api_storage_v1alpha1_VolumePoolList(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePoolSpec":                  schema_onmetal_api_api_storage_v1alpha1_VolumePoolSpec(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePoolStatus":                schema_onmetal_api_api_storage_v1alpha1_VolumePoolStatus(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeSpec":                      schema_onmetal_api_api_storage_v1alpha1_VolumeSpec(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeStatus":                    schema_onmetal_api_api_storage_v1alpha1_VolumeStatus(ref),
-		"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeTemplateSpec":              schema_onmetal_api_api_storage_v1alpha1_VolumeTemplateSpec(ref),
-		"k8s.io/api/core/v1.AWSElasticBlockStoreVolumeSource":                                 schema_k8sio_api_core_v1_AWSElasticBlockStoreVolumeSource(ref),
-		"k8s.io/api/core/v1.Affinity":                                                         schema_k8sio_api_core_v1_Affinity(ref),
-		"k8s.io/api/core/v1.AttachedVolume":                                                   schema_k8sio_api_core_v1_AttachedVolume(ref),
-		"k8s.io/api/core/v1.AvoidPods":                                                        schema_k8sio_api_core_v1_AvoidPods(ref),
-		"k8s.io/api/core/v1.AzureDiskVolumeSource":                                            schema_k8sio_api_core_v1_AzureDiskVolumeSource(ref),
-		"k8s.io/api/core/v1.AzureFilePersistentVolumeSource":                                  schema_k8sio_api_core_v1_AzureFilePersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.AzureFileVolumeSource":                                            schema_k8sio_api_core_v1_AzureFileVolumeSource(ref),
-		"k8s.io/api/core/v1.Binding":                                                          schema_k8sio_api_core_v1_Binding(ref),
-		"k8s.io/api/core/v1.CSIPersistentVolumeSource":                                        schema_k8sio_api_core_v1_CSIPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.CSIVolumeSource":                                                  schema_k8sio_api_core_v1_CSIVolumeSource(ref),
-		"k8s.io/api/core/v1.Capabilities":                                                     schema_k8sio_api_core_v1_Capabilities(ref),
-		"k8s.io/api/core/v1.CephFSPersistentVolumeSource":                                     schema_k8sio_api_core_v1_CephFSPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.CephFSVolumeSource":                                               schema_k8sio_api_core_v1_CephFSVolumeSource(ref),
-		"k8s.io/api/core/v1.CinderPersistentVolumeSource":                                     schema_k8sio_api_core_v1_CinderPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.CinderVolumeSource":                                               schema_k8sio_api_core_v1_CinderVolumeSource(ref),
-		"k8s.io/api/core/v1.ClaimSource":                                                      schema_k8sio_api_core_v1_ClaimSource(ref),
-		"k8s.io/api/core/v1.ClientIPConfig":                                                   schema_k8sio_api_core_v1_ClientIPConfig(ref),
-		"k8s.io/api/core/v1.ComponentCondition":                                               schema_k8sio_api_core_v1_ComponentCondition(ref),
-		"k8s.io/api/core/v1.ComponentStatus":                                                  schema_k8sio_api_core_v1_ComponentStatus(ref),
-		"k8s.io/api/core/v1.ComponentStatusList":                                              schema_k8sio_api_core_v1_ComponentStatusList(ref),
-		"k8s.io/api/core/v1.ConfigMap":                                                        schema_k8sio_api_core_v1_ConfigMap(ref),
-		"k8s.io/api/core/v1.ConfigMapEnvSource":                                               schema_k8sio_api_core_v1_ConfigMapEnvSource(ref),
-		"k8s.io/api/core/v1.ConfigMapKeySelector":                                             schema_k8sio_api_core_v1_ConfigMapKeySelector(ref),
-		"k8s.io/api/core/v1.ConfigMapList":                                                    schema_k8sio_api_core_v1_ConfigMapList(ref),
-		"k8s.io/api/core/v1.ConfigMapNodeConfigSource":                                        schema_k8sio_api_core_v1_ConfigMapNodeConfigSource(ref),
-		"k8s.io/api/core/v1.ConfigMapProjection":                                              schema_k8sio_api_core_v1_ConfigMapProjection(ref),
-		"k8s.io/api/core/v1.ConfigMapVolumeSource":                                            schema_k8sio_api_core_v1_ConfigMapVolumeSource(ref),
-		"k8s.io/api/core/v1.Container":                                                        schema_k8sio_api_core_v1_Container(ref),
-		"k8s.io/api/core/v1.ContainerImage":                                                   schema_k8sio_api_core_v1_ContainerImage(ref),
-		"k8s.io/api/core/v1.ContainerPort":                                                    schema_k8sio_api_core_v1_ContainerPort(ref),
-		"k8s.io/api/core/v1.ContainerResizePolicy":                                            schema_k8sio_api_core_v1_ContainerResizePolicy(ref),
-		"k8s.io/api/core/v1.ContainerState":                                                   schema_k8sio_api_core_v1_ContainerState(ref),
-		"k8s.io/api/core/v1.ContainerStateRunning":                                            schema_k8sio_api_core_v1_ContainerStateRunning(ref),
-		"k8s.io/api/core/v1.ContainerStateTerminated":                                         schema_k8sio_api_core_v1_ContainerStateTerminated(ref),
-		"k8s.io/api/core/v1.ContainerStateWaiting":                                            schema_k8sio_api_core_v1_ContainerStateWaiting(ref),
-		"k8s.io/api/core/v1.ContainerStatus":                                                  schema_k8sio_api_core_v1_ContainerStatus(ref),
-		"k8s.io/api/core/v1.DaemonEndpoint":                                                   schema_k8sio_api_core_v1_DaemonEndpoint(ref),
-		"k8s.io/api/core/v1.DownwardAPIProjection":                                            schema_k8sio_api_core_v1_DownwardAPIProjection(ref),
-		"k8s.io/api/core/v1.DownwardAPIVolumeFile":                                            schema_k8sio_api_core_v1_DownwardAPIVolumeFile(ref),
-		"k8s.io/api/core/v1.DownwardAPIVolumeSource":                                          schema_k8sio_api_core_v1_DownwardAPIVolumeSource(ref),
-		"k8s.io/api/core/v1.EmptyDirVolumeSource":                                             schema_k8sio_api_core_v1_EmptyDirVolumeSource(ref),
-		"k8s.io/api/core/v1.EndpointAddress":                                                  schema_k8sio_api_core_v1_EndpointAddress(ref),
-		"k8s.io/api/core/v1.EndpointPort":                                                     schema_k8sio_api_core_v1_EndpointPort(ref),
-		"k8s.io/api/core/v1.EndpointSubset":                                                   schema_k8sio_api_core_v1_EndpointSubset(ref),
-		"k8s.io/api/core/v1.Endpoints":                                                        schema_k8sio_api_core_v1_Endpoints(ref),
-		"k8s.io/api/core/v1.EndpointsList":                                                    schema_k8sio_api_core_v1_EndpointsList(ref),
-		"k8s.io/api/core/v1.EnvFromSource":                                                    schema_k8sio_api_core_v1_EnvFromSource(ref),
-		"k8s.io/api/core/v1.EnvVar":                                                           schema_k8sio_api_core_v1_EnvVar(ref),
-		"k8s.io/api/core/v1.EnvVarSource":                                                     schema_k8sio_api_core_v1_EnvVarSource(ref),
-		"k8s.io/api/core/v1.EphemeralContainer":                                               schema_k8sio_api_core_v1_EphemeralContainer(ref),
-		"k8s.io/api/core/v1.EphemeralContainerCommon":                                         schema_k8sio_api_core_v1_EphemeralContainerCommon(ref),
-		"k8s.io/api/core/v1.EphemeralVolumeSource":                                            schema_k8sio_api_core_v1_EphemeralVolumeSource(ref),
-		"k8s.io/api/core/v1.Event":                                                            schema_k8sio_api_core_v1_Event(ref),
-		"k8s.io/api/core/v1.EventList":                                                        schema_k8sio_api_core_v1_EventList(ref),
-		"k8s.io/api/core/v1.EventSeries":                                                      schema_k8sio_api_core_v1_EventSeries(ref),
-		"k8s.io/api/core/v1.EventSource":                                                      schema_k8sio_api_core_v1_EventSource(ref),
-		"k8s.io/api/core/v1.ExecAction":                                                       schema_k8sio_api_core_v1_ExecAction(ref),
-		"k8s.io/api/core/v1.FCVolumeSource":                                                   schema_k8sio_api_core_v1_FCVolumeSource(ref),
-		"k8s.io/api/core/v1.FlexPersistentVolumeSource":                                       schema_k8sio_api_core_v1_FlexPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.FlexVolumeSource":                                                 schema_k8sio_api_core_v1_FlexVolumeSource(ref),
-		"k8s.io/api/core/v1.FlockerVolumeSource":                                              schema_k8sio_api_core_v1_FlockerVolumeSource(ref),
-		"k8s.io/api/core/v1.GCEPersistentDiskVolumeSource":                                    schema_k8sio_api_core_v1_GCEPersistentDiskVolumeSource(ref),
-		"k8s.io/api/core/v1.GRPCAction":                                                       schema_k8sio_api_core_v1_GRPCAction(ref),
-		"k8s.io/api/core/v1.GitRepoVolumeSource":                                              schema_k8sio_api_core_v1_GitRepoVolumeSource(ref),
-		"k8s.io/api/core/v1.GlusterfsPersistentVolumeSource":                                  schema_k8sio_api_core_v1_GlusterfsPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.GlusterfsVolumeSource":                                            schema_k8sio_api_core_v1_GlusterfsVolumeSource(ref),
-		"k8s.io/api/core/v1.HTTPGetAction":                                                    schema_k8sio_api_core_v1_HTTPGetAction(ref),
-		"k8s.io/api/core/v1.HTTPHeader":                                                       schema_k8sio_api_core_v1_HTTPHeader(ref),
-		"k8s.io/api/core/v1.HostAlias":                                                        schema_k8sio_api_core_v1_HostAlias(ref),
-		"k8s.io/api/core/v1.HostIP":                                                           schema_k8sio_api_core_v1_HostIP(ref),
-		"k8s.io/api/core/v1.HostPathVolumeSource":                                             schema_k8sio_api_core_v1_HostPathVolumeSource(ref),
-		"k8s.io/api/core/v1.ISCSIPersistentVolumeSource":                                      schema_k8sio_api_core_v1_ISCSIPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.ISCSIVolumeSource":                                                schema_k8sio_api_core_v1_ISCSIVolumeSource(ref),
-		"k8s.io/api/core/v1.KeyToPath":                                                        schema_k8sio_api_core_v1_KeyToPath(ref),
-		"k8s.io/api/core/v1.Lifecycle":                                                        schema_k8sio_api_core_v1_Lifecycle(ref),
-		"k8s.io/api/core/v1.LifecycleHandler":                                                 schema_k8sio_api_core_v1_LifecycleHandler(ref),
-		"k8s.io/api/core/v1.LimitRange":                                                       schema_k8sio_api_core_v1_LimitRange(ref),
-		"k8s.io/api/core/v1.LimitRangeItem":                                                   schema_k8sio_api_core_v1_LimitRangeItem(ref),
-		"k8s.io/api/core/v1.LimitRangeList":                                                   schema_k8sio_api_core_v1_LimitRangeList(ref),
-		"k8s.io/api/core/v1.LimitRangeSpec":                                                   schema_k8sio_api_core_v1_LimitRangeSpec(ref),
-		"k8s.io/api/core/v1.List":                                                             schema_k8sio_api_core_v1_List(ref),
-		"k8s.io/api/core/v1.LoadBalancerIngress":                                              schema_k8sio_api_core_v1_LoadBalancerIngress(ref),
-		"k8s.io/api/core/v1.LoadBalancerStatus":                                               schema_k8sio_api_core_v1_LoadBalancerStatus(ref),
-		"k8s.io/api/core/v1.LocalObjectReference":                                             schema_k8sio_api_core_v1_LocalObjectReference(ref),
-		"k8s.io/api/core/v1.LocalVolumeSource":                                                schema_k8sio_api_core_v1_LocalVolumeSource(ref),
-		"k8s.io/api/core/v1.NFSVolumeSource":                                                  schema_k8sio_api_core_v1_NFSVolumeSource(ref),
-		"k8s.io/api/core/v1.Namespace":                                                        schema_k8sio_api_core_v1_Namespace(ref),
-		"k8s.io/api/core/v1.NamespaceCondition":                                               schema_k8sio_api_core_v1_NamespaceCondition(ref),
-		"k8s.io/api/core/v1.NamespaceList":                                                    schema_k8sio_api_core_v1_NamespaceList(ref),
-		"k8s.io/api/core/v1.NamespaceSpec":                                                    schema_k8sio_api_core_v1_NamespaceSpec(ref),
-		"k8s.io/api/core/v1.NamespaceStatus":                                                  schema_k8sio_api_core_v1_NamespaceStatus(ref),
-		"k8s.io/api/core/v1.Node":                                                             schema_k8sio_api_core_v1_Node(ref),
-		"k8s.io/api/core/v1.NodeAddress":                                                      schema_k8sio_api_core_v1_NodeAddress(ref),
-		"k8s.io/api/core/v1.NodeAffinity":                                                     schema_k8sio_api_core_v1_NodeAffinity(ref),
-		"k8s.io/api/core/v1.NodeCondition":                                                    schema_k8sio_api_core_v1_NodeCondition(ref),
-		"k8s.io/api/core/v1.NodeConfigSource":                                                 schema_k8sio_api_core_v1_NodeConfigSource(ref),
-		"k8s.io/api/core/v1.NodeConfigStatus":                                                 schema_k8sio_api_core_v1_NodeConfigStatus(ref),
-		"k8s.io/api/core/v1.NodeDaemonEndpoints":                                              schema_k8sio_api_core_v1_NodeDaemonEndpoints(ref),
-		"k8s.io/api/core/v1.NodeList":                                                         schema_k8sio_api_core_v1_NodeList(ref),
-		"k8s.io/api/core/v1.NodeProxyOptions":                                                 schema_k8sio_api_core_v1_NodeProxyOptions(ref),
-		"k8s.io/api/core/v1.NodeResources":                                                    schema_k8sio_api_core_v1_NodeResources(ref),
-		"k8s.io/api/core/v1.NodeSelector":                                                     schema_k8sio_api_core_v1_NodeSelector(ref),
-		"k8s.io/api/core/v1.NodeSelectorRequirement":                                          schema_k8sio_api_core_v1_NodeSelectorRequirement(ref),
-		"k8s.io/api/core/v1.NodeSelectorTerm":                                                 schema_k8sio_api_core_v1_NodeSelectorTerm(ref),
-		"k8s.io/api/core/v1.NodeSpec":                                                         schema_k8sio_api_core_v1_NodeSpec(ref),
-		"k8s.io/api/core/v1.NodeStatus":                                                       schema_k8sio_api_core_v1_NodeStatus(ref),
-		"k8s.io/api/core/v1.NodeSystemInfo":                                                   schema_k8sio_api_core_v1_NodeSystemInfo(ref),
-		"k8s.io/api/core/v1.ObjectFieldSelector":                                              schema_k8sio_api_core_v1_ObjectFieldSelector(ref),
-		"k8s.io/api/core/v1.ObjectReference":                                                  schema_k8sio_api_core_v1_ObjectReference(ref),
-		"k8s.io/api/core/v1.PersistentVolume":                                                 schema_k8sio_api_core_v1_PersistentVolume(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaim":                                            schema_k8sio_api_core_v1_PersistentVolumeClaim(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimCondition":                                   schema_k8sio_api_core_v1_PersistentVolumeClaimCondition(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimList":                                        schema_k8sio_api_core_v1_PersistentVolumeClaimList(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimSpec":                                        schema_k8sio_api_core_v1_PersistentVolumeClaimSpec(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimStatus":                                      schema_k8sio_api_core_v1_PersistentVolumeClaimStatus(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimTemplate":                                    schema_k8sio_api_core_v1_PersistentVolumeClaimTemplate(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimVolumeSource":                                schema_k8sio_api_core_v1_PersistentVolumeClaimVolumeSource(ref),
-		"k8s.io/api/core/v1.PersistentVolumeList":                                             schema_k8sio_api_core_v1_PersistentVolumeList(ref),
-		"k8s.io/api/core/v1.PersistentVolumeSource":                                           schema_k8sio_api_core_v1_PersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.PersistentVolumeSpec":                                             schema_k8sio_api_core_v1_PersistentVolumeSpec(ref),
-		"k8s.io/api/core/v1.PersistentVolumeStatus":                                           schema_k8sio_api_core_v1_PersistentVolumeStatus(ref),
-		"k8s.io/api/core/v1.PhotonPersistentDiskVolumeSource":                                 schema_k8sio_api_core_v1_PhotonPersistentDiskVolumeSource(ref),
-		"k8s.io/api/core/v1.Pod":                                                              schema_k8sio_api_core_v1_Pod(ref),
-		"k8s.io/api/core/v1.PodAffinity":                                                      schema_k8sio_api_core_v1_PodAffinity(ref),
-		"k8s.io/api/core/v1.PodAffinityTerm":                                                  schema_k8sio_api_core_v1_PodAffinityTerm(ref),
-		"k8s.io/api/core/v1.PodAntiAffinity":                                                  schema_k8sio_api_core_v1_PodAntiAffinity(ref),
-		"k8s.io/api/core/v1.PodAttachOptions":                                                 schema_k8sio_api_core_v1_PodAttachOptions(ref),
-		"k8s.io/api/core/v1.PodCondition":                                                     schema_k8sio_api_core_v1_PodCondition(ref),
-		"k8s.io/api/core/v1.PodDNSConfig":                                                     schema_k8sio_api_core_v1_PodDNSConfig(ref),
-		"k8s.io/api/core/v1.PodDNSConfigOption":                                               schema_k8sio_api_core_v1_PodDNSConfigOption(ref),
-		"k8s.io/api/core/v1.PodExecOptions":                                                   schema_k8sio_api_core_v1_PodExecOptions(ref),
-		"k8s.io/api/core/v1.PodIP":                                                            schema_k8sio_api_core_v1_PodIP(ref),
-		"k8s.io/api/core/v1.PodList":                                                          schema_k8sio_api_core_v1_PodList(ref),
-		"k8s.io/api/core/v1.PodLogOptions":                                                    schema_k8sio_api_core_v1_PodLogOptions(ref),
-		"k8s.io/api/core/v1.PodOS":                                                            schema_k8sio_api_core_v1_PodOS(ref),
-		"k8s.io/api/core/v1.PodPortForwardOptions":                                            schema_k8sio_api_core_v1_PodPortForwardOptions(ref),
-		"k8s.io/api/core/v1.PodProxyOptions":                                                  schema_k8sio_api_core_v1_PodProxyOptions(ref),
-		"k8s.io/api/core/v1.PodReadinessGate":                                                 schema_k8sio_api_core_v1_PodReadinessGate(ref),
-		"k8s.io/api/core/v1.PodResourceClaim":                                                 schema_k8sio_api_core_v1_PodResourceClaim(ref),
-		"k8s.io/api/core/v1.PodResourceClaimStatus":                                           schema_k8sio_api_core_v1_PodResourceClaimStatus(ref),
-		"k8s.io/api/core/v1.PodSchedulingGate":                                                schema_k8sio_api_core_v1_PodSchedulingGate(ref),
-		"k8s.io/api/core/v1.PodSecurityContext":                                               schema_k8sio_api_core_v1_PodSecurityContext(ref),
-		"k8s.io/api/core/v1.PodSignature":                                                     schema_k8sio_api_core_v1_PodSignature(ref),
-		"k8s.io/api/core/v1.PodSpec":                                                          schema_k8sio_api_core_v1_PodSpec(ref),
-		"k8s.io/api/core/v1.PodStatus":                                                        schema_k8sio_api_core_v1_PodStatus(ref),
-		"k8s.io/api/core/v1.PodStatusResult":                                                  schema_k8sio_api_core_v1_PodStatusResult(ref),
-		"k8s.io/api/core/v1.PodTemplate":                                                      schema_k8sio_api_core_v1_PodTemplate(ref),
-		"k8s.io/api/core/v1.PodTemplateList":                                                  schema_k8sio_api_core_v1_PodTemplateList(ref),
-		"k8s.io/api/core/v1.PodTemplateSpec":                                                  schema_k8sio_api_core_v1_PodTemplateSpec(ref),
-		"k8s.io/api/core/v1.PortStatus":                                                       schema_k8sio_api_core_v1_PortStatus(ref),
-		"k8s.io/api/core/v1.PortworxVolumeSource":                                             schema_k8sio_api_core_v1_PortworxVolumeSource(ref),
-		"k8s.io/api/core/v1.PreferAvoidPodsEntry":                                             schema_k8sio_api_core_v1_PreferAvoidPodsEntry(ref),
-		"k8s.io/api/core/v1.PreferredSchedulingTerm":                                          schema_k8sio_api_core_v1_PreferredSchedulingTerm(ref),
-		"k8s.io/api/core/v1.Probe":                                                            schema_k8sio_api_core_v1_Probe(ref),
-		"k8s.io/api/core/v1.ProbeHandler":                                                     schema_k8sio_api_core_v1_ProbeHandler(ref),
-		"k8s.io/api/core/v1.ProjectedVolumeSource":                                            schema_k8sio_api_core_v1_ProjectedVolumeSource(ref),
-		"k8s.io/api/core/v1.QuobyteVolumeSource":                                              schema_k8sio_api_core_v1_QuobyteVolumeSource(ref),
-		"k8s.io/api/core/v1.RBDPersistentVolumeSource":                                        schema_k8sio_api_core_v1_RBDPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.RBDVolumeSource":                                                  schema_k8sio_api_core_v1_RBDVolumeSource(ref),
-		"k8s.io/api/core/v1.RangeAllocation":                                                  schema_k8sio_api_core_v1_RangeAllocation(ref),
-		"k8s.io/api/core/v1.ReplicationController":                                            schema_k8sio_api_core_v1_ReplicationController(ref),
-		"k8s.io/api/core/v1.ReplicationControllerCondition":                                   schema_k8sio_api_core_v1_ReplicationControllerCondition(ref),
-		"k8s.io/api/core/v1.ReplicationControllerList":                                        schema_k8sio_api_core_v1_ReplicationControllerList(ref),
-		"k8s.io/api/core/v1.ReplicationControllerSpec":                                        schema_k8sio_api_core_v1_ReplicationControllerSpec(ref),
-		"k8s.io/api/core/v1.ReplicationControllerStatus":                                      schema_k8sio_api_core_v1_ReplicationControllerStatus(ref),
-		"k8s.io/api/core/v1.ResourceClaim":                                                    schema_k8sio_api_core_v1_ResourceClaim(ref),
-		"k8s.io/api/core/v1.ResourceFieldSelector":                                            schema_k8sio_api_core_v1_ResourceFieldSelector(ref),
-		"k8s.io/api/core/v1.ResourceQuota":                                                    schema_k8sio_api_core_v1_ResourceQuota(ref),
-		"k8s.io/api/core/v1.ResourceQuotaList":                                                schema_k8sio_api_core_v1_ResourceQuotaList(ref),
-		"k8s.io/api/core/v1.ResourceQuotaSpec":                                                schema_k8sio_api_core_v1_ResourceQuotaSpec(ref),
-		"k8s.io/api/core/v1.ResourceQuotaStatus":                                              schema_k8sio_api_core_v1_ResourceQuotaStatus(ref),
-		"k8s.io/api/core/v1.ResourceRequirements":                                             schema_k8sio_api_core_v1_ResourceRequirements(ref),
-		"k8s.io/api/core/v1.SELinuxOptions":                                                   schema_k8sio_api_core_v1_SELinuxOptions(ref),
-		"k8s.io/api/core/v1.ScaleIOPersistentVolumeSource":                                    schema_k8sio_api_core_v1_ScaleIOPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.ScaleIOVolumeSource":                                              schema_k8sio_api_core_v1_ScaleIOVolumeSource(ref),
-		"k8s.io/api/core/v1.ScopeSelector":                                                    schema_k8sio_api_core_v1_ScopeSelector(ref),
-		"k8s.io/api/core/v1.ScopedResourceSelectorRequirement":                                schema_k8sio_api_core_v1_ScopedResourceSelectorRequirement(ref),
-		"k8s.io/api/core/v1.SeccompProfile":                                                   schema_k8sio_api_core_v1_SeccompProfile(ref),
-		"k8s.io/api/core/v1.Secret":                                                           schema_k8sio_api_core_v1_Secret(ref),
-		"k8s.io/api/core/v1.SecretEnvSource":                                                  schema_k8sio_api_core_v1_SecretEnvSource(ref),
-		"k8s.io/api/core/v1.SecretKeySelector":                                                schema_k8sio_api_core_v1_SecretKeySelector(ref),
-		"k8s.io/api/core/v1.SecretList":                                                       schema_k8sio_api_core_v1_SecretList(ref),
-		"k8s.io/api/core/v1.SecretProjection":                                                 schema_k8sio_api_core_v1_SecretProjection(ref),
-		"k8s.io/api/core/v1.SecretReference":                                                  schema_k8sio_api_core_v1_SecretReference(ref),
-		"k8s.io/api/core/v1.SecretVolumeSource":                                               schema_k8sio_api_core_v1_SecretVolumeSource(ref),
-		"k8s.io/api/core/v1.SecurityContext":                                                  schema_k8sio_api_core_v1_SecurityContext(ref),
-		"k8s.io/api/core/v1.SerializedReference":                                              schema_k8sio_api_core_v1_SerializedReference(ref),
-		"k8s.io/api/core/v1.Service":                                                          schema_k8sio_api_core_v1_Service(ref),
-		"k8s.io/api/core/v1.ServiceAccount":                                                   schema_k8sio_api_core_v1_ServiceAccount(ref),
-		"k8s.io/api/core/v1.ServiceAccountList":                                               schema_k8sio_api_core_v1_ServiceAccountList(ref),
-		"k8s.io/api/core/v1.ServiceAccountTokenProjection":                                    schema_k8sio_api_core_v1_ServiceAccountTokenProjection(ref),
-		"k8s.io/api/core/v1.ServiceList":                                                      schema_k8sio_api_core_v1_ServiceList(ref),
-		"k8s.io/api/core/v1.ServicePort":                                                      schema_k8sio_api_core_v1_ServicePort(ref),
-		"k8s.io/api/core/v1.ServiceProxyOptions":                                              schema_k8sio_api_core_v1_ServiceProxyOptions(ref),
-		"k8s.io/api/core/v1.ServiceSpec":                                                      schema_k8sio_api_core_v1_ServiceSpec(ref),
-		"k8s.io/api/core/v1.ServiceStatus":                                                    schema_k8sio_api_core_v1_ServiceStatus(ref),
-		"k8s.io/api/core/v1.SessionAffinityConfig":                                            schema_k8sio_api_core_v1_SessionAffinityConfig(ref),
-		"k8s.io/api/core/v1.StorageOSPersistentVolumeSource":                                  schema_k8sio_api_core_v1_StorageOSPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.StorageOSVolumeSource":                                            schema_k8sio_api_core_v1_StorageOSVolumeSource(ref),
-		"k8s.io/api/core/v1.Sysctl":                                                           schema_k8sio_api_core_v1_Sysctl(ref),
-		"k8s.io/api/core/v1.TCPSocketAction":                                                  schema_k8sio_api_core_v1_TCPSocketAction(ref),
-		"k8s.io/api/core/v1.Taint":                                                            schema_k8sio_api_core_v1_Taint(ref),
-		"k8s.io/api/core/v1.Toleration":                                                       schema_k8sio_api_core_v1_Toleration(ref),
-		"k8s.io/api/core/v1.TopologySelectorLabelRequirement":                                 schema_k8sio_api_core_v1_TopologySelectorLabelRequirement(ref),
-		"k8s.io/api/core/v1.TopologySelectorTerm":                                             schema_k8sio_api_core_v1_TopologySelectorTerm(ref),
-		"k8s.io/api/core/v1.TopologySpreadConstraint":                                         schema_k8sio_api_core_v1_TopologySpreadConstraint(ref),
-		"k8s.io/api/core/v1.TypedLocalObjectReference":                                        schema_k8sio_api_core_v1_TypedLocalObjectReference(ref),
-		"k8s.io/api/core/v1.TypedObjectReference":                                             schema_k8sio_api_core_v1_TypedObjectReference(ref),
-		"k8s.io/api/core/v1.Volume":                                                           schema_k8sio_api_core_v1_Volume(ref),
-		"k8s.io/api/core/v1.VolumeDevice":                                                     schema_k8sio_api_core_v1_VolumeDevice(ref),
-		"k8s.io/api/core/v1.VolumeMount":                                                      schema_k8sio_api_core_v1_VolumeMount(ref),
-		"k8s.io/api/core/v1.VolumeNodeAffinity":                                               schema_k8sio_api_core_v1_VolumeNodeAffinity(ref),
-		"k8s.io/api/core/v1.VolumeProjection":                                                 schema_k8sio_api_core_v1_VolumeProjection(ref),
-		"k8s.io/api/core/v1.VolumeSource":                                                     schema_k8sio_api_core_v1_VolumeSource(ref),
-		"k8s.io/api/core/v1.VsphereVirtualDiskVolumeSource":                                   schema_k8sio_api_core_v1_VsphereVirtualDiskVolumeSource(ref),
-		"k8s.io/api/core/v1.WeightedPodAffinityTerm":                                          schema_k8sio_api_core_v1_WeightedPodAffinityTerm(ref),
-		"k8s.io/api/core/v1.WindowsSecurityContextOptions":                                    schema_k8sio_api_core_v1_WindowsSecurityContextOptions(ref),
-		"k8s.io/apimachinery/pkg/api/resource.Quantity":                                       schema_apimachinery_pkg_api_resource_Quantity(ref),
-		"k8s.io/apimachinery/pkg/api/resource.int64Amount":                                    schema_apimachinery_pkg_api_resource_int64Amount(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.APIGroup":                                       schema_pkg_apis_meta_v1_APIGroup(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.APIGroupList":                                   schema_pkg_apis_meta_v1_APIGroupList(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.APIResource":                                    schema_pkg_apis_meta_v1_APIResource(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.APIResourceList":                                schema_pkg_apis_meta_v1_APIResourceList(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.APIVersions":                                    schema_pkg_apis_meta_v1_APIVersions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ApplyOptions":                                   schema_pkg_apis_meta_v1_ApplyOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Condition":                                      schema_pkg_apis_meta_v1_Condition(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.CreateOptions":                                  schema_pkg_apis_meta_v1_CreateOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.DeleteOptions":                                  schema_pkg_apis_meta_v1_DeleteOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Duration":                                       schema_pkg_apis_meta_v1_Duration(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.FieldsV1":                                       schema_pkg_apis_meta_v1_FieldsV1(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GetOptions":                                     schema_pkg_apis_meta_v1_GetOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupKind":                                      schema_pkg_apis_meta_v1_GroupKind(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupResource":                                  schema_pkg_apis_meta_v1_GroupResource(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersion":                                   schema_pkg_apis_meta_v1_GroupVersion(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionForDiscovery":                       schema_pkg_apis_meta_v1_GroupVersionForDiscovery(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionKind":                               schema_pkg_apis_meta_v1_GroupVersionKind(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionResource":                           schema_pkg_apis_meta_v1_GroupVersionResource(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.InternalEvent":                                  schema_pkg_apis_meta_v1_InternalEvent(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector":                                  schema_pkg_apis_meta_v1_LabelSelector(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelectorRequirement":                       schema_pkg_apis_meta_v1_LabelSelectorRequirement(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.List":                                           schema_pkg_apis_meta_v1_List(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta":                                       schema_pkg_apis_meta_v1_ListMeta(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ListOptions":                                    schema_pkg_apis_meta_v1_ListOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ManagedFieldsEntry":                             schema_pkg_apis_meta_v1_ManagedFieldsEntry(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.MicroTime":                                      schema_pkg_apis_meta_v1_MicroTime(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta":                                     schema_pkg_apis_meta_v1_ObjectMeta(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.OwnerReference":                                 schema_pkg_apis_meta_v1_OwnerReference(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.PartialObjectMetadata":                          schema_pkg_apis_meta_v1_PartialObjectMetadata(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.PartialObjectMetadataList":                      schema_pkg_apis_meta_v1_PartialObjectMetadataList(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Patch":                                          schema_pkg_apis_meta_v1_Patch(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.PatchOptions":                                   schema_pkg_apis_meta_v1_PatchOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Preconditions":                                  schema_pkg_apis_meta_v1_Preconditions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.RootPaths":                                      schema_pkg_apis_meta_v1_RootPaths(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ServerAddressByClientCIDR":                      schema_pkg_apis_meta_v1_ServerAddressByClientCIDR(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Status":                                         schema_pkg_apis_meta_v1_Status(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.StatusCause":                                    schema_pkg_apis_meta_v1_StatusCause(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.StatusDetails":                                  schema_pkg_apis_meta_v1_StatusDetails(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Table":                                          schema_pkg_apis_meta_v1_Table(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.TableColumnDefinition":                          schema_pkg_apis_meta_v1_TableColumnDefinition(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.TableOptions":                                   schema_pkg_apis_meta_v1_TableOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.TableRow":                                       schema_pkg_apis_meta_v1_TableRow(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.TableRowCondition":                              schema_pkg_apis_meta_v1_TableRowCondition(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Time":                                           schema_pkg_apis_meta_v1_Time(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Timestamp":                                      schema_pkg_apis_meta_v1_Timestamp(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.TypeMeta":                                       schema_pkg_apis_meta_v1_TypeMeta(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.UpdateOptions":                                  schema_pkg_apis_meta_v1_UpdateOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.WatchEvent":                                     schema_pkg_apis_meta_v1_WatchEvent(ref),
-		"k8s.io/apimachinery/pkg/runtime.RawExtension":                                        schema_k8sio_apimachinery_pkg_runtime_RawExtension(ref),
-		"k8s.io/apimachinery/pkg/runtime.TypeMeta":                                            schema_k8sio_apimachinery_pkg_runtime_TypeMeta(ref),
-		"k8s.io/apimachinery/pkg/runtime.Unknown":                                             schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
-		"k8s.io/apimachinery/pkg/version.Info":                                                schema_k8sio_apimachinery_pkg_version_Info(ref),
+		"github.com/onmetal/onmetal-api/api/common/v1beta1.ConfigMapKeySelector":             schema_onmetal_api_api_common_v1beta1_ConfigMapKeySelector(ref),
+		"github.com/onmetal/onmetal-api/api/common/v1beta1.IP":                               schema_onmetal_api_api_common_v1beta1_IP(ref),
+		"github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix":                         schema_onmetal_api_api_common_v1beta1_IPPrefix(ref),
+		"github.com/onmetal/onmetal-api/api/common/v1beta1.IPRange":                          schema_onmetal_api_api_common_v1beta1_IPRange(ref),
+		"github.com/onmetal/onmetal-api/api/common/v1beta1.LocalUIDReference":                schema_onmetal_api_api_common_v1beta1_LocalUIDReference(ref),
+		"github.com/onmetal/onmetal-api/api/common/v1beta1.SecretKeySelector":                schema_onmetal_api_api_common_v1beta1_SecretKeySelector(ref),
+		"github.com/onmetal/onmetal-api/api/common/v1beta1.Taint":                            schema_onmetal_api_api_common_v1beta1_Taint(ref),
+		"github.com/onmetal/onmetal-api/api/common/v1beta1.Toleration":                       schema_onmetal_api_api_common_v1beta1_Toleration(ref),
+		"github.com/onmetal/onmetal-api/api/common/v1beta1.UIDReference":                     schema_onmetal_api_api_common_v1beta1_UIDReference(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.DaemonEndpoint":                  schema_onmetal_api_api_compute_v1beta1_DaemonEndpoint(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.EFIVar":                          schema_onmetal_api_api_compute_v1beta1_EFIVar(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.EmptyDiskVolumeSource":           schema_onmetal_api_api_compute_v1beta1_EmptyDiskVolumeSource(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.EphemeralNetworkInterfaceSource": schema_onmetal_api_api_compute_v1beta1_EphemeralNetworkInterfaceSource(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.EphemeralVolumeSource":           schema_onmetal_api_api_compute_v1beta1_EphemeralVolumeSource(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.Machine":                         schema_onmetal_api_api_compute_v1beta1_Machine(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineClass":                    schema_onmetal_api_api_compute_v1beta1_MachineClass(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineClassList":                schema_onmetal_api_api_compute_v1beta1_MachineClassList(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineExecOptions":              schema_onmetal_api_api_compute_v1beta1_MachineExecOptions(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineList":                     schema_onmetal_api_api_compute_v1beta1_MachineList(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePool":                     schema_onmetal_api_api_compute_v1beta1_MachinePool(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolAddress":              schema_onmetal_api_api_compute_v1beta1_MachinePoolAddress(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolCondition":            schema_onmetal_api_api_compute_v1beta1_MachinePoolCondition(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolDaemonEndpoints":      schema_onmetal_api_api_compute_v1beta1_MachinePoolDaemonEndpoints(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolList":                 schema_onmetal_api_api_compute_v1beta1_MachinePoolList(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolSpec":                 schema_onmetal_api_api_compute_v1beta1_MachinePoolSpec(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolStatus":               schema_onmetal_api_api_compute_v1beta1_MachinePoolStatus(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineSpec":                     schema_onmetal_api_api_compute_v1beta1_MachineSpec(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineStatus":                   schema_onmetal_api_api_compute_v1beta1_MachineStatus(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.NetworkInterface":                schema_onmetal_api_api_compute_v1beta1_NetworkInterface(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.NetworkInterfaceSource":          schema_onmetal_api_api_compute_v1beta1_NetworkInterfaceSource(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.NetworkInterfaceStatus":          schema_onmetal_api_api_compute_v1beta1_NetworkInterfaceStatus(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.Volume":                          schema_onmetal_api_api_compute_v1beta1_Volume(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.VolumeSource":                    schema_onmetal_api_api_compute_v1beta1_VolumeSource(ref),
+		"github.com/onmetal/onmetal-api/api/compute/v1beta1.VolumeStatus":                    schema_onmetal_api_api_compute_v1beta1_VolumeStatus(ref),
+		"github.com/onmetal/onmetal-api/api/core/v1beta1.ObjectSelector":                     schema_onmetal_api_api_core_v1beta1_ObjectSelector(ref),
+		"github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceQuota":                      schema_onmetal_api_api_core_v1beta1_ResourceQuota(ref),
+		"github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceQuotaList":                  schema_onmetal_api_api_core_v1beta1_ResourceQuotaList(ref),
+		"github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceQuotaSpec":                  schema_onmetal_api_api_core_v1beta1_ResourceQuotaSpec(ref),
+		"github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceQuotaStatus":                schema_onmetal_api_api_core_v1beta1_ResourceQuotaStatus(ref),
+		"github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceScopeSelector":              schema_onmetal_api_api_core_v1beta1_ResourceScopeSelector(ref),
+		"github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceScopeSelectorRequirement":   schema_onmetal_api_api_core_v1beta1_ResourceScopeSelectorRequirement(ref),
+		"github.com/onmetal/onmetal-api/api/ipam/v1beta1.Prefix":                             schema_onmetal_api_api_ipam_v1beta1_Prefix(ref),
+		"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixAllocation":                   schema_onmetal_api_api_ipam_v1beta1_PrefixAllocation(ref),
+		"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixAllocationList":               schema_onmetal_api_api_ipam_v1beta1_PrefixAllocationList(ref),
+		"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixAllocationSpec":               schema_onmetal_api_api_ipam_v1beta1_PrefixAllocationSpec(ref),
+		"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixAllocationStatus":             schema_onmetal_api_api_ipam_v1beta1_PrefixAllocationStatus(ref),
+		"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixList":                         schema_onmetal_api_api_ipam_v1beta1_PrefixList(ref),
+		"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixSpec":                         schema_onmetal_api_api_ipam_v1beta1_PrefixSpec(ref),
+		"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixStatus":                       schema_onmetal_api_api_ipam_v1beta1_PrefixStatus(ref),
+		"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixTemplateSpec":                 schema_onmetal_api_api_ipam_v1beta1_PrefixTemplateSpec(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.EphemeralPrefixSource":        schema_onmetal_api_api_networking_v1beta1_EphemeralPrefixSource(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.EphemeralVirtualIPSource":     schema_onmetal_api_api_networking_v1beta1_EphemeralVirtualIPSource(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.IPBlock":                      schema_onmetal_api_api_networking_v1beta1_IPBlock(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.IPSource":                     schema_onmetal_api_api_networking_v1beta1_IPSource(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancer":                 schema_onmetal_api_api_networking_v1beta1_LoadBalancer(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerDestination":      schema_onmetal_api_api_networking_v1beta1_LoadBalancerDestination(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerList":             schema_onmetal_api_api_networking_v1beta1_LoadBalancerList(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerPort":             schema_onmetal_api_api_networking_v1beta1_LoadBalancerPort(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerRouting":          schema_onmetal_api_api_networking_v1beta1_LoadBalancerRouting(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerRoutingList":      schema_onmetal_api_api_networking_v1beta1_LoadBalancerRoutingList(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerSpec":             schema_onmetal_api_api_networking_v1beta1_LoadBalancerSpec(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerStatus":           schema_onmetal_api_api_networking_v1beta1_LoadBalancerStatus(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerTargetRef":        schema_onmetal_api_api_networking_v1beta1_LoadBalancerTargetRef(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NATGateway":                   schema_onmetal_api_api_networking_v1beta1_NATGateway(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NATGatewayList":               schema_onmetal_api_api_networking_v1beta1_NATGatewayList(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NATGatewaySpec":               schema_onmetal_api_api_networking_v1beta1_NATGatewaySpec(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NATGatewayStatus":             schema_onmetal_api_api_networking_v1beta1_NATGatewayStatus(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.Network":                      schema_onmetal_api_api_networking_v1beta1_Network(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterface":             schema_onmetal_api_api_networking_v1beta1_NetworkInterface(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceList":         schema_onmetal_api_api_networking_v1beta1_NetworkInterfaceList(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceSpec":         schema_onmetal_api_api_networking_v1beta1_NetworkInterfaceSpec(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceStatus":       schema_onmetal_api_api_networking_v1beta1_NetworkInterfaceStatus(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceTemplateSpec": schema_onmetal_api_api_networking_v1beta1_NetworkInterfaceTemplateSpec(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkList":                  schema_onmetal_api_api_networking_v1beta1_NetworkList(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeering":               schema_onmetal_api_api_networking_v1beta1_NetworkPeering(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeeringClaimRef":       schema_onmetal_api_api_networking_v1beta1_NetworkPeeringClaimRef(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeeringNetworkRef":     schema_onmetal_api_api_networking_v1beta1_NetworkPeeringNetworkRef(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeeringStatus":         schema_onmetal_api_api_networking_v1beta1_NetworkPeeringStatus(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicy":                schema_onmetal_api_api_networking_v1beta1_NetworkPolicy(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyCondition":       schema_onmetal_api_api_networking_v1beta1_NetworkPolicyCondition(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyEgressRule":      schema_onmetal_api_api_networking_v1beta1_NetworkPolicyEgressRule(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyIngressRule":     schema_onmetal_api_api_networking_v1beta1_NetworkPolicyIngressRule(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyList":            schema_onmetal_api_api_networking_v1beta1_NetworkPolicyList(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyPeer":            schema_onmetal_api_api_networking_v1beta1_NetworkPolicyPeer(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyPort":            schema_onmetal_api_api_networking_v1beta1_NetworkPolicyPort(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicySpec":            schema_onmetal_api_api_networking_v1beta1_NetworkPolicySpec(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyStatus":          schema_onmetal_api_api_networking_v1beta1_NetworkPolicyStatus(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkSpec":                  schema_onmetal_api_api_networking_v1beta1_NetworkSpec(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkStatus":                schema_onmetal_api_api_networking_v1beta1_NetworkStatus(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.PrefixSource":                 schema_onmetal_api_api_networking_v1beta1_PrefixSource(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIP":                    schema_onmetal_api_api_networking_v1beta1_VirtualIP(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPList":                schema_onmetal_api_api_networking_v1beta1_VirtualIPList(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPSource":              schema_onmetal_api_api_networking_v1beta1_VirtualIPSource(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPSpec":                schema_onmetal_api_api_networking_v1beta1_VirtualIPSpec(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPStatus":              schema_onmetal_api_api_networking_v1beta1_VirtualIPStatus(ref),
+		"github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPTemplateSpec":        schema_onmetal_api_api_networking_v1beta1_VirtualIPTemplateSpec(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.Bucket":                          schema_onmetal_api_api_storage_v1beta1_Bucket(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketAccess":                    schema_onmetal_api_api_storage_v1beta1_BucketAccess(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketClass":                     schema_onmetal_api_api_storage_v1beta1_BucketClass(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketClassList":                 schema_onmetal_api_api_storage_v1beta1_BucketClassList(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketCondition":                 schema_onmetal_api_api_storage_v1beta1_BucketCondition(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketList":                      schema_onmetal_api_api_storage_v1beta1_BucketList(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketPool":                      schema_onmetal_api_api_storage_v1beta1_BucketPool(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketPoolList":                  schema_onmetal_api_api_storage_v1beta1_BucketPoolList(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketPoolSpec":                  schema_onmetal_api_api_storage_v1beta1_BucketPoolSpec(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketPoolStatus":                schema_onmetal_api_api_storage_v1beta1_BucketPoolStatus(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketSpec":                      schema_onmetal_api_api_storage_v1beta1_BucketSpec(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketStatus":                    schema_onmetal_api_api_storage_v1beta1_BucketStatus(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketTemplateSpec":              schema_onmetal_api_api_storage_v1beta1_BucketTemplateSpec(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.Volume":                          schema_onmetal_api_api_storage_v1beta1_Volume(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeAccess":                    schema_onmetal_api_api_storage_v1beta1_VolumeAccess(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeClass":                     schema_onmetal_api_api_storage_v1beta1_VolumeClass(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeClassList":                 schema_onmetal_api_api_storage_v1beta1_VolumeClassList(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeCondition":                 schema_onmetal_api_api_storage_v1beta1_VolumeCondition(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeEncryption":                schema_onmetal_api_api_storage_v1beta1_VolumeEncryption(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeList":                      schema_onmetal_api_api_storage_v1beta1_VolumeList(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePool":                      schema_onmetal_api_api_storage_v1beta1_VolumePool(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePoolCondition":             schema_onmetal_api_api_storage_v1beta1_VolumePoolCondition(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePoolList":                  schema_onmetal_api_api_storage_v1beta1_VolumePoolList(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePoolSpec":                  schema_onmetal_api_api_storage_v1beta1_VolumePoolSpec(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePoolStatus":                schema_onmetal_api_api_storage_v1beta1_VolumePoolStatus(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeSpec":                      schema_onmetal_api_api_storage_v1beta1_VolumeSpec(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeStatus":                    schema_onmetal_api_api_storage_v1beta1_VolumeStatus(ref),
+		"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeTemplateSpec":              schema_onmetal_api_api_storage_v1beta1_VolumeTemplateSpec(ref),
+		"k8s.io/api/core/v1.AWSElasticBlockStoreVolumeSource":                                schema_k8sio_api_core_v1_AWSElasticBlockStoreVolumeSource(ref),
+		"k8s.io/api/core/v1.Affinity":                                                        schema_k8sio_api_core_v1_Affinity(ref),
+		"k8s.io/api/core/v1.AttachedVolume":                                                  schema_k8sio_api_core_v1_AttachedVolume(ref),
+		"k8s.io/api/core/v1.AvoidPods":                                                       schema_k8sio_api_core_v1_AvoidPods(ref),
+		"k8s.io/api/core/v1.AzureDiskVolumeSource":                                           schema_k8sio_api_core_v1_AzureDiskVolumeSource(ref),
+		"k8s.io/api/core/v1.AzureFilePersistentVolumeSource":                                 schema_k8sio_api_core_v1_AzureFilePersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.AzureFileVolumeSource":                                           schema_k8sio_api_core_v1_AzureFileVolumeSource(ref),
+		"k8s.io/api/core/v1.Binding":                                                         schema_k8sio_api_core_v1_Binding(ref),
+		"k8s.io/api/core/v1.CSIPersistentVolumeSource":                                       schema_k8sio_api_core_v1_CSIPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.CSIVolumeSource":                                                 schema_k8sio_api_core_v1_CSIVolumeSource(ref),
+		"k8s.io/api/core/v1.Capabilities":                                                    schema_k8sio_api_core_v1_Capabilities(ref),
+		"k8s.io/api/core/v1.CephFSPersistentVolumeSource":                                    schema_k8sio_api_core_v1_CephFSPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.CephFSVolumeSource":                                              schema_k8sio_api_core_v1_CephFSVolumeSource(ref),
+		"k8s.io/api/core/v1.CinderPersistentVolumeSource":                                    schema_k8sio_api_core_v1_CinderPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.CinderVolumeSource":                                              schema_k8sio_api_core_v1_CinderVolumeSource(ref),
+		"k8s.io/api/core/v1.ClaimSource":                                                     schema_k8sio_api_core_v1_ClaimSource(ref),
+		"k8s.io/api/core/v1.ClientIPConfig":                                                  schema_k8sio_api_core_v1_ClientIPConfig(ref),
+		"k8s.io/api/core/v1.ComponentCondition":                                              schema_k8sio_api_core_v1_ComponentCondition(ref),
+		"k8s.io/api/core/v1.ComponentStatus":                                                 schema_k8sio_api_core_v1_ComponentStatus(ref),
+		"k8s.io/api/core/v1.ComponentStatusList":                                             schema_k8sio_api_core_v1_ComponentStatusList(ref),
+		"k8s.io/api/core/v1.ConfigMap":                                                       schema_k8sio_api_core_v1_ConfigMap(ref),
+		"k8s.io/api/core/v1.ConfigMapEnvSource":                                              schema_k8sio_api_core_v1_ConfigMapEnvSource(ref),
+		"k8s.io/api/core/v1.ConfigMapKeySelector":                                            schema_k8sio_api_core_v1_ConfigMapKeySelector(ref),
+		"k8s.io/api/core/v1.ConfigMapList":                                                   schema_k8sio_api_core_v1_ConfigMapList(ref),
+		"k8s.io/api/core/v1.ConfigMapNodeConfigSource":                                       schema_k8sio_api_core_v1_ConfigMapNodeConfigSource(ref),
+		"k8s.io/api/core/v1.ConfigMapProjection":                                             schema_k8sio_api_core_v1_ConfigMapProjection(ref),
+		"k8s.io/api/core/v1.ConfigMapVolumeSource":                                           schema_k8sio_api_core_v1_ConfigMapVolumeSource(ref),
+		"k8s.io/api/core/v1.Container":                                                       schema_k8sio_api_core_v1_Container(ref),
+		"k8s.io/api/core/v1.ContainerImage":                                                  schema_k8sio_api_core_v1_ContainerImage(ref),
+		"k8s.io/api/core/v1.ContainerPort":                                                   schema_k8sio_api_core_v1_ContainerPort(ref),
+		"k8s.io/api/core/v1.ContainerResizePolicy":                                           schema_k8sio_api_core_v1_ContainerResizePolicy(ref),
+		"k8s.io/api/core/v1.ContainerState":                                                  schema_k8sio_api_core_v1_ContainerState(ref),
+		"k8s.io/api/core/v1.ContainerStateRunning":                                           schema_k8sio_api_core_v1_ContainerStateRunning(ref),
+		"k8s.io/api/core/v1.ContainerStateTerminated":                                        schema_k8sio_api_core_v1_ContainerStateTerminated(ref),
+		"k8s.io/api/core/v1.ContainerStateWaiting":                                           schema_k8sio_api_core_v1_ContainerStateWaiting(ref),
+		"k8s.io/api/core/v1.ContainerStatus":                                                 schema_k8sio_api_core_v1_ContainerStatus(ref),
+		"k8s.io/api/core/v1.DaemonEndpoint":                                                  schema_k8sio_api_core_v1_DaemonEndpoint(ref),
+		"k8s.io/api/core/v1.DownwardAPIProjection":                                           schema_k8sio_api_core_v1_DownwardAPIProjection(ref),
+		"k8s.io/api/core/v1.DownwardAPIVolumeFile":                                           schema_k8sio_api_core_v1_DownwardAPIVolumeFile(ref),
+		"k8s.io/api/core/v1.DownwardAPIVolumeSource":                                         schema_k8sio_api_core_v1_DownwardAPIVolumeSource(ref),
+		"k8s.io/api/core/v1.EmptyDirVolumeSource":                                            schema_k8sio_api_core_v1_EmptyDirVolumeSource(ref),
+		"k8s.io/api/core/v1.EndpointAddress":                                                 schema_k8sio_api_core_v1_EndpointAddress(ref),
+		"k8s.io/api/core/v1.EndpointPort":                                                    schema_k8sio_api_core_v1_EndpointPort(ref),
+		"k8s.io/api/core/v1.EndpointSubset":                                                  schema_k8sio_api_core_v1_EndpointSubset(ref),
+		"k8s.io/api/core/v1.Endpoints":                                                       schema_k8sio_api_core_v1_Endpoints(ref),
+		"k8s.io/api/core/v1.EndpointsList":                                                   schema_k8sio_api_core_v1_EndpointsList(ref),
+		"k8s.io/api/core/v1.EnvFromSource":                                                   schema_k8sio_api_core_v1_EnvFromSource(ref),
+		"k8s.io/api/core/v1.EnvVar":                                                          schema_k8sio_api_core_v1_EnvVar(ref),
+		"k8s.io/api/core/v1.EnvVarSource":                                                    schema_k8sio_api_core_v1_EnvVarSource(ref),
+		"k8s.io/api/core/v1.EphemeralContainer":                                              schema_k8sio_api_core_v1_EphemeralContainer(ref),
+		"k8s.io/api/core/v1.EphemeralContainerCommon":                                        schema_k8sio_api_core_v1_EphemeralContainerCommon(ref),
+		"k8s.io/api/core/v1.EphemeralVolumeSource":                                           schema_k8sio_api_core_v1_EphemeralVolumeSource(ref),
+		"k8s.io/api/core/v1.Event":                                                           schema_k8sio_api_core_v1_Event(ref),
+		"k8s.io/api/core/v1.EventList":                                                       schema_k8sio_api_core_v1_EventList(ref),
+		"k8s.io/api/core/v1.EventSeries":                                                     schema_k8sio_api_core_v1_EventSeries(ref),
+		"k8s.io/api/core/v1.EventSource":                                                     schema_k8sio_api_core_v1_EventSource(ref),
+		"k8s.io/api/core/v1.ExecAction":                                                      schema_k8sio_api_core_v1_ExecAction(ref),
+		"k8s.io/api/core/v1.FCVolumeSource":                                                  schema_k8sio_api_core_v1_FCVolumeSource(ref),
+		"k8s.io/api/core/v1.FlexPersistentVolumeSource":                                      schema_k8sio_api_core_v1_FlexPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.FlexVolumeSource":                                                schema_k8sio_api_core_v1_FlexVolumeSource(ref),
+		"k8s.io/api/core/v1.FlockerVolumeSource":                                             schema_k8sio_api_core_v1_FlockerVolumeSource(ref),
+		"k8s.io/api/core/v1.GCEPersistentDiskVolumeSource":                                   schema_k8sio_api_core_v1_GCEPersistentDiskVolumeSource(ref),
+		"k8s.io/api/core/v1.GRPCAction":                                                      schema_k8sio_api_core_v1_GRPCAction(ref),
+		"k8s.io/api/core/v1.GitRepoVolumeSource":                                             schema_k8sio_api_core_v1_GitRepoVolumeSource(ref),
+		"k8s.io/api/core/v1.GlusterfsPersistentVolumeSource":                                 schema_k8sio_api_core_v1_GlusterfsPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.GlusterfsVolumeSource":                                           schema_k8sio_api_core_v1_GlusterfsVolumeSource(ref),
+		"k8s.io/api/core/v1.HTTPGetAction":                                                   schema_k8sio_api_core_v1_HTTPGetAction(ref),
+		"k8s.io/api/core/v1.HTTPHeader":                                                      schema_k8sio_api_core_v1_HTTPHeader(ref),
+		"k8s.io/api/core/v1.HostAlias":                                                       schema_k8sio_api_core_v1_HostAlias(ref),
+		"k8s.io/api/core/v1.HostIP":                                                          schema_k8sio_api_core_v1_HostIP(ref),
+		"k8s.io/api/core/v1.HostPathVolumeSource":                                            schema_k8sio_api_core_v1_HostPathVolumeSource(ref),
+		"k8s.io/api/core/v1.ISCSIPersistentVolumeSource":                                     schema_k8sio_api_core_v1_ISCSIPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.ISCSIVolumeSource":                                               schema_k8sio_api_core_v1_ISCSIVolumeSource(ref),
+		"k8s.io/api/core/v1.KeyToPath":                                                       schema_k8sio_api_core_v1_KeyToPath(ref),
+		"k8s.io/api/core/v1.Lifecycle":                                                       schema_k8sio_api_core_v1_Lifecycle(ref),
+		"k8s.io/api/core/v1.LifecycleHandler":                                                schema_k8sio_api_core_v1_LifecycleHandler(ref),
+		"k8s.io/api/core/v1.LimitRange":                                                      schema_k8sio_api_core_v1_LimitRange(ref),
+		"k8s.io/api/core/v1.LimitRangeItem":                                                  schema_k8sio_api_core_v1_LimitRangeItem(ref),
+		"k8s.io/api/core/v1.LimitRangeList":                                                  schema_k8sio_api_core_v1_LimitRangeList(ref),
+		"k8s.io/api/core/v1.LimitRangeSpec":                                                  schema_k8sio_api_core_v1_LimitRangeSpec(ref),
+		"k8s.io/api/core/v1.List":                                                            schema_k8sio_api_core_v1_List(ref),
+		"k8s.io/api/core/v1.LoadBalancerIngress":                                             schema_k8sio_api_core_v1_LoadBalancerIngress(ref),
+		"k8s.io/api/core/v1.LoadBalancerStatus":                                              schema_k8sio_api_core_v1_LoadBalancerStatus(ref),
+		"k8s.io/api/core/v1.LocalObjectReference":                                            schema_k8sio_api_core_v1_LocalObjectReference(ref),
+		"k8s.io/api/core/v1.LocalVolumeSource":                                               schema_k8sio_api_core_v1_LocalVolumeSource(ref),
+		"k8s.io/api/core/v1.NFSVolumeSource":                                                 schema_k8sio_api_core_v1_NFSVolumeSource(ref),
+		"k8s.io/api/core/v1.Namespace":                                                       schema_k8sio_api_core_v1_Namespace(ref),
+		"k8s.io/api/core/v1.NamespaceCondition":                                              schema_k8sio_api_core_v1_NamespaceCondition(ref),
+		"k8s.io/api/core/v1.NamespaceList":                                                   schema_k8sio_api_core_v1_NamespaceList(ref),
+		"k8s.io/api/core/v1.NamespaceSpec":                                                   schema_k8sio_api_core_v1_NamespaceSpec(ref),
+		"k8s.io/api/core/v1.NamespaceStatus":                                                 schema_k8sio_api_core_v1_NamespaceStatus(ref),
+		"k8s.io/api/core/v1.Node":                                                            schema_k8sio_api_core_v1_Node(ref),
+		"k8s.io/api/core/v1.NodeAddress":                                                     schema_k8sio_api_core_v1_NodeAddress(ref),
+		"k8s.io/api/core/v1.NodeAffinity":                                                    schema_k8sio_api_core_v1_NodeAffinity(ref),
+		"k8s.io/api/core/v1.NodeCondition":                                                   schema_k8sio_api_core_v1_NodeCondition(ref),
+		"k8s.io/api/core/v1.NodeConfigSource":                                                schema_k8sio_api_core_v1_NodeConfigSource(ref),
+		"k8s.io/api/core/v1.NodeConfigStatus":                                                schema_k8sio_api_core_v1_NodeConfigStatus(ref),
+		"k8s.io/api/core/v1.NodeDaemonEndpoints":                                             schema_k8sio_api_core_v1_NodeDaemonEndpoints(ref),
+		"k8s.io/api/core/v1.NodeList":                                                        schema_k8sio_api_core_v1_NodeList(ref),
+		"k8s.io/api/core/v1.NodeProxyOptions":                                                schema_k8sio_api_core_v1_NodeProxyOptions(ref),
+		"k8s.io/api/core/v1.NodeResources":                                                   schema_k8sio_api_core_v1_NodeResources(ref),
+		"k8s.io/api/core/v1.NodeSelector":                                                    schema_k8sio_api_core_v1_NodeSelector(ref),
+		"k8s.io/api/core/v1.NodeSelectorRequirement":                                         schema_k8sio_api_core_v1_NodeSelectorRequirement(ref),
+		"k8s.io/api/core/v1.NodeSelectorTerm":                                                schema_k8sio_api_core_v1_NodeSelectorTerm(ref),
+		"k8s.io/api/core/v1.NodeSpec":                                                        schema_k8sio_api_core_v1_NodeSpec(ref),
+		"k8s.io/api/core/v1.NodeStatus":                                                      schema_k8sio_api_core_v1_NodeStatus(ref),
+		"k8s.io/api/core/v1.NodeSystemInfo":                                                  schema_k8sio_api_core_v1_NodeSystemInfo(ref),
+		"k8s.io/api/core/v1.ObjectFieldSelector":                                             schema_k8sio_api_core_v1_ObjectFieldSelector(ref),
+		"k8s.io/api/core/v1.ObjectReference":                                                 schema_k8sio_api_core_v1_ObjectReference(ref),
+		"k8s.io/api/core/v1.PersistentVolume":                                                schema_k8sio_api_core_v1_PersistentVolume(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaim":                                           schema_k8sio_api_core_v1_PersistentVolumeClaim(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimCondition":                                  schema_k8sio_api_core_v1_PersistentVolumeClaimCondition(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimList":                                       schema_k8sio_api_core_v1_PersistentVolumeClaimList(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimSpec":                                       schema_k8sio_api_core_v1_PersistentVolumeClaimSpec(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimStatus":                                     schema_k8sio_api_core_v1_PersistentVolumeClaimStatus(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimTemplate":                                   schema_k8sio_api_core_v1_PersistentVolumeClaimTemplate(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimVolumeSource":                               schema_k8sio_api_core_v1_PersistentVolumeClaimVolumeSource(ref),
+		"k8s.io/api/core/v1.PersistentVolumeList":                                            schema_k8sio_api_core_v1_PersistentVolumeList(ref),
+		"k8s.io/api/core/v1.PersistentVolumeSource":                                          schema_k8sio_api_core_v1_PersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.PersistentVolumeSpec":                                            schema_k8sio_api_core_v1_PersistentVolumeSpec(ref),
+		"k8s.io/api/core/v1.PersistentVolumeStatus":                                          schema_k8sio_api_core_v1_PersistentVolumeStatus(ref),
+		"k8s.io/api/core/v1.PhotonPersistentDiskVolumeSource":                                schema_k8sio_api_core_v1_PhotonPersistentDiskVolumeSource(ref),
+		"k8s.io/api/core/v1.Pod":                                                             schema_k8sio_api_core_v1_Pod(ref),
+		"k8s.io/api/core/v1.PodAffinity":                                                     schema_k8sio_api_core_v1_PodAffinity(ref),
+		"k8s.io/api/core/v1.PodAffinityTerm":                                                 schema_k8sio_api_core_v1_PodAffinityTerm(ref),
+		"k8s.io/api/core/v1.PodAntiAffinity":                                                 schema_k8sio_api_core_v1_PodAntiAffinity(ref),
+		"k8s.io/api/core/v1.PodAttachOptions":                                                schema_k8sio_api_core_v1_PodAttachOptions(ref),
+		"k8s.io/api/core/v1.PodCondition":                                                    schema_k8sio_api_core_v1_PodCondition(ref),
+		"k8s.io/api/core/v1.PodDNSConfig":                                                    schema_k8sio_api_core_v1_PodDNSConfig(ref),
+		"k8s.io/api/core/v1.PodDNSConfigOption":                                              schema_k8sio_api_core_v1_PodDNSConfigOption(ref),
+		"k8s.io/api/core/v1.PodExecOptions":                                                  schema_k8sio_api_core_v1_PodExecOptions(ref),
+		"k8s.io/api/core/v1.PodIP":                                                           schema_k8sio_api_core_v1_PodIP(ref),
+		"k8s.io/api/core/v1.PodList":                                                         schema_k8sio_api_core_v1_PodList(ref),
+		"k8s.io/api/core/v1.PodLogOptions":                                                   schema_k8sio_api_core_v1_PodLogOptions(ref),
+		"k8s.io/api/core/v1.PodOS":                                                           schema_k8sio_api_core_v1_PodOS(ref),
+		"k8s.io/api/core/v1.PodPortForwardOptions":                                           schema_k8sio_api_core_v1_PodPortForwardOptions(ref),
+		"k8s.io/api/core/v1.PodProxyOptions":                                                 schema_k8sio_api_core_v1_PodProxyOptions(ref),
+		"k8s.io/api/core/v1.PodReadinessGate":                                                schema_k8sio_api_core_v1_PodReadinessGate(ref),
+		"k8s.io/api/core/v1.PodResourceClaim":                                                schema_k8sio_api_core_v1_PodResourceClaim(ref),
+		"k8s.io/api/core/v1.PodResourceClaimStatus":                                          schema_k8sio_api_core_v1_PodResourceClaimStatus(ref),
+		"k8s.io/api/core/v1.PodSchedulingGate":                                               schema_k8sio_api_core_v1_PodSchedulingGate(ref),
+		"k8s.io/api/core/v1.PodSecurityContext":                                              schema_k8sio_api_core_v1_PodSecurityContext(ref),
+		"k8s.io/api/core/v1.PodSignature":                                                    schema_k8sio_api_core_v1_PodSignature(ref),
+		"k8s.io/api/core/v1.PodSpec":                                                         schema_k8sio_api_core_v1_PodSpec(ref),
+		"k8s.io/api/core/v1.PodStatus":                                                       schema_k8sio_api_core_v1_PodStatus(ref),
+		"k8s.io/api/core/v1.PodStatusResult":                                                 schema_k8sio_api_core_v1_PodStatusResult(ref),
+		"k8s.io/api/core/v1.PodTemplate":                                                     schema_k8sio_api_core_v1_PodTemplate(ref),
+		"k8s.io/api/core/v1.PodTemplateList":                                                 schema_k8sio_api_core_v1_PodTemplateList(ref),
+		"k8s.io/api/core/v1.PodTemplateSpec":                                                 schema_k8sio_api_core_v1_PodTemplateSpec(ref),
+		"k8s.io/api/core/v1.PortStatus":                                                      schema_k8sio_api_core_v1_PortStatus(ref),
+		"k8s.io/api/core/v1.PortworxVolumeSource":                                            schema_k8sio_api_core_v1_PortworxVolumeSource(ref),
+		"k8s.io/api/core/v1.PreferAvoidPodsEntry":                                            schema_k8sio_api_core_v1_PreferAvoidPodsEntry(ref),
+		"k8s.io/api/core/v1.PreferredSchedulingTerm":                                         schema_k8sio_api_core_v1_PreferredSchedulingTerm(ref),
+		"k8s.io/api/core/v1.Probe":                                                           schema_k8sio_api_core_v1_Probe(ref),
+		"k8s.io/api/core/v1.ProbeHandler":                                                    schema_k8sio_api_core_v1_ProbeHandler(ref),
+		"k8s.io/api/core/v1.ProjectedVolumeSource":                                           schema_k8sio_api_core_v1_ProjectedVolumeSource(ref),
+		"k8s.io/api/core/v1.QuobyteVolumeSource":                                             schema_k8sio_api_core_v1_QuobyteVolumeSource(ref),
+		"k8s.io/api/core/v1.RBDPersistentVolumeSource":                                       schema_k8sio_api_core_v1_RBDPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.RBDVolumeSource":                                                 schema_k8sio_api_core_v1_RBDVolumeSource(ref),
+		"k8s.io/api/core/v1.RangeAllocation":                                                 schema_k8sio_api_core_v1_RangeAllocation(ref),
+		"k8s.io/api/core/v1.ReplicationController":                                           schema_k8sio_api_core_v1_ReplicationController(ref),
+		"k8s.io/api/core/v1.ReplicationControllerCondition":                                  schema_k8sio_api_core_v1_ReplicationControllerCondition(ref),
+		"k8s.io/api/core/v1.ReplicationControllerList":                                       schema_k8sio_api_core_v1_ReplicationControllerList(ref),
+		"k8s.io/api/core/v1.ReplicationControllerSpec":                                       schema_k8sio_api_core_v1_ReplicationControllerSpec(ref),
+		"k8s.io/api/core/v1.ReplicationControllerStatus":                                     schema_k8sio_api_core_v1_ReplicationControllerStatus(ref),
+		"k8s.io/api/core/v1.ResourceClaim":                                                   schema_k8sio_api_core_v1_ResourceClaim(ref),
+		"k8s.io/api/core/v1.ResourceFieldSelector":                                           schema_k8sio_api_core_v1_ResourceFieldSelector(ref),
+		"k8s.io/api/core/v1.ResourceQuota":                                                   schema_k8sio_api_core_v1_ResourceQuota(ref),
+		"k8s.io/api/core/v1.ResourceQuotaList":                                               schema_k8sio_api_core_v1_ResourceQuotaList(ref),
+		"k8s.io/api/core/v1.ResourceQuotaSpec":                                               schema_k8sio_api_core_v1_ResourceQuotaSpec(ref),
+		"k8s.io/api/core/v1.ResourceQuotaStatus":                                             schema_k8sio_api_core_v1_ResourceQuotaStatus(ref),
+		"k8s.io/api/core/v1.ResourceRequirements":                                            schema_k8sio_api_core_v1_ResourceRequirements(ref),
+		"k8s.io/api/core/v1.SELinuxOptions":                                                  schema_k8sio_api_core_v1_SELinuxOptions(ref),
+		"k8s.io/api/core/v1.ScaleIOPersistentVolumeSource":                                   schema_k8sio_api_core_v1_ScaleIOPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.ScaleIOVolumeSource":                                             schema_k8sio_api_core_v1_ScaleIOVolumeSource(ref),
+		"k8s.io/api/core/v1.ScopeSelector":                                                   schema_k8sio_api_core_v1_ScopeSelector(ref),
+		"k8s.io/api/core/v1.ScopedResourceSelectorRequirement":                               schema_k8sio_api_core_v1_ScopedResourceSelectorRequirement(ref),
+		"k8s.io/api/core/v1.SeccompProfile":                                                  schema_k8sio_api_core_v1_SeccompProfile(ref),
+		"k8s.io/api/core/v1.Secret":                                                          schema_k8sio_api_core_v1_Secret(ref),
+		"k8s.io/api/core/v1.SecretEnvSource":                                                 schema_k8sio_api_core_v1_SecretEnvSource(ref),
+		"k8s.io/api/core/v1.SecretKeySelector":                                               schema_k8sio_api_core_v1_SecretKeySelector(ref),
+		"k8s.io/api/core/v1.SecretList":                                                      schema_k8sio_api_core_v1_SecretList(ref),
+		"k8s.io/api/core/v1.SecretProjection":                                                schema_k8sio_api_core_v1_SecretProjection(ref),
+		"k8s.io/api/core/v1.SecretReference":                                                 schema_k8sio_api_core_v1_SecretReference(ref),
+		"k8s.io/api/core/v1.SecretVolumeSource":                                              schema_k8sio_api_core_v1_SecretVolumeSource(ref),
+		"k8s.io/api/core/v1.SecurityContext":                                                 schema_k8sio_api_core_v1_SecurityContext(ref),
+		"k8s.io/api/core/v1.SerializedReference":                                             schema_k8sio_api_core_v1_SerializedReference(ref),
+		"k8s.io/api/core/v1.Service":                                                         schema_k8sio_api_core_v1_Service(ref),
+		"k8s.io/api/core/v1.ServiceAccount":                                                  schema_k8sio_api_core_v1_ServiceAccount(ref),
+		"k8s.io/api/core/v1.ServiceAccountList":                                              schema_k8sio_api_core_v1_ServiceAccountList(ref),
+		"k8s.io/api/core/v1.ServiceAccountTokenProjection":                                   schema_k8sio_api_core_v1_ServiceAccountTokenProjection(ref),
+		"k8s.io/api/core/v1.ServiceList":                                                     schema_k8sio_api_core_v1_ServiceList(ref),
+		"k8s.io/api/core/v1.ServicePort":                                                     schema_k8sio_api_core_v1_ServicePort(ref),
+		"k8s.io/api/core/v1.ServiceProxyOptions":                                             schema_k8sio_api_core_v1_ServiceProxyOptions(ref),
+		"k8s.io/api/core/v1.ServiceSpec":                                                     schema_k8sio_api_core_v1_ServiceSpec(ref),
+		"k8s.io/api/core/v1.ServiceStatus":                                                   schema_k8sio_api_core_v1_ServiceStatus(ref),
+		"k8s.io/api/core/v1.SessionAffinityConfig":                                           schema_k8sio_api_core_v1_SessionAffinityConfig(ref),
+		"k8s.io/api/core/v1.StorageOSPersistentVolumeSource":                                 schema_k8sio_api_core_v1_StorageOSPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.StorageOSVolumeSource":                                           schema_k8sio_api_core_v1_StorageOSVolumeSource(ref),
+		"k8s.io/api/core/v1.Sysctl":                                                          schema_k8sio_api_core_v1_Sysctl(ref),
+		"k8s.io/api/core/v1.TCPSocketAction":                                                 schema_k8sio_api_core_v1_TCPSocketAction(ref),
+		"k8s.io/api/core/v1.Taint":                                                           schema_k8sio_api_core_v1_Taint(ref),
+		"k8s.io/api/core/v1.Toleration":                                                      schema_k8sio_api_core_v1_Toleration(ref),
+		"k8s.io/api/core/v1.TopologySelectorLabelRequirement":                                schema_k8sio_api_core_v1_TopologySelectorLabelRequirement(ref),
+		"k8s.io/api/core/v1.TopologySelectorTerm":                                            schema_k8sio_api_core_v1_TopologySelectorTerm(ref),
+		"k8s.io/api/core/v1.TopologySpreadConstraint":                                        schema_k8sio_api_core_v1_TopologySpreadConstraint(ref),
+		"k8s.io/api/core/v1.TypedLocalObjectReference":                                       schema_k8sio_api_core_v1_TypedLocalObjectReference(ref),
+		"k8s.io/api/core/v1.TypedObjectReference":                                            schema_k8sio_api_core_v1_TypedObjectReference(ref),
+		"k8s.io/api/core/v1.Volume":                                                          schema_k8sio_api_core_v1_Volume(ref),
+		"k8s.io/api/core/v1.VolumeDevice":                                                    schema_k8sio_api_core_v1_VolumeDevice(ref),
+		"k8s.io/api/core/v1.VolumeMount":                                                     schema_k8sio_api_core_v1_VolumeMount(ref),
+		"k8s.io/api/core/v1.VolumeNodeAffinity":                                              schema_k8sio_api_core_v1_VolumeNodeAffinity(ref),
+		"k8s.io/api/core/v1.VolumeProjection":                                                schema_k8sio_api_core_v1_VolumeProjection(ref),
+		"k8s.io/api/core/v1.VolumeSource":                                                    schema_k8sio_api_core_v1_VolumeSource(ref),
+		"k8s.io/api/core/v1.VsphereVirtualDiskVolumeSource":                                  schema_k8sio_api_core_v1_VsphereVirtualDiskVolumeSource(ref),
+		"k8s.io/api/core/v1.WeightedPodAffinityTerm":                                         schema_k8sio_api_core_v1_WeightedPodAffinityTerm(ref),
+		"k8s.io/api/core/v1.WindowsSecurityContextOptions":                                   schema_k8sio_api_core_v1_WindowsSecurityContextOptions(ref),
+		"k8s.io/apimachinery/pkg/api/resource.Quantity":                                      schema_apimachinery_pkg_api_resource_Quantity(ref),
+		"k8s.io/apimachinery/pkg/api/resource.int64Amount":                                   schema_apimachinery_pkg_api_resource_int64Amount(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.APIGroup":                                      schema_pkg_apis_meta_v1_APIGroup(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.APIGroupList":                                  schema_pkg_apis_meta_v1_APIGroupList(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.APIResource":                                   schema_pkg_apis_meta_v1_APIResource(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.APIResourceList":                               schema_pkg_apis_meta_v1_APIResourceList(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.APIVersions":                                   schema_pkg_apis_meta_v1_APIVersions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ApplyOptions":                                  schema_pkg_apis_meta_v1_ApplyOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Condition":                                     schema_pkg_apis_meta_v1_Condition(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.CreateOptions":                                 schema_pkg_apis_meta_v1_CreateOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.DeleteOptions":                                 schema_pkg_apis_meta_v1_DeleteOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Duration":                                      schema_pkg_apis_meta_v1_Duration(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.FieldsV1":                                      schema_pkg_apis_meta_v1_FieldsV1(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GetOptions":                                    schema_pkg_apis_meta_v1_GetOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupKind":                                     schema_pkg_apis_meta_v1_GroupKind(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupResource":                                 schema_pkg_apis_meta_v1_GroupResource(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersion":                                  schema_pkg_apis_meta_v1_GroupVersion(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionForDiscovery":                      schema_pkg_apis_meta_v1_GroupVersionForDiscovery(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionKind":                              schema_pkg_apis_meta_v1_GroupVersionKind(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionResource":                          schema_pkg_apis_meta_v1_GroupVersionResource(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.InternalEvent":                                 schema_pkg_apis_meta_v1_InternalEvent(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector":                                 schema_pkg_apis_meta_v1_LabelSelector(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelectorRequirement":                      schema_pkg_apis_meta_v1_LabelSelectorRequirement(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.List":                                          schema_pkg_apis_meta_v1_List(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta":                                      schema_pkg_apis_meta_v1_ListMeta(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ListOptions":                                   schema_pkg_apis_meta_v1_ListOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ManagedFieldsEntry":                            schema_pkg_apis_meta_v1_ManagedFieldsEntry(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.MicroTime":                                     schema_pkg_apis_meta_v1_MicroTime(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta":                                    schema_pkg_apis_meta_v1_ObjectMeta(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.OwnerReference":                                schema_pkg_apis_meta_v1_OwnerReference(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.PartialObjectMetadata":                         schema_pkg_apis_meta_v1_PartialObjectMetadata(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.PartialObjectMetadataList":                     schema_pkg_apis_meta_v1_PartialObjectMetadataList(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Patch":                                         schema_pkg_apis_meta_v1_Patch(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.PatchOptions":                                  schema_pkg_apis_meta_v1_PatchOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Preconditions":                                 schema_pkg_apis_meta_v1_Preconditions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.RootPaths":                                     schema_pkg_apis_meta_v1_RootPaths(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ServerAddressByClientCIDR":                     schema_pkg_apis_meta_v1_ServerAddressByClientCIDR(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Status":                                        schema_pkg_apis_meta_v1_Status(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.StatusCause":                                   schema_pkg_apis_meta_v1_StatusCause(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.StatusDetails":                                 schema_pkg_apis_meta_v1_StatusDetails(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Table":                                         schema_pkg_apis_meta_v1_Table(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.TableColumnDefinition":                         schema_pkg_apis_meta_v1_TableColumnDefinition(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.TableOptions":                                  schema_pkg_apis_meta_v1_TableOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.TableRow":                                      schema_pkg_apis_meta_v1_TableRow(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.TableRowCondition":                             schema_pkg_apis_meta_v1_TableRowCondition(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Time":                                          schema_pkg_apis_meta_v1_Time(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Timestamp":                                     schema_pkg_apis_meta_v1_Timestamp(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.TypeMeta":                                      schema_pkg_apis_meta_v1_TypeMeta(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.UpdateOptions":                                 schema_pkg_apis_meta_v1_UpdateOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.WatchEvent":                                    schema_pkg_apis_meta_v1_WatchEvent(ref),
+		"k8s.io/apimachinery/pkg/runtime.RawExtension":                                       schema_k8sio_apimachinery_pkg_runtime_RawExtension(ref),
+		"k8s.io/apimachinery/pkg/runtime.TypeMeta":                                           schema_k8sio_apimachinery_pkg_runtime_TypeMeta(ref),
+		"k8s.io/apimachinery/pkg/runtime.Unknown":                                            schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
+		"k8s.io/apimachinery/pkg/version.Info":                                               schema_k8sio_apimachinery_pkg_version_Info(ref),
 	}
 }
 
-func schema_onmetal_api_api_common_v1alpha1_ConfigMapKeySelector(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_common_v1beta1_ConfigMapKeySelector(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -462,31 +462,31 @@ func schema_onmetal_api_api_common_v1alpha1_ConfigMapKeySelector(ref common.Refe
 	}
 }
 
-func schema_onmetal_api_api_common_v1alpha1_IP(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_common_v1beta1_IP(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
 				Description: "IP is an IP address.",
-				Type:        v1alpha1.IP{}.OpenAPISchemaType(),
-				Format:      v1alpha1.IP{}.OpenAPISchemaFormat(),
+				Type:        v1beta1.IP{}.OpenAPISchemaType(),
+				Format:      v1beta1.IP{}.OpenAPISchemaFormat(),
 			},
 		},
 	}
 }
 
-func schema_onmetal_api_api_common_v1alpha1_IPPrefix(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_common_v1beta1_IPPrefix(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
 				Description: "IPPrefix represents a network prefix.",
-				Type:        v1alpha1.IPPrefix{}.OpenAPISchemaType(),
-				Format:      v1alpha1.IPPrefix{}.OpenAPISchemaFormat(),
+				Type:        v1beta1.IPPrefix{}.OpenAPISchemaType(),
+				Format:      v1beta1.IPPrefix{}.OpenAPISchemaFormat(),
 			},
 		},
 	}
 }
 
-func schema_onmetal_api_api_common_v1alpha1_IPRange(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_common_v1beta1_IPRange(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -496,13 +496,13 @@ func schema_onmetal_api_api_common_v1alpha1_IPRange(ref common.ReferenceCallback
 					"from": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 						},
 					},
 					"to": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 						},
 					},
 				},
@@ -510,11 +510,11 @@ func schema_onmetal_api_api_common_v1alpha1_IPRange(ref common.ReferenceCallback
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IP"},
 	}
 }
 
-func schema_onmetal_api_api_common_v1alpha1_LocalUIDReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_common_v1beta1_LocalUIDReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -549,7 +549,7 @@ func schema_onmetal_api_api_common_v1alpha1_LocalUIDReference(ref common.Referen
 	}
 }
 
-func schema_onmetal_api_api_common_v1alpha1_SecretKeySelector(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_common_v1beta1_SecretKeySelector(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -581,7 +581,7 @@ func schema_onmetal_api_api_common_v1alpha1_SecretKeySelector(ref common.Referen
 	}
 }
 
-func schema_onmetal_api_api_common_v1alpha1_Taint(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_common_v1beta1_Taint(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -618,7 +618,7 @@ func schema_onmetal_api_api_common_v1alpha1_Taint(ref common.ReferenceCallback) 
 	}
 }
 
-func schema_onmetal_api_api_common_v1alpha1_Toleration(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_common_v1beta1_Toleration(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -659,7 +659,7 @@ func schema_onmetal_api_api_common_v1alpha1_Toleration(ref common.ReferenceCallb
 	}
 }
 
-func schema_onmetal_api_api_common_v1alpha1_UIDReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_common_v1beta1_UIDReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -700,7 +700,7 @@ func schema_onmetal_api_api_common_v1alpha1_UIDReference(ref common.ReferenceCal
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_DaemonEndpoint(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_DaemonEndpoint(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -722,7 +722,7 @@ func schema_onmetal_api_api_compute_v1alpha1_DaemonEndpoint(ref common.Reference
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_EFIVar(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_EFIVar(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -760,7 +760,7 @@ func schema_onmetal_api_api_compute_v1alpha1_EFIVar(ref common.ReferenceCallback
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_EmptyDiskVolumeSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_EmptyDiskVolumeSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -781,7 +781,7 @@ func schema_onmetal_api_api_compute_v1alpha1_EmptyDiskVolumeSource(ref common.Re
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_EphemeralNetworkInterfaceSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_EphemeralNetworkInterfaceSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -791,18 +791,18 @@ func schema_onmetal_api_api_compute_v1alpha1_EphemeralNetworkInterfaceSource(ref
 					"networkInterfaceTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "NetworkInterfaceTemplate is the template definition of the networking.NetworkInterface.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceTemplateSpec"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceTemplateSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceTemplateSpec"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceTemplateSpec"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_EphemeralVolumeSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_EphemeralVolumeSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -812,18 +812,18 @@ func schema_onmetal_api_api_compute_v1alpha1_EphemeralVolumeSource(ref common.Re
 					"volumeTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VolumeTemplate is the template definition of the storage.Volume.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeTemplateSpec"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeTemplateSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeTemplateSpec"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeTemplateSpec"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_Machine(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_Machine(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -853,24 +853,24 @@ func schema_onmetal_api_api_compute_v1alpha1_Machine(ref common.ReferenceCallbac
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineSpec", "github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineSpec", "github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachineClass(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachineClass(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -919,7 +919,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineClass(ref common.ReferenceCa
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachineClassList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachineClassList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -953,7 +953,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineClassList(ref common.Referen
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineClass"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineClass"),
 									},
 								},
 							},
@@ -964,11 +964,11 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineClassList(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachineClass", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachineClass", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachineExecOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachineExecOptions(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1001,7 +1001,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineExecOptions(ref common.Refer
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachineList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachineList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1035,7 +1035,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineList(ref common.ReferenceCal
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.Machine"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.Machine"),
 									},
 								},
 							},
@@ -1046,11 +1046,11 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineList(ref common.ReferenceCal
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.Machine", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.Machine", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachinePool(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachinePool(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1080,24 +1080,24 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePool(ref common.ReferenceCal
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolSpec", "github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolSpec", "github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachinePoolAddress(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachinePoolAddress(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1124,7 +1124,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolAddress(ref common.Refer
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachinePoolCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachinePoolCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1186,7 +1186,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolCondition(ref common.Ref
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachinePoolDaemonEndpoints(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachinePoolDaemonEndpoints(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1197,18 +1197,18 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolDaemonEndpoints(ref comm
 						SchemaProps: spec.SchemaProps{
 							Description: "Endpoint on which machinepoollet is listening.",
 							Default:     map[string]interface{}{},
-							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.DaemonEndpoint"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.DaemonEndpoint"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.DaemonEndpoint"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.DaemonEndpoint"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachinePoolList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachinePoolList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1242,7 +1242,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolList(ref common.Referenc
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePool"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePool"),
 									},
 								},
 							},
@@ -1253,11 +1253,11 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolList(ref common.Referenc
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePool", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePool", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachinePoolSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachinePoolSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1280,7 +1280,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolSpec(ref common.Referenc
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.Taint"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.Taint"),
 									},
 								},
 							},
@@ -1291,11 +1291,11 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolSpec(ref common.Referenc
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.Taint"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.Taint"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachinePoolStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachinePoolStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1317,7 +1317,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolStatus(ref common.Refere
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolCondition"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolCondition"),
 									},
 								},
 							},
@@ -1343,7 +1343,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolStatus(ref common.Refere
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolAddress"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolAddress"),
 									},
 								},
 							},
@@ -1352,7 +1352,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolStatus(ref common.Refere
 					"daemonEndpoints": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolDaemonEndpoints"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolDaemonEndpoints"),
 						},
 					},
 					"capacity": {
@@ -1389,11 +1389,11 @@ func schema_onmetal_api_api_compute_v1alpha1_MachinePoolStatus(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolAddress", "github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolCondition", "github.com/onmetal/onmetal-api/api/compute/v1alpha1.MachinePoolDaemonEndpoints", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolAddress", "github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolCondition", "github.com/onmetal/onmetal-api/api/compute/v1beta1.MachinePoolDaemonEndpoints", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachineSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachineSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1463,7 +1463,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineSpec(ref common.ReferenceCal
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.NetworkInterface"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.NetworkInterface"),
 									},
 								},
 							},
@@ -1483,7 +1483,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineSpec(ref common.ReferenceCal
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.Volume"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.Volume"),
 									},
 								},
 							},
@@ -1492,7 +1492,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineSpec(ref common.ReferenceCal
 					"ignitionRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "IgnitionRef is a reference to a secret containing the ignition YAML for the machine to boot up. If key is empty, DefaultIgnitionKey will be used as fallback.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.SecretKeySelector"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.SecretKeySelector"),
 						},
 					},
 					"efiVars": {
@@ -1509,7 +1509,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineSpec(ref common.ReferenceCal
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.EFIVar"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.EFIVar"),
 									},
 								},
 							},
@@ -1523,7 +1523,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineSpec(ref common.ReferenceCal
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.Toleration"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.Toleration"),
 									},
 								},
 							},
@@ -1534,11 +1534,11 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineSpec(ref common.ReferenceCal
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.SecretKeySelector", "github.com/onmetal/onmetal-api/api/common/v1alpha1.Toleration", "github.com/onmetal/onmetal-api/api/compute/v1alpha1.EFIVar", "github.com/onmetal/onmetal-api/api/compute/v1alpha1.NetworkInterface", "github.com/onmetal/onmetal-api/api/compute/v1alpha1.Volume", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.SecretKeySelector", "github.com/onmetal/onmetal-api/api/common/v1beta1.Toleration", "github.com/onmetal/onmetal-api/api/compute/v1beta1.EFIVar", "github.com/onmetal/onmetal-api/api/compute/v1beta1.NetworkInterface", "github.com/onmetal/onmetal-api/api/compute/v1beta1.Volume", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_MachineStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_MachineStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1575,7 +1575,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineStatus(ref common.ReferenceC
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.NetworkInterfaceStatus"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.NetworkInterfaceStatus"),
 									},
 								},
 							},
@@ -1589,7 +1589,7 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineStatus(ref common.ReferenceC
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.VolumeStatus"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.VolumeStatus"),
 									},
 								},
 							},
@@ -1599,11 +1599,11 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineStatus(ref common.ReferenceC
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.NetworkInterfaceStatus", "github.com/onmetal/onmetal-api/api/compute/v1alpha1.VolumeStatus"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.NetworkInterfaceStatus", "github.com/onmetal/onmetal-api/api/compute/v1beta1.VolumeStatus"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_NetworkInterface(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_NetworkInterface(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1627,7 +1627,7 @@ func schema_onmetal_api_api_compute_v1alpha1_NetworkInterface(ref common.Referen
 					"ephemeral": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Ephemeral instructs to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) NetworkInterface to use.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.EphemeralNetworkInterfaceSource"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.EphemeralNetworkInterfaceSource"),
 						},
 					},
 				},
@@ -1635,11 +1635,11 @@ func schema_onmetal_api_api_compute_v1alpha1_NetworkInterface(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.EphemeralNetworkInterfaceSource", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.EphemeralNetworkInterfaceSource", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_NetworkInterfaceSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_NetworkInterfaceSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1654,18 +1654,18 @@ func schema_onmetal_api_api_compute_v1alpha1_NetworkInterfaceSource(ref common.R
 					"ephemeral": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Ephemeral instructs to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) NetworkInterface to use.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.EphemeralNetworkInterfaceSource"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.EphemeralNetworkInterfaceSource"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.EphemeralNetworkInterfaceSource", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.EphemeralNetworkInterfaceSource", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_NetworkInterfaceStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_NetworkInterfaceStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1695,7 +1695,7 @@ func schema_onmetal_api_api_compute_v1alpha1_NetworkInterfaceStatus(ref common.R
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 									},
 								},
 							},
@@ -1704,7 +1704,7 @@ func schema_onmetal_api_api_compute_v1alpha1_NetworkInterfaceStatus(ref common.R
 					"virtualIP": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VirtualIP is the virtual ip allocated for the network interface.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 						},
 					},
 					"state": {
@@ -1725,11 +1725,11 @@ func schema_onmetal_api_api_compute_v1alpha1_NetworkInterfaceStatus(ref common.R
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IP", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IP", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_Volume(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_Volume(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1760,13 +1760,13 @@ func schema_onmetal_api_api_compute_v1alpha1_Volume(ref common.ReferenceCallback
 					"emptyDisk": {
 						SchemaProps: spec.SchemaProps{
 							Description: "EmptyDisk instructs to use a Volume offered by the machine pool provider.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.EmptyDiskVolumeSource"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.EmptyDiskVolumeSource"),
 						},
 					},
 					"ephemeral": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Ephemeral instructs to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) Volume to use.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.EphemeralVolumeSource"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.EphemeralVolumeSource"),
 						},
 					},
 				},
@@ -1774,11 +1774,11 @@ func schema_onmetal_api_api_compute_v1alpha1_Volume(ref common.ReferenceCallback
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.EmptyDiskVolumeSource", "github.com/onmetal/onmetal-api/api/compute/v1alpha1.EphemeralVolumeSource", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.EmptyDiskVolumeSource", "github.com/onmetal/onmetal-api/api/compute/v1beta1.EphemeralVolumeSource", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_VolumeSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_VolumeSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1794,24 +1794,24 @@ func schema_onmetal_api_api_compute_v1alpha1_VolumeSource(ref common.ReferenceCa
 					"emptyDisk": {
 						SchemaProps: spec.SchemaProps{
 							Description: "EmptyDisk instructs to use a Volume offered by the machine pool provider.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.EmptyDiskVolumeSource"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.EmptyDiskVolumeSource"),
 						},
 					},
 					"ephemeral": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Ephemeral instructs to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) Volume to use.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1alpha1.EphemeralVolumeSource"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/compute/v1beta1.EphemeralVolumeSource"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/compute/v1alpha1.EmptyDiskVolumeSource", "github.com/onmetal/onmetal-api/api/compute/v1alpha1.EphemeralVolumeSource", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/onmetal/onmetal-api/api/compute/v1beta1.EmptyDiskVolumeSource", "github.com/onmetal/onmetal-api/api/compute/v1beta1.EphemeralVolumeSource", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
-func schema_onmetal_api_api_compute_v1alpha1_VolumeStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_compute_v1beta1_VolumeStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1855,7 +1855,7 @@ func schema_onmetal_api_api_compute_v1alpha1_VolumeStatus(ref common.ReferenceCa
 	}
 }
 
-func schema_onmetal_api_api_core_v1alpha1_ObjectSelector(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_core_v1beta1_ObjectSelector(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1909,7 +1909,7 @@ func schema_onmetal_api_api_core_v1alpha1_ObjectSelector(ref common.ReferenceCal
 	}
 }
 
-func schema_onmetal_api_api_core_v1alpha1_ResourceQuota(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_core_v1beta1_ResourceQuota(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1939,24 +1939,24 @@ func schema_onmetal_api_api_core_v1alpha1_ResourceQuota(ref common.ReferenceCall
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceQuotaSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceQuotaSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceQuotaStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceQuotaStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceQuotaSpec", "github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceQuotaStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceQuotaSpec", "github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceQuotaStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_core_v1alpha1_ResourceQuotaList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_core_v1beta1_ResourceQuotaList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -1990,7 +1990,7 @@ func schema_onmetal_api_api_core_v1alpha1_ResourceQuotaList(ref common.Reference
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceQuota"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceQuota"),
 									},
 								},
 							},
@@ -2001,11 +2001,11 @@ func schema_onmetal_api_api_core_v1alpha1_ResourceQuotaList(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceQuota", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceQuota", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_core_v1alpha1_ResourceQuotaSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_core_v1beta1_ResourceQuotaSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2030,18 +2030,18 @@ func schema_onmetal_api_api_core_v1alpha1_ResourceQuotaSpec(ref common.Reference
 					"scopeSelector": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ScopeSelector selects the resources that are subject to this quota. Note: By using certain ScopeSelectors, only certain resources may be tracked.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceScopeSelector"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceScopeSelector"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceScopeSelector", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
+			"github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceScopeSelector", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 
-func schema_onmetal_api_api_core_v1alpha1_ResourceQuotaStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_core_v1beta1_ResourceQuotaStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2086,7 +2086,7 @@ func schema_onmetal_api_api_core_v1alpha1_ResourceQuotaStatus(ref common.Referen
 	}
 }
 
-func schema_onmetal_api_api_core_v1alpha1_ResourceScopeSelector(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_core_v1beta1_ResourceScopeSelector(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2101,7 +2101,7 @@ func schema_onmetal_api_api_core_v1alpha1_ResourceScopeSelector(ref common.Refer
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceScopeSelectorRequirement"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceScopeSelectorRequirement"),
 									},
 								},
 							},
@@ -2111,11 +2111,11 @@ func schema_onmetal_api_api_core_v1alpha1_ResourceScopeSelector(ref common.Refer
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/core/v1alpha1.ResourceScopeSelectorRequirement"},
+			"github.com/onmetal/onmetal-api/api/core/v1beta1.ResourceScopeSelectorRequirement"},
 	}
 }
 
-func schema_onmetal_api_api_core_v1alpha1_ResourceScopeSelectorRequirement(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_core_v1beta1_ResourceScopeSelectorRequirement(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2160,7 +2160,7 @@ func schema_onmetal_api_api_core_v1alpha1_ResourceScopeSelectorRequirement(ref c
 	}
 }
 
-func schema_onmetal_api_api_ipam_v1alpha1_Prefix(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_ipam_v1beta1_Prefix(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2190,24 +2190,24 @@ func schema_onmetal_api_api_ipam_v1alpha1_Prefix(ref common.ReferenceCallback) c
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixSpec", "github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixSpec", "github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocation(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_ipam_v1beta1_PrefixAllocation(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2237,24 +2237,24 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocation(ref common.ReferenceC
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixAllocationSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixAllocationSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixAllocationStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixAllocationStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixAllocationSpec", "github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixAllocationStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixAllocationSpec", "github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixAllocationStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_ipam_v1beta1_PrefixAllocationList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2288,7 +2288,7 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationList(ref common.Refere
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixAllocation"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixAllocation"),
 									},
 								},
 							},
@@ -2299,11 +2299,11 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationList(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixAllocation", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixAllocation", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_ipam_v1beta1_PrefixAllocationSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2321,7 +2321,7 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationSpec(ref common.Refere
 					"prefix": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Prefix is the prefix to allocate for this Prefix.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix"),
 						},
 					},
 					"prefixLength": {
@@ -2347,11 +2347,11 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationSpec(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
 	}
 }
 
-func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_ipam_v1beta1_PrefixAllocationStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2361,7 +2361,7 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationStatus(ref common.Refe
 					"prefix": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Prefix is the allocated prefix, if any",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix"),
 						},
 					},
 					"phase": {
@@ -2381,11 +2381,11 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixAllocationStatus(ref common.Refe
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
-func schema_onmetal_api_api_ipam_v1alpha1_PrefixList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_ipam_v1beta1_PrefixList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2419,7 +2419,7 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixList(ref common.ReferenceCallbac
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1alpha1.Prefix"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1beta1.Prefix"),
 									},
 								},
 							},
@@ -2430,11 +2430,11 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixList(ref common.ReferenceCallbac
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.Prefix", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/ipam/v1beta1.Prefix", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_ipam_v1alpha1_PrefixSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_ipam_v1beta1_PrefixSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2452,7 +2452,7 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixSpec(ref common.ReferenceCallbac
 					"prefix": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Prefix is the prefix to allocate for this Prefix.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix"),
 						},
 					},
 					"prefixLength": {
@@ -2478,11 +2478,11 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixSpec(ref common.ReferenceCallbac
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
 	}
 }
 
-func schema_onmetal_api_api_ipam_v1alpha1_PrefixStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_ipam_v1beta1_PrefixStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2510,7 +2510,7 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixStatus(ref common.ReferenceCallb
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix"),
 									},
 								},
 							},
@@ -2520,11 +2520,11 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixStatus(ref common.ReferenceCallb
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
-func schema_onmetal_api_api_ipam_v1alpha1_PrefixTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_ipam_v1beta1_PrefixTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2539,18 +2539,18 @@ func schema_onmetal_api_api_ipam_v1alpha1_PrefixTemplateSpec(ref common.Referenc
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_EphemeralPrefixSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_EphemeralPrefixSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2560,18 +2560,18 @@ func schema_onmetal_api_api_networking_v1alpha1_EphemeralPrefixSource(ref common
 					"prefixTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "PrefixTemplate is the template for the Prefix.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixTemplateSpec"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixTemplateSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/ipam/v1alpha1.PrefixTemplateSpec"},
+			"github.com/onmetal/onmetal-api/api/ipam/v1beta1.PrefixTemplateSpec"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_EphemeralVirtualIPSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_EphemeralVirtualIPSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2581,18 +2581,18 @@ func schema_onmetal_api_api_networking_v1alpha1_EphemeralVirtualIPSource(ref com
 					"virtualIPTemplate": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VirtualIPTemplate is the template for the VirtualIP.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPTemplateSpec"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPTemplateSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPTemplateSpec"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPTemplateSpec"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_IPBlock(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_IPBlock(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2603,7 +2603,7 @@ func schema_onmetal_api_api_networking_v1alpha1_IPBlock(ref common.ReferenceCall
 						SchemaProps: spec.SchemaProps{
 							Description: "CIDR is a string representing the ip block.",
 							Default:     map[string]interface{}{},
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix"),
 						},
 					},
 					"except": {
@@ -2614,7 +2614,7 @@ func schema_onmetal_api_api_networking_v1alpha1_IPBlock(ref common.ReferenceCall
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix"),
 									},
 								},
 							},
@@ -2625,11 +2625,11 @@ func schema_onmetal_api_api_networking_v1alpha1_IPBlock(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_IPSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_IPSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2639,24 +2639,24 @@ func schema_onmetal_api_api_networking_v1alpha1_IPSource(ref common.ReferenceCal
 					"value": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Value specifies an IP by using an IP literal.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 						},
 					},
 					"ephemeral": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Ephemeral specifies an IP by creating an ephemeral Prefix to allocate the IP with.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.EphemeralPrefixSource"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.EphemeralPrefixSource"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IP", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.EphemeralPrefixSource"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IP", "github.com/onmetal/onmetal-api/api/networking/v1beta1.EphemeralPrefixSource"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_LoadBalancer(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_LoadBalancer(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2686,24 +2686,24 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancer(ref common.Referenc
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerSpec", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerSpec", "github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerDestination(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_LoadBalancerDestination(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2714,13 +2714,13 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerDestination(ref comm
 						SchemaProps: spec.SchemaProps{
 							Description: "IP is the target IP.",
 							Default:     map[string]interface{}{},
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 						},
 					},
 					"targetRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "TargetRef is the target providing the destination.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerTargetRef"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerTargetRef"),
 						},
 					},
 				},
@@ -2728,11 +2728,11 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerDestination(ref comm
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IP", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerTargetRef"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IP", "github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerTargetRef"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_LoadBalancerList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2766,7 +2766,7 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerList(ref common.Refe
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancer"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancer"),
 									},
 								},
 							},
@@ -2777,11 +2777,11 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerList(ref common.Refe
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancer", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancer", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerPort(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_LoadBalancerPort(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2817,7 +2817,7 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerPort(ref common.Refe
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerRouting(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_LoadBalancerRouting(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2848,7 +2848,7 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerRouting(ref common.R
 						SchemaProps: spec.SchemaProps{
 							Description: "NetworkRef is the network the load balancer is assigned to.",
 							Default:     map[string]interface{}{},
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.LocalUIDReference"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.LocalUIDReference"),
 						},
 					},
 					"destinations": {
@@ -2859,7 +2859,7 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerRouting(ref common.R
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerDestination"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerDestination"),
 									},
 								},
 							},
@@ -2870,11 +2870,11 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerRouting(ref common.R
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.LocalUIDReference", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerDestination", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.LocalUIDReference", "github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerDestination", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerRoutingList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_LoadBalancerRoutingList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2908,7 +2908,7 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerRoutingList(ref comm
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerRouting"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerRouting"),
 									},
 								},
 							},
@@ -2919,11 +2919,11 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerRoutingList(ref comm
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerRouting", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerRouting", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_LoadBalancerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -2961,7 +2961,7 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerSpec(ref common.Refe
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.IPSource"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.IPSource"),
 									},
 								},
 							},
@@ -2988,7 +2988,7 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerSpec(ref common.Refe
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerPort"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerPort"),
 									},
 								},
 							},
@@ -2999,11 +2999,11 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerSpec(ref common.Refe
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.IPSource", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.LoadBalancerPort", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.IPSource", "github.com/onmetal/onmetal-api/api/networking/v1beta1.LoadBalancerPort", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_LoadBalancerStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3018,7 +3018,7 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerStatus(ref common.Re
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 									},
 								},
 							},
@@ -3028,11 +3028,11 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerStatus(ref common.Re
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IP"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerTargetRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_LoadBalancerTargetRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3070,7 +3070,7 @@ func schema_onmetal_api_api_networking_v1alpha1_LoadBalancerTargetRef(ref common
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NATGateway(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NATGateway(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3100,24 +3100,24 @@ func schema_onmetal_api_api_networking_v1alpha1_NATGateway(ref common.ReferenceC
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NATGatewaySpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NATGatewaySpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NATGatewayStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NATGatewayStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NATGatewaySpec", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.NATGatewayStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NATGatewaySpec", "github.com/onmetal/onmetal-api/api/networking/v1beta1.NATGatewayStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NATGatewayList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NATGatewayList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3151,7 +3151,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NATGatewayList(ref common.Refere
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NATGateway"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NATGateway"),
 									},
 								},
 							},
@@ -3162,11 +3162,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NATGatewayList(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NATGateway", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NATGateway", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NATGatewaySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NATGatewaySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3213,7 +3213,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NATGatewaySpec(ref common.Refere
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NATGatewayStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NATGatewayStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3228,7 +3228,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NATGatewayStatus(ref common.Refe
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 									},
 								},
 							},
@@ -3238,11 +3238,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NATGatewayStatus(ref common.Refe
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IP"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_Network(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_Network(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3272,24 +3272,24 @@ func schema_onmetal_api_api_networking_v1alpha1_Network(ref common.ReferenceCall
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkSpec", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkSpec", "github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkInterface(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkInterface(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3319,24 +3319,24 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterface(ref common.Refe
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceSpec", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceSpec", "github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkInterfaceList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3370,7 +3370,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceList(ref common.
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterface"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterface"),
 									},
 								},
 							},
@@ -3381,11 +3381,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceList(ref common.
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterface", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterface", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkInterfaceSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3409,7 +3409,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceSpec(ref common.
 					"machineRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "MachineRef is the Machine this NetworkInterface is used by",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.LocalUIDReference"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.LocalUIDReference"),
 						},
 					},
 					"ipFamilies": {
@@ -3435,7 +3435,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceSpec(ref common.
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.IPSource"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.IPSource"),
 									},
 								},
 							},
@@ -3449,7 +3449,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceSpec(ref common.
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.PrefixSource"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.PrefixSource"),
 									},
 								},
 							},
@@ -3458,7 +3458,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceSpec(ref common.
 					"virtualIP": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VirtualIP specifies the virtual ip that should be assigned to this NetworkInterface.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPSource"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPSource"),
 						},
 					},
 					"attributes": {
@@ -3482,11 +3482,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceSpec(ref common.
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.LocalUIDReference", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.IPSource", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.PrefixSource", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPSource", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.LocalUIDReference", "github.com/onmetal/onmetal-api/api/networking/v1beta1.IPSource", "github.com/onmetal/onmetal-api/api/networking/v1beta1.PrefixSource", "github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPSource", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkInterfaceStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3514,7 +3514,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceStatus(ref commo
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 									},
 								},
 							},
@@ -3528,7 +3528,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceStatus(ref commo
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix"),
 									},
 								},
 							},
@@ -3537,18 +3537,18 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceStatus(ref commo
 					"virtualIP": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VirtualIP is any virtual ip assigned to the NetworkInterface.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IP", "github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IP", "github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkInterfaceTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3564,18 +3564,18 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkInterfaceTemplateSpec(ref
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkInterfaceSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkInterfaceSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3609,7 +3609,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkList(ref common.Reference
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.Network"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.Network"),
 									},
 								},
 							},
@@ -3620,11 +3620,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkList(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.Network", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.Network", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPeering(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPeering(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3643,7 +3643,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPeering(ref common.Refere
 						SchemaProps: spec.SchemaProps{
 							Description: "NetworkRef is the reference to the network to peer with. An empty namespace indicates that the target network resides in the same namespace as the source network.",
 							Default:     map[string]interface{}{},
-							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeeringNetworkRef"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeeringNetworkRef"),
 						},
 					},
 				},
@@ -3651,11 +3651,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPeering(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeeringNetworkRef"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeeringNetworkRef"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPeeringClaimRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPeeringClaimRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3690,7 +3690,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPeeringClaimRef(ref commo
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPeeringNetworkRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPeeringNetworkRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3719,7 +3719,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPeeringNetworkRef(ref com
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPeeringStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPeeringStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3741,7 +3741,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPeeringStatus(ref common.
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicy(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPolicy(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3771,24 +3771,24 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicy(ref common.Referen
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicySpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicySpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicySpec", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicySpec", "github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPolicyCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3850,7 +3850,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyCondition(ref commo
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyEgressRule(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPolicyEgressRule(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3865,7 +3865,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyEgressRule(ref comm
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyPort"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyPort"),
 									},
 								},
 							},
@@ -3879,7 +3879,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyEgressRule(ref comm
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyPeer"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyPeer"),
 									},
 								},
 							},
@@ -3889,11 +3889,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyEgressRule(ref comm
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyPeer", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyPort"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyPeer", "github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyPort"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyIngressRule(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPolicyIngressRule(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3908,7 +3908,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyIngressRule(ref com
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyPort"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyPort"),
 									},
 								},
 							},
@@ -3922,7 +3922,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyIngressRule(ref com
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyPeer"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyPeer"),
 									},
 								},
 							},
@@ -3932,11 +3932,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyIngressRule(ref com
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyPeer", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyPort"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyPeer", "github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyPort"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPolicyList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3970,7 +3970,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyList(ref common.Ref
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicy"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicy"),
 									},
 								},
 							},
@@ -3981,11 +3981,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyList(ref common.Ref
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicy", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicy", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyPeer(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPolicyPeer(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -3995,24 +3995,24 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyPeer(ref common.Ref
 					"objectSelector": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ObjectSelector selects peers with the given kind matching the label selector. Exclusive with other peer specifiers.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/core/v1alpha1.ObjectSelector"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/core/v1beta1.ObjectSelector"),
 						},
 					},
 					"ipBlock": {
 						SchemaProps: spec.SchemaProps{
 							Description: "IPBlock specifies the ip block from or to which network traffic may come.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.IPBlock"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.IPBlock"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/core/v1alpha1.ObjectSelector", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.IPBlock"},
+			"github.com/onmetal/onmetal-api/api/core/v1beta1.ObjectSelector", "github.com/onmetal/onmetal-api/api/networking/v1beta1.IPBlock"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyPort(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPolicyPort(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4047,7 +4047,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyPort(ref common.Ref
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPolicySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4076,7 +4076,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicySpec(ref common.Ref
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyIngressRule"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyIngressRule"),
 									},
 								},
 							},
@@ -4090,7 +4090,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicySpec(ref common.Ref
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyEgressRule"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyEgressRule"),
 									},
 								},
 							},
@@ -4116,11 +4116,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicySpec(ref common.Ref
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyEgressRule", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyIngressRule", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyEgressRule", "github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyIngressRule", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkPolicyStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4135,7 +4135,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyStatus(ref common.R
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyCondition"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyCondition"),
 									},
 								},
 							},
@@ -4145,11 +4145,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkPolicyStatus(ref common.R
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPolicyCondition"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPolicyCondition"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4177,7 +4177,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkSpec(ref common.Reference
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeering"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeering"),
 									},
 								},
 							},
@@ -4197,7 +4197,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkSpec(ref common.Reference
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeeringClaimRef"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeeringClaimRef"),
 									},
 								},
 							},
@@ -4207,11 +4207,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkSpec(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeering", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeeringClaimRef"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeering", "github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeeringClaimRef"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_NetworkStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_NetworkStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4240,7 +4240,7 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkStatus(ref common.Referen
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeeringStatus"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeeringStatus"),
 									},
 								},
 							},
@@ -4250,11 +4250,11 @@ func schema_onmetal_api_api_networking_v1alpha1_NetworkStatus(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.NetworkPeeringStatus"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.NetworkPeeringStatus"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_PrefixSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_PrefixSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4263,24 +4263,24 @@ func schema_onmetal_api_api_networking_v1alpha1_PrefixSource(ref common.Referenc
 					"value": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Value specifies a static prefix to use.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix"),
 						},
 					},
 					"ephemeral": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Ephemeral specifies a prefix by creating an ephemeral ipam.Prefix to allocate the prefix with.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.EphemeralPrefixSource"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.EphemeralPrefixSource"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IPPrefix", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.EphemeralPrefixSource"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IPPrefix", "github.com/onmetal/onmetal-api/api/networking/v1beta1.EphemeralPrefixSource"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_VirtualIP(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_VirtualIP(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4310,24 +4310,24 @@ func schema_onmetal_api_api_networking_v1alpha1_VirtualIP(ref common.ReferenceCa
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPSpec", "github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPSpec", "github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_VirtualIPList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_VirtualIPList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4361,7 +4361,7 @@ func schema_onmetal_api_api_networking_v1alpha1_VirtualIPList(ref common.Referen
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIP"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIP"),
 									},
 								},
 							},
@@ -4372,11 +4372,11 @@ func schema_onmetal_api_api_networking_v1alpha1_VirtualIPList(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIP", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIP", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_VirtualIPSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_VirtualIPSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4392,18 +4392,18 @@ func schema_onmetal_api_api_networking_v1alpha1_VirtualIPSource(ref common.Refer
 					"ephemeral": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Ephemeral instructs to create an ephemeral (i.e. coupled to the lifetime of the surrounding object) VirtualIP.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.EphemeralVirtualIPSource"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.EphemeralVirtualIPSource"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.EphemeralVirtualIPSource", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.EphemeralVirtualIPSource", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_VirtualIPSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_VirtualIPSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4430,7 +4430,7 @@ func schema_onmetal_api_api_networking_v1alpha1_VirtualIPSpec(ref common.Referen
 					"targetRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "TargetRef references the target for this VirtualIP (currently only NetworkInterface).",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.LocalUIDReference"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.LocalUIDReference"),
 						},
 					},
 				},
@@ -4438,11 +4438,11 @@ func schema_onmetal_api_api_networking_v1alpha1_VirtualIPSpec(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.LocalUIDReference"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.LocalUIDReference"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_VirtualIPStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_VirtualIPStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4452,18 +4452,18 @@ func schema_onmetal_api_api_networking_v1alpha1_VirtualIPStatus(ref common.Refer
 					"ip": {
 						SchemaProps: spec.SchemaProps{
 							Description: "IP is the allocated IP, if any.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.IP"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.IP"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.IP"},
 	}
 }
 
-func schema_onmetal_api_api_networking_v1alpha1_VirtualIPTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_networking_v1beta1_VirtualIPTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4479,18 +4479,18 @@ func schema_onmetal_api_api_networking_v1alpha1_VirtualIPTemplateSpec(ref common
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/networking/v1alpha1.VirtualIPSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/networking/v1beta1.VirtualIPSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_Bucket(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_Bucket(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4520,24 +4520,24 @@ func schema_onmetal_api_api_storage_v1alpha1_Bucket(ref common.ReferenceCallback
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketSpec", "github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketSpec", "github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketAccess(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketAccess(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4567,7 +4567,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketAccess(ref common.ReferenceCa
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketClass(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketClass(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4617,7 +4617,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketClass(ref common.ReferenceCal
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketClassList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketClassList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4651,7 +4651,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketClassList(ref common.Referenc
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketClass"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketClass"),
 									},
 								},
 							},
@@ -4662,11 +4662,11 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketClassList(ref common.Referenc
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketClass", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketClass", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4726,7 +4726,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketCondition(ref common.Referenc
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4760,7 +4760,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketList(ref common.ReferenceCall
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.Bucket"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.Bucket"),
 									},
 								},
 							},
@@ -4771,11 +4771,11 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketList(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.Bucket", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.Bucket", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketPool(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketPool(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4805,24 +4805,24 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketPool(ref common.ReferenceCall
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketPoolSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketPoolSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketPoolStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketPoolStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketPoolSpec", "github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketPoolStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketPoolSpec", "github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketPoolStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketPoolList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketPoolList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4856,7 +4856,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketPoolList(ref common.Reference
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketPool"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketPool"),
 									},
 								},
 							},
@@ -4867,11 +4867,11 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketPoolList(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketPool", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketPool", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketPoolSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketPoolSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4894,7 +4894,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketPoolSpec(ref common.Reference
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.Taint"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.Taint"),
 									},
 								},
 							},
@@ -4905,11 +4905,11 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketPoolSpec(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.Taint"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.Taint"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketPoolStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketPoolStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4945,7 +4945,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketPoolStatus(ref common.Referen
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -4988,7 +4988,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketSpec(ref common.ReferenceCall
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.Toleration"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.Toleration"),
 									},
 								},
 							},
@@ -4998,11 +4998,11 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketSpec(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.Toleration", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.Toleration", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5025,7 +5025,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketStatus(ref common.ReferenceCa
 					"access": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Access specifies how to access a Bucket. This is set by the bucket provider when the bucket is provisioned.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketAccess"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketAccess"),
 						},
 					},
 					"conditions": {
@@ -5036,7 +5036,7 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketStatus(ref common.ReferenceCa
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketCondition"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketCondition"),
 									},
 								},
 							},
@@ -5046,11 +5046,11 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketStatus(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketAccess", "github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketCondition", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketAccess", "github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketCondition", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_BucketTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_BucketTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5066,18 +5066,18 @@ func schema_onmetal_api_api_storage_v1alpha1_BucketTemplateSpec(ref common.Refer
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.BucketSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.BucketSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_Volume(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_Volume(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5107,24 +5107,24 @@ func schema_onmetal_api_api_storage_v1alpha1_Volume(ref common.ReferenceCallback
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeSpec", "github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeSpec", "github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumeAccess(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumeAccess(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5178,7 +5178,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeAccess(ref common.ReferenceCa
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumeClass(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumeClass(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5235,7 +5235,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeClass(ref common.ReferenceCal
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumeClassList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumeClassList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5269,7 +5269,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeClassList(ref common.Referenc
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeClass"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeClass"),
 									},
 								},
 							},
@@ -5280,11 +5280,11 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeClassList(ref common.Referenc
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeClass", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeClass", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumeCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumeCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5344,7 +5344,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeCondition(ref common.Referenc
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumeEncryption(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumeEncryption(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5367,7 +5367,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeEncryption(ref common.Referen
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumeList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumeList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5401,7 +5401,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeList(ref common.ReferenceCall
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.Volume"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.Volume"),
 									},
 								},
 							},
@@ -5412,11 +5412,11 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeList(ref common.ReferenceCall
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.Volume", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.Volume", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumePool(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumePool(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5446,24 +5446,24 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumePool(ref common.ReferenceCall
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePoolSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePoolSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePoolStatus"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePoolStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePoolSpec", "github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePoolStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePoolSpec", "github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePoolStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumePoolCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumePoolCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5525,7 +5525,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumePoolCondition(ref common.Refe
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumePoolList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumePoolList(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5559,7 +5559,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumePoolList(ref common.Reference
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePool"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePool"),
 									},
 								},
 							},
@@ -5570,11 +5570,11 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumePoolList(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePool", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePool", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumePoolSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumePoolSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5597,7 +5597,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumePoolSpec(ref common.Reference
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.Taint"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.Taint"),
 									},
 								},
 							},
@@ -5608,11 +5608,11 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumePoolSpec(ref common.Reference
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.Taint"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.Taint"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumePoolStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumePoolStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5632,7 +5632,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumePoolStatus(ref common.Referen
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePoolCondition"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePoolCondition"),
 									},
 								},
 							},
@@ -5686,11 +5686,11 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumePoolStatus(ref common.Referen
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumePoolCondition", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumePoolCondition", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5728,7 +5728,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeSpec(ref common.ReferenceCall
 					"claimRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ClaimRef is the reference to the claiming entity of the Volume.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.LocalUIDReference"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/common/v1beta1.LocalUIDReference"),
 						},
 					},
 					"resources": {
@@ -5774,7 +5774,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeSpec(ref common.ReferenceCall
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1alpha1.Toleration"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/common/v1beta1.Toleration"),
 									},
 								},
 							},
@@ -5783,18 +5783,18 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeSpec(ref common.ReferenceCall
 					"encryption": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Encryption is an optional field which provides attributes to encrypt Volume.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeEncryption"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeEncryption"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/common/v1alpha1.LocalUIDReference", "github.com/onmetal/onmetal-api/api/common/v1alpha1.Toleration", "github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeEncryption", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
+			"github.com/onmetal/onmetal-api/api/common/v1beta1.LocalUIDReference", "github.com/onmetal/onmetal-api/api/common/v1beta1.Toleration", "github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeEncryption", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumeStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumeStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5817,7 +5817,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeStatus(ref common.ReferenceCa
 					"access": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Access specifies how to access a Volume. This is set by the volume provider when the volume is provisioned.",
-							Ref:         ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeAccess"),
+							Ref:         ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeAccess"),
 						},
 					},
 					"conditions": {
@@ -5828,7 +5828,7 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeStatus(ref common.ReferenceCa
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
 										Default: map[string]interface{}{},
-										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeCondition"),
+										Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeCondition"),
 									},
 								},
 							},
@@ -5838,11 +5838,11 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeStatus(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeAccess", "github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeCondition", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeAccess", "github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeCondition", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 
-func schema_onmetal_api_api_storage_v1alpha1_VolumeTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_onmetal_api_api_storage_v1beta1_VolumeTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
@@ -5858,14 +5858,14 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeTemplateSpec(ref common.Refer
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeSpec"),
+							Ref:     ref("github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeSpec"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/onmetal/onmetal-api/api/storage/v1alpha1.VolumeSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/onmetal/onmetal-api/api/storage/v1beta1.VolumeSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
