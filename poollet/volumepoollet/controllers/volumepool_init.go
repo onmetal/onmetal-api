@@ -18,8 +18,8 @@ import (
 	"context"
 	"fmt"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
-	volumepoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/volumepoollet/api/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
+	volumepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/volumepoollet/api/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -41,19 +41,19 @@ func (i *VolumePoolInit) Start(ctx context.Context) error {
 	log := ctrl.LoggerFrom(ctx).WithName("volumepool").WithName("init")
 
 	log.V(1).Info("Applying volume pool")
-	volumePool := &storagev1alpha1.VolumePool{
+	volumePool := &storagev1beta1.VolumePool{
 		TypeMeta: metav1.TypeMeta{
-			APIVersion: storagev1alpha1.SchemeGroupVersion.String(),
+			APIVersion: storagev1beta1.SchemeGroupVersion.String(),
 			Kind:       "VolumePool",
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name: i.VolumePoolName,
 		},
-		Spec: storagev1alpha1.VolumePoolSpec{
+		Spec: storagev1beta1.VolumePoolSpec{
 			ProviderID: i.ProviderID,
 		},
 	}
-	if err := i.Patch(ctx, volumePool, client.Apply, client.ForceOwnership, client.FieldOwner(volumepoolletv1alpha1.FieldOwner)); err != nil {
+	if err := i.Patch(ctx, volumePool, client.Apply, client.ForceOwnership, client.FieldOwner(volumepoolletv1beta1.FieldOwner)); err != nil {
 		if i.OnFailed != nil {
 			log.V(1).Info("Failed applying, calling OnFailed callback", "Error", err)
 			return i.OnFailed(ctx, err)

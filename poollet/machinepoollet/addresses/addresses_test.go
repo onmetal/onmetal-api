@@ -17,7 +17,7 @@ package addresses_test
 import (
 	"os"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	. "github.com/onmetal/onmetal-api/poollet/machinepoollet/addresses"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -47,13 +47,13 @@ var _ = Describe("Addresses", func() {
 			addresses, err := Get(&GetOptions{Filename: "./testdata/addresses.yaml"})
 			Expect(err).NotTo(HaveOccurred())
 
-			Expect(addresses).To(Equal([]computev1alpha1.MachinePoolAddress{
+			Expect(addresses).To(Equal([]computev1beta1.MachinePoolAddress{
 				{
-					Type:    computev1alpha1.MachinePoolHostName,
+					Type:    computev1beta1.MachinePoolHostName,
 					Address: "foo.bar",
 				},
 				{
-					Type:    computev1alpha1.MachinePoolInternalIP,
+					Type:    computev1beta1.MachinePoolInternalIP,
 					Address: "10.0.0.1",
 				},
 			}))
@@ -70,12 +70,12 @@ var _ = Describe("Addresses", func() {
 			Expect(os.Setenv(KubernetesPodNamespaceEnvVar, "foo")).To(Succeed())
 
 			Expect(Get()).To(ConsistOf(
-				computev1alpha1.MachinePoolAddress{
-					Type:    computev1alpha1.MachinePoolInternalDNS,
+				computev1beta1.MachinePoolAddress{
+					Type:    computev1beta1.MachinePoolInternalDNS,
 					Address: "10.0.0.1.foo.svc.cluster.local",
 				},
-				computev1alpha1.MachinePoolAddress{
-					Type:    computev1alpha1.MachinePoolInternalIP,
+				computev1beta1.MachinePoolAddress{
+					Type:    computev1beta1.MachinePoolInternalIP,
 					Address: "10.0.0.1",
 				},
 			))

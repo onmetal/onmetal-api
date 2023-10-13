@@ -20,7 +20,7 @@ import (
 	"strconv"
 
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
-	machinepoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1alpha1"
+	machinepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	"google.golang.org/grpc/codes"
 	grpcstatus "google.golang.org/grpc/status"
 	"k8s.io/apimachinery/pkg/util/proxy"
@@ -34,8 +34,8 @@ func (s *Server) serveExec(w http.ResponseWriter, req *http.Request, namespace, 
 	listMachinesRes, err := s.machineRuntime.ListMachines(ctx, &ori.ListMachinesRequest{
 		Filter: &ori.MachineFilter{
 			LabelSelector: map[string]string{
-				machinepoolletv1alpha1.MachineNamespaceLabel: namespace,
-				machinepoolletv1alpha1.MachineNameLabel:      name,
+				machinepoolletv1beta1.MachineNamespaceLabel: namespace,
+				machinepoolletv1beta1.MachineNameLabel:      name,
 			},
 		},
 	})

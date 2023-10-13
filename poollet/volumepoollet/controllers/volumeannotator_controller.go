@@ -19,11 +19,11 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
-	volumepoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/volumepoollet/api/v1alpha1"
+	volumepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/volumepoollet/api/v1beta1"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -42,7 +42,7 @@ type VolumeAnnotatorReconciler struct {
 }
 
 func (r *VolumeAnnotatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	volume := &storagev1alpha1.Volume{
+	volume := &storagev1beta1.Volume{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: req.Namespace,
 			Name:      req.Name,
@@ -57,17 +57,17 @@ func (r *VolumeAnnotatorReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 
 func volumeAnnotatorEventHandler[O orimeta.Object](log logr.Logger, c chan<- event.GenericEvent) orievent.HandlerFuncs[O] {
 	handleEvent := func(obj orimeta.Object) {
-		namespace, ok := obj.GetMetadata().Labels[volumepoolletv1alpha1.VolumeNamespaceLabel]
+		namespace, ok := obj.GetMetadata().Labels[volumepoolletv1beta1.VolumeNamespaceLabel]
 		if !ok {
 			return
 		}
 
-		name, ok := obj.GetMetadata().Labels[volumepoolletv1alpha1.VolumeNameLabel]
+		name, ok := obj.GetMetadata().Labels[volumepoolletv1beta1.VolumeNameLabel]
 		if !ok {
 			return
 		}
 
-		volume := &storagev1alpha1.Volume{
+		volume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace: namespace,
 				Name:      name,

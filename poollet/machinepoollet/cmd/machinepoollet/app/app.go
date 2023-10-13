@@ -23,10 +23,10 @@ import (
 	"time"
 
 	"github.com/onmetal/controller-utils/configutils"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	oriremotemachine "github.com/onmetal/onmetal-api/ori/remote/machine"
@@ -59,10 +59,10 @@ var (
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
-	utilruntime.Must(computev1alpha1.AddToScheme(scheme))
-	utilruntime.Must(storagev1alpha1.AddToScheme(scheme))
-	utilruntime.Must(networkingv1alpha1.AddToScheme(scheme))
-	utilruntime.Must(ipamv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(computev1beta1.AddToScheme(scheme))
+	utilruntime.Must(storagev1beta1.AddToScheme(scheme))
+	utilruntime.Must(networkingv1beta1.AddToScheme(scheme))
+	utilruntime.Must(ipamv1beta1.AddToScheme(scheme))
 }
 
 type Options struct {
@@ -226,9 +226,9 @@ func Run(ctx context.Context, opts Options) error {
 		LeaderElectionConfig:    leaderElectionCfg,
 		Cache:                   cache.Options{ByObject: map[client.Object]cache.ByObject{}},
 		NewCache: func(config *rest.Config, cacheOpts cache.Options) (cache.Cache, error) {
-			cacheOpts.ByObject[&computev1alpha1.Machine{}] = cache.ByObject{
+			cacheOpts.ByObject[&computev1beta1.Machine{}] = cache.ByObject{
 				Field: fields.OneTermEqualSelector(
-					computev1alpha1.MachineMachinePoolRefNameField,
+					computev1beta1.MachineMachinePoolRefNameField,
 					opts.MachinePoolName,
 				),
 			}

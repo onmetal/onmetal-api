@@ -30,7 +30,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-logr/logr"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	orimachine "github.com/onmetal/onmetal-api/ori/apis/machine"
 	utilshttp "github.com/onmetal/onmetal-api/utils/http"
 	"k8s.io/apiserver/pkg/authentication/authenticator"
@@ -165,8 +165,8 @@ func (m MachinePoolRequestAttr) GetRequestAttributes(u user.Info, req *http.Requ
 		User:            u,
 		Verb:            getAPIVerb(req.Method),
 		Namespace:       "",
-		APIGroup:        computev1alpha1.SchemeGroupVersion.Group,
-		APIVersion:      computev1alpha1.SchemeGroupVersion.Version,
+		APIGroup:        computev1beta1.SchemeGroupVersion.Group,
+		APIVersion:      computev1beta1.SchemeGroupVersion.Version,
 		Resource:        "machinepools",
 		Subresource:     "proxy",
 		Name:            m.MachinePoolName,

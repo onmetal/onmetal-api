@@ -17,8 +17,8 @@ package controllers_test
 import (
 	"fmt"
 
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
 	. "github.com/onsi/ginkgo/v2"
@@ -50,16 +50,16 @@ var _ = Describe("VolumeController", func() {
 		volumeHandle := "testhandle"
 
 		By("creating a volume")
-		volume := &storagev1alpha1.Volume{
+		volume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "volume-",
 			},
-			Spec: storagev1alpha1.VolumeSpec{
+			Spec: storagev1beta1.VolumeSpec{
 				VolumeClassRef: &corev1.LocalObjectReference{Name: vc.Name},
 				VolumePoolRef:  &corev1.LocalObjectReference{Name: vp.Name},
-				Resources: corev1alpha1.ResourceList{
-					corev1alpha1.ResourceStorage: size,
+				Resources: corev1beta1.ResourceList{
+					corev1beta1.ResourceStorage: size,
 				},
 			},
 		}
@@ -95,7 +95,7 @@ var _ = Describe("VolumeController", func() {
 		Expect(onmetalapiclient.PatchAddReconcileAnnotation(ctx, k8sClient, volume)).Should(Succeed())
 
 		Eventually(Object(volume)).Should(SatisfyAll(
-			HaveField("Status.State", storagev1alpha1.VolumeStateAvailable),
+			HaveField("Status.State", storagev1beta1.VolumeStateAvailable),
 			HaveField("Status.Access.Driver", volumeDriver),
 			HaveField("Status.Access.SecretRef", Not(BeNil())),
 			HaveField("Status.Access.VolumeAttributes", HaveKeyWithValue(MonitorsKey, volumeMonitors)),
@@ -133,18 +133,18 @@ var _ = Describe("VolumeController", func() {
 		Expect(k8sClient.Create(ctx, encryptionSecret)).To(Succeed())
 
 		By("creating a volume")
-		volume := &storagev1alpha1.Volume{
+		volume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "volume-",
 			},
-			Spec: storagev1alpha1.VolumeSpec{
+			Spec: storagev1beta1.VolumeSpec{
 				VolumeClassRef: &corev1.LocalObjectReference{Name: vc.Name},
 				VolumePoolRef:  &corev1.LocalObjectReference{Name: vp.Name},
-				Resources: corev1alpha1.ResourceList{
-					corev1alpha1.ResourceStorage: size,
+				Resources: corev1beta1.ResourceList{
+					corev1beta1.ResourceStorage: size,
 				},
-				Encryption: &storagev1alpha1.VolumeEncryption{
+				Encryption: &storagev1beta1.VolumeEncryption{
 					SecretRef: corev1.LocalObjectReference{Name: encryptionSecret.Name},
 				},
 			},
@@ -171,16 +171,16 @@ var _ = Describe("VolumeController", func() {
 		newSize := resource.MustParse("200Mi")
 
 		By("creating a volume")
-		volume := &storagev1alpha1.Volume{
+		volume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "volume-",
 			},
-			Spec: storagev1alpha1.VolumeSpec{
+			Spec: storagev1beta1.VolumeSpec{
 				VolumeClassRef: &corev1.LocalObjectReference{Name: expandableVc.Name},
 				VolumePoolRef:  &corev1.LocalObjectReference{Name: vp.Name},
-				Resources: corev1alpha1.ResourceList{
-					corev1alpha1.ResourceStorage: size,
+				Resources: corev1beta1.ResourceList{
+					corev1beta1.ResourceStorage: size,
 				},
 			},
 		}
@@ -200,8 +200,8 @@ var _ = Describe("VolumeController", func() {
 
 		By("update increasing the storage resource")
 		baseVolume := volume.DeepCopy()
-		volume.Spec.Resources = corev1alpha1.ResourceList{
-			corev1alpha1.ResourceStorage: newSize,
+		volume.Spec.Resources = corev1beta1.ResourceList{
+			corev1beta1.ResourceStorage: newSize,
 		}
 		Expect(k8sClient.Patch(ctx, volume, client.MergeFrom(baseVolume))).To(Succeed())
 

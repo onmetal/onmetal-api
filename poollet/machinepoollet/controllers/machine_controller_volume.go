@@ -21,9 +21,9 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/gogo/protobuf/proto"
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	"github.com/onmetal/onmetal-api/poollet/machinepoollet/controllers/events"
 	"github.com/onmetal/onmetal-api/utils/claimmanager"
@@ -42,7 +42,7 @@ type volumeClaimStrategy struct {
 }
 
 func (s *volumeClaimStrategy) ClaimState(claimer client.Object, obj client.Object) claimmanager.ClaimState {
-	volume := obj.(*storagev1alpha1.Volume)
+	volume := obj.(*storagev1beta1.Volume)
 	if claimRef := volume.Spec.ClaimRef; claimRef != nil {
 		if claimRef.UID == claimer.GetUID() {
 			return claimmanager.ClaimStateClaimed
@@ -53,23 +53,23 @@ func (s *volumeClaimStrategy) ClaimState(claimer client.Object, obj client.Objec
 }
 
 func (s *volumeClaimStrategy) Adopt(ctx context.Context, claimer client.Object, obj client.Object) error {
-	volume := obj.(*storagev1alpha1.Volume)
+	volume := obj.(*storagev1beta1.Volume)
 	base := volume.DeepCopy()
-	volume.Spec.ClaimRef = commonv1alpha1.NewLocalObjUIDRef(claimer)
+	volume.Spec.ClaimRef = commonv1beta1.NewLocalObjUIDRef(claimer)
 	return s.Patch(ctx, volume, client.StrategicMergeFrom(base))
 }
 
 func (s *volumeClaimStrategy) Release(ctx context.Context, claimer client.Object, obj client.Object) error {
-	volume := obj.(*storagev1alpha1.Volume)
+	volume := obj.(*storagev1beta1.Volume)
 	base := volume.DeepCopy()
 	volume.Spec.ClaimRef = nil
 	return s.Patch(ctx, volume, client.StrategicMergeFrom(base))
 }
 
-func (r *MachineReconciler) volumeNameToMachineVolume(machine *computev1alpha1.Machine) map[string]computev1alpha1.Volume {
-	sel := make(map[string]computev1alpha1.Volume)
+func (r *MachineReconciler) volumeNameToMachineVolume(machine *computev1beta1.Machine) map[string]computev1beta1.Volume {
+	sel := make(map[string]computev1beta1.Volume)
 	for _, machineVolume := range machine.Spec.Volumes {
-		volumeName := computev1alpha1.MachineVolumeName(machine.Name, machineVolume)
+		volumeName := computev1beta1.MachineVolumeName(machine.Name, machineVolume)
 		if volumeName == "" {
 			// volume name is empty on empty disk volumes.
 			continue
@@ -79,16 +79,16 @@ func (r *MachineReconciler) volumeNameToMachineVolume(machine *computev1alpha1.M
 	return sel
 }
 
-func (r *MachineReconciler) machineVolumeSelector(machine *computev1alpha1.Machine) claimmanager.Selector {
-	names := sets.New(computev1alpha1.MachineVolumeNames(machine)...)
+func (r *MachineReconciler) machineVolumeSelector(machine *computev1beta1.Machine) claimmanager.Selector {
+	names := sets.New(computev1beta1.MachineVolumeNames(machine)...)
 	return claimmanager.SelectorFunc(func(obj client.Object) bool {
-		volume := obj.(*storagev1alpha1.Volume)
+		volume := obj.(*storagev1beta1.Volume)
 		return names.Has(volume.Name)
 	})
 }
 
-func (r *MachineReconciler) getVolumesForMachine(ctx context.Context, machine *computev1alpha1.Machine) ([]storagev1alpha1.Volume, error) {
-	volumeList := &storagev1alpha1.VolumeList{}
+func (r *MachineReconciler) getVolumesForMachine(ctx context.Context, machine *computev1beta1.Machine) ([]storagev1beta1.Volume, error) {
+	volumeList := &storagev1beta1.VolumeList{}
 	if err := r.List(ctx, volumeList,
 		client.InNamespace(machine.Namespace),
 	); err != nil {
@@ -98,7 +98,7 @@ func (r *MachineReconciler) getVolumesForMachine(ctx context.Context, machine *c
 	var (
 		sel      = r.machineVolumeSelector(machine)
 		claimMgr = claimmanager.New(machine, sel, &volumeClaimStrategy{r.Client})
-		volumes  []storagev1alpha1.Volume
+		volumes  []storagev1beta1.Volume
 		errs     []error
 	)
 	for _, volume := range volumeList.Items {
@@ -111,7 +111,7 @@ func (r *MachineReconciler) getVolumesForMachine(ctx context.Context, machine *c
 			continue
 		}
 
-		if volume.Status.State != storagev1alpha1.VolumeStateAvailable || volume.Status.Access == nil {
+		if volume.Status.State != storagev1beta1.VolumeStateAvailable || volume.Status.Access == nil {
 			r.Eventf(machine, corev1.EventTypeNormal, events.VolumeNotReady, "Volume %s does not access information", volume.Name)
 			continue
 		}
@@ -123,9 +123,9 @@ func (r *MachineReconciler) getVolumesForMachine(ctx context.Context, machine *c
 
 func (r *MachineReconciler) prepareRemoteORIVolume(
 	ctx context.Context,
-	machine *computev1alpha1.Machine,
-	machineVolume *computev1alpha1.Volume,
-	volume *storagev1alpha1.Volume,
+	machine *computev1beta1.Machine,
+	machineVolume *computev1beta1.Volume,
+	volume *storagev1beta1.Volume,
 ) (*ori.Volume, bool, error) {
 	access := volume.Status.Access
 	if access == nil {
@@ -165,7 +165,7 @@ func (r *MachineReconciler) prepareRemoteORIVolume(
 	}, true, nil
 }
 
-func (r *MachineReconciler) prepareEmptyDiskORIVolume(machineVolume *computev1alpha1.Volume) *ori.Volume {
+func (r *MachineReconciler) prepareEmptyDiskORIVolume(machineVolume *computev1beta1.Volume) *ori.Volume {
 	var sizeBytes int64
 	if sizeLimit := machineVolume.EmptyDisk.SizeLimit; sizeLimit != nil {
 		sizeBytes = sizeLimit.Value()
@@ -181,8 +181,8 @@ func (r *MachineReconciler) prepareEmptyDiskORIVolume(machineVolume *computev1al
 
 func (r *MachineReconciler) prepareORIVolumes(
 	ctx context.Context,
-	machine *computev1alpha1.Machine,
-	volumes []storagev1alpha1.Volume,
+	machine *computev1beta1.Machine,
+	volumes []storagev1beta1.Volume,
 ) ([]*ori.Volume, bool, error) {
 	var (
 		volumeNameToMachineVolume = r.volumeNameToMachineVolume(machine)
@@ -216,7 +216,7 @@ func (r *MachineReconciler) prepareORIVolumes(
 	}
 
 	if len(oriVolumes) != len(machine.Spec.Volumes) {
-		expectedVolumeNames := utilslices.ToSetFunc(machine.Spec.Volumes, func(v computev1alpha1.Volume) string { return v.Name })
+		expectedVolumeNames := utilslices.ToSetFunc(machine.Spec.Volumes, func(v computev1beta1.Volume) string { return v.Name })
 		actualVolumeNames := utilslices.ToSetFunc(oriVolumes, (*ori.Volume).GetName)
 		missingVolumeNames := sets.List(expectedVolumeNames.Difference(actualVolumeNames))
 		r.Eventf(machine, corev1.EventTypeNormal, events.VolumeNotReady, "Machine volumes are not ready: %v", missingVolumeNames)
@@ -298,9 +298,9 @@ func (r *MachineReconciler) getNewORIVolumesForMachine(
 func (r *MachineReconciler) updateORIVolumes(
 	ctx context.Context,
 	log logr.Logger,
-	machine *computev1alpha1.Machine,
+	machine *computev1beta1.Machine,
 	oriMachine *ori.Machine,
-	volumes []storagev1alpha1.Volume,
+	volumes []storagev1beta1.Volume,
 ) error {
 	desiredORIVolumes, _, err := r.prepareORIVolumes(ctx, machine, volumes)
 	if err != nil {
@@ -321,21 +321,21 @@ func (r *MachineReconciler) updateORIVolumes(
 }
 
 func (r *MachineReconciler) getVolumeStatusesForMachine(
-	machine *computev1alpha1.Machine,
+	machine *computev1beta1.Machine,
 	oriMachine *ori.Machine,
 	now metav1.Time,
-) ([]computev1alpha1.VolumeStatus, error) {
+) ([]computev1beta1.VolumeStatus, error) {
 	var (
 		oriVolumeStatusByName        = utilslices.ToMapByKey(oriMachine.Status.Volumes, (*ori.VolumeStatus).GetName)
-		existingVolumeStatusesByName = utilslices.ToMapByKey(machine.Status.Volumes, func(status computev1alpha1.VolumeStatus) string { return status.Name })
-		volumeStatuses               []computev1alpha1.VolumeStatus
+		existingVolumeStatusesByName = utilslices.ToMapByKey(machine.Status.Volumes, func(status computev1beta1.VolumeStatus) string { return status.Name })
+		volumeStatuses               []computev1beta1.VolumeStatus
 		errs                         []error
 	)
 
 	for _, machineVolume := range machine.Spec.Volumes {
 		var (
 			oriVolumeStatus, ok = oriVolumeStatusByName[machineVolume.Name]
-			volumeStatusValues  computev1alpha1.VolumeStatus
+			volumeStatusValues  computev1beta1.VolumeStatus
 		)
 		if ok {
 			var err error
@@ -344,9 +344,9 @@ func (r *MachineReconciler) getVolumeStatusesForMachine(
 				return nil, fmt.Errorf("[volume %s] %w", machineVolume.Name, err)
 			}
 		} else {
-			volumeStatusValues = computev1alpha1.VolumeStatus{
+			volumeStatusValues = computev1beta1.VolumeStatus{
 				Name:  machineVolume.Name,
-				State: computev1alpha1.VolumeStatePending,
+				State: computev1beta1.VolumeStatePending,
 			}
 		}
 
@@ -360,32 +360,32 @@ func (r *MachineReconciler) getVolumeStatusesForMachine(
 	return volumeStatuses, nil
 }
 
-var oriVolumeStateToVolumeState = map[ori.VolumeState]computev1alpha1.VolumeState{
-	ori.VolumeState_VOLUME_ATTACHED: computev1alpha1.VolumeStateAttached,
-	ori.VolumeState_VOLUME_PENDING:  computev1alpha1.VolumeStatePending,
+var oriVolumeStateToVolumeState = map[ori.VolumeState]computev1beta1.VolumeState{
+	ori.VolumeState_VOLUME_ATTACHED: computev1beta1.VolumeStateAttached,
+	ori.VolumeState_VOLUME_PENDING:  computev1beta1.VolumeStatePending,
 }
 
-func (r *MachineReconciler) convertORIVolumeState(oriState ori.VolumeState) (computev1alpha1.VolumeState, error) {
+func (r *MachineReconciler) convertORIVolumeState(oriState ori.VolumeState) (computev1beta1.VolumeState, error) {
 	if res, ok := oriVolumeStateToVolumeState[oriState]; ok {
 		return res, nil
 	}
 	return "", fmt.Errorf("unknown ori volume state %v", oriState)
 }
 
-func (r *MachineReconciler) convertORIVolumeStatus(oriVolumeStatus *ori.VolumeStatus) (computev1alpha1.VolumeStatus, error) {
+func (r *MachineReconciler) convertORIVolumeStatus(oriVolumeStatus *ori.VolumeStatus) (computev1beta1.VolumeStatus, error) {
 	state, err := r.convertORIVolumeState(oriVolumeStatus.State)
 	if err != nil {
-		return computev1alpha1.VolumeStatus{}, err
+		return computev1beta1.VolumeStatus{}, err
 	}
 
-	return computev1alpha1.VolumeStatus{
+	return computev1beta1.VolumeStatus{
 		Name:   oriVolumeStatus.Name,
 		Handle: oriVolumeStatus.Handle,
 		State:  state,
 	}, nil
 }
 
-func (r *MachineReconciler) addVolumeStatusValues(now metav1.Time, existing, newValues *computev1alpha1.VolumeStatus) {
+func (r *MachineReconciler) addVolumeStatusValues(now metav1.Time, existing, newValues *computev1beta1.VolumeStatus) {
 	if existing.State != newValues.State {
 		existing.LastStateTransitionTime = &now
 	}

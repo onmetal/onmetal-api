@@ -19,10 +19,10 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
-	machinepoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1alpha1"
+	machinepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -42,7 +42,7 @@ type MachineAnnotatorReconciler struct {
 }
 
 func (r *MachineAnnotatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	machine := &computev1alpha1.Machine{
+	machine := &computev1beta1.Machine{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: req.Namespace,
 			Name:      req.Name,
@@ -57,17 +57,17 @@ func (r *MachineAnnotatorReconciler) Reconcile(ctx context.Context, req ctrl.Req
 
 func machineAnnotatorEventHandler[O orimeta.Object](log logr.Logger, c chan<- event.GenericEvent) orievent.HandlerFuncs[O] {
 	handleEvent := func(obj orimeta.Object) {
-		namespace, ok := obj.GetMetadata().Labels[machinepoolletv1alpha1.MachineNamespaceLabel]
+		namespace, ok := obj.GetMetadata().Labels[machinepoolletv1beta1.MachineNamespaceLabel]
 		if !ok {
 			return
 		}
 
-		name, ok := obj.GetMetadata().Labels[machinepoolletv1alpha1.MachineNameLabel]
+		name, ok := obj.GetMetadata().Labels[machinepoolletv1beta1.MachineNameLabel]
 		if !ok {
 			return
 		}
 
-		machine := &computev1alpha1.Machine{
+		machine := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace: namespace,
 				Name:      name,

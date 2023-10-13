@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package v1alpha1
+package v1beta1
 
 const (
-	VolumeUIDLabel       = "volumepoollet.api.onmetal.de/volume-uid"
-	VolumeNamespaceLabel = "volumepoollet.api.onmetal.de/volume-namespace"
-	VolumeNameLabel      = "volumepoollet.api.onmetal.de/volume-name"
+	BucketUIDLabel       = "bucketpoollet.api.onmetal.de/bucket-uid"
+	BucketNamespaceLabel = "bucketpoollet.api.onmetal.de/bucket-namespace"
+	BucketNameLabel      = "bucketpoollet.api.onmetal.de/bucket-name"
 
-	FieldOwner      = "volumepoollet.api.onmetal.de/field-owner"
-	VolumeFinalizer = "volumepoollet.api.onmetal.de/volume"
+	FieldOwner      = "bucketpoollet.api.onmetal.de/field-owner"
+	BucketFinalizer = "bucketpoollet.api.onmetal.de/bucket"
 )

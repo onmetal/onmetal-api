@@ -19,10 +19,10 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
 	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
-	bucketpoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/bucketpoollet/api/v1alpha1"
+	bucketpoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/bucketpoollet/api/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -42,7 +42,7 @@ type BucketAnnotatorReconciler struct {
 }
 
 func (r *BucketAnnotatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	bucket := &storagev1alpha1.Bucket{
+	bucket := &storagev1beta1.Bucket{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: req.Namespace,
 			Name:      req.Name,
@@ -57,17 +57,17 @@ func (r *BucketAnnotatorReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 
 func bucketAnnotatorEventHandler[O orimeta.Object](log logr.Logger, c chan<- event.GenericEvent) orievent.HandlerFuncs[O] {
 	handleEvent := func(obj orimeta.Object) {
-		namespace, ok := obj.GetMetadata().Labels[bucketpoolletv1alpha1.BucketNamespaceLabel]
+		namespace, ok := obj.GetMetadata().Labels[bucketpoolletv1beta1.BucketNamespaceLabel]
 		if !ok {
 			return
 		}
 
-		name, ok := obj.GetMetadata().Labels[bucketpoolletv1alpha1.BucketNameLabel]
+		name, ok := obj.GetMetadata().Labels[bucketpoolletv1beta1.BucketNameLabel]
 		if !ok {
 			return
 		}
 
-		bucket := &storagev1alpha1.Bucket{
+		bucket := &storagev1beta1.Bucket{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace: namespace,
 				Name:      name,

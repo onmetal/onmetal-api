@@ -20,7 +20,7 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
 	"github.com/onmetal/onmetal-api/poollet/bucketpoollet/bcm"
 	corev1 "k8s.io/api/core/v1"
@@ -44,7 +44,7 @@ type BucketPoolReconciler struct {
 
 func (r *BucketPoolReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	bucketPool := &storagev1alpha1.BucketPool{}
+	bucketPool := &storagev1beta1.BucketPool{}
 	if err := r.Get(ctx, req.NamespacedName, bucketPool); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -52,20 +52,20 @@ func (r *BucketPoolReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	return r.reconcileExists(ctx, log, bucketPool)
 }
 
-func (r *BucketPoolReconciler) reconcileExists(ctx context.Context, log logr.Logger, bucketPool *storagev1alpha1.BucketPool) (ctrl.Result, error) {
+func (r *BucketPoolReconciler) reconcileExists(ctx context.Context, log logr.Logger, bucketPool *storagev1beta1.BucketPool) (ctrl.Result, error) {
 	if !bucketPool.DeletionTimestamp.IsZero() {
 		return r.delete(ctx, log, bucketPool)
 	}
 	return r.reconcile(ctx, log, bucketPool)
 }
 
-func (r *BucketPoolReconciler) delete(ctx context.Context, log logr.Logger, bucketPool *storagev1alpha1.BucketPool) (ctrl.Result, error) {
+func (r *BucketPoolReconciler) delete(ctx context.Context, log logr.Logger, bucketPool *storagev1beta1.BucketPool) (ctrl.Result, error) {
 	log.V(1).Info("Delete")
 	log.V(1).Info("Deleted")
 	return ctrl.Result{}, nil
 }
 
-func (r *BucketPoolReconciler) supportsBucketClass(ctx context.Context, log logr.Logger, bucketClass *storagev1alpha1.BucketClass) (bool, error) {
+func (r *BucketPoolReconciler) supportsBucketClass(ctx context.Context, log logr.Logger, bucketClass *storagev1beta1.BucketClass) (bool, error) {
 	oriCapabilities, err := getORIBucketClassCapabilities(bucketClass)
 	if err != nil {
 		return false, fmt.Errorf("error getting ori mahchine class capabilities: %w", err)
@@ -81,11 +81,11 @@ func (r *BucketPoolReconciler) supportsBucketClass(ctx context.Context, log logr
 	return true, nil
 }
 
-func (r *BucketPoolReconciler) reconcile(ctx context.Context, log logr.Logger, bucketPool *storagev1alpha1.BucketPool) (ctrl.Result, error) {
+func (r *BucketPoolReconciler) reconcile(ctx context.Context, log logr.Logger, bucketPool *storagev1beta1.BucketPool) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	log.V(1).Info("Listing bucket classes")
-	bucketClassList := &storagev1alpha1.BucketClassList{}
+	bucketClassList := &storagev1beta1.BucketClassList{}
 	if err := r.List(ctx, bucketClassList); err != nil {
 		return ctrl.Result{}, fmt.Errorf("error listing bucket classes: %w", err)
 	}
@@ -118,7 +118,7 @@ func (r *BucketPoolReconciler) reconcile(ctx context.Context, log logr.Logger, b
 func (r *BucketPoolReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(
-			&storagev1alpha1.BucketPool{},
+			&storagev1beta1.BucketPool{},
 			builder.WithPredicates(
 				predicate.NewPredicateFuncs(func(obj client.Object) bool {
 					return obj.GetName() == r.BucketPoolName
@@ -126,7 +126,7 @@ func (r *BucketPoolReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			),
 		).
 		Watches(
-			&storagev1alpha1.BucketClass{},
+			&storagev1beta1.BucketClass{},
 			handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 				return []ctrl.Request{{NamespacedName: client.ObjectKey{Name: r.BucketPoolName}}}
 			}),

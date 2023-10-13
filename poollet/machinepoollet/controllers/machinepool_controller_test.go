@@ -15,8 +15,8 @@
 package controllers_test
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	"github.com/onmetal/onmetal-api/ori/testing/machine"
 	testingmachine "github.com/onmetal/onmetal-api/ori/testing/machine"
@@ -38,13 +38,13 @@ var _ = Describe("MachinePoolController", func() {
 		)
 
 		By("creating a second machine class")
-		machineClass2 := &computev1alpha1.MachineClass{
+		machineClass2 := &computev1beta1.MachineClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-mc2-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceCPU:    resource.MustParse("2"),
-				corev1alpha1.ResourceMemory: resource.MustParse("2Gi"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceCPU:    resource.MustParse("2"),
+				corev1beta1.ResourceMemory: resource.MustParse("2Gi"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, machineClass2)).To(Succeed(), "failed to create machine class")
@@ -78,21 +78,21 @@ var _ = Describe("MachinePoolController", func() {
 
 		By("checking if the capacity is correct")
 		Eventually(Object(machinePool)).Should(SatisfyAll(
-			HaveField("Status.Capacity", Satisfy(func(capacity corev1alpha1.ResourceList) bool {
-				return quota.Equals(capacity, corev1alpha1.ResourceList{
-					corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, machineClass.Name):  *resource.NewQuantity(machineClassCapacity, resource.DecimalSI),
-					corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, machineClass2.Name): *resource.NewQuantity(machineClass2Capacity, resource.DecimalSI),
+			HaveField("Status.Capacity", Satisfy(func(capacity corev1beta1.ResourceList) bool {
+				return quota.Equals(capacity, corev1beta1.ResourceList{
+					corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, machineClass.Name):  *resource.NewQuantity(machineClassCapacity, resource.DecimalSI),
+					corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, machineClass2.Name): *resource.NewQuantity(machineClass2Capacity, resource.DecimalSI),
 				})
 			})),
 		))
 
 		By("creating a machine")
-		machine := &computev1alpha1.Machine{
+		machine := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-machine",
 				Namespace:    ns.Name,
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				MachineClassRef: corev1.LocalObjectReference{
 					Name: machineClass2.Name,
 				},
@@ -105,21 +105,21 @@ var _ = Describe("MachinePoolController", func() {
 
 		By("checking if the allocatable resources are correct")
 		Eventually(Object(machinePool)).Should(SatisfyAll(
-			HaveField("Status.Allocatable", Satisfy(func(allocatable corev1alpha1.ResourceList) bool {
-				return quota.Equals(allocatable, corev1alpha1.ResourceList{
-					corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, machineClass.Name):  *resource.NewQuantity(machineClassCapacity, resource.DecimalSI),
-					corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, machineClass2.Name): *resource.NewQuantity(machineClass2Capacity-1, resource.DecimalSI),
+			HaveField("Status.Allocatable", Satisfy(func(allocatable corev1beta1.ResourceList) bool {
+				return quota.Equals(allocatable, corev1beta1.ResourceList{
+					corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, machineClass.Name):  *resource.NewQuantity(machineClassCapacity, resource.DecimalSI),
+					corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, machineClass2.Name): *resource.NewQuantity(machineClass2Capacity-1, resource.DecimalSI),
 				})
 			})),
 		))
 
 		By("creating a second machine")
-		machine2 := &computev1alpha1.Machine{
+		machine2 := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-machine",
 				Namespace:    ns.Name,
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				MachineClassRef: corev1.LocalObjectReference{
 					Name: machineClass.Name,
 				},
@@ -132,10 +132,10 @@ var _ = Describe("MachinePoolController", func() {
 
 		By("checking if the allocatable resources are correct")
 		Eventually(Object(machinePool)).Should(SatisfyAll(
-			HaveField("Status.Allocatable", Satisfy(func(allocatable corev1alpha1.ResourceList) bool {
-				return quota.Equals(allocatable, corev1alpha1.ResourceList{
-					corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, machineClass.Name):  *resource.NewQuantity(machineClassCapacity-1, resource.DecimalSI),
-					corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, machineClass2.Name): *resource.NewQuantity(machineClass2Capacity-1, resource.DecimalSI),
+			HaveField("Status.Allocatable", Satisfy(func(allocatable corev1beta1.ResourceList) bool {
+				return quota.Equals(allocatable, corev1beta1.ResourceList{
+					corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, machineClass.Name):  *resource.NewQuantity(machineClassCapacity-1, resource.DecimalSI),
+					corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, machineClass2.Name): *resource.NewQuantity(machineClass2Capacity-1, resource.DecimalSI),
 				})
 			})),
 		))
@@ -145,13 +145,13 @@ var _ = Describe("MachinePoolController", func() {
 		srv.SetMachineClasses([]*machine.FakeMachineClassStatus{})
 
 		By("creating a machine class")
-		machineClass := &computev1alpha1.MachineClass{
+		machineClass := &computev1beta1.MachineClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-mc-1-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceCPU:    resource.MustParse("2"),
-				corev1alpha1.ResourceMemory: resource.MustParse("2Gi"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceCPU:    resource.MustParse("2"),
+				corev1beta1.ResourceMemory: resource.MustParse("2Gi"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, machineClass)).To(Succeed(), "failed to create test machine class")
@@ -180,13 +180,13 @@ var _ = Describe("MachinePoolController", func() {
 		)
 
 		By("creating a second machine class")
-		machineClass2 := &computev1alpha1.MachineClass{
+		machineClass2 := &computev1beta1.MachineClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-mc-2-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceCPU:    resource.MustParse("3"),
-				corev1alpha1.ResourceMemory: resource.MustParse("4Gi"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceCPU:    resource.MustParse("3"),
+				corev1beta1.ResourceMemory: resource.MustParse("4Gi"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, machineClass2)).To(Succeed(), "failed to create test machine class")

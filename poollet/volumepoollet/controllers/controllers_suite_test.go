@@ -21,8 +21,8 @@ import (
 
 	"github.com/onmetal/controller-utils/buildutils"
 	"github.com/onmetal/controller-utils/modutils"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	storageclient "github.com/onmetal/onmetal-api/internal/client/storage"
 	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
 	"github.com/onmetal/onmetal-api/ori/testing/volume"
@@ -100,7 +100,7 @@ var _ = BeforeSuite(func() {
 
 	DeferCleanup(utilsenvtest.StopWithExtensions, testEnv, testEnvExt)
 
-	Expect(storagev1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(storagev1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
 
 	// Init package-level k8sClient
 	k8sClient, err = client.New(cfg, client.Options{Scheme: scheme.Scheme})
@@ -136,12 +136,12 @@ var _ = BeforeSuite(func() {
 	DeferCleanup(ctrlMgr.Stop)
 })
 
-func SetupTest() (*corev1.Namespace, *storagev1alpha1.VolumePool, *storagev1alpha1.VolumeClass, *storagev1alpha1.VolumeClass, *volume.FakeRuntimeService) {
+func SetupTest() (*corev1.Namespace, *storagev1beta1.VolumePool, *storagev1beta1.VolumeClass, *storagev1beta1.VolumeClass, *volume.FakeRuntimeService) {
 	var (
 		ns           = &corev1.Namespace{}
-		vp           = &storagev1alpha1.VolumePool{}
-		vc           = &storagev1alpha1.VolumeClass{}
-		expandableVc = &storagev1alpha1.VolumeClass{}
+		vp           = &storagev1beta1.VolumePool{}
+		vc           = &storagev1beta1.VolumeClass{}
+		expandableVc = &storagev1beta1.VolumeClass{}
 		srv          = &volume.FakeRuntimeService{}
 	)
 
@@ -154,7 +154,7 @@ func SetupTest() (*corev1.Namespace, *storagev1alpha1.VolumePool, *storagev1alph
 		Expect(k8sClient.Create(ctx, ns)).To(Succeed(), "failed to create test namespace")
 		DeferCleanup(k8sClient.Delete, ns)
 
-		*vp = storagev1alpha1.VolumePool{
+		*vp = storagev1beta1.VolumePool{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-vp-",
 			},
@@ -162,26 +162,26 @@ func SetupTest() (*corev1.Namespace, *storagev1alpha1.VolumePool, *storagev1alph
 		Expect(k8sClient.Create(ctx, vp)).To(Succeed(), "failed to create test volume pool")
 		DeferCleanup(k8sClient.Delete, vp)
 
-		*vc = storagev1alpha1.VolumeClass{
+		*vc = storagev1beta1.VolumeClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-vc-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceTPS:  resource.MustParse("250Mi"),
-				corev1alpha1.ResourceIOPS: resource.MustParse("15000"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceTPS:  resource.MustParse("250Mi"),
+				corev1beta1.ResourceIOPS: resource.MustParse("15000"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, vc)).To(Succeed(), "failed to create test volume class")
 		DeferCleanup(k8sClient.Delete, vc)
 
-		*expandableVc = storagev1alpha1.VolumeClass{
+		*expandableVc = storagev1beta1.VolumeClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-vc-expandable-",
 			},
-			ResizePolicy: storagev1alpha1.ResizePolicyExpandOnly,
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceTPS:  resource.MustParse("250Mi"),
-				corev1alpha1.ResourceIOPS: resource.MustParse("1000"),
+			ResizePolicy: storagev1beta1.ResizePolicyExpandOnly,
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceTPS:  resource.MustParse("250Mi"),
+				corev1beta1.ResourceIOPS: resource.MustParse("1000"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, expandableVc)).To(Succeed(), "failed to create test volume class")
@@ -264,7 +264,7 @@ func SetupTest() (*corev1.Namespace, *storagev1alpha1.VolumePool, *storagev1alph
 	return ns, vp, vc, expandableVc, srv
 }
 
-func expectVolumeDeleted(ctx context.Context, volume *storagev1alpha1.Volume) {
+func expectVolumeDeleted(ctx context.Context, volume *storagev1beta1.Volume) {
 	Expect(k8sClient.Delete(ctx, volume)).Should(Succeed())
 	Eventually(Get(volume)).Should(Satisfy(errors.IsNotFound))
 }

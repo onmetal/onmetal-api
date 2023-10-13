@@ -19,7 +19,7 @@ import (
 	"crypto/x509/pkix"
 	"os"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	utilcertificate "github.com/onmetal/onmetal-api/utils/certificate"
 	"github.com/onmetal/onmetal-api/utils/client/config"
 	certificatesv1 "k8s.io/api/certificates/v1"
@@ -35,8 +35,8 @@ func NewGetter(volumePoolName string) (*config.Getter, error) {
 		SignerName: certificatesv1.KubeAPIServerClientSignerName,
 		Template: &x509.CertificateRequest{
 			Subject: pkix.Name{
-				CommonName:   storagev1alpha1.VolumePoolCommonName(volumePoolName),
-				Organization: []string{storagev1alpha1.VolumePoolsGroup},
+				CommonName:   storagev1beta1.VolumePoolCommonName(volumePoolName),
+				Organization: []string{storagev1beta1.VolumePoolsGroup},
 			},
 		},
 		GetUsages:      utilcertificate.DefaultKubeAPIServerClientGetUsages,

@@ -22,11 +22,11 @@ import (
 
 	"github.com/onmetal/controller-utils/buildutils"
 	"github.com/onmetal/controller-utils/modutils"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	"github.com/onmetal/onmetal-api/ori/testing/machine"
@@ -108,10 +108,10 @@ var _ = BeforeSuite(func() {
 
 	DeferCleanup(utilsenvtest.StopWithExtensions, testEnv, testEnvExt)
 
-	Expect(computev1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
-	Expect(networkingv1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
-	Expect(ipamv1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
-	Expect(storagev1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(computev1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(networkingv1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(ipamv1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(storagev1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
 
 	// Init package-level k8sClient
 	k8sClient, err = client.New(cfg, client.Options{Scheme: scheme.Scheme})
@@ -147,11 +147,11 @@ var _ = BeforeSuite(func() {
 	DeferCleanup(ctrlMgr.Stop)
 })
 
-func SetupTest() (*corev1.Namespace, *computev1alpha1.MachinePool, *computev1alpha1.MachineClass, *machine.FakeRuntimeService) {
+func SetupTest() (*corev1.Namespace, *computev1beta1.MachinePool, *computev1beta1.MachineClass, *machine.FakeRuntimeService) {
 	var (
 		ns  = &corev1.Namespace{}
-		mp  = &computev1alpha1.MachinePool{}
-		mc  = &computev1alpha1.MachineClass{}
+		mp  = &computev1beta1.MachinePool{}
+		mc  = &computev1beta1.MachineClass{}
 		srv = &machine.FakeRuntimeService{}
 	)
 
@@ -164,7 +164,7 @@ func SetupTest() (*corev1.Namespace, *computev1alpha1.MachinePool, *computev1alp
 		Expect(k8sClient.Create(ctx, ns)).To(Succeed(), "failed to create test namespace")
 		DeferCleanup(k8sClient.Delete, ns)
 
-		*mp = computev1alpha1.MachinePool{
+		*mp = computev1beta1.MachinePool{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-mp-",
 			},
@@ -172,13 +172,13 @@ func SetupTest() (*corev1.Namespace, *computev1alpha1.MachinePool, *computev1alp
 		Expect(k8sClient.Create(ctx, mp)).To(Succeed(), "failed to create test machine pool")
 		DeferCleanup(k8sClient.Delete, mp)
 
-		*mc = computev1alpha1.MachineClass{
+		*mc = computev1beta1.MachineClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-mc-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceCPU:    resource.MustParse("1"),
-				corev1alpha1.ResourceMemory: resource.MustParse("1Gi"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceCPU:    resource.MustParse("1"),
+				corev1beta1.ResourceMemory: resource.MustParse("1Gi"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, mc)).To(Succeed(), "failed to create test machine class")

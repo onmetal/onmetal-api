@@ -18,13 +18,13 @@ import (
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	testingmachine "github.com/onmetal/onmetal-api/ori/testing/machine"
-	machinepoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1alpha1"
+	machinepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	machinepoolletmachine "github.com/onmetal/onmetal-api/poollet/machinepoollet/machine"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -40,12 +40,12 @@ var _ = Describe("MachineController", func() {
 
 	It("should create a machine", func(ctx SpecContext) {
 		By("creating a network")
-		network := &networkingv1alpha1.Network{
+		network := &networkingv1beta1.Network{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "network-",
 			},
-			Spec: networkingv1alpha1.NetworkSpec{
+			Spec: networkingv1beta1.NetworkSpec{
 				ProviderID: "foo",
 			},
 		}
@@ -53,38 +53,38 @@ var _ = Describe("MachineController", func() {
 
 		By("patching the network to be available")
 		Eventually(UpdateStatus(network, func() {
-			network.Status.State = networkingv1alpha1.NetworkStateAvailable
+			network.Status.State = networkingv1beta1.NetworkStateAvailable
 		})).Should(Succeed())
 
 		By("creating a network interface")
-		nic := &networkingv1alpha1.NetworkInterface{
+		nic := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "nic-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{Name: network.Name},
-				IPs: []networkingv1alpha1.IPSource{
-					{Value: commonv1alpha1.MustParseNewIP("10.0.0.1")},
+				IPs: []networkingv1beta1.IPSource{
+					{Value: commonv1beta1.MustParseNewIP("10.0.0.1")},
 				},
 			},
 		}
 		Expect(k8sClient.Create(ctx, nic)).To(Succeed())
 
 		By("creating a volume")
-		volume := &storagev1alpha1.Volume{
+		volume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "volume-",
 			},
-			Spec: storagev1alpha1.VolumeSpec{},
+			Spec: storagev1beta1.VolumeSpec{},
 		}
 		Expect(k8sClient.Create(ctx, volume)).To(Succeed())
 
 		By("patching the volume to be available")
 		Eventually(UpdateStatus(volume, func() {
-			volume.Status.State = storagev1alpha1.VolumeStateAvailable
-			volume.Status.Access = &storagev1alpha1.VolumeAccess{
+			volume.Status.State = storagev1beta1.VolumeStateAvailable
+			volume.Status.Access = &storagev1beta1.VolumeAccess{
 				Driver: "test",
 				Handle: "testhandle",
 			}
@@ -92,7 +92,7 @@ var _ = Describe("MachineController", func() {
 
 		By("creating a machine")
 		const fooAnnotationValue = "bar"
-		machine := &computev1alpha1.Machine{
+		machine := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "machine-",
@@ -100,21 +100,21 @@ var _ = Describe("MachineController", func() {
 					fooAnnotation: fooAnnotationValue,
 				},
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				MachineClassRef: corev1.LocalObjectReference{Name: mc.Name},
 				MachinePoolRef:  &corev1.LocalObjectReference{Name: mp.Name},
-				Volumes: []computev1alpha1.Volume{
+				Volumes: []computev1beta1.Volume{
 					{
 						Name: "primary",
-						VolumeSource: computev1alpha1.VolumeSource{
+						VolumeSource: computev1beta1.VolumeSource{
 							VolumeRef: &corev1.LocalObjectReference{Name: volume.Name},
 						},
 					},
 				},
-				NetworkInterfaces: []computev1alpha1.NetworkInterface{
+				NetworkInterfaces: []computev1beta1.NetworkInterface{
 					{
 						Name: "primary",
-						NetworkInterfaceSource: computev1alpha1.NetworkInterfaceSource{
+						NetworkInterfaceSource: computev1beta1.NetworkInterfaceSource{
 							NetworkInterfaceRef: &corev1.LocalObjectReference{Name: nic.Name},
 						},
 					},
@@ -130,7 +130,7 @@ var _ = Describe("MachineController", func() {
 		_, oriMachine := GetSingleMapEntry(srv.Machines)
 
 		By("inspecting the ori machine")
-		Expect(oriMachine.Metadata.Labels).To(HaveKeyWithValue(machinepoolletv1alpha1.DownwardAPILabel(fooDownwardAPILabel), fooAnnotationValue))
+		Expect(oriMachine.Metadata.Labels).To(HaveKeyWithValue(machinepoolletv1beta1.DownwardAPILabel(fooDownwardAPILabel), fooAnnotationValue))
 		Expect(oriMachine.Spec.Class).To(Equal(mc.Name))
 		Expect(oriMachine.Spec.Power).To(Equal(ori.Power_POWER_ON))
 		Expect(oriMachine.Spec.Volumes).To(ConsistOf(&ori.Volume{
@@ -172,18 +172,18 @@ var _ = Describe("MachineController", func() {
 		Eventually(Object(machine)).Should(HaveField("Status.NetworkInterfaces", ConsistOf(MatchFields(IgnoreExtras, Fields{
 			"Name":   Equal("primary"),
 			"Handle": Equal("primary-handle"),
-			"State":  Equal(computev1alpha1.NetworkInterfaceStateAttached),
+			"State":  Equal(computev1beta1.NetworkInterfaceStateAttached),
 		}))))
 	})
 
 	It("should correctly manage the power state of a machine", func(ctx SpecContext) {
 		By("creating a machine")
-		machine := &computev1alpha1.Machine{
+		machine := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "machine-",
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				MachineClassRef: corev1.LocalObjectReference{Name: mc.Name},
 				MachinePoolRef:  &corev1.LocalObjectReference{Name: mp.Name},
 			},
@@ -199,7 +199,7 @@ var _ = Describe("MachineController", func() {
 
 		By("updating the machine power")
 		base := machine.DeepCopy()
-		machine.Spec.Power = computev1alpha1.PowerOff
+		machine.Spec.Power = computev1beta1.PowerOff
 		Expect(k8sClient.Patch(ctx, machine, client.MergeFrom(base))).To(Succeed())
 
 		By("waiting for the ori machine to be updated")

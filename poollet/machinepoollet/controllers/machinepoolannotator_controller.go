@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/machinepoollet/mcm"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
@@ -41,7 +41,7 @@ type MachinePoolAnnotatorReconciler struct {
 }
 
 func (r *MachinePoolAnnotatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	machinePool := &computev1alpha1.MachinePool{
+	machinePool := &computev1beta1.MachinePool{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: req.Name,
 		},
@@ -78,7 +78,7 @@ func (r *MachinePoolAnnotatorReconciler) SetupWithManager(mgr ctrl.Manager) erro
 func (r *MachinePoolAnnotatorReconciler) machinePoolAnnotatorEventHandler(log logr.Logger, c chan<- event.GenericEvent) orievent.EnqueueFunc {
 	handleEvent := func() {
 		select {
-		case c <- event.GenericEvent{Object: &computev1alpha1.MachinePool{ObjectMeta: metav1.ObjectMeta{
+		case c <- event.GenericEvent{Object: &computev1beta1.MachinePool{ObjectMeta: metav1.ObjectMeta{
 			Name: r.MachinePoolName,
 		}}}:
 			log.V(1).Info("Added item to queue")

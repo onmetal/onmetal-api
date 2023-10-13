@@ -21,7 +21,7 @@ import (
 	"os"
 	"strings"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	"github.com/spf13/pflag"
 	"k8s.io/apimachinery/pkg/util/yaml"
 )
@@ -75,9 +75,9 @@ type GetOption interface {
 	ApplyToGet(o *GetOptions)
 }
 
-func Load(data []byte) ([]computev1alpha1.MachinePoolAddress, error) {
+func Load(data []byte) ([]computev1beta1.MachinePoolAddress, error) {
 	type Config struct {
-		Addresses []computev1alpha1.MachinePoolAddress `json:"addresses"`
+		Addresses []computev1beta1.MachinePoolAddress `json:"addresses"`
 	}
 
 	file := &Config{}
@@ -87,7 +87,7 @@ func Load(data []byte) ([]computev1alpha1.MachinePoolAddress, error) {
 	return file.Addresses, nil
 }
 
-func LoadFromFile(filename string) ([]computev1alpha1.MachinePoolAddress, error) {
+func LoadFromFile(filename string) ([]computev1beta1.MachinePoolAddress, error) {
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, fmt.Errorf("error reading file at %q: %w", filename, err)
@@ -125,7 +125,7 @@ func IsInCluster() bool {
 	return podIP != ""
 }
 
-func Get(opts ...GetOption) ([]computev1alpha1.MachinePoolAddress, error) {
+func Get(opts ...GetOption) ([]computev1beta1.MachinePoolAddress, error) {
 	o := &GetOptions{}
 	o.ApplyOptions(opts)
 
@@ -154,16 +154,16 @@ func Get(opts ...GetOption) ([]computev1alpha1.MachinePoolAddress, error) {
 			hostname = strings.TrimSpace(h)
 		}
 
-		var addresses []computev1alpha1.MachinePoolAddress
+		var addresses []computev1beta1.MachinePoolAddress
 		if ip != "" {
-			addresses = append(addresses, computev1alpha1.MachinePoolAddress{
-				Type:    computev1alpha1.MachinePoolInternalIP,
+			addresses = append(addresses, computev1beta1.MachinePoolAddress{
+				Type:    computev1beta1.MachinePoolInternalIP,
 				Address: ip,
 			})
 		}
 		if hostname != "" {
-			addresses = append(addresses, computev1alpha1.MachinePoolAddress{
-				Type:    computev1alpha1.MachinePoolInternalDNS,
+			addresses = append(addresses, computev1beta1.MachinePoolAddress{
+				Type:    computev1beta1.MachinePoolInternalDNS,
 				Address: hostname,
 			})
 		}
@@ -173,7 +173,7 @@ func Get(opts ...GetOption) ([]computev1alpha1.MachinePoolAddress, error) {
 	return InCluster()
 }
 
-func InCluster() ([]computev1alpha1.MachinePoolAddress, error) {
+func InCluster() ([]computev1beta1.MachinePoolAddress, error) {
 	serviceName := os.Getenv(KubernetesServiceName)
 	namespace := os.Getenv(KubernetesPodNamespaceEnvVar)
 	clusterDomain := os.Getenv(KubernetesClusterDomainEnvVar)
@@ -188,13 +188,13 @@ func InCluster() ([]computev1alpha1.MachinePoolAddress, error) {
 
 	internalDNS := fmt.Sprintf("%s.%s.svc.%s", serviceName, namespace, clusterDomain)
 
-	return []computev1alpha1.MachinePoolAddress{
+	return []computev1beta1.MachinePoolAddress{
 		{
-			Type:    computev1alpha1.MachinePoolInternalIP,
+			Type:    computev1beta1.MachinePoolInternalIP,
 			Address: serviceName,
 		},
 		{
-			Type:    computev1alpha1.MachinePoolInternalDNS,
+			Type:    computev1beta1.MachinePoolInternalDNS,
 			Address: internalDNS,
 		},
 	}, nil

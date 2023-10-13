@@ -20,8 +20,8 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	"github.com/onmetal/onmetal-api/ori/apis/machine"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
@@ -40,10 +40,10 @@ import (
 type MachinePoolReconciler struct {
 	client.Client
 
-	// MachinePoolName is the name of the computev1alpha1.MachinePool to report / update.
+	// MachinePoolName is the name of the computev1beta1.MachinePool to report / update.
 	MachinePoolName string
 	// Addresses are the addresses the machinepoollet server is available on.
-	Addresses []computev1alpha1.MachinePoolAddress
+	Addresses []computev1beta1.MachinePoolAddress
 	// Port is the port the machinepoollet server is available on.
 	Port int32
 
@@ -57,7 +57,7 @@ type MachinePoolReconciler struct {
 
 func (r *MachinePoolReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	machinePool := &computev1alpha1.MachinePool{}
+	machinePool := &computev1beta1.MachinePool{}
 	if err := r.Get(ctx, req.NamespacedName, machinePool); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -65,20 +65,20 @@ func (r *MachinePoolReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 	return r.reconcileExists(ctx, log, machinePool)
 }
 
-func (r *MachinePoolReconciler) reconcileExists(ctx context.Context, log logr.Logger, machinePool *computev1alpha1.MachinePool) (ctrl.Result, error) {
+func (r *MachinePoolReconciler) reconcileExists(ctx context.Context, log logr.Logger, machinePool *computev1beta1.MachinePool) (ctrl.Result, error) {
 	if !machinePool.DeletionTimestamp.IsZero() {
 		return r.delete(ctx, log, machinePool)
 	}
 	return r.reconcile(ctx, log, machinePool)
 }
 
-func (r *MachinePoolReconciler) delete(ctx context.Context, log logr.Logger, machinePool *computev1alpha1.MachinePool) (ctrl.Result, error) {
+func (r *MachinePoolReconciler) delete(ctx context.Context, log logr.Logger, machinePool *computev1beta1.MachinePool) (ctrl.Result, error) {
 	log.V(1).Info("Delete")
 	log.V(1).Info("Deleted")
 	return ctrl.Result{}, nil
 }
 
-func (r *MachinePoolReconciler) supportsMachineClass(ctx context.Context, log logr.Logger, machineClass *computev1alpha1.MachineClass) (*ori.MachineClass, int64, error) {
+func (r *MachinePoolReconciler) supportsMachineClass(ctx context.Context, log logr.Logger, machineClass *computev1beta1.MachineClass) (*ori.MachineClass, int64, error) {
 	oriCapabilities, err := getORIMachineClassCapabilities(machineClass)
 	if err != nil {
 		return nil, 0, fmt.Errorf("error getting ori mahchine class capabilities: %w", err)
@@ -97,12 +97,12 @@ func (r *MachinePoolReconciler) supportsMachineClass(ctx context.Context, log lo
 func (r *MachinePoolReconciler) calculateCapacity(
 	ctx context.Context,
 	log logr.Logger,
-	machines []computev1alpha1.Machine,
-	machineClassList []computev1alpha1.MachineClass,
-) (capacity, allocatable corev1alpha1.ResourceList, supported []corev1.LocalObjectReference, err error) {
+	machines []computev1beta1.Machine,
+	machineClassList []computev1beta1.MachineClass,
+) (capacity, allocatable corev1beta1.ResourceList, supported []corev1.LocalObjectReference, err error) {
 	log.V(1).Info("Determining supported machine classes, capacity and allocatable")
 
-	capacity = corev1alpha1.ResourceList{}
+	capacity = corev1beta1.ResourceList{}
 	for _, machineClass := range machineClassList {
 		class, quantity, err := r.supportsMachineClass(ctx, log, &machineClass)
 		if err != nil {
@@ -113,15 +113,15 @@ func (r *MachinePoolReconciler) calculateCapacity(
 		}
 
 		supported = append(supported, corev1.LocalObjectReference{Name: machineClass.Name})
-		capacity[corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, machineClass.Name)] = *resource.NewQuantity(quantity, resource.DecimalSI)
+		capacity[corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, machineClass.Name)] = *resource.NewQuantity(quantity, resource.DecimalSI)
 	}
 
-	usedResources := corev1alpha1.ResourceList{}
+	usedResources := corev1beta1.ResourceList{}
 	for _, machine := range machines {
 		className := machine.Spec.MachineClassRef.Name
-		res, ok := usedResources[corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, className)]
+		res, ok := usedResources[corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, className)]
 		if !ok {
-			usedResources[corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, className)] = *resource.NewQuantity(1, resource.DecimalSI)
+			usedResources[corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, className)] = *resource.NewQuantity(1, resource.DecimalSI)
 			continue
 		}
 
@@ -131,14 +131,14 @@ func (r *MachinePoolReconciler) calculateCapacity(
 	return capacity, quota.SubtractWithNonNegativeResult(capacity, usedResources), supported, nil
 }
 
-func (r *MachinePoolReconciler) updateStatus(ctx context.Context, log logr.Logger, machinePool *computev1alpha1.MachinePool, machines []computev1alpha1.Machine, machineClassList []computev1alpha1.MachineClass) error {
+func (r *MachinePoolReconciler) updateStatus(ctx context.Context, log logr.Logger, machinePool *computev1beta1.MachinePool, machines []computev1beta1.Machine, machineClassList []computev1beta1.MachineClass) error {
 	capacity, allocatable, supported, err := r.calculateCapacity(ctx, log, machines, machineClassList)
 	if err != nil {
 		return fmt.Errorf("error calculating pool resources:%w", err)
 	}
 
 	base := machinePool.DeepCopy()
-	machinePool.Status.State = computev1alpha1.MachinePoolStateReady
+	machinePool.Status.State = computev1beta1.MachinePoolStateReady
 	machinePool.Status.AvailableMachineClasses = supported
 	machinePool.Status.Addresses = r.Addresses
 	machinePool.Status.Capacity = capacity
@@ -152,7 +152,7 @@ func (r *MachinePoolReconciler) updateStatus(ctx context.Context, log logr.Logge
 	return nil
 }
 
-func (r *MachinePoolReconciler) reconcile(ctx context.Context, log logr.Logger, machinePool *computev1alpha1.MachinePool) (ctrl.Result, error) {
+func (r *MachinePoolReconciler) reconcile(ctx context.Context, log logr.Logger, machinePool *computev1beta1.MachinePool) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	log.V(1).Info("Ensuring no reconcile annotation")
@@ -166,13 +166,13 @@ func (r *MachinePoolReconciler) reconcile(ctx context.Context, log logr.Logger, 
 	}
 
 	log.V(1).Info("Listing machine classes")
-	machineClassList := &computev1alpha1.MachineClassList{}
+	machineClassList := &computev1beta1.MachineClassList{}
 	if err := r.List(ctx, machineClassList); err != nil {
 		return ctrl.Result{}, fmt.Errorf("error listing machine classes: %w", err)
 	}
 
 	log.V(1).Info("Listing machines in pool")
-	machineList := &computev1alpha1.MachineList{}
+	machineList := &computev1beta1.MachineList{}
 	if err := r.List(ctx, machineList, client.MatchingFields{
 		computeclient.MachineSpecMachinePoolRefNameField: r.MachinePoolName,
 	}); err != nil {
@@ -191,7 +191,7 @@ func (r *MachinePoolReconciler) reconcile(ctx context.Context, log logr.Logger, 
 func (r *MachinePoolReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(
-			&computev1alpha1.MachinePool{},
+			&computev1beta1.MachinePool{},
 			builder.WithPredicates(
 				predicate.NewPredicateFuncs(func(obj client.Object) bool {
 					return obj.GetName() == r.MachinePoolName
@@ -199,13 +199,13 @@ func (r *MachinePoolReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			),
 		).
 		Watches(
-			&computev1alpha1.MachineClass{},
+			&computev1beta1.MachineClass{},
 			handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 				return []ctrl.Request{{NamespacedName: client.ObjectKey{Name: r.MachinePoolName}}}
 			}),
 		).
 		Watches(
-			&computev1alpha1.Machine{},
+			&computev1beta1.Machine{},
 			handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 				return []ctrl.Request{{NamespacedName: client.ObjectKey{Name: r.MachinePoolName}}}
 			}),

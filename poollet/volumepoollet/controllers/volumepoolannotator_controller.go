@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
 	"github.com/onmetal/onmetal-api/poollet/volumepoollet/vcm"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
@@ -41,7 +41,7 @@ type VolumePoolAnnotatorReconciler struct {
 }
 
 func (r *VolumePoolAnnotatorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	volumePool := &storagev1alpha1.VolumePool{
+	volumePool := &storagev1beta1.VolumePool{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: req.Name,
 		},
@@ -78,7 +78,7 @@ func (r *VolumePoolAnnotatorReconciler) SetupWithManager(mgr ctrl.Manager) error
 func (r *VolumePoolAnnotatorReconciler) volumePoolAnnotatorEventHandler(log logr.Logger, c chan<- event.GenericEvent) orievent.EnqueueFunc {
 	handleEvent := func() {
 		select {
-		case c <- event.GenericEvent{Object: &storagev1alpha1.VolumePool{ObjectMeta: metav1.ObjectMeta{
+		case c <- event.GenericEvent{Object: &storagev1beta1.VolumePool{ObjectMeta: metav1.ObjectMeta{
 			Name: r.VolumePoolName,
 		}}}:
 			log.V(1).Info("Added item to queue")

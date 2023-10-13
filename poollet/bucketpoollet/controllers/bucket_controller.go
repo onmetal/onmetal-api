@@ -22,10 +22,10 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/onmetal/controller-utils/clientutils"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
 	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
-	bucketpoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/bucketpoollet/api/v1alpha1"
+	bucketpoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/bucketpoollet/api/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/bucketpoollet/bcm"
 	"github.com/onmetal/onmetal-api/poollet/bucketpoollet/controllers/events"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
@@ -58,15 +58,15 @@ type BucketReconciler struct {
 	WatchFilterValue string
 }
 
-func (r *BucketReconciler) oriBucketLabels(bucket *storagev1alpha1.Bucket) map[string]string {
+func (r *BucketReconciler) oriBucketLabels(bucket *storagev1beta1.Bucket) map[string]string {
 	return map[string]string{
-		bucketpoolletv1alpha1.BucketUIDLabel:       string(bucket.UID),
-		bucketpoolletv1alpha1.BucketNamespaceLabel: bucket.Namespace,
-		bucketpoolletv1alpha1.BucketNameLabel:      bucket.Name,
+		bucketpoolletv1beta1.BucketUIDLabel:       string(bucket.UID),
+		bucketpoolletv1beta1.BucketNamespaceLabel: bucket.Namespace,
+		bucketpoolletv1beta1.BucketNameLabel:      bucket.Name,
 	}
 }
 
-func (r *BucketReconciler) oriBucketAnnotations(_ *storagev1alpha1.Bucket) map[string]string {
+func (r *BucketReconciler) oriBucketAnnotations(_ *storagev1beta1.Bucket) map[string]string {
 	return map[string]string{}
 }
 
@@ -74,8 +74,8 @@ func (r *BucketReconciler) listORIBucketsByKey(ctx context.Context, bucketKey cl
 	res, err := r.BucketRuntime.ListBuckets(ctx, &ori.ListBucketsRequest{
 		Filter: &ori.BucketFilter{
 			LabelSelector: map[string]string{
-				bucketpoolletv1alpha1.BucketNamespaceLabel: bucketKey.Namespace,
-				bucketpoolletv1alpha1.BucketNameLabel:      bucketKey.Name,
+				bucketpoolletv1beta1.BucketNamespaceLabel: bucketKey.Namespace,
+				bucketpoolletv1beta1.BucketNameLabel:      bucketKey.Name,
 			},
 		},
 	})
@@ -90,7 +90,7 @@ func (r *BucketReconciler) listORIBucketsByUID(ctx context.Context, bucketUID ty
 	res, err := r.BucketRuntime.ListBuckets(ctx, &ori.ListBucketsRequest{
 		Filter: &ori.BucketFilter{
 			LabelSelector: map[string]string{
-				bucketpoolletv1alpha1.BucketUIDLabel: string(bucketUID),
+				bucketpoolletv1beta1.BucketUIDLabel: string(bucketUID),
 			},
 		},
 	})
@@ -108,7 +108,7 @@ func (r *BucketReconciler) listORIBucketsByUID(ctx context.Context, bucketUID ty
 
 func (r *BucketReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	bucket := &storagev1alpha1.Bucket{}
+	bucket := &storagev1beta1.Bucket{}
 	if err := r.Get(ctx, req.NamespacedName, bucket); err != nil {
 		if !apierrors.IsNotFound(err) {
 			return ctrl.Result{}, fmt.Errorf("error getting bucket %s: %w", req.NamespacedName, err)
@@ -177,17 +177,17 @@ func (r *BucketReconciler) deleteORIBuckets(ctx context.Context, log logr.Logger
 	}
 }
 
-func (r *BucketReconciler) reconcileExists(ctx context.Context, log logr.Logger, bucket *storagev1alpha1.Bucket) (ctrl.Result, error) {
+func (r *BucketReconciler) reconcileExists(ctx context.Context, log logr.Logger, bucket *storagev1beta1.Bucket) (ctrl.Result, error) {
 	if !bucket.DeletionTimestamp.IsZero() {
 		return r.delete(ctx, log, bucket)
 	}
 	return r.reconcile(ctx, log, bucket)
 }
 
-func (r *BucketReconciler) delete(ctx context.Context, log logr.Logger, bucket *storagev1alpha1.Bucket) (ctrl.Result, error) {
+func (r *BucketReconciler) delete(ctx context.Context, log logr.Logger, bucket *storagev1beta1.Bucket) (ctrl.Result, error) {
 	log.V(1).Info("Delete")
 
-	if !controllerutil.ContainsFinalizer(bucket, bucketpoolletv1alpha1.BucketFinalizer) {
+	if !controllerutil.ContainsFinalizer(bucket, bucketpoolletv1beta1.BucketFinalizer) {
 		log.V(1).Info("No finalizer present, nothing to do")
 		return ctrl.Result{}, nil
 	}
@@ -210,7 +210,7 @@ func (r *BucketReconciler) delete(ctx context.Context, log logr.Logger, bucket *
 	}
 
 	log.V(1).Info("Deleted all ori buckets, removing finalizer")
-	if err := clientutils.PatchRemoveFinalizer(ctx, r.Client, bucket, bucketpoolletv1alpha1.BucketFinalizer); err != nil {
+	if err := clientutils.PatchRemoveFinalizer(ctx, r.Client, bucket, bucketpoolletv1beta1.BucketFinalizer); err != nil {
 		return ctrl.Result{}, fmt.Errorf("error removing finalizer: %w", err)
 	}
 
@@ -218,7 +218,7 @@ func (r *BucketReconciler) delete(ctx context.Context, log logr.Logger, bucket *
 	return ctrl.Result{}, nil
 }
 
-func getORIBucketClassCapabilities(bucketClass *storagev1alpha1.BucketClass) (*ori.BucketClassCapabilities, error) {
+func getORIBucketClassCapabilities(bucketClass *storagev1beta1.BucketClass) (*ori.BucketClassCapabilities, error) {
 	tps := bucketClass.Capabilities.TPS()
 	iops := bucketClass.Capabilities.IOPS()
 
@@ -228,15 +228,15 @@ func getORIBucketClassCapabilities(bucketClass *storagev1alpha1.BucketClass) (*o
 	}, nil
 }
 
-func (r *BucketReconciler) prepareORIBucketMetadata(bucket *storagev1alpha1.Bucket) *orimeta.ObjectMetadata {
+func (r *BucketReconciler) prepareORIBucketMetadata(bucket *storagev1beta1.Bucket) *orimeta.ObjectMetadata {
 	return &orimeta.ObjectMetadata{
 		Labels:      r.oriBucketLabels(bucket),
 		Annotations: r.oriBucketAnnotations(bucket),
 	}
 }
 
-func (r *BucketReconciler) prepareORIBucketClass(ctx context.Context, bucket *storagev1alpha1.Bucket, bucketClassName string) (string, bool, error) {
-	bucketClass := &storagev1alpha1.BucketClass{}
+func (r *BucketReconciler) prepareORIBucketClass(ctx context.Context, bucket *storagev1beta1.Bucket, bucketClassName string) (string, bool, error) {
+	bucketClass := &storagev1beta1.BucketClass{}
 	bucketClassKey := client.ObjectKey{Name: bucketClassName}
 	if err := r.Get(ctx, bucketClassKey, bucketClass); err != nil {
 		err = fmt.Errorf("error getting bucket class %s: %w", bucketClassKey, err)
@@ -260,7 +260,7 @@ func (r *BucketReconciler) prepareORIBucketClass(ctx context.Context, bucket *st
 	return class.Name, true, nil
 }
 
-func (r *BucketReconciler) prepareORIBucket(ctx context.Context, log logr.Logger, bucket *storagev1alpha1.Bucket) (*ori.Bucket, bool, error) {
+func (r *BucketReconciler) prepareORIBucket(ctx context.Context, log logr.Logger, bucket *storagev1beta1.Bucket) (*ori.Bucket, bool, error) {
 	var (
 		ok   = true
 		errs []error
@@ -292,11 +292,11 @@ func (r *BucketReconciler) prepareORIBucket(ctx context.Context, log logr.Logger
 	}, true, nil
 }
 
-func (r *BucketReconciler) reconcile(ctx context.Context, log logr.Logger, bucket *storagev1alpha1.Bucket) (ctrl.Result, error) {
+func (r *BucketReconciler) reconcile(ctx context.Context, log logr.Logger, bucket *storagev1beta1.Bucket) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	log.V(1).Info("Ensuring finalizer")
-	modified, err := clientutils.PatchEnsureFinalizer(ctx, r.Client, bucket, bucketpoolletv1alpha1.BucketFinalizer)
+	modified, err := clientutils.PatchEnsureFinalizer(ctx, r.Client, bucket, bucketpoolletv1beta1.BucketFinalizer)
 	if err != nil {
 		return ctrl.Result{}, fmt.Errorf("error ensuring finalizer: %w", err)
 	}
@@ -320,7 +320,7 @@ func (r *BucketReconciler) reconcile(ctx context.Context, log logr.Logger, bucke
 	res, err := r.BucketRuntime.ListBuckets(ctx, &ori.ListBucketsRequest{
 		Filter: &ori.BucketFilter{
 			LabelSelector: map[string]string{
-				bucketpoolletv1alpha1.BucketUIDLabel: string(bucket.UID),
+				bucketpoolletv1beta1.BucketUIDLabel: string(bucket.UID),
 			},
 		},
 	})
@@ -342,7 +342,7 @@ func (r *BucketReconciler) reconcile(ctx context.Context, log logr.Logger, bucke
 	}
 }
 
-func (r *BucketReconciler) create(ctx context.Context, log logr.Logger, bucket *storagev1alpha1.Bucket) (ctrl.Result, error) {
+func (r *BucketReconciler) create(ctx context.Context, log logr.Logger, bucket *storagev1beta1.Bucket) (ctrl.Result, error) {
 	log.V(1).Info("Create")
 
 	log.V(1).Info("Preparing ori bucket")
@@ -383,21 +383,21 @@ func (r *BucketReconciler) bucketSecretName(bucketName string) string {
 	return hex.EncodeToString(sum[:])[:63]
 }
 
-var oriBucketStateToBucketState = map[ori.BucketState]storagev1alpha1.BucketState{
-	ori.BucketState_BUCKET_PENDING:   storagev1alpha1.BucketStatePending,
-	ori.BucketState_BUCKET_AVAILABLE: storagev1alpha1.BucketStateAvailable,
-	ori.BucketState_BUCKET_ERROR:     storagev1alpha1.BucketStateError,
+var oriBucketStateToBucketState = map[ori.BucketState]storagev1beta1.BucketState{
+	ori.BucketState_BUCKET_PENDING:   storagev1beta1.BucketStatePending,
+	ori.BucketState_BUCKET_AVAILABLE: storagev1beta1.BucketStateAvailable,
+	ori.BucketState_BUCKET_ERROR:     storagev1beta1.BucketStateError,
 }
 
-func (r *BucketReconciler) convertORIBucketState(oriState ori.BucketState) (storagev1alpha1.BucketState, error) {
+func (r *BucketReconciler) convertORIBucketState(oriState ori.BucketState) (storagev1beta1.BucketState, error) {
 	if res, ok := oriBucketStateToBucketState[oriState]; ok {
 		return res, nil
 	}
 	return "", fmt.Errorf("unknown bucket state %v", oriState)
 }
 
-func (r *BucketReconciler) updateStatus(ctx context.Context, log logr.Logger, bucket *storagev1alpha1.Bucket, oriBucket *ori.Bucket) error {
-	var access *storagev1alpha1.BucketAccess
+func (r *BucketReconciler) updateStatus(ctx context.Context, log logr.Logger, bucket *storagev1beta1.Bucket, oriBucket *ori.Bucket) error {
+	var access *storagev1beta1.BucketAccess
 
 	if oriBucket.Status.State == ori.BucketState_BUCKET_AVAILABLE {
 		if oriAccess := oriBucket.Status.Access; oriAccess != nil {
@@ -414,13 +414,13 @@ func (r *BucketReconciler) updateStatus(ctx context.Context, log logr.Logger, bu
 						Namespace: bucket.Namespace,
 						Name:      r.bucketSecretName(bucket.Name),
 						Labels: map[string]string{
-							bucketpoolletv1alpha1.BucketUIDLabel: string(bucket.UID),
+							bucketpoolletv1beta1.BucketUIDLabel: string(bucket.UID),
 						},
 					},
 					Data: oriAccess.SecretData,
 				}
 				_ = ctrl.SetControllerReference(bucket, bucketSecret, r.Scheme)
-				if err := r.Patch(ctx, bucketSecret, client.Apply, client.FieldOwner(bucketpoolletv1alpha1.FieldOwner)); err != nil {
+				if err := r.Patch(ctx, bucketSecret, client.Apply, client.FieldOwner(bucketpoolletv1beta1.FieldOwner)); err != nil {
 					return fmt.Errorf("error applying bucket secret: %w", err)
 				}
 				secretRef = &corev1.LocalObjectReference{Name: bucketSecret.Name}
@@ -429,14 +429,14 @@ func (r *BucketReconciler) updateStatus(ctx context.Context, log logr.Logger, bu
 				if err := r.DeleteAllOf(ctx, &corev1.Secret{},
 					client.InNamespace(bucket.Namespace),
 					client.MatchingLabels{
-						bucketpoolletv1alpha1.BucketUIDLabel: string(bucket.UID),
+						bucketpoolletv1beta1.BucketUIDLabel: string(bucket.UID),
 					},
 				); err != nil {
 					return fmt.Errorf("error deleting any corresponding bucket secret: %w", err)
 				}
 			}
 
-			access = &storagev1alpha1.BucketAccess{
+			access = &storagev1beta1.BucketAccess{
 				SecretRef: secretRef,
 				Endpoint:  oriAccess.Endpoint,
 			}
@@ -468,7 +468,7 @@ func (r *BucketReconciler) SetupWithManager(mgr ctrl.Manager) error {
 
 	return ctrl.NewControllerManagedBy(mgr).
 		For(
-			&storagev1alpha1.Bucket{},
+			&storagev1beta1.Bucket{},
 			builder.WithPredicates(
 				BucketRunsInBucketPoolPredicate(r.BucketPoolName),
 				predicates.ResourceHasFilterLabel(log, r.WatchFilterValue),
@@ -478,7 +478,7 @@ func (r *BucketReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Complete(r)
 }
 
-func BucketRunsInBucketPool(bucket *storagev1alpha1.Bucket, bucketPoolName string) bool {
+func BucketRunsInBucketPool(bucket *storagev1beta1.Bucket, bucketPoolName string) bool {
 	bucketPoolRef := bucket.Spec.BucketPoolRef
 	if bucketPoolRef == nil {
 		return false
@@ -489,7 +489,7 @@ func BucketRunsInBucketPool(bucket *storagev1alpha1.Bucket, bucketPoolName strin
 
 func BucketRunsInBucketPoolPredicate(bucketPoolName string) predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(object client.Object) bool {
-		bucket := object.(*storagev1alpha1.Bucket)
+		bucket := object.(*storagev1beta1.Bucket)
 		return BucketRunsInBucketPool(bucket, bucketPoolName)
 	})
 }
