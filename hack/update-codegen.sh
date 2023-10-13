@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -66,8 +68,8 @@ export GOPATH="$VIRTUAL_GOPATH"
 export GO111MODULE=off
 
 CLIENT_GROUPS="core compute ipam networking storage"
-CLIENT_VERSION_GROUPS="core:v1alpha1 compute:v1alpha1 ipam:v1alpha1 networking:v1alpha1 storage:v1alpha1"
-ALL_VERSION_GROUPS="common:v1alpha1 $CLIENT_VERSION_GROUPS"
+CLIENT_VERSION_GROUPS="core:v1beta1 compute:v1beta1 ipam:v1beta1 networking:v1beta1 storage:v1beta1"
+ALL_VERSION_GROUPS="common:v1beta1 $CLIENT_VERSION_GROUPS"
 
 echo "${bold}Public types${normal}"
 
