@@ -5,13 +5,13 @@
 		"version": "0.1"
 	},
 	"paths": {
-		"/apis/ipam.api.onmetal.de/v1alpha1/": {
+		"/apis/core.api.onmetal.de/v1beta1/": {
 			"get": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
 				"description": "get available resources",
-				"operationId": "getIpamApiOnmetalDeV1alpha1APIResources",
+				"operationId": "getCoreApiOnmetalDeV1beta1APIResources",
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -31,13 +31,13 @@
 				}
 			}
 		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/namespaces/{namespace}/prefixallocations": {
+		"/apis/core.api.onmetal.de/v1beta1/namespaces/{namespace}/resourcequotas": {
 			"get": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "list or watch objects of kind PrefixAllocation",
-				"operationId": "listIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocation",
+				"description": "list or watch objects of kind ResourceQuota",
+				"operationId": "listCoreApiOnmetalDeV1beta1NamespacedResourceQuota",
 				"parameters": [
 					{
 						"name": "allowWatchBookmarks",
@@ -136,17 +136,17 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationList"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaList"
 								}
 							},
 							"application/json;stream=watch": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationList"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaList"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationList"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaList"
 								}
 							}
 						}
@@ -154,17 +154,17 @@
 				},
 				"x-kubernetes-action": "list",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"post": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "create a PrefixAllocation",
-				"operationId": "createIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocation",
+				"description": "create a ResourceQuota",
+				"operationId": "createCoreApiOnmetalDeV1beta1NamespacedResourceQuota",
 				"parameters": [
 					{
 						"name": "dryRun",
@@ -198,7 +198,7 @@
 					"content": {
 						"*/*": {
 							"schema": {
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 							}
 						}
 					}
@@ -209,12 +209,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -224,12 +224,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -239,12 +239,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -252,17 +252,17 @@
 				},
 				"x-kubernetes-action": "post",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"delete": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "delete collection of PrefixAllocation",
-				"operationId": "deleteIpamApiOnmetalDeV1alpha1CollectionNamespacedPrefixAllocation",
+				"description": "delete collection of ResourceQuota",
+				"operationId": "deleteCoreApiOnmetalDeV1beta1CollectionNamespacedResourceQuota",
 				"parameters": [
 					{
 						"name": "continue",
@@ -401,9 +401,9 @@
 				},
 				"x-kubernetes-action": "deletecollection",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"parameters": [
@@ -428,25 +428,25 @@
 				}
 			]
 		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/namespaces/{namespace}/prefixallocations/{name}": {
+		"/apis/core.api.onmetal.de/v1beta1/namespaces/{namespace}/resourcequotas/{name}": {
 			"get": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "read the specified PrefixAllocation",
-				"operationId": "readIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocation",
+				"description": "read the specified ResourceQuota",
+				"operationId": "readCoreApiOnmetalDeV1beta1NamespacedResourceQuota",
 				"responses": {
 					"200": {
 						"description": "OK",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -454,17 +454,17 @@
 				},
 				"x-kubernetes-action": "get",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"put": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "replace the specified PrefixAllocation",
-				"operationId": "replaceIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocation",
+				"description": "replace the specified ResourceQuota",
+				"operationId": "replaceCoreApiOnmetalDeV1beta1NamespacedResourceQuota",
 				"parameters": [
 					{
 						"name": "dryRun",
@@ -498,7 +498,7 @@
 					"content": {
 						"*/*": {
 							"schema": {
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 							}
 						}
 					}
@@ -509,12 +509,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -524,12 +524,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -537,17 +537,17 @@
 				},
 				"x-kubernetes-action": "put",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"delete": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "delete a PrefixAllocation",
-				"operationId": "deleteIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocation",
+				"description": "delete a ResourceQuota",
+				"operationId": "deleteCoreApiOnmetalDeV1beta1NamespacedResourceQuota",
 				"parameters": [
 					{
 						"name": "dryRun",
@@ -629,17 +629,17 @@
 				},
 				"x-kubernetes-action": "delete",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"patch": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "partially update the specified PrefixAllocation",
-				"operationId": "patchIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocation",
+				"description": "partially update the specified ResourceQuota",
+				"operationId": "patchCoreApiOnmetalDeV1beta1NamespacedResourceQuota",
 				"parameters": [
 					{
 						"name": "dryRun",
@@ -708,12 +708,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -723,12 +723,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -736,16 +736,16 @@
 				},
 				"x-kubernetes-action": "patch",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"parameters": [
 				{
 					"name": "name",
 					"in": "path",
-					"description": "name of the PrefixAllocation",
+					"description": "name of the ResourceQuota",
 					"required": true,
 					"schema": {
 						"type": "string",
@@ -773,25 +773,25 @@
 				}
 			]
 		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/namespaces/{namespace}/prefixallocations/{name}/status": {
+		"/apis/core.api.onmetal.de/v1beta1/namespaces/{namespace}/resourcequotas/{name}/status": {
 			"get": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "read status of the specified PrefixAllocation",
-				"operationId": "readIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocationStatus",
+				"description": "read status of the specified ResourceQuota",
+				"operationId": "readCoreApiOnmetalDeV1beta1NamespacedResourceQuotaStatus",
 				"responses": {
 					"200": {
 						"description": "OK",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -799,17 +799,17 @@
 				},
 				"x-kubernetes-action": "get",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"put": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "replace status of the specified PrefixAllocation",
-				"operationId": "replaceIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocationStatus",
+				"description": "replace status of the specified ResourceQuota",
+				"operationId": "replaceCoreApiOnmetalDeV1beta1NamespacedResourceQuotaStatus",
 				"parameters": [
 					{
 						"name": "dryRun",
@@ -843,7 +843,7 @@
 					"content": {
 						"*/*": {
 							"schema": {
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 							}
 						}
 					}
@@ -854,12 +854,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -869,12 +869,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -882,17 +882,17 @@
 				},
 				"x-kubernetes-action": "put",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"patch": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "partially update status of the specified PrefixAllocation",
-				"operationId": "patchIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocationStatus",
+				"description": "partially update status of the specified ResourceQuota",
+				"operationId": "patchCoreApiOnmetalDeV1beta1NamespacedResourceQuotaStatus",
 				"parameters": [
 					{
 						"name": "dryRun",
@@ -961,12 +961,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -976,12 +976,12 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							}
 						}
@@ -989,16 +989,16 @@
 				},
 				"x-kubernetes-action": "patch",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"parameters": [
 				{
 					"name": "name",
 					"in": "path",
-					"description": "name of the PrefixAllocation",
+					"description": "name of the ResourceQuota",
 					"required": true,
 					"schema": {
 						"type": "string",
@@ -1026,122 +1026,30 @@
 				}
 			]
 		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/namespaces/{namespace}/prefixes": {
+		"/apis/core.api.onmetal.de/v1beta1/resourcequotas": {
 			"get": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "list or watch objects of kind Prefix",
-				"operationId": "listIpamApiOnmetalDeV1alpha1NamespacedPrefix",
-				"parameters": [
-					{
-						"name": "allowWatchBookmarks",
-						"in": "query",
-						"description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored.",
-						"schema": {
-							"type": "boolean",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "continue",
-						"in": "query",
-						"description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldSelector",
-						"in": "query",
-						"description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "labelSelector",
-						"in": "query",
-						"description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "limit",
-						"in": "query",
-						"description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
-						"schema": {
-							"type": "integer",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "resourceVersion",
-						"in": "query",
-						"description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "resourceVersionMatch",
-						"in": "query",
-						"description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "sendInitialEvents",
-						"in": "query",
-						"description": "`sendInitialEvents=true` may be set together with `watch=true`. In that case, the watch stream will begin with synthetic events to produce the current state of objects in the collection. Once all such events have been sent, a synthetic \"Bookmark\" event  will be sent. The bookmark will report the ResourceVersion (RV) corresponding to the set of objects, and be marked with `\"k8s.io/initial-events-end\": \"true\"` annotation. Afterwards, the watch stream will proceed as usual, sending watch events corresponding to changes (subsequent to the RV) to objects watched.\n\nWhen `sendInitialEvents` option is set, we require `resourceVersionMatch` option to also be set. The semantic of the watch request is as following: - `resourceVersionMatch` = NotOlderThan\n  is interpreted as \"data at least as new as the provided `resourceVersion`\"\n  and the bookmark event is send when the state is synced\n  to a `resourceVersion` at least as fresh as the one provided by the ListOptions.\n  If `resourceVersion` is unset, this is interpreted as \"consistent read\" and the\n  bookmark event is send when the state is synced at least to the moment\n  when request started being processed.\n- `resourceVersionMatch` set to any other value or unset\n  Invalid error is returned.\n\nDefaults to true if `resourceVersion=\"\"` or `resourceVersion=\"0\"` (for backward compatibility reasons) and to false otherwise.",
-						"schema": {
-							"type": "boolean",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "timeoutSeconds",
-						"in": "query",
-						"description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
-						"schema": {
-							"type": "integer",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "watch",
-						"in": "query",
-						"description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
-						"schema": {
-							"type": "boolean",
-							"uniqueItems": true
-						}
-					}
-				],
+				"description": "list or watch objects of kind ResourceQuota",
+				"operationId": "listCoreApiOnmetalDeV1beta1ResourceQuotaForAllNamespaces",
 				"responses": {
 					"200": {
 						"description": "OK",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixList"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaList"
 								}
 							},
 							"application/json;stream=watch": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixList"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaList"
 								}
 							},
 							"application/yaml": {
 								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixList"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaList"
 								}
 							}
 						}
@@ -1149,912 +1057,9 @@
 				},
 				"x-kubernetes-action": "list",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"post": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "create a Prefix",
-				"operationId": "createIpamApiOnmetalDeV1alpha1NamespacedPrefix",
-				"parameters": [
-					{
-						"name": "dryRun",
-						"in": "query",
-						"description": "When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldManager",
-						"in": "query",
-						"description": "fieldManager is a name associated with the actor or entity that is making these changes. The value must be less than or 128 characters long, and only contain printable characters, as defined by https://golang.org/pkg/unicode/#IsPrint.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldValidation",
-						"in": "query",
-						"description": "fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"*/*": {
-							"schema": {
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					},
-					"201": {
-						"description": "Created",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					},
-					"202": {
-						"description": "Accepted",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "post",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"delete": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "delete collection of Prefix",
-				"operationId": "deleteIpamApiOnmetalDeV1alpha1CollectionNamespacedPrefix",
-				"parameters": [
-					{
-						"name": "continue",
-						"in": "query",
-						"description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "dryRun",
-						"in": "query",
-						"description": "When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldSelector",
-						"in": "query",
-						"description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "gracePeriodSeconds",
-						"in": "query",
-						"description": "The duration in seconds before the object should be deleted. Value must be non-negative integer. The value zero indicates delete immediately. If this value is nil, the default grace period for the specified type will be used. Defaults to a per object value if not specified. zero means delete immediately.",
-						"schema": {
-							"type": "integer",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "labelSelector",
-						"in": "query",
-						"description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "limit",
-						"in": "query",
-						"description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
-						"schema": {
-							"type": "integer",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "orphanDependents",
-						"in": "query",
-						"description": "Deprecated: please use the PropagationPolicy, this field will be deprecated in 1.7. Should the dependent objects be orphaned. If true/false, the \"orphan\" finalizer will be added to/removed from the object's finalizers list. Either this field or PropagationPolicy may be set, but not both.",
-						"schema": {
-							"type": "boolean",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "propagationPolicy",
-						"in": "query",
-						"description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy. Acceptable values are: 'Orphan' - orphan the dependents; 'Background' - allow the garbage collector to delete the dependents in the background; 'Foreground' - a cascading policy that deletes all dependents in the foreground.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "resourceVersion",
-						"in": "query",
-						"description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "resourceVersionMatch",
-						"in": "query",
-						"description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "sendInitialEvents",
-						"in": "query",
-						"description": "`sendInitialEvents=true` may be set together with `watch=true`. In that case, the watch stream will begin with synthetic events to produce the current state of objects in the collection. Once all such events have been sent, a synthetic \"Bookmark\" event  will be sent. The bookmark will report the ResourceVersion (RV) corresponding to the set of objects, and be marked with `\"k8s.io/initial-events-end\": \"true\"` annotation. Afterwards, the watch stream will proceed as usual, sending watch events corresponding to changes (subsequent to the RV) to objects watched.\n\nWhen `sendInitialEvents` option is set, we require `resourceVersionMatch` option to also be set. The semantic of the watch request is as following: - `resourceVersionMatch` = NotOlderThan\n  is interpreted as \"data at least as new as the provided `resourceVersion`\"\n  and the bookmark event is send when the state is synced\n  to a `resourceVersion` at least as fresh as the one provided by the ListOptions.\n  If `resourceVersion` is unset, this is interpreted as \"consistent read\" and the\n  bookmark event is send when the state is synced at least to the moment\n  when request started being processed.\n- `resourceVersionMatch` set to any other value or unset\n  Invalid error is returned.\n\nDefaults to true if `resourceVersion=\"\"` or `resourceVersion=\"0\"` (for backward compatibility reasons) and to false otherwise.",
-						"schema": {
-							"type": "boolean",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "timeoutSeconds",
-						"in": "query",
-						"description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
-						"schema": {
-							"type": "integer",
-							"uniqueItems": true
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"*/*": {
-							"schema": {
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Status"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Status"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "deletecollection",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"parameters": [
-				{
-					"name": "namespace",
-					"in": "path",
-					"description": "object name and auth scope, such as for teams and projects",
-					"required": true,
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "pretty",
-					"in": "query",
-					"description": "If 'true', then the output is pretty printed.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				}
-			]
-		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/namespaces/{namespace}/prefixes/{name}": {
-			"get": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "read the specified Prefix",
-				"operationId": "readIpamApiOnmetalDeV1alpha1NamespacedPrefix",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "get",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"put": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "replace the specified Prefix",
-				"operationId": "replaceIpamApiOnmetalDeV1alpha1NamespacedPrefix",
-				"parameters": [
-					{
-						"name": "dryRun",
-						"in": "query",
-						"description": "When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldManager",
-						"in": "query",
-						"description": "fieldManager is a name associated with the actor or entity that is making these changes. The value must be less than or 128 characters long, and only contain printable characters, as defined by https://golang.org/pkg/unicode/#IsPrint.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldValidation",
-						"in": "query",
-						"description": "fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"*/*": {
-							"schema": {
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					},
-					"201": {
-						"description": "Created",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "put",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"delete": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "delete a Prefix",
-				"operationId": "deleteIpamApiOnmetalDeV1alpha1NamespacedPrefix",
-				"parameters": [
-					{
-						"name": "dryRun",
-						"in": "query",
-						"description": "When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "gracePeriodSeconds",
-						"in": "query",
-						"description": "The duration in seconds before the object should be deleted. Value must be non-negative integer. The value zero indicates delete immediately. If this value is nil, the default grace period for the specified type will be used. Defaults to a per object value if not specified. zero means delete immediately.",
-						"schema": {
-							"type": "integer",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "orphanDependents",
-						"in": "query",
-						"description": "Deprecated: please use the PropagationPolicy, this field will be deprecated in 1.7. Should the dependent objects be orphaned. If true/false, the \"orphan\" finalizer will be added to/removed from the object's finalizers list. Either this field or PropagationPolicy may be set, but not both.",
-						"schema": {
-							"type": "boolean",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "propagationPolicy",
-						"in": "query",
-						"description": "Whether and how garbage collection will be performed. Either this field or OrphanDependents may be set, but not both. The default policy is decided by the existing finalizer set in the metadata.finalizers and the resource-specific default policy. Acceptable values are: 'Orphan' - orphan the dependents; 'Background' - allow the garbage collector to delete the dependents in the background; 'Foreground' - a cascading policy that deletes all dependents in the foreground.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"*/*": {
-							"schema": {
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Status"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Status"
-								}
-							}
-						}
-					},
-					"202": {
-						"description": "Accepted",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Status"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Status"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "delete",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"patch": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "partially update the specified Prefix",
-				"operationId": "patchIpamApiOnmetalDeV1alpha1NamespacedPrefix",
-				"parameters": [
-					{
-						"name": "dryRun",
-						"in": "query",
-						"description": "When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldManager",
-						"in": "query",
-						"description": "fieldManager is a name associated with the actor or entity that is making these changes. The value must be less than or 128 characters long, and only contain printable characters, as defined by https://golang.org/pkg/unicode/#IsPrint. This field is required for apply requests (application/apply-patch) but optional for non-apply patch types (JsonPatch, MergePatch, StrategicMergePatch).",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldValidation",
-						"in": "query",
-						"description": "fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "force",
-						"in": "query",
-						"description": "Force is going to \"force\" Apply requests. It means user will re-acquire conflicting fields owned by other people. Force flag must be unset for non-apply patch requests.",
-						"schema": {
-							"type": "boolean",
-							"uniqueItems": true
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/apply-patch+yaml": {
-							"schema": {
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Patch"
-							}
-						},
-						"application/json-patch+json": {
-							"schema": {
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Patch"
-							}
-						},
-						"application/merge-patch+json": {
-							"schema": {
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Patch"
-							}
-						},
-						"application/strategic-merge-patch+json": {
-							"schema": {
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Patch"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					},
-					"201": {
-						"description": "Created",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "patch",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"parameters": [
-				{
-					"name": "name",
-					"in": "path",
-					"description": "name of the Prefix",
-					"required": true,
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "namespace",
-					"in": "path",
-					"description": "object name and auth scope, such as for teams and projects",
-					"required": true,
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "pretty",
-					"in": "query",
-					"description": "If 'true', then the output is pretty printed.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				}
-			]
-		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/namespaces/{namespace}/prefixes/{name}/status": {
-			"get": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "read status of the specified Prefix",
-				"operationId": "readIpamApiOnmetalDeV1alpha1NamespacedPrefixStatus",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "get",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"put": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "replace status of the specified Prefix",
-				"operationId": "replaceIpamApiOnmetalDeV1alpha1NamespacedPrefixStatus",
-				"parameters": [
-					{
-						"name": "dryRun",
-						"in": "query",
-						"description": "When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldManager",
-						"in": "query",
-						"description": "fieldManager is a name associated with the actor or entity that is making these changes. The value must be less than or 128 characters long, and only contain printable characters, as defined by https://golang.org/pkg/unicode/#IsPrint.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldValidation",
-						"in": "query",
-						"description": "fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"*/*": {
-							"schema": {
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					},
-					"201": {
-						"description": "Created",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "put",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"patch": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "partially update status of the specified Prefix",
-				"operationId": "patchIpamApiOnmetalDeV1alpha1NamespacedPrefixStatus",
-				"parameters": [
-					{
-						"name": "dryRun",
-						"in": "query",
-						"description": "When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldManager",
-						"in": "query",
-						"description": "fieldManager is a name associated with the actor or entity that is making these changes. The value must be less than or 128 characters long, and only contain printable characters, as defined by https://golang.org/pkg/unicode/#IsPrint. This field is required for apply requests (application/apply-patch) but optional for non-apply patch types (JsonPatch, MergePatch, StrategicMergePatch).",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "fieldValidation",
-						"in": "query",
-						"description": "fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered.",
-						"schema": {
-							"type": "string",
-							"uniqueItems": true
-						}
-					},
-					{
-						"name": "force",
-						"in": "query",
-						"description": "Force is going to \"force\" Apply requests. It means user will re-acquire conflicting fields owned by other people. Force flag must be unset for non-apply patch requests.",
-						"schema": {
-							"type": "boolean",
-							"uniqueItems": true
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/apply-patch+yaml": {
-							"schema": {
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Patch"
-							}
-						},
-						"application/json-patch+json": {
-							"schema": {
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Patch"
-							}
-						},
-						"application/merge-patch+json": {
-							"schema": {
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Patch"
-							}
-						},
-						"application/strategic-merge-patch+json": {
-							"schema": {
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Patch"
-							}
-						}
-					}
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					},
-					"201": {
-						"description": "Created",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "patch",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"parameters": [
-				{
-					"name": "name",
-					"in": "path",
-					"description": "name of the Prefix",
-					"required": true,
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "namespace",
-					"in": "path",
-					"description": "object name and auth scope, such as for teams and projects",
-					"required": true,
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "pretty",
-					"in": "query",
-					"description": "If 'true', then the output is pretty printed.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				}
-			]
-		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/prefixallocations": {
-			"get": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "list or watch objects of kind PrefixAllocation",
-				"operationId": "listIpamApiOnmetalDeV1alpha1PrefixAllocationForAllNamespaces",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationList"
-								}
-							},
-							"application/json;stream=watch": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationList"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationList"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "list",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"parameters": [
@@ -2159,151 +1164,13 @@
 				}
 			]
 		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/prefixes": {
+		"/apis/core.api.onmetal.de/v1beta1/watch/namespaces/{namespace}/resourcequotas": {
 			"get": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "list or watch objects of kind Prefix",
-				"operationId": "listIpamApiOnmetalDeV1alpha1PrefixForAllNamespaces",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixList"
-								}
-							},
-							"application/json;stream=watch": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixList"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixList"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "list",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"parameters": [
-				{
-					"name": "allowWatchBookmarks",
-					"in": "query",
-					"description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "continue",
-					"in": "query",
-					"description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "fieldSelector",
-					"in": "query",
-					"description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "labelSelector",
-					"in": "query",
-					"description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "limit",
-					"in": "query",
-					"description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
-					"schema": {
-						"type": "integer",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "pretty",
-					"in": "query",
-					"description": "If 'true', then the output is pretty printed.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "resourceVersion",
-					"in": "query",
-					"description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "resourceVersionMatch",
-					"in": "query",
-					"description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "sendInitialEvents",
-					"in": "query",
-					"description": "`sendInitialEvents=true` may be set together with `watch=true`. In that case, the watch stream will begin with synthetic events to produce the current state of objects in the collection. Once all such events have been sent, a synthetic \"Bookmark\" event  will be sent. The bookmark will report the ResourceVersion (RV) corresponding to the set of objects, and be marked with `\"k8s.io/initial-events-end\": \"true\"` annotation. Afterwards, the watch stream will proceed as usual, sending watch events corresponding to changes (subsequent to the RV) to objects watched.\n\nWhen `sendInitialEvents` option is set, we require `resourceVersionMatch` option to also be set. The semantic of the watch request is as following: - `resourceVersionMatch` = NotOlderThan\n  is interpreted as \"data at least as new as the provided `resourceVersion`\"\n  and the bookmark event is send when the state is synced\n  to a `resourceVersion` at least as fresh as the one provided by the ListOptions.\n  If `resourceVersion` is unset, this is interpreted as \"consistent read\" and the\n  bookmark event is send when the state is synced at least to the moment\n  when request started being processed.\n- `resourceVersionMatch` set to any other value or unset\n  Invalid error is returned.\n\nDefaults to true if `resourceVersion=\"\"` or `resourceVersion=\"0\"` (for backward compatibility reasons) and to false otherwise.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "timeoutSeconds",
-					"in": "query",
-					"description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
-					"schema": {
-						"type": "integer",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "watch",
-					"in": "query",
-					"description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				}
-			]
-		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/watch/namespaces/{namespace}/prefixallocations": {
-			"get": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "watch individual changes to a list of PrefixAllocation. deprecated: use the 'watch' parameter with a list operation instead.",
-				"operationId": "watchIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocationList",
+				"description": "watch individual changes to a list of ResourceQuota. deprecated: use the 'watch' parameter with a list operation instead.",
+				"operationId": "watchCoreApiOnmetalDeV1beta1NamespacedResourceQuotaList",
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -2328,9 +1195,9 @@
 				},
 				"x-kubernetes-action": "watchlist",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"parameters": [
@@ -2445,13 +1312,13 @@
 				}
 			]
 		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/watch/namespaces/{namespace}/prefixallocations/{name}": {
+		"/apis/core.api.onmetal.de/v1beta1/watch/namespaces/{namespace}/resourcequotas/{name}": {
 			"get": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "watch changes to an object of kind PrefixAllocation. deprecated: use the 'watch' parameter with a list operation instead, filtered to a single item with the 'fieldSelector' parameter.",
-				"operationId": "watchIpamApiOnmetalDeV1alpha1NamespacedPrefixAllocation",
+				"description": "watch changes to an object of kind ResourceQuota. deprecated: use the 'watch' parameter with a list operation instead, filtered to a single item with the 'fieldSelector' parameter.",
+				"operationId": "watchCoreApiOnmetalDeV1beta1NamespacedResourceQuota",
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -2476,9 +1343,9 @@
 				},
 				"x-kubernetes-action": "watch",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"parameters": [
@@ -2530,7 +1397,7 @@
 				{
 					"name": "name",
 					"in": "path",
-					"description": "name of the PrefixAllocation",
+					"description": "name of the ResourceQuota",
 					"required": true,
 					"schema": {
 						"type": "string",
@@ -2603,13 +1470,13 @@
 				}
 			]
 		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/watch/namespaces/{namespace}/prefixes": {
+		"/apis/core.api.onmetal.de/v1beta1/watch/resourcequotas": {
 			"get": {
 				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
+					"coreApiOnmetalDe_v1beta1"
 				],
-				"description": "watch individual changes to a list of Prefix. deprecated: use the 'watch' parameter with a list operation instead.",
-				"operationId": "watchIpamApiOnmetalDeV1alpha1NamespacedPrefixList",
+				"description": "watch individual changes to a list of ResourceQuota. deprecated: use the 'watch' parameter with a list operation instead.",
+				"operationId": "watchCoreApiOnmetalDeV1beta1ResourceQuotaListForAllNamespaces",
 				"responses": {
 					"200": {
 						"description": "OK",
@@ -2634,453 +1501,9 @@
 				},
 				"x-kubernetes-action": "watchlist",
 				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"parameters": [
-				{
-					"name": "allowWatchBookmarks",
-					"in": "query",
-					"description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "continue",
-					"in": "query",
-					"description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "fieldSelector",
-					"in": "query",
-					"description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "labelSelector",
-					"in": "query",
-					"description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "limit",
-					"in": "query",
-					"description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
-					"schema": {
-						"type": "integer",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "namespace",
-					"in": "path",
-					"description": "object name and auth scope, such as for teams and projects",
-					"required": true,
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "pretty",
-					"in": "query",
-					"description": "If 'true', then the output is pretty printed.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "resourceVersion",
-					"in": "query",
-					"description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "resourceVersionMatch",
-					"in": "query",
-					"description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "sendInitialEvents",
-					"in": "query",
-					"description": "`sendInitialEvents=true` may be set together with `watch=true`. In that case, the watch stream will begin with synthetic events to produce the current state of objects in the collection. Once all such events have been sent, a synthetic \"Bookmark\" event  will be sent. The bookmark will report the ResourceVersion (RV) corresponding to the set of objects, and be marked with `\"k8s.io/initial-events-end\": \"true\"` annotation. Afterwards, the watch stream will proceed as usual, sending watch events corresponding to changes (subsequent to the RV) to objects watched.\n\nWhen `sendInitialEvents` option is set, we require `resourceVersionMatch` option to also be set. The semantic of the watch request is as following: - `resourceVersionMatch` = NotOlderThan\n  is interpreted as \"data at least as new as the provided `resourceVersion`\"\n  and the bookmark event is send when the state is synced\n  to a `resourceVersion` at least as fresh as the one provided by the ListOptions.\n  If `resourceVersion` is unset, this is interpreted as \"consistent read\" and the\n  bookmark event is send when the state is synced at least to the moment\n  when request started being processed.\n- `resourceVersionMatch` set to any other value or unset\n  Invalid error is returned.\n\nDefaults to true if `resourceVersion=\"\"` or `resourceVersion=\"0\"` (for backward compatibility reasons) and to false otherwise.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "timeoutSeconds",
-					"in": "query",
-					"description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
-					"schema": {
-						"type": "integer",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "watch",
-					"in": "query",
-					"description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				}
-			]
-		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/watch/namespaces/{namespace}/prefixes/{name}": {
-			"get": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "watch changes to an object of kind Prefix. deprecated: use the 'watch' parameter with a list operation instead, filtered to a single item with the 'fieldSelector' parameter.",
-				"operationId": "watchIpamApiOnmetalDeV1alpha1NamespacedPrefix",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
-								}
-							},
-							"application/json;stream=watch": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "watch",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
-				}
-			},
-			"parameters": [
-				{
-					"name": "allowWatchBookmarks",
-					"in": "query",
-					"description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "continue",
-					"in": "query",
-					"description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "fieldSelector",
-					"in": "query",
-					"description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "labelSelector",
-					"in": "query",
-					"description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "limit",
-					"in": "query",
-					"description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
-					"schema": {
-						"type": "integer",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "name",
-					"in": "path",
-					"description": "name of the Prefix",
-					"required": true,
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "namespace",
-					"in": "path",
-					"description": "object name and auth scope, such as for teams and projects",
-					"required": true,
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "pretty",
-					"in": "query",
-					"description": "If 'true', then the output is pretty printed.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "resourceVersion",
-					"in": "query",
-					"description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "resourceVersionMatch",
-					"in": "query",
-					"description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "sendInitialEvents",
-					"in": "query",
-					"description": "`sendInitialEvents=true` may be set together with `watch=true`. In that case, the watch stream will begin with synthetic events to produce the current state of objects in the collection. Once all such events have been sent, a synthetic \"Bookmark\" event  will be sent. The bookmark will report the ResourceVersion (RV) corresponding to the set of objects, and be marked with `\"k8s.io/initial-events-end\": \"true\"` annotation. Afterwards, the watch stream will proceed as usual, sending watch events corresponding to changes (subsequent to the RV) to objects watched.\n\nWhen `sendInitialEvents` option is set, we require `resourceVersionMatch` option to also be set. The semantic of the watch request is as following: - `resourceVersionMatch` = NotOlderThan\n  is interpreted as \"data at least as new as the provided `resourceVersion`\"\n  and the bookmark event is send when the state is synced\n  to a `resourceVersion` at least as fresh as the one provided by the ListOptions.\n  If `resourceVersion` is unset, this is interpreted as \"consistent read\" and the\n  bookmark event is send when the state is synced at least to the moment\n  when request started being processed.\n- `resourceVersionMatch` set to any other value or unset\n  Invalid error is returned.\n\nDefaults to true if `resourceVersion=\"\"` or `resourceVersion=\"0\"` (for backward compatibility reasons) and to false otherwise.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "timeoutSeconds",
-					"in": "query",
-					"description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
-					"schema": {
-						"type": "integer",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "watch",
-					"in": "query",
-					"description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				}
-			]
-		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/watch/prefixallocations": {
-			"get": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "watch individual changes to a list of PrefixAllocation. deprecated: use the 'watch' parameter with a list operation instead.",
-				"operationId": "watchIpamApiOnmetalDeV1alpha1PrefixAllocationListForAllNamespaces",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
-								}
-							},
-							"application/json;stream=watch": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "watchlist",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "PrefixAllocation"
-				}
-			},
-			"parameters": [
-				{
-					"name": "allowWatchBookmarks",
-					"in": "query",
-					"description": "allowWatchBookmarks requests watch events with type \"BOOKMARK\". Servers that do not implement bookmarks may ignore this flag and bookmarks are sent at the server's discretion. Clients should not assume bookmarks are returned at any specific interval, nor may they assume the server will send any BOOKMARK event during a session. If this is not a watch, this field is ignored.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "continue",
-					"in": "query",
-					"description": "The continue option should be set when retrieving more results from the server. Since this value is server defined, clients may only use the continue value from a previous query result with identical query parameters (except for the value of continue) and the server may reject a continue value it does not recognize. If the specified continue value is no longer valid whether due to expiration (generally five to fifteen minutes) or a configuration change on the server, the server will respond with a 410 ResourceExpired error together with a continue token. If the client needs a consistent list, it must restart their list without the continue field. Otherwise, the client may send another list request with the token received with the 410 error, the server will respond with a list starting from the next key, but from the latest snapshot, which is inconsistent from the previous list results - objects that are created, modified, or deleted after the first list request will be included in the response, as long as their keys are after the \"next key\".\n\nThis field is not supported when watch is true. Clients may start a watch from the last resourceVersion value returned by the server and not miss any modifications.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "fieldSelector",
-					"in": "query",
-					"description": "A selector to restrict the list of returned objects by their fields. Defaults to everything.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "labelSelector",
-					"in": "query",
-					"description": "A selector to restrict the list of returned objects by their labels. Defaults to everything.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "limit",
-					"in": "query",
-					"description": "limit is a maximum number of responses to return for a list call. If more items exist, the server will set the `continue` field on the list metadata to a value that can be used with the same initial query to retrieve the next set of results. Setting a limit may return fewer than the requested amount of items (up to zero items) in the event all requested objects are filtered out and clients should only use the presence of the continue field to determine whether more results are available. Servers may choose not to support the limit argument and will return all of the available results. If limit is specified and the continue field is empty, clients may assume that no more results are available. This field is not supported if watch is true.\n\nThe server guarantees that the objects returned when using continue will be identical to issuing a single list call without a limit - that is, no objects created, modified, or deleted after the first request is issued will be included in any subsequent continued requests. This is sometimes referred to as a consistent snapshot, and ensures that a client that is using limit to receive smaller chunks of a very large result can ensure they see all possible objects. If objects are updated during a chunked list the version of the object that was present at the time the first list result was calculated is returned.",
-					"schema": {
-						"type": "integer",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "pretty",
-					"in": "query",
-					"description": "If 'true', then the output is pretty printed.",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "resourceVersion",
-					"in": "query",
-					"description": "resourceVersion sets a constraint on what resource versions a request may be served from. See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "resourceVersionMatch",
-					"in": "query",
-					"description": "resourceVersionMatch determines how resourceVersion is applied to list calls. It is highly recommended that resourceVersionMatch be set for list calls where resourceVersion is set See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for details.\n\nDefaults to unset",
-					"schema": {
-						"type": "string",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "sendInitialEvents",
-					"in": "query",
-					"description": "`sendInitialEvents=true` may be set together with `watch=true`. In that case, the watch stream will begin with synthetic events to produce the current state of objects in the collection. Once all such events have been sent, a synthetic \"Bookmark\" event  will be sent. The bookmark will report the ResourceVersion (RV) corresponding to the set of objects, and be marked with `\"k8s.io/initial-events-end\": \"true\"` annotation. Afterwards, the watch stream will proceed as usual, sending watch events corresponding to changes (subsequent to the RV) to objects watched.\n\nWhen `sendInitialEvents` option is set, we require `resourceVersionMatch` option to also be set. The semantic of the watch request is as following: - `resourceVersionMatch` = NotOlderThan\n  is interpreted as \"data at least as new as the provided `resourceVersion`\"\n  and the bookmark event is send when the state is synced\n  to a `resourceVersion` at least as fresh as the one provided by the ListOptions.\n  If `resourceVersion` is unset, this is interpreted as \"consistent read\" and the\n  bookmark event is send when the state is synced at least to the moment\n  when request started being processed.\n- `resourceVersionMatch` set to any other value or unset\n  Invalid error is returned.\n\nDefaults to true if `resourceVersion=\"\"` or `resourceVersion=\"0\"` (for backward compatibility reasons) and to false otherwise.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "timeoutSeconds",
-					"in": "query",
-					"description": "Timeout for the list/watch call. This limits the duration of the call, regardless of any activity or inactivity.",
-					"schema": {
-						"type": "integer",
-						"uniqueItems": true
-					}
-				},
-				{
-					"name": "watch",
-					"in": "query",
-					"description": "Watch for changes to the described resources and return them as a stream of add, update, and remove notifications. Specify resourceVersion.",
-					"schema": {
-						"type": "boolean",
-						"uniqueItems": true
-					}
-				}
-			]
-		},
-		"/apis/ipam.api.onmetal.de/v1alpha1/watch/prefixes": {
-			"get": {
-				"tags": [
-					"ipamApiOnmetalDe_v1alpha1"
-				],
-				"description": "watch individual changes to a list of Prefix. deprecated: use the 'watch' parameter with a list operation instead.",
-				"operationId": "watchIpamApiOnmetalDeV1alpha1PrefixListForAllNamespaces",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
-								}
-							},
-							"application/json;stream=watch": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
-								}
-							},
-							"application/yaml": {
-								"schema": {
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.WatchEvent"
-								}
-							}
-						}
-					}
-				},
-				"x-kubernetes-action": "watchlist",
-				"x-kubernetes-group-version-kind": {
-					"group": "ipam.api.onmetal.de",
-					"version": "v1alpha1",
-					"kind": "Prefix"
+					"group": "core.api.onmetal.de",
+					"version": "v1beta1",
+					"kind": "ResourceQuota"
 				}
 			},
 			"parameters": [
@@ -3188,13 +1611,8 @@
 	},
 	"components": {
 		"schemas": {
-			"com.github.onmetal.onmetal-api.api.common.v1alpha1.IPPrefix": {
-				"description": "IPPrefix represents a network prefix.",
-				"type": "string",
-				"format": "ip-prefix"
-			},
-			"com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix": {
-				"description": "Prefix is the Schema for the prefixes API",
+			"com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota": {
+				"description": "ResourceQuota is the Schema for the resourcequotas API",
 				"type": "object",
 				"properties": {
 					"apiVersion": {
@@ -3217,7 +1635,7 @@
 						"default": {},
 						"allOf": [
 							{
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixSpec"
+								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaSpec"
 							}
 						]
 					},
@@ -3225,66 +1643,21 @@
 						"default": {},
 						"allOf": [
 							{
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixStatus"
+								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaStatus"
 							}
 						]
 					}
 				},
 				"x-kubernetes-group-version-kind": [
 					{
-						"group": "ipam.api.onmetal.de",
-						"kind": "Prefix",
-						"version": "v1alpha1"
+						"group": "core.api.onmetal.de",
+						"kind": "ResourceQuota",
+						"version": "v1beta1"
 					}
 				]
 			},
-			"com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation": {
-				"description": "PrefixAllocation is the Schema for the prefixallocations API",
-				"type": "object",
-				"properties": {
-					"apiVersion": {
-						"description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-						"type": "string"
-					},
-					"kind": {
-						"description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-						"type": "string"
-					},
-					"metadata": {
-						"default": {},
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
-							}
-						]
-					},
-					"spec": {
-						"default": {},
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationSpec"
-							}
-						]
-					},
-					"status": {
-						"default": {},
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationStatus"
-							}
-						]
-					}
-				},
-				"x-kubernetes-group-version-kind": [
-					{
-						"group": "ipam.api.onmetal.de",
-						"kind": "PrefixAllocation",
-						"version": "v1alpha1"
-					}
-				]
-			},
-			"com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationList": {
-				"description": "PrefixAllocationList contains a list of PrefixAllocation",
+			"com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaList": {
+				"description": "ResourceQuotaList contains a list of ResourceQuota",
 				"type": "object",
 				"required": [
 					"items"
@@ -3300,7 +1673,7 @@
 							"default": {},
 							"allOf": [
 								{
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocation"
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuota"
 								}
 							]
 						}
@@ -3320,207 +1693,124 @@
 				},
 				"x-kubernetes-group-version-kind": [
 					{
-						"group": "ipam.api.onmetal.de",
-						"kind": "PrefixAllocationList",
-						"version": "v1alpha1"
+						"group": "core.api.onmetal.de",
+						"kind": "ResourceQuotaList",
+						"version": "v1beta1"
 					}
 				]
 			},
-			"com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationSpec": {
-				"description": "PrefixAllocationSpec defines the desired state of PrefixAllocation",
+			"com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaSpec": {
+				"description": "ResourceQuotaSpec defines the desired state of ResourceQuotaSpec",
 				"type": "object",
 				"properties": {
-					"ipFamily": {
-						"description": "IPFamily is the IPFamily of the prefix. If unset but Prefix is set, this can be inferred.\n\nPossible enum values:\n - `\"IPv4\"` indicates that this IP is IPv4 protocol\n - `\"IPv6\"` indicates that this IP is IPv6 protocol",
-						"type": "string",
-						"enum": [
-							"IPv4",
-							"IPv6"
-						]
-					},
-					"prefix": {
-						"description": "Prefix is the prefix to allocate for this Prefix.",
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.common.v1alpha1.IPPrefix"
-							}
-						]
-					},
-					"prefixLength": {
-						"description": "PrefixLength is the length of prefix to allocate for this Prefix.",
-						"type": "integer",
-						"format": "int32"
-					},
-					"prefixRef": {
-						"description": "PrefixRef references the prefix to allocate from.",
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/io.k8s.api.core.v1.LocalObjectReference"
-							}
-						]
-					},
-					"prefixSelector": {
-						"description": "PrefixSelector selects the prefix to allocate from.",
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector"
-							}
-						]
-					}
-				}
-			},
-			"com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixAllocationStatus": {
-				"description": "PrefixAllocationStatus is the status of a PrefixAllocation.",
-				"type": "object",
-				"properties": {
-					"lastPhaseTransitionTime": {
-						"description": "LastPhaseTransitionTime is the last time the Phase changed values.",
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
-							}
-						]
-					},
-					"phase": {
-						"description": "Phase is the phase of the PrefixAllocation.",
-						"type": "string"
-					},
-					"prefix": {
-						"description": "Prefix is the allocated prefix, if any",
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.common.v1alpha1.IPPrefix"
-							}
-						]
-					}
-				}
-			},
-			"com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixList": {
-				"description": "PrefixList contains a list of Prefix",
-				"type": "object",
-				"required": [
-					"items"
-				],
-				"properties": {
-					"apiVersion": {
-						"description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-						"type": "string"
-					},
-					"items": {
-						"type": "array",
-						"items": {
+					"hard": {
+						"description": "Hard is a ResourceList of the strictly enforced amount of resources.",
+						"type": "object",
+						"additionalProperties": {
 							"default": {},
 							"allOf": [
 								{
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.ipam.v1alpha1.Prefix"
+									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.api.resource.Quantity"
 								}
 							]
 						}
 					},
-					"kind": {
-						"description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-						"type": "string"
-					},
-					"metadata": {
-						"default": {},
+					"scopeSelector": {
+						"description": "ScopeSelector selects the resources that are subject to this quota. Note: By using certain ScopeSelectors, only certain resources may be tracked.",
 						"allOf": [
 							{
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta"
+								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceScopeSelector"
 							}
 						]
-					}
-				},
-				"x-kubernetes-group-version-kind": [
-					{
-						"group": "ipam.api.onmetal.de",
-						"kind": "PrefixList",
-						"version": "v1alpha1"
-					}
-				]
-			},
-			"com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixSpec": {
-				"description": "PrefixSpec defines the desired state of Prefix",
-				"type": "object",
-				"properties": {
-					"ipFamily": {
-						"description": "IPFamily is the IPFamily of the prefix. If unset but Prefix is set, this can be inferred.\n\nPossible enum values:\n - `\"IPv4\"` indicates that this IP is IPv4 protocol\n - `\"IPv6\"` indicates that this IP is IPv6 protocol",
-						"type": "string",
-						"enum": [
-							"IPv4",
-							"IPv6"
-						]
-					},
-					"parentRef": {
-						"description": "ParentRef references the parent to allocate the Prefix from. If ParentRef and ParentSelector is empty, the Prefix is considered a root prefix and thus allocated by itself.",
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/io.k8s.api.core.v1.LocalObjectReference"
-							}
-						]
-					},
-					"parentSelector": {
-						"description": "ParentSelector is the LabelSelector to use for determining the parent for this Prefix.",
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector"
-							}
-						]
-					},
-					"prefix": {
-						"description": "Prefix is the prefix to allocate for this Prefix.",
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.common.v1alpha1.IPPrefix"
-							}
-						]
-					},
-					"prefixLength": {
-						"description": "PrefixLength is the length of prefix to allocate for this Prefix.",
-						"type": "integer",
-						"format": "int32"
 					}
 				}
 			},
-			"com.github.onmetal.onmetal-api.api.ipam.v1alpha1.PrefixStatus": {
-				"description": "PrefixStatus defines the observed state of Prefix",
+			"com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceQuotaStatus": {
+				"description": "ResourceQuotaStatus is the status of a ResourceQuota.",
 				"type": "object",
 				"properties": {
-					"lastPhaseTransitionTime": {
-						"description": "LastPhaseTransitionTime is the last time the Phase changed values.",
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
-							}
-						]
-					},
-					"phase": {
-						"description": "Phase is the PrefixPhase of the Prefix.",
-						"type": "string"
+					"hard": {
+						"description": "Hard are the currently enforced hard resource limits. Hard may be less than used in case the limits were introduced / updated after more than allowed resources were already present.",
+						"type": "object",
+						"additionalProperties": {
+							"default": {},
+							"allOf": [
+								{
+									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.api.resource.Quantity"
+								}
+							]
+						}
 					},
 					"used": {
-						"description": "Used is a list of used prefixes.",
-						"type": "array",
-						"items": {
+						"description": "Used is the amount of currently used resources.",
+						"type": "object",
+						"additionalProperties": {
 							"default": {},
 							"allOf": [
 								{
-									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.common.v1alpha1.IPPrefix"
+									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.api.resource.Quantity"
 								}
 							]
 						}
 					}
 				}
 			},
-			"io.k8s.api.core.v1.LocalObjectReference": {
-				"description": "LocalObjectReference contains enough information to let you locate the referenced object inside the same namespace.",
+			"com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceScopeSelector": {
+				"description": "ResourceScopeSelector selects",
 				"type": "object",
 				"properties": {
-					"name": {
-						"description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
-						"type": "string"
+					"matchExpressions": {
+						"description": "MatchExpressions is a list of ResourceScopeSelectorRequirement to match resources by.",
+						"type": "array",
+						"items": {
+							"default": {},
+							"allOf": [
+								{
+									"$ref": "#/components/schemas/com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceScopeSelectorRequirement"
+								}
+							]
+						}
 					}
-				},
-				"x-kubernetes-map-type": "atomic"
+				}
+			},
+			"com.github.onmetal.onmetal-api.api.core.v1beta1.ResourceScopeSelectorRequirement": {
+				"description": "ResourceScopeSelectorRequirement is a requirement for a resource using a ResourceScope alongside a ResourceScopeSelectorOperator with Values (depending on the ResourceScopeSelectorOperator).",
+				"type": "object",
+				"required": [
+					"scopeName",
+					"operator"
+				],
+				"properties": {
+					"operator": {
+						"description": "Operator is the ResourceScopeSelectorOperator to check the ScopeName with in a resource.",
+						"type": "string",
+						"default": ""
+					},
+					"scopeName": {
+						"description": "ScopeName is the ResourceScope to make a requirement for.",
+						"type": "string",
+						"default": ""
+					},
+					"values": {
+						"description": "Values are the values to compare the Operator with the ScopeName. May be optional.",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"default": ""
+						}
+					}
+				}
+			},
+			"io.k8s.apimachinery.pkg.api.resource.Quantity": {
+				"description": "Quantity is a fixed-point representation of a number. It provides convenient marshaling/unmarshaling in JSON and YAML, in addition to String() and AsInt64() accessors.\n\nThe serialization format is:\n\n``` \u003cquantity\u003e        ::= \u003csignedNumber\u003e\u003csuffix\u003e\n\n\t(Note that \u003csuffix\u003e may be empty, from the \"\" case in \u003cdecimalSI\u003e.)\n\n\u003cdigit\u003e           ::= 0 | 1 | ... | 9 \u003cdigits\u003e          ::= \u003cdigit\u003e | \u003cdigit\u003e\u003cdigits\u003e \u003cnumber\u003e          ::= \u003cdigits\u003e | \u003cdigits\u003e.\u003cdigits\u003e | \u003cdigits\u003e. | .\u003cdigits\u003e \u003csign\u003e            ::= \"+\" | \"-\" \u003csignedNumber\u003e    ::= \u003cnumber\u003e | \u003csign\u003e\u003cnumber\u003e \u003csuffix\u003e          ::= \u003cbinarySI\u003e | \u003cdecimalExponent\u003e | \u003cdecimalSI\u003e \u003cbinarySI\u003e        ::= Ki | Mi | Gi | Ti | Pi | Ei\n\n\t(International System of units; See: http://physics.nist.gov/cuu/Units/binary.html)\n\n\u003cdecimalSI\u003e       ::= m | \"\" | k | M | G | T | P | E\n\n\t(Note that 1024 = 1Ki but 1000 = 1k; I didn't choose the capitalization.)\n\n\u003cdecimalExponent\u003e ::= \"e\" \u003csignedNumber\u003e | \"E\" \u003csignedNumber\u003e ```\n\nNo matter which of the three exponent forms is used, no quantity may represent a number greater than 2^63-1 in magnitude, nor may it have more than 3 decimal places. Numbers larger or more precise will be capped or rounded up. (E.g.: 0.1m will rounded up to 1m.) This may be extended in the future if we require larger or smaller quantities.\n\nWhen a Quantity is parsed from a string, it will remember the type of suffix it had, and will use the same type again when it is serialized.\n\nBefore serializing, Quantity will be put in \"canonical form\". This means that Exponent/suffix will be adjusted up or down (with a corresponding increase or decrease in Mantissa) such that:\n\n- No precision is lost - No fractional digits will be emitted - The exponent (or suffix) is as large as possible.\n\nThe sign will be omitted unless the number is negative.\n\nExamples:\n\n- 1.5 will be serialized as \"1500m\" - 1.5Gi will be serialized as \"1536Mi\"\n\nNote that the quantity will NEVER be internally represented by a floating point number. That is the whole point of this exercise.\n\nNon-canonical values will still parse as long as they are well formed, but will be re-emitted in their canonical form. (So always use canonical form, or don't diff.)\n\nThis format is intended to make it difficult to use these numbers without writing some sort of special handling code in the hopes that that will cause implementors to also use a fixed point implementation.",
+				"oneOf": [
+					{
+						"type": "string"
+					},
+					{
+						"type": "number"
+					}
+				]
 			},
 			"io.k8s.apimachinery.pkg.apis.meta.v1.APIResource": {
 				"description": "APIResource specifies the name of a resource and whether it is namespaced.",
@@ -3689,88 +1979,33 @@
 					{
 						"group": "compute.api.onmetal.de",
 						"kind": "DeleteOptions",
-						"version": "v1alpha1"
+						"version": "v1beta1"
 					},
 					{
 						"group": "core.api.onmetal.de",
 						"kind": "DeleteOptions",
-						"version": "v1alpha1"
+						"version": "v1beta1"
 					},
 					{
 						"group": "ipam.api.onmetal.de",
 						"kind": "DeleteOptions",
-						"version": "v1alpha1"
+						"version": "v1beta1"
 					},
 					{
 						"group": "networking.api.onmetal.de",
 						"kind": "DeleteOptions",
-						"version": "v1alpha1"
+						"version": "v1beta1"
 					},
 					{
 						"group": "storage.api.onmetal.de",
 						"kind": "DeleteOptions",
-						"version": "v1alpha1"
+						"version": "v1beta1"
 					}
 				]
 			},
 			"io.k8s.apimachinery.pkg.apis.meta.v1.FieldsV1": {
 				"description": "FieldsV1 stores a set of fields in a data structure like a Trie, in JSON format.\n\nEach key is either a '.' representing the field itself, and will always map to an empty set, or a string representing a sub-field or item. The string will follow one of these four formats: 'f:\u003cname\u003e', where \u003cname\u003e is the name of a field in a struct, or key in a map 'v:\u003cvalue\u003e', where \u003cvalue\u003e is the exact json formatted value of a list item 'i:\u003cindex\u003e', where \u003cindex\u003e is position of a item in a list 'k:\u003ckeys\u003e', where \u003ckeys\u003e is a map of  a list item's key fields to their unique values If a key maps to an empty Fields value, the field that key represents is part of the set.\n\nThe exact format is defined in sigs.k8s.io/structured-merge-diff",
 				"type": "object"
-			},
-			"io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector": {
-				"description": "A label selector is a label query over a set of resources. The result of matchLabels and matchExpressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects.",
-				"type": "object",
-				"properties": {
-					"matchExpressions": {
-						"description": "matchExpressions is a list of label selector requirements. The requirements are ANDed.",
-						"type": "array",
-						"items": {
-							"default": {},
-							"allOf": [
-								{
-									"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelectorRequirement"
-								}
-							]
-						}
-					},
-					"matchLabels": {
-						"description": "matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
-						"type": "object",
-						"additionalProperties": {
-							"type": "string",
-							"default": ""
-						}
-					}
-				},
-				"x-kubernetes-map-type": "atomic"
-			},
-			"io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelectorRequirement": {
-				"description": "A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
-				"type": "object",
-				"required": [
-					"key",
-					"operator"
-				],
-				"properties": {
-					"key": {
-						"description": "key is the label key that the selector applies to.",
-						"type": "string",
-						"default": ""
-					},
-					"operator": {
-						"description": "operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
-						"type": "string",
-						"default": ""
-					},
-					"values": {
-						"description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
-						"type": "array",
-						"items": {
-							"type": "string",
-							"default": ""
-						}
-					}
-				}
 			},
 			"io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta": {
 				"description": "ListMeta describes metadata that synthetic resources must have, including lists and various status objects. A resource may have only one of {ObjectMeta, ListMeta}.",
@@ -4157,27 +2392,27 @@
 					{
 						"group": "compute.api.onmetal.de",
 						"kind": "WatchEvent",
-						"version": "v1alpha1"
+						"version": "v1beta1"
 					},
 					{
 						"group": "core.api.onmetal.de",
 						"kind": "WatchEvent",
-						"version": "v1alpha1"
+						"version": "v1beta1"
 					},
 					{
 						"group": "ipam.api.onmetal.de",
 						"kind": "WatchEvent",
-						"version": "v1alpha1"
+						"version": "v1beta1"
 					},
 					{
 						"group": "networking.api.onmetal.de",
 						"kind": "WatchEvent",
-						"version": "v1alpha1"
+						"version": "v1beta1"
 					},
 					{
 						"group": "storage.api.onmetal.de",
 						"kind": "WatchEvent",
-						"version": "v1alpha1"
+						"version": "v1beta1"
 					}
 				]
 			},
