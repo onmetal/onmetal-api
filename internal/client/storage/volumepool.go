@@ -17,7 +17,7 @@ package storage
 import (
 	"context"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -26,8 +26,8 @@ const (
 )
 
 func SetupVolumePoolAvailableVolumeClassesFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &storagev1alpha1.VolumePool{}, VolumePoolAvailableVolumeClassesField, func(object client.Object) []string {
-		volumePool := object.(*storagev1alpha1.VolumePool)
+	return indexer.IndexField(ctx, &storagev1beta1.VolumePool{}, VolumePoolAvailableVolumeClassesField, func(object client.Object) []string {
+		volumePool := object.(*storagev1beta1.VolumePool)
 
 		names := make([]string, 0, len(volumePool.Status.AvailableVolumeClasses))
 		for _, availableVolumeClass := range volumePool.Status.AvailableVolumeClasses {

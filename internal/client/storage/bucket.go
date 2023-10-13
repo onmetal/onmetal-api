@@ -17,18 +17,18 @@ package storage
 import (
 	"context"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (
-	BucketSpecBucketClassRefNameField = storagev1alpha1.BucketBucketClassRefNameField
-	BucketSpecBucketPoolRefNameField  = storagev1alpha1.BucketBucketPoolRefNameField
+	BucketSpecBucketClassRefNameField = storagev1beta1.BucketBucketClassRefNameField
+	BucketSpecBucketPoolRefNameField  = storagev1beta1.BucketBucketPoolRefNameField
 )
 
 func SetupBucketSpecBucketClassRefNameFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &storagev1alpha1.Bucket{}, BucketSpecBucketClassRefNameField, func(obj client.Object) []string {
-		bucket := obj.(*storagev1alpha1.Bucket)
+	return indexer.IndexField(ctx, &storagev1beta1.Bucket{}, BucketSpecBucketClassRefNameField, func(obj client.Object) []string {
+		bucket := obj.(*storagev1beta1.Bucket)
 		bucketClassRef := bucket.Spec.BucketClassRef
 		if bucketClassRef == nil {
 			return []string{""}
@@ -38,8 +38,8 @@ func SetupBucketSpecBucketClassRefNameFieldIndexer(ctx context.Context, indexer 
 }
 
 func SetupBucketSpecBucketPoolRefNameFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &storagev1alpha1.Bucket{}, BucketSpecBucketPoolRefNameField, func(obj client.Object) []string {
-		bucket := obj.(*storagev1alpha1.Bucket)
+	return indexer.IndexField(ctx, &storagev1beta1.Bucket{}, BucketSpecBucketPoolRefNameField, func(obj client.Object) []string {
+		bucket := obj.(*storagev1beta1.Bucket)
 		bucketPoolRef := bucket.Spec.BucketPoolRef
 		if bucketPoolRef == nil {
 			return []string{""}

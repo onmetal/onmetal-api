@@ -17,7 +17,7 @@ package networking
 import (
 	"context"
 
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -28,15 +28,15 @@ const (
 )
 
 func SetupLoadBalancerPrefixNamesFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &networkingv1alpha1.LoadBalancer{}, LoadBalancerPrefixNamesField, func(obj client.Object) []string {
-		loadBalancer := obj.(*networkingv1alpha1.LoadBalancer)
-		return networkingv1alpha1.LoadBalancerPrefixNames(loadBalancer)
+	return indexer.IndexField(ctx, &networkingv1beta1.LoadBalancer{}, LoadBalancerPrefixNamesField, func(obj client.Object) []string {
+		loadBalancer := obj.(*networkingv1beta1.LoadBalancer)
+		return networkingv1beta1.LoadBalancerPrefixNames(loadBalancer)
 	})
 }
 
 func SetupLoadBalancerNetworkNameFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &networkingv1alpha1.LoadBalancer{}, LoadBalancerNetworkNameField, func(obj client.Object) []string {
-		loadBalancer := obj.(*networkingv1alpha1.LoadBalancer)
+	return indexer.IndexField(ctx, &networkingv1beta1.LoadBalancer{}, LoadBalancerNetworkNameField, func(obj client.Object) []string {
+		loadBalancer := obj.(*networkingv1beta1.LoadBalancer)
 		return []string{loadBalancer.Spec.NetworkRef.Name}
 	})
 }

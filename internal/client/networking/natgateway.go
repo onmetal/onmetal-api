@@ -16,15 +16,15 @@ package networking
 
 import (
 	"context"
-
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const NATGatewayNetworkNameField = "natgateway-network-name"
 
 func SetupNATGatewayNetworkNameFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &v1beta1.NATGateway{}, NATGatewayNetworkNameField, func(obj client.Object) []string {
-		natGateway := obj.(*v1beta1.NATGateway)
+	return indexer.IndexField(ctx, &networkingv1beta1.NATGateway{}, NATGatewayNetworkNameField, func(obj client.Object) []string {
+		natGateway := obj.(*networkingv1beta1.NATGateway)
 		return []string{natGateway.Spec.NetworkRef.Name}
 	})
 }

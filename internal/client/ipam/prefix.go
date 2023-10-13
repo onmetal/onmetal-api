@@ -17,7 +17,7 @@ package ipam
 import (
 	"context"
 
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -27,15 +27,15 @@ const (
 )
 
 func SetupPrefixSpecIPFamilyFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &ipamv1alpha1.Prefix{}, PrefixSpecIPFamilyField, func(obj client.Object) []string {
-		prefix := obj.(*ipamv1alpha1.Prefix)
+	return indexer.IndexField(ctx, &ipamv1beta1.Prefix{}, PrefixSpecIPFamilyField, func(obj client.Object) []string {
+		prefix := obj.(*ipamv1beta1.Prefix)
 		return []string{string(prefix.Spec.IPFamily)}
 	})
 }
 
 func SetupPrefixSpecParentRefFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &ipamv1alpha1.Prefix{}, PrefixSpecParentRefNameField, func(obj client.Object) []string {
-		prefix := obj.(*ipamv1alpha1.Prefix)
+	return indexer.IndexField(ctx, &ipamv1beta1.Prefix{}, PrefixSpecParentRefNameField, func(obj client.Object) []string {
+		prefix := obj.(*ipamv1beta1.Prefix)
 		parentRef := prefix.Spec.ParentRef
 		if parentRef == nil {
 			return []string{""}

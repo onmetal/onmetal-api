@@ -17,7 +17,7 @@ package ipam
 import (
 	"context"
 
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -27,15 +27,15 @@ const (
 )
 
 func SetupPrefixAllocationSpecIPFamilyFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &ipamv1alpha1.PrefixAllocation{}, PrefixAllocationSpecIPFamilyField, func(obj client.Object) []string {
-		prefixAllocation := obj.(*ipamv1alpha1.PrefixAllocation)
+	return indexer.IndexField(ctx, &ipamv1beta1.PrefixAllocation{}, PrefixAllocationSpecIPFamilyField, func(obj client.Object) []string {
+		prefixAllocation := obj.(*ipamv1beta1.PrefixAllocation)
 		return []string{string(prefixAllocation.Spec.IPFamily)}
 	})
 }
 
 func SetupPrefixAllocationSpecPrefixRefNameField(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &ipamv1alpha1.PrefixAllocation{}, PrefixAllocationSpecPrefixRefNameField, func(obj client.Object) []string {
-		allocation := obj.(*ipamv1alpha1.PrefixAllocation)
+	return indexer.IndexField(ctx, &ipamv1beta1.PrefixAllocation{}, PrefixAllocationSpecPrefixRefNameField, func(obj client.Object) []string {
+		allocation := obj.(*ipamv1beta1.PrefixAllocation)
 		prefixRef := allocation.Spec.PrefixRef
 		if prefixRef == nil {
 			return nil

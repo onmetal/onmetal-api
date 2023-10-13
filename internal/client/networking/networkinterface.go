@@ -17,7 +17,7 @@ package networking
 import (
 	"context"
 
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -28,22 +28,22 @@ const (
 )
 
 func SetupNetworkInterfacePrefixNamesFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &networkingv1alpha1.NetworkInterface{}, NetworkInterfacePrefixNamesField, func(obj client.Object) []string {
-		nic := obj.(*networkingv1alpha1.NetworkInterface)
-		return networkingv1alpha1.NetworkInterfacePrefixNames(nic)
+	return indexer.IndexField(ctx, &networkingv1beta1.NetworkInterface{}, NetworkInterfacePrefixNamesField, func(obj client.Object) []string {
+		nic := obj.(*networkingv1beta1.NetworkInterface)
+		return networkingv1beta1.NetworkInterfacePrefixNames(nic)
 	})
 }
 
 func SetupNetworkInterfaceVirtualIPNameFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &networkingv1alpha1.NetworkInterface{}, NetworkInterfaceVirtualIPNamesField, func(obj client.Object) []string {
-		nic := obj.(*networkingv1alpha1.NetworkInterface)
+	return indexer.IndexField(ctx, &networkingv1beta1.NetworkInterface{}, NetworkInterfaceVirtualIPNamesField, func(obj client.Object) []string {
+		nic := obj.(*networkingv1beta1.NetworkInterface)
 
 		virtualIP := nic.Spec.VirtualIP
 		if virtualIP == nil {
 			return []string{""}
 		}
 
-		virtualIPName := networkingv1alpha1.NetworkInterfaceVirtualIPName(nic.Name, *nic.Spec.VirtualIP)
+		virtualIPName := networkingv1beta1.NetworkInterfaceVirtualIPName(nic.Name, *nic.Spec.VirtualIP)
 		if virtualIPName == "" {
 			return []string{""}
 		}
@@ -53,8 +53,8 @@ func SetupNetworkInterfaceVirtualIPNameFieldIndexer(ctx context.Context, indexer
 }
 
 func SetupNetworkInterfaceNetworkNameFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &networkingv1alpha1.NetworkInterface{}, NetworkInterfaceSpecNetworkRefNameField, func(obj client.Object) []string {
-		nic := obj.(*networkingv1alpha1.NetworkInterface)
+	return indexer.IndexField(ctx, &networkingv1beta1.NetworkInterface{}, NetworkInterfaceSpecNetworkRefNameField, func(obj client.Object) []string {
+		nic := obj.(*networkingv1beta1.NetworkInterface)
 		return []string{nic.Spec.NetworkRef.Name}
 	})
 }

@@ -17,7 +17,7 @@ package storage
 import (
 	"context"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -26,8 +26,8 @@ const (
 )
 
 func SetupBucketPoolAvailableBucketClassesFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &storagev1alpha1.BucketPool{}, BucketPoolAvailableBucketClassesField, func(object client.Object) []string {
-		bucketPool := object.(*storagev1alpha1.BucketPool)
+	return indexer.IndexField(ctx, &storagev1beta1.BucketPool{}, BucketPoolAvailableBucketClassesField, func(object client.Object) []string {
+		bucketPool := object.(*storagev1beta1.BucketPool)
 
 		names := make([]string, 0, len(bucketPool.Status.AvailableBucketClasses))
 		for _, availableBucketClass := range bucketPool.Status.AvailableBucketClasses {

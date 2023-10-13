@@ -17,7 +17,7 @@ package compute
 import (
 	"context"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -26,8 +26,8 @@ const (
 )
 
 func SetupMachinePoolAvailableMachineClassesFieldIndexer(ctx context.Context, indexer client.FieldIndexer) error {
-	return indexer.IndexField(ctx, &computev1alpha1.MachinePool{}, MachinePoolAvailableMachineClassesField, func(object client.Object) []string {
-		machinePool := object.(*computev1alpha1.MachinePool)
+	return indexer.IndexField(ctx, &computev1beta1.MachinePool{}, MachinePoolAvailableMachineClassesField, func(object client.Object) []string {
+		machinePool := object.(*computev1beta1.MachinePool)
 
 		names := make([]string, 0, len(machinePool.Status.AvailableMachineClasses))
 		for _, availableMachineClass := range machinePool.Status.AvailableMachineClasses {
