@@ -49,7 +49,7 @@ Please include the statement `--8<-- "hack/docs/abbreviations.md"` at the end of
 
 The [API reference documentation](/api-reference/overview/) contains auto-generated description from the CRD definition of the [onmetal-api](https://github.com/onmetal/onmetal-api) project.
 We are using the [gen-crd-api-reference-docs](https://github.com/ahmetb/gen-crd-api-reference-docs) project to generate the content. Under the hood we are using `go generate` instructions defined in each version type `doc.go`.
-The needed instructions to generate documentation for the `core/v1alpha1` types are in the example below:
+The needed instructions to generate documentation for the `core/v1beta` types are in the example below:
 
 ```go
 //go:generate gen-crd-api-reference-docs -api-dir . -config ../../../hack/api-reference/core-config.json -template-dir ../../../hack/api-reference/template -out-file ../../../docs/api-reference/core.md
