@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package bucket.v1alpha1;
-option go_package = "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1";
+package bucket.v1beta1;
+option go_package = "github.com/onmetal/onmetal-api/ori/apis/bucket/v1beta1";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-import "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1/api.proto";
+import "github.com/onmetal/onmetal-api/ori/apis/meta/v1beta1/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
 option (gogoproto.stringer_all) = true;
@@ -37,7 +37,7 @@ message BucketStatus {
 }
 
 message Bucket {
-  meta.v1alpha1.ObjectMetadata metadata = 1;
+  meta.v1beta1.ObjectMetadata metadata = 1;
   BucketSpec spec = 2;
   BucketStatus status = 3;
 }

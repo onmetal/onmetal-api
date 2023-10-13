@@ -17,7 +17,7 @@ package machine
 import (
 	"context"
 
-	api "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	api "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 )
 
 type RuntimeService interface {

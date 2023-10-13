@@ -20,7 +20,7 @@ import (
 	"time"
 
 	"github.com/onmetal/onmetal-api/broker/common/idgen"
-	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1beta1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
