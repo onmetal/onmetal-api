@@ -106,7 +106,7 @@ var StatusStrategy = prefixAllocationStatusStrategy{Strategy}
 
 func (prefixAllocationStatusStrategy) GetResetFields() map[fieldpath.APIVersion]*fieldpath.Set {
 	return map[fieldpath.APIVersion]*fieldpath.Set{
-		"ipam.api.onmetal.de/v1alpha1": fieldpath.NewSet(
+		"ipam.api.onmetal.de/v1beta1": fieldpath.NewSet(
 			fieldpath.MakePathOrDie("spec"),
 		),
 	}

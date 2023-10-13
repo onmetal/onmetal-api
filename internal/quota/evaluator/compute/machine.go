@@ -18,10 +18,10 @@ import (
 	"context"
 	"fmt"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/apis/compute"
-	internalcomputev1alpha1 "github.com/onmetal/onmetal-api/internal/apis/compute/v1alpha1"
+	internalcomputev1beta1 "github.com/onmetal/onmetal-api/internal/apis/compute/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/quota/evaluator/generic"
 	"github.com/onmetal/onmetal-api/utils/quota"
 	"golang.org/x/exp/slices"
@@ -32,13 +32,13 @@ import (
 )
 
 var (
-	machineResource          = computev1alpha1.Resource("machines")
-	machineCountResourceName = corev1alpha1.ObjectCountQuotaResourceNameFor(machineResource)
+	machineResource          = computev1beta1.Resource("machines")
+	machineCountResourceName = corev1beta1.ObjectCountQuotaResourceNameFor(machineResource)
 
 	MachineResourceNames = sets.New(
 		machineCountResourceName,
-		corev1alpha1.ResourceRequestsCPU,
-		corev1alpha1.ResourceRequestsMemory,
+		corev1beta1.ResourceRequestsCPU,
+		corev1beta1.ResourceRequestsMemory,
 	)
 )
 
@@ -53,57 +53,57 @@ func NewMachineEvaluator(capabilities generic.CapabilitiesReader) quota.Evaluato
 }
 
 func (m *machineEvaluator) Type() client.Object {
-	return &computev1alpha1.Machine{}
+	return &computev1beta1.Machine{}
 }
 
-func (m *machineEvaluator) MatchesResourceName(name corev1alpha1.ResourceName) bool {
+func (m *machineEvaluator) MatchesResourceName(name corev1beta1.ResourceName) bool {
 	return MachineResourceNames.Has(name)
 }
 
-func (m *machineEvaluator) MatchesResourceScopeSelectorRequirement(item client.Object, req corev1alpha1.ResourceScopeSelectorRequirement) (bool, error) {
-	machine := item.(*computev1alpha1.Machine)
+func (m *machineEvaluator) MatchesResourceScopeSelectorRequirement(item client.Object, req corev1beta1.ResourceScopeSelectorRequirement) (bool, error) {
+	machine := item.(*computev1beta1.Machine)
 
 	switch req.ScopeName {
-	case corev1alpha1.ResourceScopeMachineClass:
+	case corev1beta1.ResourceScopeMachineClass:
 		return machineMatchesMachineClassScope(machine, req.Operator, req.Values), nil
 	default:
 		return false, nil
 	}
 }
 
-func machineMatchesMachineClassScope(machine *computev1alpha1.Machine, op corev1alpha1.ResourceScopeSelectorOperator, values []string) bool {
+func machineMatchesMachineClassScope(machine *computev1beta1.Machine, op corev1beta1.ResourceScopeSelectorOperator, values []string) bool {
 	machineClassName := machine.Spec.MachineClassRef.Name
 
 	switch op {
-	case corev1alpha1.ResourceScopeSelectorOperatorExists:
+	case corev1beta1.ResourceScopeSelectorOperatorExists:
 		return true
-	case corev1alpha1.ResourceScopeSelectorOperatorDoesNotExist:
+	case corev1beta1.ResourceScopeSelectorOperatorDoesNotExist:
 		return false
-	case corev1alpha1.ResourceScopeSelectorOperatorIn:
+	case corev1beta1.ResourceScopeSelectorOperatorIn:
 		return slices.Contains(values, machineClassName)
-	case corev1alpha1.ResourceScopeSelectorOperatorNotIn:
+	case corev1beta1.ResourceScopeSelectorOperatorNotIn:
 		return !slices.Contains(values, machineClassName)
 	default:
 		return false
 	}
 }
 
-func toExternalMachineOrError(obj client.Object) (*computev1alpha1.Machine, error) {
+func toExternalMachineOrError(obj client.Object) (*computev1beta1.Machine, error) {
 	switch t := obj.(type) {
-	case *computev1alpha1.Machine:
+	case *computev1beta1.Machine:
 		return t, nil
 	case *compute.Machine:
-		machine := &computev1alpha1.Machine{}
-		if err := internalcomputev1alpha1.Convert_compute_Machine_To_v1alpha1_Machine(t, machine, nil); err != nil {
+		machine := &computev1beta1.Machine{}
+		if err := internalcomputev1beta1.Convert_compute_Machine_To_v1beta1_Machine(t, machine, nil); err != nil {
 			return nil, err
 		}
 		return machine, nil
 	default:
-		return nil, fmt.Errorf("expect *compute.Machine or *computev1alpha1.Machine but got %v", t)
+		return nil, fmt.Errorf("expect *compute.Machine or *computev1beta1.Machine but got %v", t)
 	}
 }
 
-func (m *machineEvaluator) Usage(ctx context.Context, item client.Object) (corev1alpha1.ResourceList, error) {
+func (m *machineEvaluator) Usage(ctx context.Context, item client.Object) (corev1beta1.ResourceList, error) {
 	machine, err := toExternalMachineOrError(item)
 	if err != nil {
 		return nil, err
@@ -116,9 +116,9 @@ func (m *machineEvaluator) Usage(ctx context.Context, item client.Object) (corev
 		return nil, apierrors.NewBadRequest(fmt.Sprintf("machine class %q not found", machineClassName))
 	}
 
-	return corev1alpha1.ResourceList{
-		machineCountResourceName:            resource.MustParse("1"),
-		corev1alpha1.ResourceRequestsCPU:    *capabilities.CPU(),
-		corev1alpha1.ResourceRequestsMemory: *capabilities.Memory(),
+	return corev1beta1.ResourceList{
+		machineCountResourceName:           resource.MustParse("1"),
+		corev1beta1.ResourceRequestsCPU:    *capabilities.CPU(),
+		corev1beta1.ResourceRequestsMemory: *capabilities.Memory(),
 	}, nil
 }

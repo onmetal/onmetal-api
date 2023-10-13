@@ -18,10 +18,10 @@ import (
 	"context"
 	"fmt"
 
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/apis/storage"
-	internalstoragev1alpha1 "github.com/onmetal/onmetal-api/internal/apis/storage/v1alpha1"
+	internalstoragev1beta1 "github.com/onmetal/onmetal-api/internal/apis/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/quota/evaluator/generic"
 	"github.com/onmetal/onmetal-api/utils/quota"
 	"golang.org/x/exp/slices"
@@ -31,12 +31,12 @@ import (
 )
 
 var (
-	bucketResource          = storagev1alpha1.Resource("buckets")
-	bucketCountResourceName = corev1alpha1.ObjectCountQuotaResourceNameFor(bucketResource)
+	bucketResource          = storagev1beta1.Resource("buckets")
+	bucketCountResourceName = corev1beta1.ObjectCountQuotaResourceNameFor(bucketResource)
 
 	BucketResourceNames = sets.New(
 		bucketCountResourceName,
-		corev1alpha1.ResourceRequestsStorage,
+		corev1beta1.ResourceRequestsStorage,
 	)
 )
 
@@ -51,35 +51,35 @@ func NewBucketEvaluator(capabilities generic.CapabilitiesReader) quota.Evaluator
 }
 
 func (m *bucketEvaluator) Type() client.Object {
-	return &storagev1alpha1.Bucket{}
+	return &storagev1beta1.Bucket{}
 }
 
-func (m *bucketEvaluator) MatchesResourceName(name corev1alpha1.ResourceName) bool {
+func (m *bucketEvaluator) MatchesResourceName(name corev1beta1.ResourceName) bool {
 	return BucketResourceNames.Has(name)
 }
 
-func (m *bucketEvaluator) MatchesResourceScopeSelectorRequirement(item client.Object, req corev1alpha1.ResourceScopeSelectorRequirement) (bool, error) {
-	bucket := item.(*storagev1alpha1.Bucket)
+func (m *bucketEvaluator) MatchesResourceScopeSelectorRequirement(item client.Object, req corev1beta1.ResourceScopeSelectorRequirement) (bool, error) {
+	bucket := item.(*storagev1beta1.Bucket)
 
 	switch req.ScopeName {
-	case corev1alpha1.ResourceScopeBucketClass:
+	case corev1beta1.ResourceScopeBucketClass:
 		return bucketMatchesBucketClassScope(bucket, req.Operator, req.Values), nil
 	default:
 		return false, nil
 	}
 }
 
-func bucketMatchesBucketClassScope(bucket *storagev1alpha1.Bucket, op corev1alpha1.ResourceScopeSelectorOperator, values []string) bool {
+func bucketMatchesBucketClassScope(bucket *storagev1beta1.Bucket, op corev1beta1.ResourceScopeSelectorOperator, values []string) bool {
 	bucketClassRef := bucket.Spec.BucketClassRef
 
 	switch op {
-	case corev1alpha1.ResourceScopeSelectorOperatorExists:
+	case corev1beta1.ResourceScopeSelectorOperatorExists:
 		return bucketClassRef != nil
-	case corev1alpha1.ResourceScopeSelectorOperatorDoesNotExist:
+	case corev1beta1.ResourceScopeSelectorOperatorDoesNotExist:
 		return bucketClassRef == nil
-	case corev1alpha1.ResourceScopeSelectorOperatorIn:
+	case corev1beta1.ResourceScopeSelectorOperatorIn:
 		return slices.Contains(values, bucketClassRef.Name)
-	case corev1alpha1.ResourceScopeSelectorOperatorNotIn:
+	case corev1beta1.ResourceScopeSelectorOperatorNotIn:
 		if bucketClassRef == nil {
 			return false
 		}
@@ -89,28 +89,28 @@ func bucketMatchesBucketClassScope(bucket *storagev1alpha1.Bucket, op corev1alph
 	}
 }
 
-func toExternalBucketOrError(obj client.Object) (*storagev1alpha1.Bucket, error) {
+func toExternalBucketOrError(obj client.Object) (*storagev1beta1.Bucket, error) {
 	switch t := obj.(type) {
-	case *storagev1alpha1.Bucket:
+	case *storagev1beta1.Bucket:
 		return t, nil
 	case *storage.Bucket:
-		bucket := &storagev1alpha1.Bucket{}
-		if err := internalstoragev1alpha1.Convert_storage_Bucket_To_v1alpha1_Bucket(t, bucket, nil); err != nil {
+		bucket := &storagev1beta1.Bucket{}
+		if err := internalstoragev1beta1.Convert_storage_Bucket_To_v1beta1_Bucket(t, bucket, nil); err != nil {
 			return nil, err
 		}
 		return bucket, nil
 	default:
-		return nil, fmt.Errorf("expect *storage.Bucket or *storagev1alpha1.Bucket but got %v", t)
+		return nil, fmt.Errorf("expect *storage.Bucket or *storagev1beta1.Bucket but got %v", t)
 	}
 }
 
-func (m *bucketEvaluator) Usage(ctx context.Context, item client.Object) (corev1alpha1.ResourceList, error) {
+func (m *bucketEvaluator) Usage(ctx context.Context, item client.Object) (corev1beta1.ResourceList, error) {
 	_, err := toExternalBucketOrError(item)
 	if err != nil {
 		return nil, err
 	}
 
-	return corev1alpha1.ResourceList{
+	return corev1beta1.ResourceList{
 		// TODO: return more detailed usage
 		bucketCountResourceName: resource.MustParse("1"),
 	}, nil

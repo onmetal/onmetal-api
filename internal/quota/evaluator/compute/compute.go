@@ -17,8 +17,8 @@ package compute
 import (
 	"context"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	"github.com/onmetal/onmetal-api/client-go/informers"
 	"github.com/onmetal/onmetal-api/client-go/onmetalapi"
 	"github.com/onmetal/onmetal-api/internal/quota/evaluator/generic"
@@ -35,12 +35,12 @@ func NewEvaluators(capabilities generic.CapabilitiesReader) []quota.Evaluator {
 	}
 }
 
-func extractMachineClassCapabilities(machineClass *computev1alpha1.MachineClass) corev1alpha1.ResourceList {
+func extractMachineClassCapabilities(machineClass *computev1beta1.MachineClass) corev1beta1.ResourceList {
 	return machineClass.Capabilities
 }
 
 func NewClientMachineCapabilitiesReader(c client.Client) generic.CapabilitiesReader {
-	getter := resourceaccess.NewTypedClientGetter[computev1alpha1.MachineClass](c)
+	getter := resourceaccess.NewTypedClientGetter[computev1beta1.MachineClass](c)
 	return generic.NewGetterCapabilitiesReader(getter,
 		extractMachineClassCapabilities,
 		func(s string) client.ObjectKey { return client.ObjectKey{Name: s} },
@@ -48,12 +48,12 @@ func NewClientMachineCapabilitiesReader(c client.Client) generic.CapabilitiesRea
 }
 
 func NewPrimeLRUMachineClassCapabilitiesReader(c onmetalapi.Interface, f informers.SharedInformerFactory) generic.CapabilitiesReader {
-	getter := resourceaccess.NewPrimeLRUGetter[*computev1alpha1.MachineClass, string](
-		func(ctx context.Context, className string) (*computev1alpha1.MachineClass, error) {
-			return c.ComputeV1alpha1().MachineClasses().Get(ctx, className, metav1.GetOptions{})
+	getter := resourceaccess.NewPrimeLRUGetter[*computev1beta1.MachineClass, string](
+		func(ctx context.Context, className string) (*computev1beta1.MachineClass, error) {
+			return c.ComputeV1beta1().MachineClasses().Get(ctx, className, metav1.GetOptions{})
 		},
-		func(ctx context.Context, className string) (*computev1alpha1.MachineClass, error) {
-			return f.Compute().V1alpha1().MachineClasses().Lister().Get(className)
+		func(ctx context.Context, className string) (*computev1beta1.MachineClass, error) {
+			return f.Compute().V1beta1().MachineClasses().Lister().Get(className)
 		},
 	)
 	return generic.NewGetterCapabilitiesReader(getter, extractMachineClassCapabilities, utilsgeneric.Identity[string])

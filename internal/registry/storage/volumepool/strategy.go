@@ -65,7 +65,7 @@ func (volumePoolStrategy) NamespaceScoped() bool {
 
 func (volumePoolStrategy) GetResetFields() map[fieldpath.APIVersion]*fieldpath.Set {
 	return map[fieldpath.APIVersion]*fieldpath.Set{
-		"storage.api.onmetal.de/v1alpha1": fieldpath.NewSet(
+		"storage.api.onmetal.de/v1beta1": fieldpath.NewSet(
 			fieldpath.MakePathOrDie("status"),
 		),
 	}
@@ -123,7 +123,7 @@ var StatusStrategy = volumePoolStatusStrategy{Strategy}
 
 func (volumePoolStatusStrategy) GetResetFields() map[fieldpath.APIVersion]*fieldpath.Set {
 	return map[fieldpath.APIVersion]*fieldpath.Set{
-		"storage.api.onmetal.de/v1alpha1": fieldpath.NewSet(
+		"storage.api.onmetal.de/v1beta1": fieldpath.NewSet(
 			fieldpath.MakePathOrDie("spec"),
 		),
 	}

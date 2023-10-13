@@ -106,7 +106,7 @@ var StatusStrategy = resourceQuotaStatusStrategy{Strategy}
 
 func (resourceQuotaStatusStrategy) GetResetFields() map[fieldpath.APIVersion]*fieldpath.Set {
 	return map[fieldpath.APIVersion]*fieldpath.Set{
-		"core.api.onmetal.de/v1alpha1": fieldpath.NewSet(
+		"core.api.onmetal.de/v1beta1": fieldpath.NewSet(
 			fieldpath.MakePathOrDie("spec"),
 		),
 	}

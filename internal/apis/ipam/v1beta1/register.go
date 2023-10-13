@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// Package v1alpha1 contains API Schema definitions for the ipam v1alpha1 API group
+// Package v1beta1 contains API Schema definitions for the ipam v1beta1 API group
 // +groupName=ipam.api.onmetal.de
 package v1beta1
 
@@ -25,7 +25,7 @@ import (
 
 var (
 	// SchemeGroupVersion is group version used to register these objects
-	SchemeGroupVersion = schema.GroupVersion{Group: "ipam.api.onmetal.de", Version: "v1alpha1"}
+	SchemeGroupVersion = schema.GroupVersion{Group: "ipam.api.onmetal.de", Version: "v1beta1"}
 
 	localSchemeBuilder = &v1beta1.SchemeBuilder
 

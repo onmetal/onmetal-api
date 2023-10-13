@@ -17,5 +17,5 @@
 // +k8s:defaulter-gen=TypeMeta
 // +k8s:defaulter-gen-input=github.com/onmetal/onmetal-api/api/core/v1beta1
 
-// Package v1alpha1 is the v1alpha1 version of the API.
+// Package v1beta1 is the v1beta1 version of the API.
 package v1beta1 // import "github.com/onmetal/onmetal-api/internal/apis/core/v1beta1"

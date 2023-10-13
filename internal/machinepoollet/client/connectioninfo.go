@@ -21,7 +21,7 @@ import (
 	"strconv"
 	"time"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
 	"k8s.io/apiserver/pkg/server/egressselector"
@@ -44,14 +44,14 @@ type ConnectionInfoGetter interface {
 
 // MachinePoolGetter defines an interface for looking up a node by name
 type MachinePoolGetter interface {
-	Get(ctx context.Context, name string, options metav1.GetOptions) (*computev1alpha1.MachinePool, error)
+	Get(ctx context.Context, name string, options metav1.GetOptions) (*computev1beta1.MachinePool, error)
 }
 
 // MachinePoolGetterFunc allows implementing MachinePoolGetter with a function
-type MachinePoolGetterFunc func(ctx context.Context, name string, options metav1.GetOptions) (*computev1alpha1.MachinePool, error)
+type MachinePoolGetterFunc func(ctx context.Context, name string, options metav1.GetOptions) (*computev1beta1.MachinePool, error)
 
 // Get fetches information via MachinePoolGetterFunc.
-func (f MachinePoolGetterFunc) Get(ctx context.Context, name string, options metav1.GetOptions) (*computev1alpha1.MachinePool, error) {
+func (f MachinePoolGetterFunc) Get(ctx context.Context, name string, options metav1.GetOptions) (*computev1beta1.MachinePool, error) {
 	return f(ctx, name, options)
 }
 
@@ -68,7 +68,7 @@ type MachinePoolConnectionInfoGetter struct {
 	// insecureSkipTLSVerifyTransport is the transport to use if the kube-apiserver wants to skip verifying the TLS certificate of the machinepoolllet
 	insecureSkipTLSVerifyTransport http.RoundTripper
 	// preferredAddressTypes specifies the preferred order to use to find a node address
-	preferredAddressTypes []computev1alpha1.MachinePoolAddressType
+	preferredAddressTypes []computev1beta1.MachinePoolAddressType
 }
 
 type MachinePoolletClientConfig struct {
@@ -166,7 +166,7 @@ func makeTransport(config *MachinePoolletClientConfig, insecureSkipTLSVerify boo
 
 // NoMatchError is a typed implementation of the error interface. It indicates a failure to get a matching Node.
 type NoMatchError struct {
-	addresses []computev1alpha1.MachinePoolAddress
+	addresses []computev1beta1.MachinePoolAddress
 }
 
 // Error is the implementation of the conventional interface for
@@ -177,7 +177,7 @@ func (e *NoMatchError) Error() string {
 
 // GetPreferredMachinePoolAddress returns the address of the provided node, using the provided preference order.
 // If none of the preferred address types are found, an error is returned.
-func GetPreferredMachinePoolAddress(machinePool *computev1alpha1.MachinePool, preferredAddressTypes []computev1alpha1.MachinePoolAddressType) (string, error) {
+func GetPreferredMachinePoolAddress(machinePool *computev1beta1.MachinePool, preferredAddressTypes []computev1beta1.MachinePoolAddressType) (string, error) {
 	for _, addressType := range preferredAddressTypes {
 		for _, address := range machinePool.Status.Addresses {
 			if address.Type == addressType {
@@ -226,9 +226,9 @@ func NewMachinePoolConnectionInfoGetter(machinePools MachinePoolGetter, config M
 		return nil, err
 	}
 
-	var types []computev1alpha1.MachinePoolAddressType
+	var types []computev1beta1.MachinePoolAddressType
 	for _, t := range config.PreferredAddressTypes {
-		types = append(types, computev1alpha1.MachinePoolAddressType(t))
+		types = append(types, computev1beta1.MachinePoolAddressType(t))
 	}
 
 	return &MachinePoolConnectionInfoGetter{

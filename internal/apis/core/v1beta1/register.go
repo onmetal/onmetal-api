@@ -25,7 +25,7 @@ import (
 
 var (
 	// SchemeGroupVersion is group version used to register these objects
-	SchemeGroupVersion = schema.GroupVersion{Group: "core.api.onmetal.de", Version: "v1alpha1"}
+	SchemeGroupVersion = schema.GroupVersion{Group: "core.api.onmetal.de", Version: "v1beta1"}
 
 	localSchemeBuilder = &v1beta1.SchemeBuilder
 

@@ -65,7 +65,7 @@ func (machinePoolStrategy) NamespaceScoped() bool {
 
 func (machinePoolStrategy) GetResetFields() map[fieldpath.APIVersion]*fieldpath.Set {
 	return map[fieldpath.APIVersion]*fieldpath.Set{
-		"compute.api.onmetal.de/v1alpha1": fieldpath.NewSet(
+		"compute.api.onmetal.de/v1beta1": fieldpath.NewSet(
 			fieldpath.MakePathOrDie("status"),
 		),
 	}
@@ -125,7 +125,7 @@ var StatusStrategy = machinePoolStatusStrategy{Strategy}
 
 func (machinePoolStatusStrategy) GetResetFields() map[fieldpath.APIVersion]*fieldpath.Set {
 	return map[fieldpath.APIVersion]*fieldpath.Set{
-		"compute.api.onmetal.de/v1alpha1": fieldpath.NewSet(
+		"compute.api.onmetal.de/v1beta1": fieldpath.NewSet(
 			fieldpath.MakePathOrDie("spec"),
 		),
 	}

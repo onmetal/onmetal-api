@@ -142,7 +142,7 @@ var StatusStrategy = volumeStatusStrategy{Strategy}
 
 func (volumeStatusStrategy) GetResetFields() map[fieldpath.APIVersion]*fieldpath.Set {
 	return map[fieldpath.APIVersion]*fieldpath.Set{
-		"storage.api.onmetal.de/v1alpha1": fieldpath.NewSet(
+		"storage.api.onmetal.de/v1beta1": fieldpath.NewSet(
 			fieldpath.MakePathOrDie("spec"),
 		),
 	}

@@ -146,7 +146,7 @@ var StatusStrategy = machineStatusStrategy{Strategy}
 
 func (machineStatusStrategy) GetResetFields() map[fieldpath.APIVersion]*fieldpath.Set {
 	return map[fieldpath.APIVersion]*fieldpath.Set{
-		"compute.api.onmetal.de/v1alpha1": fieldpath.NewSet(
+		"compute.api.onmetal.de/v1beta1": fieldpath.NewSet(
 			fieldpath.MakePathOrDie("spec"),
 		),
 	}

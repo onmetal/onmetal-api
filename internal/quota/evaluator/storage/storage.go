@@ -17,8 +17,8 @@ package storage
 import (
 	"context"
 
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/client-go/informers"
 	"github.com/onmetal/onmetal-api/client-go/onmetalapi"
 	"github.com/onmetal/onmetal-api/internal/quota/evaluator/generic"
@@ -36,12 +36,12 @@ func NewEvaluators(volumeClassCapabilities, bucketClassCapabilities generic.Capa
 	}
 }
 
-func extractVolumeClassCapabilities(volumeClass *storagev1alpha1.VolumeClass) corev1alpha1.ResourceList {
+func extractVolumeClassCapabilities(volumeClass *storagev1beta1.VolumeClass) corev1beta1.ResourceList {
 	return volumeClass.Capabilities
 }
 
 func NewClientVolumeCapabilitiesReader(c client.Client) generic.CapabilitiesReader {
-	getter := resourceaccess.NewTypedClientGetter[storagev1alpha1.VolumeClass](c)
+	getter := resourceaccess.NewTypedClientGetter[storagev1beta1.VolumeClass](c)
 	return generic.NewGetterCapabilitiesReader(getter,
 		extractVolumeClassCapabilities,
 		func(s string) client.ObjectKey { return client.ObjectKey{Name: s} },
@@ -49,23 +49,23 @@ func NewClientVolumeCapabilitiesReader(c client.Client) generic.CapabilitiesRead
 }
 
 func NewPrimeLRUVolumeClassCapabilitiesReader(c onmetalapi.Interface, f informers.SharedInformerFactory) generic.CapabilitiesReader {
-	getter := resourceaccess.NewPrimeLRUGetter[*storagev1alpha1.VolumeClass, string](
-		func(ctx context.Context, className string) (*storagev1alpha1.VolumeClass, error) {
-			return c.StorageV1alpha1().VolumeClasses().Get(ctx, className, metav1.GetOptions{})
+	getter := resourceaccess.NewPrimeLRUGetter[*storagev1beta1.VolumeClass, string](
+		func(ctx context.Context, className string) (*storagev1beta1.VolumeClass, error) {
+			return c.StorageV1beta1().VolumeClasses().Get(ctx, className, metav1.GetOptions{})
 		},
-		func(ctx context.Context, className string) (*storagev1alpha1.VolumeClass, error) {
-			return f.Storage().V1alpha1().VolumeClasses().Lister().Get(className)
+		func(ctx context.Context, className string) (*storagev1beta1.VolumeClass, error) {
+			return f.Storage().V1beta1().VolumeClasses().Lister().Get(className)
 		},
 	)
 	return generic.NewGetterCapabilitiesReader(getter, extractVolumeClassCapabilities, utilsgeneric.Identity[string])
 }
 
-func extractBucketClassCapabilities(bucketClass *storagev1alpha1.BucketClass) corev1alpha1.ResourceList {
+func extractBucketClassCapabilities(bucketClass *storagev1beta1.BucketClass) corev1beta1.ResourceList {
 	return bucketClass.Capabilities
 }
 
 func NewClientBucketCapabilitiesReader(c client.Client) generic.CapabilitiesReader {
-	getter := resourceaccess.NewTypedClientGetter[storagev1alpha1.BucketClass](c)
+	getter := resourceaccess.NewTypedClientGetter[storagev1beta1.BucketClass](c)
 	return generic.NewGetterCapabilitiesReader(getter,
 		extractBucketClassCapabilities,
 		func(s string) client.ObjectKey { return client.ObjectKey{Name: s} },
@@ -73,12 +73,12 @@ func NewClientBucketCapabilitiesReader(c client.Client) generic.CapabilitiesRead
 }
 
 func NewPrimeLRUBucketClassCapabilitiesReader(c onmetalapi.Interface, f informers.SharedInformerFactory) generic.CapabilitiesReader {
-	getter := resourceaccess.NewPrimeLRUGetter[*storagev1alpha1.BucketClass, string](
-		func(ctx context.Context, className string) (*storagev1alpha1.BucketClass, error) {
-			return c.StorageV1alpha1().BucketClasses().Get(ctx, className, metav1.GetOptions{})
+	getter := resourceaccess.NewPrimeLRUGetter[*storagev1beta1.BucketClass, string](
+		func(ctx context.Context, className string) (*storagev1beta1.BucketClass, error) {
+			return c.StorageV1beta1().BucketClasses().Get(ctx, className, metav1.GetOptions{})
 		},
-		func(ctx context.Context, className string) (*storagev1alpha1.BucketClass, error) {
-			return f.Storage().V1alpha1().BucketClasses().Lister().Get(className)
+		func(ctx context.Context, className string) (*storagev1beta1.BucketClass, error) {
+			return f.Storage().V1beta1().BucketClasses().Lister().Get(className)
 		},
 	)
 	return generic.NewGetterCapabilitiesReader(getter, extractBucketClassCapabilities, utilsgeneric.Identity[string])

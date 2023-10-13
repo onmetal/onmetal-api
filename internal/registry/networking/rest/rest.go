@@ -15,7 +15,7 @@
 package rest
 
 import (
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/api"
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
 	loadbalancerstorage "github.com/onmetal/onmetal-api/internal/registry/networking/loadbalancer/storage"
@@ -43,20 +43,20 @@ func (p StorageProvider) GroupName() string {
 
 func (p StorageProvider) NewRESTStorage(apiResourceConfigSource storage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter) (genericapiserver.APIGroupInfo, bool, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(p.GroupName(), api.Scheme, metav1.ParameterCodec, api.Codecs)
-	apiGroupInfo.PrioritizedVersions = []schema.GroupVersion{networkingv1alpha1.SchemeGroupVersion}
+	apiGroupInfo.PrioritizedVersions = []schema.GroupVersion{networkingv1beta1.SchemeGroupVersion}
 	apiGroupInfo.NegotiatedSerializer = onmetalapiserializer.DefaultSubsetNegotiatedSerializer(api.Codecs)
 
-	storageMap, err := p.v1alpha1Storage(restOptionsGetter)
+	storageMap, err := p.v1beta1Storage(restOptionsGetter)
 	if err != nil {
 		return genericapiserver.APIGroupInfo{}, false, err
 	}
 
-	apiGroupInfo.VersionedResourcesStorageMap[networkingv1alpha1.SchemeGroupVersion.Version] = storageMap
+	apiGroupInfo.VersionedResourcesStorageMap[networkingv1beta1.SchemeGroupVersion.Version] = storageMap
 
 	return apiGroupInfo, true, nil
 }
 
-func (p StorageProvider) v1alpha1Storage(restOptionsGetter generic.RESTOptionsGetter) (map[string]rest.Storage, error) {
+func (p StorageProvider) v1beta1Storage(restOptionsGetter generic.RESTOptionsGetter) (map[string]rest.Storage, error) {
 	storageMap := map[string]rest.Storage{}
 
 	networkInterfaceStorage, err := networkinterfacestorage.NewStorage(restOptionsGetter)

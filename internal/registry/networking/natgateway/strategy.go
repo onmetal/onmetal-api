@@ -108,7 +108,7 @@ var StatusStrategy = natGatewayStatusStrategy{Strategy}
 
 func (natGatewayStatusStrategy) GetResetFields() map[fieldpath.APIVersion]*fieldpath.Set {
 	return map[fieldpath.APIVersion]*fieldpath.Set{
-		"networking.api.onmetal.de/v1alpha1": fieldpath.NewSet(
+		"networking.api.onmetal.de/v1beta1": fieldpath.NewSet(
 			fieldpath.MakePathOrDie("spec"),
 		),
 	}

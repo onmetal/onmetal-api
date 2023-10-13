@@ -15,7 +15,7 @@
 package rest
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/api"
 	"github.com/onmetal/onmetal-api/internal/apis/compute"
 	machinepoolletclient "github.com/onmetal/onmetal-api/internal/machinepoollet/client"
@@ -42,17 +42,17 @@ func (p StorageProvider) NewRESTStorage(apiResourceConfigSource serverstorage.AP
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(p.GroupName(), api.Scheme, api.ParameterCodec, api.Codecs)
 	apiGroupInfo.NegotiatedSerializer = onmetalapiserializer.DefaultSubsetNegotiatedSerializer(api.Codecs)
 
-	storageMap, err := p.v1alpha1Storage(restOptionsGetter)
+	storageMap, err := p.v1betaStorage(restOptionsGetter)
 	if err != nil {
 		return genericapiserver.APIGroupInfo{}, false, err
 	}
 
-	apiGroupInfo.VersionedResourcesStorageMap[computev1alpha1.SchemeGroupVersion.Version] = storageMap
+	apiGroupInfo.VersionedResourcesStorageMap[computev1beta1.SchemeGroupVersion.Version] = storageMap
 
 	return apiGroupInfo, true, nil
 }
 
-func (p StorageProvider) v1alpha1Storage(restOptionsGetter generic.RESTOptionsGetter) (map[string]rest.Storage, error) {
+func (p StorageProvider) v1betaStorage(restOptionsGetter generic.RESTOptionsGetter) (map[string]rest.Storage, error) {
 	storageMap := map[string]rest.Storage{}
 
 	machineClassStorage, err := machineclassstore.NewStorage(restOptionsGetter)

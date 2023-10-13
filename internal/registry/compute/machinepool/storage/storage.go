@@ -17,8 +17,9 @@ package storage
 import (
 	"context"
 	"fmt"
+	"github.com/onmetal/onmetal-api/internal/apis/compute/v1beta1"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/apis/compute"
 	"github.com/onmetal/onmetal-api/internal/machinepoollet/client"
 	"github.com/onmetal/onmetal-api/internal/registry/compute/machinepool"
@@ -72,7 +73,7 @@ func NewStorage(optsGetter generic.RESTOptionsGetter, machinePoolletClientConfig
 	statusRest := &StatusREST{&statusStore}
 
 	// Build a MachinePoolGetter that looks up nodes using the REST handler
-	machinePoolGetter := client.MachinePoolGetterFunc(func(ctx context.Context, machinePoolName string, options metav1.GetOptions) (*computev1alpha1.MachinePool, error) {
+	machinePoolGetter := client.MachinePoolGetterFunc(func(ctx context.Context, machinePoolName string, options metav1.GetOptions) (*computev1beta1.MachinePool, error) {
 		obj, err := machinePoolRest.Get(ctx, machinePoolName, &options)
 		if err != nil {
 			return nil, err
@@ -82,9 +83,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter, machinePoolletClientConfig
 			return nil, fmt.Errorf("unexpected type %T", obj)
 		}
 		// TODO: Remove the conversion. Consider only return the MachinePoolAddresses
-		externalMachinePool := &computev1alpha1.MachinePool{}
-		if err := v1beta1.Convert_compute_MachinePool_To_v1alpha1_MachinePool(machinePool, externalMachinePool, nil); err != nil {
-			return nil, fmt.Errorf("failed to convert to v1alpha1.MachinePool: %v", err)
+		externalMachinePool := &computev1beta1.MachinePool{}
+		if err := v1beta1.Convert_compute_MachinePool_To_v1beta1_MachinePool(machinePool, externalMachinePool, nil); err != nil {
+			return nil, fmt.Errorf("failed to convert to v1beta1.MachinePool: %v", err)
 		}
 		return externalMachinePool, nil
 	})
