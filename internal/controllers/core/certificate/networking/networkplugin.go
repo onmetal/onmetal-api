@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"strings"
 
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/controllers/core/certificate/generic"
 	"golang.org/x/exp/slices"
 	authv1 "k8s.io/api/authorization/v1"
@@ -44,8 +44,8 @@ func IsNetworkPluginClientCert(csr *certificatesv1.CertificateSigningRequest, x5
 }
 
 func ValidateNetworkPluginClientCSR(req *x509.CertificateRequest, usages sets.Set[certificatesv1.KeyUsage]) error {
-	if !slices.Equal([]string{networkingv1alpha1.NetworkPluginsGroup}, req.Subject.Organization) {
-		return fmt.Errorf("organization is not %s", networkingv1alpha1.NetworkPluginsGroup)
+	if !slices.Equal([]string{networkingv1beta1.NetworkPluginsGroup}, req.Subject.Organization) {
+		return fmt.Errorf("organization is not %s", networkingv1beta1.NetworkPluginsGroup)
 	}
 
 	if len(req.DNSNames) > 0 {
@@ -61,8 +61,8 @@ func ValidateNetworkPluginClientCSR(req *x509.CertificateRequest, usages sets.Se
 		return fmt.Errorf("uri subject alternative names are not allowed")
 	}
 
-	if !strings.HasPrefix(req.Subject.CommonName, networkingv1alpha1.NetworkPluginUserNamePrefix) {
-		return fmt.Errorf("subject common name does not begin with %s", networkingv1alpha1.NetworkPluginUserNamePrefix)
+	if !strings.HasPrefix(req.Subject.CommonName, networkingv1beta1.NetworkPluginUserNamePrefix) {
+		return fmt.Errorf("subject common name does not begin with %s", networkingv1beta1.NetworkPluginUserNamePrefix)
 	}
 
 	if !NetworkPluginRequiredUsages.Equal(usages) {

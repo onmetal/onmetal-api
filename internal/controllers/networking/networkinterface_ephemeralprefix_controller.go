@@ -23,8 +23,8 @@ import (
 	"github.com/onmetal/onmetal-api/utils/annotations"
 
 	"github.com/go-logr/logr"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	networkingclient "github.com/onmetal/onmetal-api/internal/client/networking"
 	klogutils "github.com/onmetal/onmetal-api/utils/klog"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -46,7 +46,7 @@ type NetworkInterfaceEphemeralPrefixReconciler struct {
 
 func (r *NetworkInterfaceEphemeralPrefixReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	nic := &networkingv1alpha1.NetworkInterface{}
+	nic := &networkingv1beta1.NetworkInterface{}
 	if err := r.Get(ctx, req.NamespacedName, nic); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -54,7 +54,7 @@ func (r *NetworkInterfaceEphemeralPrefixReconciler) Reconcile(ctx context.Contex
 	return r.reconcileExists(ctx, log, nic)
 }
 
-func (r *NetworkInterfaceEphemeralPrefixReconciler) reconcileExists(ctx context.Context, log logr.Logger, nic *networkingv1alpha1.NetworkInterface) (ctrl.Result, error) {
+func (r *NetworkInterfaceEphemeralPrefixReconciler) reconcileExists(ctx context.Context, log logr.Logger, nic *networkingv1beta1.NetworkInterface) (ctrl.Result, error) {
 	if !nic.DeletionTimestamp.IsZero() {
 		return ctrl.Result{}, nil
 	}
@@ -62,8 +62,8 @@ func (r *NetworkInterfaceEphemeralPrefixReconciler) reconcileExists(ctx context.
 	return r.reconcile(ctx, log, nic)
 }
 
-func (r *NetworkInterfaceEphemeralPrefixReconciler) ephemeralNetworkInterfacePrefixByName(nic *networkingv1alpha1.NetworkInterface) map[string]*ipamv1alpha1.Prefix {
-	res := make(map[string]*ipamv1alpha1.Prefix)
+func (r *NetworkInterfaceEphemeralPrefixReconciler) ephemeralNetworkInterfacePrefixByName(nic *networkingv1beta1.NetworkInterface) map[string]*ipamv1beta1.Prefix {
+	res := make(map[string]*ipamv1beta1.Prefix)
 
 	for i, nicIP := range nic.Spec.IPs {
 		ephemeral := nicIP.Ephemeral
@@ -71,8 +71,8 @@ func (r *NetworkInterfaceEphemeralPrefixReconciler) ephemeralNetworkInterfacePre
 			continue
 		}
 
-		prefixName := networkingv1alpha1.NetworkInterfaceIPIPAMPrefixName(nic.Name, i)
-		prefix := &ipamv1alpha1.Prefix{
+		prefixName := networkingv1beta1.NetworkInterfaceIPIPAMPrefixName(nic.Name, i)
+		prefix := &ipamv1beta1.Prefix{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:   nic.Namespace,
 				Name:        prefixName,
@@ -92,8 +92,8 @@ func (r *NetworkInterfaceEphemeralPrefixReconciler) ephemeralNetworkInterfacePre
 			continue
 		}
 
-		prefixName := networkingv1alpha1.NetworkInterfacePrefixIPAMPrefixName(nic.Name, i)
-		prefix := &ipamv1alpha1.Prefix{
+		prefixName := networkingv1beta1.NetworkInterfacePrefixIPAMPrefixName(nic.Name, i)
+		prefix := &ipamv1beta1.Prefix{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:   nic.Namespace,
 				Name:        prefixName,
@@ -109,7 +109,7 @@ func (r *NetworkInterfaceEphemeralPrefixReconciler) ephemeralNetworkInterfacePre
 	return res
 }
 
-func (r *NetworkInterfaceEphemeralPrefixReconciler) handleExistingPrefix(ctx context.Context, log logr.Logger, nic *networkingv1alpha1.NetworkInterface, shouldManage bool, prefix *ipamv1alpha1.Prefix) error {
+func (r *NetworkInterfaceEphemeralPrefixReconciler) handleExistingPrefix(ctx context.Context, log logr.Logger, nic *networkingv1beta1.NetworkInterface, shouldManage bool, prefix *ipamv1beta1.Prefix) error {
 	if annotations.IsDefaultEphemeralControlledBy(prefix, nic) {
 		if shouldManage {
 			log.V(1).Info("Ephemeral prefix is present and controlled by network interface")
@@ -137,8 +137,8 @@ func (r *NetworkInterfaceEphemeralPrefixReconciler) handleExistingPrefix(ctx con
 func (r *NetworkInterfaceEphemeralPrefixReconciler) handleCreatePrefix(
 	ctx context.Context,
 	log logr.Logger,
-	nic *networkingv1alpha1.NetworkInterface,
-	prefix *ipamv1alpha1.Prefix,
+	nic *networkingv1beta1.NetworkInterface,
+	prefix *ipamv1beta1.Prefix,
 ) error {
 	log.V(1).Info("Creating prefix")
 	prefixKey := client.ObjectKeyFromObject(prefix)
@@ -162,11 +162,11 @@ func (r *NetworkInterfaceEphemeralPrefixReconciler) handleCreatePrefix(
 	return r.handleExistingPrefix(ctx, log, nic, true, prefix)
 }
 
-func (r *NetworkInterfaceEphemeralPrefixReconciler) reconcile(ctx context.Context, log logr.Logger, nic *networkingv1alpha1.NetworkInterface) (ctrl.Result, error) {
+func (r *NetworkInterfaceEphemeralPrefixReconciler) reconcile(ctx context.Context, log logr.Logger, nic *networkingv1beta1.NetworkInterface) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	log.V(1).Info("Listing prefixes")
-	prefixList := &ipamv1alpha1.PrefixList{}
+	prefixList := &ipamv1beta1.PrefixList{}
 	if err := r.List(ctx, prefixList,
 		client.InNamespace(nic.Namespace),
 	); err != nil {
@@ -205,17 +205,17 @@ func (r *NetworkInterfaceEphemeralPrefixReconciler) reconcile(ctx context.Contex
 
 func (r *NetworkInterfaceEphemeralPrefixReconciler) networkInterfaceNotDeletingPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		networkInterface := obj.(*networkingv1alpha1.NetworkInterface)
+		networkInterface := obj.(*networkingv1beta1.NetworkInterface)
 		return networkInterface.DeletionTimestamp.IsZero()
 	})
 }
 
 func (r *NetworkInterfaceEphemeralPrefixReconciler) enqueueByPrefix() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		prefix := obj.(*ipamv1alpha1.Prefix)
+		prefix := obj.(*ipamv1beta1.Prefix)
 		log := ctrl.LoggerFrom(ctx)
 
-		nicList := &networkingv1alpha1.NetworkInterfaceList{}
+		nicList := &networkingv1beta1.NetworkInterfaceList{}
 		if err := r.List(ctx, nicList,
 			client.InNamespace(prefix.Namespace),
 			client.MatchingFields{
@@ -242,14 +242,14 @@ func (r *NetworkInterfaceEphemeralPrefixReconciler) SetupWithManager(mgr ctrl.Ma
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("networkinterfaceephemeralprefix").
 		For(
-			&networkingv1alpha1.NetworkInterface{},
+			&networkingv1beta1.NetworkInterface{},
 			builder.WithPredicates(
 				r.networkInterfaceNotDeletingPredicate(),
 			),
 		).
-		Owns(&ipamv1alpha1.Prefix{}).
+		Owns(&ipamv1beta1.Prefix{}).
 		Watches(
-			&ipamv1alpha1.Prefix{},
+			&ipamv1beta1.Prefix{},
 			r.enqueueByPrefix(),
 		).
 		Complete(r)

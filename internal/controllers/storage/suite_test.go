@@ -23,32 +23,30 @@ import (
 	"time"
 
 	"github.com/onmetal/controller-utils/buildutils"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	storageclient "github.com/onmetal/onmetal-api/internal/client/storage"
 	"github.com/onmetal/onmetal-api/internal/controllers/storage/scheduler"
 	utilsenvtest "github.com/onmetal/onmetal-api/utils/envtest"
 	"github.com/onmetal/onmetal-api/utils/envtest/apiserver"
-	"k8s.io/apimachinery/pkg/api/resource"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/tools/record"
-	"k8s.io/utils/lru"
-	ctrl "sigs.k8s.io/controller-runtime"
-	"sigs.k8s.io/controller-runtime/pkg/envtest/komega"
-	metricserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
-
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
-
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"k8s.io/apimachinery/pkg/api/resource"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/record"
+	"k8s.io/utils/lru"
+	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
+	"sigs.k8s.io/controller-runtime/pkg/envtest/komega"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
+	metricserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -98,8 +96,8 @@ var _ = BeforeSuite(func() {
 
 	DeferCleanup(utilsenvtest.StopWithExtensions, testEnv, testEnvExt)
 
-	Expect(storagev1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
-	Expect(computev1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(storagev1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(computev1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
 
 	//+kubebuilder:scaffold:scheme
 
@@ -188,15 +186,15 @@ var _ = BeforeSuite(func() {
 	}()
 })
 
-func SetupVolumeClass() *storagev1alpha1.VolumeClass {
-	return SetupObjectStruct[*storagev1alpha1.VolumeClass](&k8sClient, func(volumeClass *storagev1alpha1.VolumeClass) {
-		*volumeClass = storagev1alpha1.VolumeClass{
+func SetupVolumeClass() *storagev1beta1.VolumeClass {
+	return SetupObjectStruct[*storagev1beta1.VolumeClass](&k8sClient, func(volumeClass *storagev1beta1.VolumeClass) {
+		*volumeClass = storagev1beta1.VolumeClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "volume-class-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceTPS:  resource.MustParse("250Mi"),
-				corev1alpha1.ResourceIOPS: resource.MustParse("15000"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceTPS:  resource.MustParse("250Mi"),
+				corev1beta1.ResourceIOPS: resource.MustParse("15000"),
 			},
 		}
 	})

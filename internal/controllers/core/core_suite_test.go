@@ -21,9 +21,9 @@ import (
 	"time"
 
 	"github.com/onmetal/controller-utils/buildutils"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/controllers/core"
 	certificateonmetal "github.com/onmetal/onmetal-api/internal/controllers/core/certificate/onmetal"
 	quotacontrollergeneric "github.com/onmetal/onmetal-api/internal/controllers/core/quota/generic"
@@ -85,9 +85,9 @@ var _ = BeforeSuite(func() {
 
 	DeferCleanup(utilsenvtest.StopWithExtensions, testEnv, testEnvExt)
 
-	Expect(corev1alpha1.AddToScheme(scheme.Scheme)).Should(Succeed())
-	Expect(computev1alpha1.AddToScheme(scheme.Scheme)).Should(Succeed())
-	Expect(storagev1alpha1.AddToScheme(scheme.Scheme)).Should(Succeed())
+	Expect(corev1beta1.AddToScheme(scheme.Scheme)).Should(Succeed())
+	Expect(computev1beta1.AddToScheme(scheme.Scheme)).Should(Succeed())
+	Expect(storagev1beta1.AddToScheme(scheme.Scheme)).Should(Succeed())
 
 	// Init package-level k8sClient
 	k8sClient, err = client.New(cfg, client.Options{Scheme: scheme.Scheme})

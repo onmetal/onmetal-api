@@ -22,8 +22,9 @@ import (
 	"time"
 
 	"github.com/onmetal/controller-utils/buildutils"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	ipamclient "github.com/onmetal/onmetal-api/internal/client/ipam"
 	networkingclient "github.com/onmetal/onmetal-api/internal/client/networking"
@@ -40,8 +41,6 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	metricserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
-
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -84,9 +83,9 @@ var _ = BeforeSuite(func() {
 
 	DeferCleanup(utilsenvtest.StopWithExtensions, testEnv, testEnvExt)
 
-	Expect(ipamv1alpha1.AddToScheme(scheme.Scheme)).Should(Succeed())
-	Expect(networkingv1alpha1.AddToScheme(scheme.Scheme)).Should(Succeed())
-	Expect(computev1alpha1.AddToScheme(scheme.Scheme)).Should(Succeed())
+	Expect(ipamv1beta1.AddToScheme(scheme.Scheme)).Should(Succeed())
+	Expect(networkingv1beta1.AddToScheme(scheme.Scheme)).Should(Succeed())
+	Expect(computev1beta1.AddToScheme(scheme.Scheme)).Should(Succeed())
 
 	// Init package-level k8sClient
 	k8sClient, err = client.New(cfg, client.Options{Scheme: scheme.Scheme})

@@ -16,9 +16,9 @@
 package networking
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"github.com/onmetal/onmetal-api/utils/annotations"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
@@ -35,21 +35,21 @@ var _ = Describe("LoadBalancerEphemeralPrefix", func() {
 
 	It("should manage ephemeral IP prefixes for a load balancer", func(ctx SpecContext) {
 		By("creating a load balancer that requires a prefix")
-		loadBalancer := &networkingv1alpha1.LoadBalancer{
+		loadBalancer := &networkingv1beta1.LoadBalancer{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "load-balancer-",
 			},
-			Spec: networkingv1alpha1.LoadBalancerSpec{
-				Type:       networkingv1alpha1.LoadBalancerTypeInternal,
+			Spec: networkingv1beta1.LoadBalancerSpec{
+				Type:       networkingv1beta1.LoadBalancerTypeInternal,
 				NetworkRef: corev1.LocalObjectReference{Name: "my-network"},
-				IPs: []networkingv1alpha1.IPSource{
+				IPs: []networkingv1beta1.IPSource{
 					{
-						Ephemeral: &networkingv1alpha1.EphemeralPrefixSource{
-							PrefixTemplate: &ipamv1alpha1.PrefixTemplateSpec{
-								Spec: ipamv1alpha1.PrefixSpec{
+						Ephemeral: &networkingv1beta1.EphemeralPrefixSource{
+							PrefixTemplate: &ipamv1beta1.PrefixTemplateSpec{
+								Spec: ipamv1beta1.PrefixSpec{
 									IPFamily: corev1.IPv4Protocol,
-									Prefix:   commonv1alpha1.MustParseNewIPPrefix("10.0.0.1/32"),
+									Prefix:   commonv1beta1.MustParseNewIPPrefix("10.0.0.1/32"),
 								},
 							},
 						},
@@ -60,45 +60,45 @@ var _ = Describe("LoadBalancerEphemeralPrefix", func() {
 		Expect(k8sClient.Create(ctx, loadBalancer)).To(Succeed())
 
 		By("waiting for the prefix to exist")
-		prefix := &ipamv1alpha1.Prefix{
+		prefix := &ipamv1beta1.Prefix{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace: ns.Name,
-				Name:      networkingv1alpha1.LoadBalancerIPIPAMPrefixName(loadBalancer.Name, 0),
+				Name:      networkingv1beta1.LoadBalancerIPIPAMPrefixName(loadBalancer.Name, 0),
 			},
 		}
 		Eventually(Object(prefix)).Should(SatisfyAll(
 			BeControlledBy(loadBalancer),
-			HaveField("Spec", ipamv1alpha1.PrefixSpec{
+			HaveField("Spec", ipamv1beta1.PrefixSpec{
 				IPFamily: corev1.IPv4Protocol,
-				Prefix:   commonv1alpha1.MustParseNewIPPrefix("10.0.0.1/32"),
+				Prefix:   commonv1beta1.MustParseNewIPPrefix("10.0.0.1/32"),
 			}),
 		))
 	})
 
 	It("should delete undesired prefixes for a load balancer", MustPassRepeatedly(10), func(ctx SpecContext) {
 		By("creating a load balancer")
-		loadBalancer := &networkingv1alpha1.LoadBalancer{
+		loadBalancer := &networkingv1beta1.LoadBalancer{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "load-balancer-",
 			},
-			Spec: networkingv1alpha1.LoadBalancerSpec{
-				Type:       networkingv1alpha1.LoadBalancerTypeInternal,
+			Spec: networkingv1beta1.LoadBalancerSpec{
+				Type:       networkingv1beta1.LoadBalancerTypeInternal,
 				NetworkRef: corev1.LocalObjectReference{Name: "my-network"},
-				IPs:        []networkingv1alpha1.IPSource{{Value: commonv1alpha1.MustParseNewIP("10.0.0.1")}},
+				IPs:        []networkingv1beta1.IPSource{{Value: commonv1beta1.MustParseNewIP("10.0.0.1")}},
 			},
 		}
 		Expect(k8sClient.Create(ctx, loadBalancer)).To(Succeed())
 
 		By("creating an undesired prefix")
-		prefix := &ipamv1alpha1.Prefix{
+		prefix := &ipamv1beta1.Prefix{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "undesired-prefix-",
 			},
-			Spec: ipamv1alpha1.PrefixSpec{
+			Spec: ipamv1beta1.PrefixSpec{
 				IPFamily: corev1.IPv4Protocol,
-				Prefix:   commonv1alpha1.MustParseNewIPPrefix("10.0.0.1/32"),
+				Prefix:   commonv1beta1.MustParseNewIPPrefix("10.0.0.1/32"),
 			},
 		}
 		annotations.SetDefaultEphemeralManagedBy(prefix)
@@ -111,28 +111,28 @@ var _ = Describe("LoadBalancerEphemeralPrefix", func() {
 
 	It("should not delete externally managed prefix for a load balancer", MustPassRepeatedly(10), func(ctx SpecContext) {
 		By("creating a load balancer")
-		loadBalancer := &networkingv1alpha1.LoadBalancer{
+		loadBalancer := &networkingv1beta1.LoadBalancer{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "load-balancer-",
 			},
-			Spec: networkingv1alpha1.LoadBalancerSpec{
-				Type:       networkingv1alpha1.LoadBalancerTypeInternal,
+			Spec: networkingv1beta1.LoadBalancerSpec{
+				Type:       networkingv1beta1.LoadBalancerTypeInternal,
 				NetworkRef: corev1.LocalObjectReference{Name: "my-network"},
-				IPs:        []networkingv1alpha1.IPSource{{Value: commonv1alpha1.MustParseNewIP("10.0.0.1")}},
+				IPs:        []networkingv1beta1.IPSource{{Value: commonv1beta1.MustParseNewIP("10.0.0.1")}},
 			},
 		}
 		Expect(k8sClient.Create(ctx, loadBalancer)).To(Succeed())
 
 		By("creating an undesired prefix")
-		externalPrefix := &ipamv1alpha1.Prefix{
+		externalPrefix := &ipamv1beta1.Prefix{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "external-prefix-",
 			},
-			Spec: ipamv1alpha1.PrefixSpec{
+			Spec: ipamv1beta1.PrefixSpec{
 				IPFamily: corev1.IPv4Protocol,
-				Prefix:   commonv1alpha1.MustParseNewIPPrefix("10.0.0.1/32"),
+				Prefix:   commonv1beta1.MustParseNewIPPrefix("10.0.0.1/32"),
 			},
 		}
 		Expect(ctrl.SetControllerReference(loadBalancer, externalPrefix, k8sClient.Scheme())).To(Succeed())

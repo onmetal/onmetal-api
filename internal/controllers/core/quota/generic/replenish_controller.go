@@ -20,7 +20,7 @@ import (
 	"strings"
 
 	"github.com/go-logr/logr"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/controllers/core"
 	"github.com/onmetal/onmetal-api/utils/quota"
 	corev1 "k8s.io/api/core/v1"
@@ -63,7 +63,7 @@ func NewReplenishReconciler(opts ReplenishReconcilerOptions) (*ReplenishReconcil
 	}, nil
 }
 
-func (r *ReplenishReconciler) anyResourceQuotaMatches(resourceQuotas []corev1alpha1.ResourceQuota) bool {
+func (r *ReplenishReconciler) anyResourceQuotaMatches(resourceQuotas []corev1beta1.ResourceQuota) bool {
 	for _, resourceQuota := range resourceQuotas {
 		for resourceName := range resourceQuota.Spec.Hard {
 			if r.evaluator.MatchesResourceName(resourceName) {
@@ -78,7 +78,7 @@ func (r *ReplenishReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 	log := ctrl.LoggerFrom(ctx)
 
 	log.V(1).Info("Listing quotas")
-	resourceQuotaList := &corev1alpha1.ResourceQuotaList{}
+	resourceQuotaList := &corev1beta1.ResourceQuotaList{}
 	if err := r.client.List(ctx, resourceQuotaList,
 		client.InNamespace(req.Namespace),
 	); err != nil {

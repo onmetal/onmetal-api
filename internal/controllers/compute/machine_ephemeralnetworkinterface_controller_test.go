@@ -15,9 +15,9 @@
 package compute
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"github.com/onmetal/onmetal-api/utils/annotations"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
@@ -35,23 +35,23 @@ var _ = Describe("MachineEphemeralNetworkInterfaceController", func() {
 
 	It("should create ephemeral network interfaces for machines", func(ctx SpecContext) {
 		By("creating a machine")
-		machine := &computev1alpha1.Machine{
+		machine := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "machine-",
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
-				NetworkInterfaces: []computev1alpha1.NetworkInterface{
+				NetworkInterfaces: []computev1beta1.NetworkInterface{
 					{
 						Name: "ephem-nic",
-						NetworkInterfaceSource: computev1alpha1.NetworkInterfaceSource{
-							Ephemeral: &computev1alpha1.EphemeralNetworkInterfaceSource{
-								NetworkInterfaceTemplate: &networkingv1alpha1.NetworkInterfaceTemplateSpec{
-									Spec: networkingv1alpha1.NetworkInterfaceSpec{
+						NetworkInterfaceSource: computev1beta1.NetworkInterfaceSource{
+							Ephemeral: &computev1beta1.EphemeralNetworkInterfaceSource{
+								NetworkInterfaceTemplate: &networkingv1beta1.NetworkInterfaceTemplateSpec{
+									Spec: networkingv1beta1.NetworkInterfaceSpec{
 										NetworkRef: corev1.LocalObjectReference{Name: "my-network"},
-										IPs: []networkingv1alpha1.IPSource{
-											{Value: commonv1alpha1.MustParseNewIP("10.0.0.2")},
+										IPs: []networkingv1beta1.IPSource{
+											{Value: commonv1beta1.MustParseNewIP("10.0.0.2")},
 										},
 									},
 								},
@@ -64,44 +64,44 @@ var _ = Describe("MachineEphemeralNetworkInterfaceController", func() {
 		Expect(k8sClient.Create(ctx, machine)).To(Succeed())
 
 		By("waiting for the ephemeral network interface to exist")
-		ephemNic := &networkingv1alpha1.NetworkInterface{
+		ephemNic := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace: ns.Name,
-				Name:      computev1alpha1.MachineEphemeralNetworkInterfaceName(machine.Name, "ephem-nic"),
+				Name:      computev1beta1.MachineEphemeralNetworkInterfaceName(machine.Name, "ephem-nic"),
 			},
 		}
 		Eventually(Object(ephemNic)).Should(SatisfyAll(
 			BeControlledBy(machine),
 			HaveField("Spec.NetworkRef", corev1.LocalObjectReference{Name: "my-network"}),
-			HaveField("Spec.IPs", []networkingv1alpha1.IPSource{
-				{Value: commonv1alpha1.MustParseNewIP("10.0.0.2")},
+			HaveField("Spec.IPs", []networkingv1beta1.IPSource{
+				{Value: commonv1beta1.MustParseNewIP("10.0.0.2")},
 			}),
 		))
 	})
 
 	It("should delete undesired ephemeral network interfaces", func(ctx SpecContext) {
 		By("creating a machine")
-		machine := &computev1alpha1.Machine{
+		machine := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "machine-",
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
 			},
 		}
 		Expect(k8sClient.Create(ctx, machine)).To(Succeed())
 
 		By("creating an undesired network interface")
-		undesiredNic := &networkingv1alpha1.NetworkInterface{
+		undesiredNic := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "undesired-nic-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{Name: "my-network"},
-				IPs: []networkingv1alpha1.IPSource{
-					{Value: commonv1alpha1.MustParseNewIP("10.0.0.1")},
+				IPs: []networkingv1beta1.IPSource{
+					{Value: commonv1beta1.MustParseNewIP("10.0.0.1")},
 				},
 			},
 		}
@@ -115,27 +115,27 @@ var _ = Describe("MachineEphemeralNetworkInterfaceController", func() {
 
 	It("should not delete an externally managed network interface", func(ctx SpecContext) {
 		By("creating a machine")
-		machine := &computev1alpha1.Machine{
+		machine := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "machine-",
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
 			},
 		}
 		Expect(k8sClient.Create(ctx, machine)).To(Succeed())
 
 		By("creating an externally managed network interface")
-		externalNic := &networkingv1alpha1.NetworkInterface{
+		externalNic := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "external-nic-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{Name: "my-network"},
-				IPs: []networkingv1alpha1.IPSource{
-					{Value: commonv1alpha1.MustParseNewIP("10.0.0.1")},
+				IPs: []networkingv1beta1.IPSource{
+					{Value: commonv1beta1.MustParseNewIP("10.0.0.1")},
 				},
 			},
 		}

@@ -19,8 +19,8 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/lru"
@@ -43,7 +43,7 @@ type VolumeReleaseReconciler struct {
 
 func (r *VolumeReleaseReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	volume := &storagev1alpha1.Volume{}
+	volume := &storagev1beta1.Volume{}
 	if err := r.Get(ctx, req.NamespacedName, volume); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -51,7 +51,7 @@ func (r *VolumeReleaseReconciler) Reconcile(ctx context.Context, req ctrl.Reques
 	return r.reconcileExists(ctx, log, volume)
 }
 
-func (r *VolumeReleaseReconciler) reconcileExists(ctx context.Context, log logr.Logger, volume *storagev1alpha1.Volume) (ctrl.Result, error) {
+func (r *VolumeReleaseReconciler) reconcileExists(ctx context.Context, log logr.Logger, volume *storagev1beta1.Volume) (ctrl.Result, error) {
 	if !volume.DeletionTimestamp.IsZero() {
 		log.V(1).Info("Volume is already deleting, nothing to do")
 		return ctrl.Result{}, nil
@@ -60,7 +60,7 @@ func (r *VolumeReleaseReconciler) reconcileExists(ctx context.Context, log logr.
 	return r.reconcile(ctx, log, volume)
 }
 
-func (r *VolumeReleaseReconciler) volumeClaimExists(ctx context.Context, volume *storagev1alpha1.Volume) (bool, error) {
+func (r *VolumeReleaseReconciler) volumeClaimExists(ctx context.Context, volume *storagev1beta1.Volume) (bool, error) {
 	claimRef := volume.Spec.ClaimRef
 	if _, ok := r.AbsenceCache.Get(claimRef.UID); ok {
 		return false, nil
@@ -68,7 +68,7 @@ func (r *VolumeReleaseReconciler) volumeClaimExists(ctx context.Context, volume 
 
 	claimer := &metav1.PartialObjectMetadata{
 		TypeMeta: metav1.TypeMeta{
-			APIVersion: computev1alpha1.SchemeGroupVersion.String(),
+			APIVersion: computev1beta1.SchemeGroupVersion.String(),
 			Kind:       "Machine",
 		},
 	}
@@ -84,7 +84,7 @@ func (r *VolumeReleaseReconciler) volumeClaimExists(ctx context.Context, volume 
 	return true, nil
 }
 
-func (r *VolumeReleaseReconciler) releaseVolume(ctx context.Context, volume *storagev1alpha1.Volume) error {
+func (r *VolumeReleaseReconciler) releaseVolume(ctx context.Context, volume *storagev1beta1.Volume) error {
 	baseNic := volume.DeepCopy()
 	volume.Spec.ClaimRef = nil
 	if err := r.Patch(ctx, volume, client.StrategicMergeFrom(baseNic, client.MergeFromWithOptimisticLock{})); err != nil {
@@ -93,7 +93,7 @@ func (r *VolumeReleaseReconciler) releaseVolume(ctx context.Context, volume *sto
 	return nil
 }
 
-func (r *VolumeReleaseReconciler) reconcile(ctx context.Context, log logr.Logger, volume *storagev1alpha1.Volume) (ctrl.Result, error) {
+func (r *VolumeReleaseReconciler) reconcile(ctx context.Context, log logr.Logger, volume *storagev1beta1.Volume) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	if volume.Spec.ClaimRef == nil {
@@ -126,17 +126,17 @@ func (r *VolumeReleaseReconciler) reconcile(ctx context.Context, log logr.Logger
 
 func (r *VolumeReleaseReconciler) volumeClaimedPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		volume := obj.(*storagev1alpha1.Volume)
+		volume := obj.(*storagev1beta1.Volume)
 		return volume.Spec.ClaimRef != nil
 	})
 }
 
 func (r *VolumeReleaseReconciler) enqueueByMachine() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		machine := obj.(*computev1alpha1.Machine)
+		machine := obj.(*computev1beta1.Machine)
 		log := ctrl.LoggerFrom(ctx)
 
-		volumeList := &storagev1alpha1.VolumeList{}
+		volumeList := &storagev1beta1.VolumeList{}
 		if err := r.List(ctx, volumeList,
 			client.InNamespace(machine.Namespace),
 		); err != nil {
@@ -163,7 +163,7 @@ func (r *VolumeReleaseReconciler) enqueueByMachine() handler.EventHandler {
 
 func (r *VolumeReleaseReconciler) machineDeletingPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		machine := obj.(*computev1alpha1.Machine)
+		machine := obj.(*computev1beta1.Machine)
 		return !machine.DeletionTimestamp.IsZero()
 	})
 }
@@ -172,11 +172,11 @@ func (r *VolumeReleaseReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("volumerelease").
 		For(
-			&storagev1alpha1.Volume{},
+			&storagev1beta1.Volume{},
 			builder.WithPredicates(r.volumeClaimedPredicate()),
 		).
 		Watches(
-			&computev1alpha1.Machine{},
+			&computev1beta1.Machine{},
 			r.enqueueByMachine(),
 			builder.WithPredicates(r.machineDeletingPredicate()),
 		).

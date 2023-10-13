@@ -23,8 +23,8 @@ import (
 	"github.com/onmetal/onmetal-api/utils/annotations"
 
 	"github.com/go-logr/logr"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -49,7 +49,7 @@ type MachineEphemeralVolumeReconciler struct {
 
 func (r *MachineEphemeralVolumeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	machine := &computev1alpha1.Machine{}
+	machine := &computev1beta1.Machine{}
 	if err := r.Get(ctx, req.NamespacedName, machine); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -57,7 +57,7 @@ func (r *MachineEphemeralVolumeReconciler) Reconcile(ctx context.Context, req ct
 	return r.reconcileExists(ctx, log, machine)
 }
 
-func (r *MachineEphemeralVolumeReconciler) reconcileExists(ctx context.Context, log logr.Logger, machine *computev1alpha1.Machine) (ctrl.Result, error) {
+func (r *MachineEphemeralVolumeReconciler) reconcileExists(ctx context.Context, log logr.Logger, machine *computev1beta1.Machine) (ctrl.Result, error) {
 	if !machine.DeletionTimestamp.IsZero() {
 		log.V(1).Info("Machine is deleting, nothing to do")
 		return ctrl.Result{}, nil
@@ -66,16 +66,16 @@ func (r *MachineEphemeralVolumeReconciler) reconcileExists(ctx context.Context, 
 	return r.reconcile(ctx, log, machine)
 }
 
-func (r *MachineEphemeralVolumeReconciler) ephemeralMachineVolumeByName(machine *computev1alpha1.Machine) map[string]*storagev1alpha1.Volume {
-	res := make(map[string]*storagev1alpha1.Volume)
+func (r *MachineEphemeralVolumeReconciler) ephemeralMachineVolumeByName(machine *computev1beta1.Machine) map[string]*storagev1beta1.Volume {
+	res := make(map[string]*storagev1beta1.Volume)
 	for _, machineVolume := range machine.Spec.Volumes {
 		ephemeral := machineVolume.Ephemeral
 		if ephemeral == nil {
 			continue
 		}
 
-		volumeName := computev1alpha1.MachineEphemeralVolumeName(machine.Name, machineVolume.Name)
-		volume := &storagev1alpha1.Volume{
+		volumeName := computev1beta1.MachineEphemeralVolumeName(machine.Name, machineVolume.Name)
+		volume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:   machine.Namespace,
 				Name:        volumeName,
@@ -91,7 +91,7 @@ func (r *MachineEphemeralVolumeReconciler) ephemeralMachineVolumeByName(machine 
 	return res
 }
 
-func (r *MachineEphemeralVolumeReconciler) handleExistingVolume(ctx context.Context, log logr.Logger, machine *computev1alpha1.Machine, shouldManage bool, volume *storagev1alpha1.Volume) error {
+func (r *MachineEphemeralVolumeReconciler) handleExistingVolume(ctx context.Context, log logr.Logger, machine *computev1beta1.Machine, shouldManage bool, volume *storagev1beta1.Volume) error {
 	if annotations.IsDefaultEphemeralControlledBy(volume, machine) {
 		if shouldManage {
 			log.V(1).Info("Ephemeral volume is present and controlled by machine")
@@ -116,7 +116,7 @@ func (r *MachineEphemeralVolumeReconciler) handleExistingVolume(ctx context.Cont
 	return nil
 }
 
-func (r *MachineEphemeralVolumeReconciler) handleCreateVolume(ctx context.Context, log logr.Logger, machine *computev1alpha1.Machine, volume *storagev1alpha1.Volume) error {
+func (r *MachineEphemeralVolumeReconciler) handleCreateVolume(ctx context.Context, log logr.Logger, machine *computev1beta1.Machine, volume *storagev1beta1.Volume) error {
 	volumeKey := client.ObjectKeyFromObject(volume)
 	err := r.Create(ctx, volume)
 	if err == nil {
@@ -137,11 +137,11 @@ func (r *MachineEphemeralVolumeReconciler) handleCreateVolume(ctx context.Contex
 	return r.handleExistingVolume(ctx, log, machine, true, volume)
 }
 
-func (r *MachineEphemeralVolumeReconciler) reconcile(ctx context.Context, log logr.Logger, machine *computev1alpha1.Machine) (ctrl.Result, error) {
+func (r *MachineEphemeralVolumeReconciler) reconcile(ctx context.Context, log logr.Logger, machine *computev1beta1.Machine) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	log.V(1).Info("Listing volumes")
-	volumeList := &storagev1alpha1.VolumeList{}
+	volumeList := &storagev1beta1.VolumeList{}
 	if err := r.List(ctx, volumeList,
 		client.InNamespace(machine.Namespace),
 	); err != nil {
@@ -179,17 +179,17 @@ func (r *MachineEphemeralVolumeReconciler) reconcile(ctx context.Context, log lo
 
 func (r *MachineEphemeralVolumeReconciler) machineNotDeletingPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		machine := obj.(*computev1alpha1.Machine)
+		machine := obj.(*computev1beta1.Machine)
 		return machine.DeletionTimestamp.IsZero()
 	})
 }
 
 func (r *MachineEphemeralVolumeReconciler) enqueueByVolume() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		volume := obj.(*storagev1alpha1.Volume)
+		volume := obj.(*storagev1beta1.Volume)
 		log := ctrl.LoggerFrom(ctx)
 
-		machineList := &computev1alpha1.MachineList{}
+		machineList := &computev1beta1.MachineList{}
 		if err := r.List(ctx, machineList,
 			client.InNamespace(volume.Namespace),
 			client.MatchingFields{
@@ -216,16 +216,16 @@ func (r *MachineEphemeralVolumeReconciler) SetupWithManager(mgr ctrl.Manager) er
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("machineephemeralvolume").
 		For(
-			&computev1alpha1.Machine{},
+			&computev1beta1.Machine{},
 			builder.WithPredicates(
 				r.machineNotDeletingPredicate(),
 			),
 		).
 		Owns(
-			&storagev1alpha1.Volume{},
+			&storagev1beta1.Volume{},
 		).
 		Watches(
-			&storagev1alpha1.Volume{},
+			&storagev1beta1.Volume{},
 			r.enqueueByVolume(),
 		).
 		Complete(r)

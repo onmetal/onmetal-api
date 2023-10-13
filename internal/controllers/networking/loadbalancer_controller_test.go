@@ -23,8 +23,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	. "sigs.k8s.io/controller-runtime/pkg/envtest/komega"
 
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 )
 
 var _ = Describe("LoadBalancerReconciler", func() {
@@ -32,7 +32,7 @@ var _ = Describe("LoadBalancerReconciler", func() {
 
 	It("should reconcile the prefix and routing destinations", func(ctx SpecContext) {
 		By("creating a network")
-		network := &networkingv1alpha1.Network{
+		network := &networkingv1beta1.Network{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "network-",
@@ -42,17 +42,17 @@ var _ = Describe("LoadBalancerReconciler", func() {
 
 		By("setting the network to be available")
 		Eventually(UpdateStatus(network, func() {
-			network.Status.State = networkingv1alpha1.NetworkStateAvailable
+			network.Status.State = networkingv1beta1.NetworkStateAvailable
 		})).Should(Succeed())
 
 		By("creating a load balancer")
-		loadBalancer := &networkingv1alpha1.LoadBalancer{
+		loadBalancer := &networkingv1beta1.LoadBalancer{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "load-balancer-",
 			},
-			Spec: networkingv1alpha1.LoadBalancerSpec{
-				Type: networkingv1alpha1.LoadBalancerTypePublic,
+			Spec: networkingv1beta1.LoadBalancerSpec{
+				Type: networkingv1beta1.LoadBalancerTypePublic,
 				IPFamilies: []corev1.IPFamily{
 					corev1.IPv4Protocol,
 				},
@@ -65,7 +65,7 @@ var _ = Describe("LoadBalancerReconciler", func() {
 		Expect(k8sClient.Create(ctx, loadBalancer)).To(Succeed())
 
 		By("waiting for the load balancer routing to exist with no destinations")
-		loadBalancerRouting := &networkingv1alpha1.LoadBalancerRouting{
+		loadBalancerRouting := &networkingv1beta1.LoadBalancerRouting{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace: loadBalancer.Namespace,
 				Name:      loadBalancer.Name,
@@ -77,20 +77,20 @@ var _ = Describe("LoadBalancerReconciler", func() {
 		))
 
 		By("creating a network interface")
-		nic := &networkingv1alpha1.NetworkInterface{
+		nic := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "nic-",
 				Labels:       map[string]string{"foo": "bar"},
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{Name: network.Name},
 				IPFamilies: []corev1.IPFamily{
 					corev1.IPv4Protocol,
 				},
-				IPs: []networkingv1alpha1.IPSource{
+				IPs: []networkingv1beta1.IPSource{
 					{
-						Value: commonv1alpha1.MustParseNewIP("10.0.0.1"),
+						Value: commonv1beta1.MustParseNewIP("10.0.0.1"),
 					},
 				},
 			},
@@ -102,20 +102,20 @@ var _ = Describe("LoadBalancerReconciler", func() {
 			nic.Spec.ProviderID = "my://provider-id"
 		})).Should(Succeed())
 		Eventually(UpdateStatus(nic, func() {
-			nic.Status.State = networkingv1alpha1.NetworkInterfaceStateAvailable
-			nic.Status.IPs = commonv1alpha1.MustParseIPs("10.0.0.1")
+			nic.Status.State = networkingv1beta1.NetworkInterfaceStateAvailable
+			nic.Status.IPs = commonv1beta1.MustParseIPs("10.0.0.1")
 		})).Should(Succeed())
 
 		By("waiting for the load balancer routing to be updated")
 		Eventually(Object(loadBalancerRouting)).Should(SatisfyAll(
-			HaveField("NetworkRef", commonv1alpha1.LocalUIDReference{
+			HaveField("NetworkRef", commonv1beta1.LocalUIDReference{
 				Name: network.Name,
 				UID:  network.UID,
 			}),
-			HaveField("Destinations", []networkingv1alpha1.LoadBalancerDestination{
+			HaveField("Destinations", []networkingv1beta1.LoadBalancerDestination{
 				{
-					IP: commonv1alpha1.MustParseIP("10.0.0.1"),
-					TargetRef: &networkingv1alpha1.LoadBalancerTargetRef{
+					IP: commonv1beta1.MustParseIP("10.0.0.1"),
+					TargetRef: &networkingv1beta1.LoadBalancerTargetRef{
 						Name:       nic.Name,
 						UID:        nic.UID,
 						ProviderID: "my://provider-id",
@@ -131,7 +131,7 @@ var _ = Describe("LoadBalancerReconciler", func() {
 
 		By("waiting for the load balancer routing to be updated")
 		Eventually(Object(loadBalancerRouting)).Should(SatisfyAll(
-			HaveField("NetworkRef", commonv1alpha1.LocalUIDReference{
+			HaveField("NetworkRef", commonv1beta1.LocalUIDReference{
 				Name: network.Name,
 				UID:  network.UID,
 			}),

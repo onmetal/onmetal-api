@@ -23,8 +23,8 @@ import (
 	"github.com/onmetal/onmetal-api/utils/annotations"
 
 	"github.com/go-logr/logr"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	networkingclient "github.com/onmetal/onmetal-api/internal/client/networking"
 	klogutils "github.com/onmetal/onmetal-api/utils/klog"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -46,7 +46,7 @@ type LoadBalancerEphemeralPrefixReconciler struct {
 
 func (r *LoadBalancerEphemeralPrefixReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	loadBalancer := &networkingv1alpha1.LoadBalancer{}
+	loadBalancer := &networkingv1beta1.LoadBalancer{}
 	if err := r.Get(ctx, req.NamespacedName, loadBalancer); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -54,7 +54,7 @@ func (r *LoadBalancerEphemeralPrefixReconciler) Reconcile(ctx context.Context, r
 	return r.reconcileExists(ctx, log, loadBalancer)
 }
 
-func (r *LoadBalancerEphemeralPrefixReconciler) reconcileExists(ctx context.Context, log logr.Logger, loadBalancer *networkingv1alpha1.LoadBalancer) (ctrl.Result, error) {
+func (r *LoadBalancerEphemeralPrefixReconciler) reconcileExists(ctx context.Context, log logr.Logger, loadBalancer *networkingv1beta1.LoadBalancer) (ctrl.Result, error) {
 	if !loadBalancer.DeletionTimestamp.IsZero() {
 		return ctrl.Result{}, nil
 	}
@@ -62,8 +62,8 @@ func (r *LoadBalancerEphemeralPrefixReconciler) reconcileExists(ctx context.Cont
 	return r.reconcile(ctx, log, loadBalancer)
 }
 
-func (r *LoadBalancerEphemeralPrefixReconciler) ephemeralLoadBalancerPrefixByName(loadBalancer *networkingv1alpha1.LoadBalancer) map[string]*ipamv1alpha1.Prefix {
-	res := make(map[string]*ipamv1alpha1.Prefix)
+func (r *LoadBalancerEphemeralPrefixReconciler) ephemeralLoadBalancerPrefixByName(loadBalancer *networkingv1beta1.LoadBalancer) map[string]*ipamv1beta1.Prefix {
+	res := make(map[string]*ipamv1beta1.Prefix)
 
 	for i, loadBalancerPrefix := range loadBalancer.Spec.IPs {
 		ephemeral := loadBalancerPrefix.Ephemeral
@@ -71,8 +71,8 @@ func (r *LoadBalancerEphemeralPrefixReconciler) ephemeralLoadBalancerPrefixByNam
 			continue
 		}
 
-		prefixName := networkingv1alpha1.LoadBalancerIPIPAMPrefixName(loadBalancer.Name, i)
-		prefix := &ipamv1alpha1.Prefix{
+		prefixName := networkingv1beta1.LoadBalancerIPIPAMPrefixName(loadBalancer.Name, i)
+		prefix := &ipamv1beta1.Prefix{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:   loadBalancer.Namespace,
 				Name:        prefixName,
@@ -89,7 +89,7 @@ func (r *LoadBalancerEphemeralPrefixReconciler) ephemeralLoadBalancerPrefixByNam
 	return res
 }
 
-func (r *LoadBalancerEphemeralPrefixReconciler) handleExistingPrefix(ctx context.Context, log logr.Logger, loadBalancer *networkingv1alpha1.LoadBalancer, shouldManage bool, prefix *ipamv1alpha1.Prefix) error {
+func (r *LoadBalancerEphemeralPrefixReconciler) handleExistingPrefix(ctx context.Context, log logr.Logger, loadBalancer *networkingv1beta1.LoadBalancer, shouldManage bool, prefix *ipamv1beta1.Prefix) error {
 	if annotations.IsDefaultEphemeralControlledBy(prefix, loadBalancer) {
 		if shouldManage {
 			log.V(1).Info("Ephemeral prefix is present and controlled by load balancer")
@@ -117,8 +117,8 @@ func (r *LoadBalancerEphemeralPrefixReconciler) handleExistingPrefix(ctx context
 func (r *LoadBalancerEphemeralPrefixReconciler) handleCreatePrefix(
 	ctx context.Context,
 	log logr.Logger,
-	loadBalancer *networkingv1alpha1.LoadBalancer,
-	prefix *ipamv1alpha1.Prefix,
+	loadBalancer *networkingv1beta1.LoadBalancer,
+	prefix *ipamv1beta1.Prefix,
 ) error {
 	log.V(1).Info("Creating prefix")
 	prefixKey := client.ObjectKeyFromObject(prefix)
@@ -142,11 +142,11 @@ func (r *LoadBalancerEphemeralPrefixReconciler) handleCreatePrefix(
 	return r.handleExistingPrefix(ctx, log, loadBalancer, true, prefix)
 }
 
-func (r *LoadBalancerEphemeralPrefixReconciler) reconcile(ctx context.Context, log logr.Logger, loadBalancer *networkingv1alpha1.LoadBalancer) (ctrl.Result, error) {
+func (r *LoadBalancerEphemeralPrefixReconciler) reconcile(ctx context.Context, log logr.Logger, loadBalancer *networkingv1beta1.LoadBalancer) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	log.V(1).Info("Listing prefixes")
-	prefixList := &ipamv1alpha1.PrefixList{}
+	prefixList := &ipamv1beta1.PrefixList{}
 	if err := r.List(ctx, prefixList,
 		client.InNamespace(loadBalancer.Namespace),
 	); err != nil {
@@ -185,17 +185,17 @@ func (r *LoadBalancerEphemeralPrefixReconciler) reconcile(ctx context.Context, l
 
 func (r *LoadBalancerEphemeralPrefixReconciler) loadBalancerNotDeletingPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		loadBalancer := obj.(*networkingv1alpha1.LoadBalancer)
+		loadBalancer := obj.(*networkingv1beta1.LoadBalancer)
 		return loadBalancer.DeletionTimestamp.IsZero()
 	})
 }
 
 func (r *LoadBalancerEphemeralPrefixReconciler) enqueueByPrefix() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		prefix := obj.(*ipamv1alpha1.Prefix)
+		prefix := obj.(*ipamv1beta1.Prefix)
 		log := ctrl.LoggerFrom(ctx)
 
-		loadBalancerList := &networkingv1alpha1.LoadBalancerList{}
+		loadBalancerList := &networkingv1beta1.LoadBalancerList{}
 		if err := r.List(ctx, loadBalancerList,
 			client.InNamespace(prefix.Namespace),
 			client.MatchingFields{
@@ -222,14 +222,14 @@ func (r *LoadBalancerEphemeralPrefixReconciler) SetupWithManager(mgr ctrl.Manage
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("loadbalancerephemeralprefix").
 		For(
-			&networkingv1alpha1.LoadBalancer{},
+			&networkingv1beta1.LoadBalancer{},
 			builder.WithPredicates(
 				r.loadBalancerNotDeletingPredicate(),
 			),
 		).
-		Owns(&ipamv1alpha1.Prefix{}).
+		Owns(&ipamv1beta1.Prefix{}).
 		Watches(
-			&ipamv1alpha1.Prefix{},
+			&ipamv1beta1.Prefix{},
 			r.enqueueByPrefix(),
 		).
 		Complete(r)

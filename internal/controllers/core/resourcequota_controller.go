@@ -20,7 +20,7 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/onmetal/controller-utils/metautils"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
 	"github.com/onmetal/onmetal-api/utils/quota"
 	corev1 "k8s.io/api/core/v1"
@@ -56,7 +56,7 @@ type ResourceQuotaReconciler struct {
 func (r *ResourceQuotaReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
 
-	resourceQuota := &corev1alpha1.ResourceQuota{}
+	resourceQuota := &corev1beta1.ResourceQuota{}
 	if err := r.Get(ctx, req.NamespacedName, resourceQuota); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -64,18 +64,18 @@ func (r *ResourceQuotaReconciler) Reconcile(ctx context.Context, req ctrl.Reques
 	return r.reconcileExists(ctx, log, resourceQuota)
 }
 
-func (r *ResourceQuotaReconciler) reconcileExists(ctx context.Context, log logr.Logger, resourceQuota *corev1alpha1.ResourceQuota) (ctrl.Result, error) {
+func (r *ResourceQuotaReconciler) reconcileExists(ctx context.Context, log logr.Logger, resourceQuota *corev1beta1.ResourceQuota) (ctrl.Result, error) {
 	if !resourceQuota.DeletionTimestamp.IsZero() {
 		return r.delete(ctx, log, resourceQuota)
 	}
 	return r.reconcile(ctx, log, resourceQuota)
 }
 
-func (r *ResourceQuotaReconciler) delete(ctx context.Context, log logr.Logger, resourceQuota *corev1alpha1.ResourceQuota) (ctrl.Result, error) {
+func (r *ResourceQuotaReconciler) delete(ctx context.Context, log logr.Logger, resourceQuota *corev1beta1.ResourceQuota) (ctrl.Result, error) {
 	return ctrl.Result{}, nil
 }
 
-func (r *ResourceQuotaReconciler) reconcile(ctx context.Context, log logr.Logger, resourceQuota *corev1alpha1.ResourceQuota) (ctrl.Result, error) {
+func (r *ResourceQuotaReconciler) reconcile(ctx context.Context, log logr.Logger, resourceQuota *corev1beta1.ResourceQuota) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	log.V(1).Info("Gathering matching evaluators")
@@ -96,11 +96,11 @@ func (r *ResourceQuotaReconciler) reconcile(ctx context.Context, log logr.Logger
 	return ctrl.Result{}, nil
 }
 
-func (r *ResourceQuotaReconciler) getMatchingEvaluators(resourceQuota *corev1alpha1.ResourceQuota) ([]quota.Evaluator, sets.Set[corev1alpha1.ResourceName]) {
+func (r *ResourceQuotaReconciler) getMatchingEvaluators(resourceQuota *corev1beta1.ResourceQuota) ([]quota.Evaluator, sets.Set[corev1beta1.ResourceName]) {
 	var (
 		evaluators           []quota.Evaluator
 		hardResourceNames    = quota.ResourceNames(resourceQuota.Spec.Hard)
-		coveredResourceNames = sets.New[corev1alpha1.ResourceName]()
+		coveredResourceNames = sets.New[corev1beta1.ResourceName]()
 	)
 	for _, evaluator := range r.Registry.List() {
 		var matches bool
@@ -121,11 +121,11 @@ func (r *ResourceQuotaReconciler) getMatchingEvaluators(resourceQuota *corev1alp
 func (r *ResourceQuotaReconciler) calculateUsage(
 	ctx context.Context,
 	log logr.Logger,
-	resourceQuota *corev1alpha1.ResourceQuota,
+	resourceQuota *corev1beta1.ResourceQuota,
 	evaluators []quota.Evaluator,
-	coveredResourceNames sets.Set[corev1alpha1.ResourceName],
-) (corev1alpha1.ResourceList, error) {
-	usage := make(corev1alpha1.ResourceList, len(coveredResourceNames))
+	coveredResourceNames sets.Set[corev1beta1.ResourceName],
+) (corev1beta1.ResourceList, error) {
+	usage := make(corev1beta1.ResourceList, len(coveredResourceNames))
 	zero := resource.MustParse("0")
 	for resourceName := range coveredResourceNames {
 		usage[resourceName] = zero
@@ -149,7 +149,7 @@ func (r *ResourceQuotaReconciler) calculateUsage(
 		log.V(1).Info("Listed resources", "NoOfResources", meta.LenList(list))
 
 		log.V(1).Info("Calculating usage for type")
-		typeUsage := corev1alpha1.ResourceList{}
+		typeUsage := corev1beta1.ResourceList{}
 		if err := metautils.EachListItem(list, func(obj client.Object) error {
 			matches, err := quota.EvaluatorMatchesResourceScopeSelector(evaluator, obj, resourceQuota.Spec.ScopeSelector)
 			if err != nil {
@@ -180,8 +180,8 @@ func (r *ResourceQuotaReconciler) calculateUsage(
 
 func (r *ResourceQuotaReconciler) updateStatus(
 	ctx context.Context,
-	resourceQuota *corev1alpha1.ResourceQuota,
-	hard, used corev1alpha1.ResourceList,
+	resourceQuota *corev1beta1.ResourceQuota,
+	hard, used corev1beta1.ResourceList,
 ) error {
 	base := resourceQuota.DeepCopy()
 	resourceQuota.Status.Hard = hard
@@ -197,7 +197,7 @@ func (r *ResourceQuotaReconciler) enqueueResourceQuotasByNamespace() handler.Eve
 		namespace := obj.(*corev1.Namespace)
 		log := ctrl.LoggerFrom(ctx, "Namespace", namespace.Name)
 
-		resourceQuotaList := &corev1alpha1.ResourceQuotaList{}
+		resourceQuotaList := &corev1beta1.ResourceQuotaList{}
 		if err := r.List(ctx, resourceQuotaList,
 			client.InNamespace(namespace.Name),
 		); err != nil {
@@ -218,7 +218,7 @@ func (r *ResourceQuotaReconciler) enqueueResourceQuotasByNamespace() handler.Eve
 }
 
 var resourceQuotaDirtyPredicate = predicate.NewPredicateFuncs(func(obj client.Object) bool {
-	resourceQuota := obj.(*corev1alpha1.ResourceQuota)
+	resourceQuota := obj.(*corev1beta1.ResourceQuota)
 
 	// If we did not calculate any usage yet (i.e. hard being unset), we need to recalc.
 	if resourceQuota.Status.Hard == nil {
@@ -242,7 +242,7 @@ var resourceQuotaDirtyPredicate = predicate.NewPredicateFuncs(func(obj client.Ob
 func (r *ResourceQuotaReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(
-			&corev1alpha1.ResourceQuota{},
+			&corev1beta1.ResourceQuota{},
 			builder.WithPredicates(resourceQuotaDirtyPredicate),
 		).
 		Watches(

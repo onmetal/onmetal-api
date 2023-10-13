@@ -19,8 +19,8 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/client/networking"
 	clientutils "github.com/onmetal/onmetal-api/utils/client"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -37,7 +37,7 @@ import (
 )
 
 var (
-	loadBalancerFieldOwner = client.FieldOwner(networkingv1alpha1.Resource("loadbalancers").String())
+	loadBalancerFieldOwner = client.FieldOwner(networkingv1beta1.Resource("loadbalancers").String())
 )
 
 type LoadBalancerReconciler struct {
@@ -53,7 +53,7 @@ type LoadBalancerReconciler struct {
 
 func (r *LoadBalancerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	loadBalancer := &networkingv1alpha1.LoadBalancer{}
+	loadBalancer := &networkingv1beta1.LoadBalancer{}
 	if err := r.Get(ctx, req.NamespacedName, loadBalancer); err != nil {
 		if !apierrors.IsNotFound(err) {
 			return ctrl.Result{}, err
@@ -64,18 +64,18 @@ func (r *LoadBalancerReconciler) Reconcile(ctx context.Context, req ctrl.Request
 	return r.reconcileExists(ctx, log, loadBalancer)
 }
 
-func (r *LoadBalancerReconciler) reconcileExists(ctx context.Context, log logr.Logger, loadBalancer *networkingv1alpha1.LoadBalancer) (ctrl.Result, error) {
+func (r *LoadBalancerReconciler) reconcileExists(ctx context.Context, log logr.Logger, loadBalancer *networkingv1beta1.LoadBalancer) (ctrl.Result, error) {
 	if !loadBalancer.DeletionTimestamp.IsZero() {
 		return r.delete(ctx, log, loadBalancer)
 	}
 	return r.reconcile(ctx, log, loadBalancer)
 }
 
-func (r *LoadBalancerReconciler) delete(ctx context.Context, log logr.Logger, loadBalancer *networkingv1alpha1.LoadBalancer) (ctrl.Result, error) {
+func (r *LoadBalancerReconciler) delete(ctx context.Context, log logr.Logger, loadBalancer *networkingv1beta1.LoadBalancer) (ctrl.Result, error) {
 	return ctrl.Result{}, nil
 }
 
-func (r *LoadBalancerReconciler) reconcile(ctx context.Context, log logr.Logger, loadBalancer *networkingv1alpha1.LoadBalancer) (ctrl.Result, error) {
+func (r *LoadBalancerReconciler) reconcile(ctx context.Context, log logr.Logger, loadBalancer *networkingv1beta1.LoadBalancer) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	nicSelector := loadBalancer.Spec.NetworkInterfaceSelector
@@ -112,13 +112,13 @@ func (r *LoadBalancerReconciler) reconcile(ctx context.Context, log logr.Logger,
 	return ctrl.Result{}, nil
 }
 
-func (r *LoadBalancerReconciler) findDestinations(ctx context.Context, loadBalancer *networkingv1alpha1.LoadBalancer) ([]networkingv1alpha1.LoadBalancerDestination, error) {
+func (r *LoadBalancerReconciler) findDestinations(ctx context.Context, loadBalancer *networkingv1beta1.LoadBalancer) ([]networkingv1beta1.LoadBalancerDestination, error) {
 	sel, err := metav1.LabelSelectorAsSelector(loadBalancer.Spec.NetworkInterfaceSelector)
 	if err != nil {
 		return nil, err
 	}
 
-	nicList := &networkingv1alpha1.NetworkInterfaceList{}
+	nicList := &networkingv1beta1.NetworkInterfaceList{}
 	if err := r.List(ctx, nicList,
 		client.InNamespace(loadBalancer.Namespace),
 		client.MatchingLabelsSelector{Selector: sel},
@@ -128,16 +128,16 @@ func (r *LoadBalancerReconciler) findDestinations(ctx context.Context, loadBalan
 	}
 
 	// Make slice non-nil so omitempty does not file.
-	destinations := make([]networkingv1alpha1.LoadBalancerDestination, 0)
+	destinations := make([]networkingv1beta1.LoadBalancerDestination, 0)
 	for _, nic := range nicList.Items {
-		if nic.Status.State != networkingv1alpha1.NetworkInterfaceStateAvailable {
+		if nic.Status.State != networkingv1beta1.NetworkInterfaceStateAvailable {
 			continue
 		}
 
 		for _, ip := range nic.Status.IPs {
-			destinations = append(destinations, networkingv1alpha1.LoadBalancerDestination{
+			destinations = append(destinations, networkingv1beta1.LoadBalancerDestination{
 				IP: ip,
-				TargetRef: &networkingv1alpha1.LoadBalancerTargetRef{
+				TargetRef: &networkingv1beta1.LoadBalancerTargetRef{
 					UID:        nic.UID,
 					Name:       nic.Name,
 					ProviderID: nic.Spec.ProviderID,
@@ -148,8 +148,8 @@ func (r *LoadBalancerReconciler) findDestinations(ctx context.Context, loadBalan
 	return destinations, nil
 }
 
-func (r *LoadBalancerReconciler) getNetwork(ctx context.Context, loadBalancer *networkingv1alpha1.LoadBalancer) (*networkingv1alpha1.Network, error) {
-	network := &networkingv1alpha1.Network{}
+func (r *LoadBalancerReconciler) getNetwork(ctx context.Context, loadBalancer *networkingv1beta1.LoadBalancer) (*networkingv1beta1.Network, error) {
+	network := &networkingv1beta1.Network{}
 	networkKey := client.ObjectKey{Namespace: loadBalancer.Namespace, Name: loadBalancer.Spec.NetworkRef.Name}
 	if err := r.Get(ctx, networkKey, network); err != nil {
 		if !apierrors.IsNotFound(err) {
@@ -162,21 +162,21 @@ func (r *LoadBalancerReconciler) getNetwork(ctx context.Context, loadBalancer *n
 
 func (r *LoadBalancerReconciler) applyRouting(
 	ctx context.Context,
-	loadBalancer *networkingv1alpha1.LoadBalancer,
-	destinations []networkingv1alpha1.LoadBalancerDestination,
-	network *networkingv1alpha1.Network,
+	loadBalancer *networkingv1beta1.LoadBalancer,
+	destinations []networkingv1beta1.LoadBalancerDestination,
+	network *networkingv1beta1.Network,
 ) error {
-	loadBalancerRouting := &networkingv1alpha1.LoadBalancerRouting{
+	loadBalancerRouting := &networkingv1beta1.LoadBalancerRouting{
 		TypeMeta: metav1.TypeMeta{
 			Kind:       "LoadBalancerRouting",
-			APIVersion: networkingv1alpha1.SchemeGroupVersion.String(),
+			APIVersion: networkingv1beta1.SchemeGroupVersion.String(),
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: loadBalancer.Namespace,
 			Name:      loadBalancer.Name,
 		},
 		Destinations: destinations,
-		NetworkRef: commonv1alpha1.LocalUIDReference{
+		NetworkRef: commonv1beta1.LocalUIDReference{
 			Name: network.Name,
 			UID:  network.UID,
 		},
@@ -189,9 +189,9 @@ func (r *LoadBalancerReconciler) applyRouting(
 }
 
 func (r *LoadBalancerReconciler) enqueueByNetworkInterface() handler.EventHandler {
-	getEnqueueFunc := func(ctx context.Context, nic *networkingv1alpha1.NetworkInterface) func(nics []*networkingv1alpha1.NetworkInterface, queue workqueue.RateLimitingInterface) {
+	getEnqueueFunc := func(ctx context.Context, nic *networkingv1beta1.NetworkInterface) func(nics []*networkingv1beta1.NetworkInterface, queue workqueue.RateLimitingInterface) {
 		log := ctrl.LoggerFrom(ctx)
-		loadBalancerList := &networkingv1alpha1.LoadBalancerList{}
+		loadBalancerList := &networkingv1beta1.LoadBalancerList{}
 		if err := r.List(ctx, loadBalancerList,
 			client.InNamespace(nic.Namespace),
 			client.MatchingFields{networking.LoadBalancerNetworkNameField: nic.Spec.NetworkRef.Name},
@@ -200,7 +200,7 @@ func (r *LoadBalancerReconciler) enqueueByNetworkInterface() handler.EventHandle
 			return nil
 		}
 
-		return func(nics []*networkingv1alpha1.NetworkInterface, queue workqueue.RateLimitingInterface) {
+		return func(nics []*networkingv1beta1.NetworkInterface, queue workqueue.RateLimitingInterface) {
 			for _, loadBalancer := range loadBalancerList.Items {
 				loadBalancerKey := client.ObjectKeyFromObject(&loadBalancer)
 				log := log.WithValues("LoadBalancerKey", loadBalancerKey)
@@ -227,32 +227,32 @@ func (r *LoadBalancerReconciler) enqueueByNetworkInterface() handler.EventHandle
 
 	return handler.Funcs{
 		CreateFunc: func(ctx context.Context, evt event.CreateEvent, queue workqueue.RateLimitingInterface) {
-			nic := evt.Object.(*networkingv1alpha1.NetworkInterface)
+			nic := evt.Object.(*networkingv1beta1.NetworkInterface)
 			enqueueFunc := getEnqueueFunc(ctx, nic)
 			if enqueueFunc != nil {
-				enqueueFunc([]*networkingv1alpha1.NetworkInterface{nic}, queue)
+				enqueueFunc([]*networkingv1beta1.NetworkInterface{nic}, queue)
 			}
 		},
 		UpdateFunc: func(ctx context.Context, evt event.UpdateEvent, queue workqueue.RateLimitingInterface) {
-			newNic := evt.ObjectNew.(*networkingv1alpha1.NetworkInterface)
-			oldNic := evt.ObjectOld.(*networkingv1alpha1.NetworkInterface)
+			newNic := evt.ObjectNew.(*networkingv1beta1.NetworkInterface)
+			oldNic := evt.ObjectOld.(*networkingv1beta1.NetworkInterface)
 			enqueueFunc := getEnqueueFunc(ctx, newNic)
 			if enqueueFunc != nil {
-				enqueueFunc([]*networkingv1alpha1.NetworkInterface{newNic, oldNic}, queue)
+				enqueueFunc([]*networkingv1beta1.NetworkInterface{newNic, oldNic}, queue)
 			}
 		},
 		DeleteFunc: func(ctx context.Context, evt event.DeleteEvent, queue workqueue.RateLimitingInterface) {
-			nic := evt.Object.(*networkingv1alpha1.NetworkInterface)
+			nic := evt.Object.(*networkingv1beta1.NetworkInterface)
 			enqueueFunc := getEnqueueFunc(ctx, nic)
 			if enqueueFunc != nil {
-				enqueueFunc([]*networkingv1alpha1.NetworkInterface{nic}, queue)
+				enqueueFunc([]*networkingv1beta1.NetworkInterface{nic}, queue)
 			}
 		},
 		GenericFunc: func(ctx context.Context, evt event.GenericEvent, queue workqueue.RateLimitingInterface) {
-			nic := evt.Object.(*networkingv1alpha1.NetworkInterface)
+			nic := evt.Object.(*networkingv1beta1.NetworkInterface)
 			enqueueFunc := getEnqueueFunc(ctx, nic)
 			if enqueueFunc != nil {
-				enqueueFunc([]*networkingv1alpha1.NetworkInterface{nic}, queue)
+				enqueueFunc([]*networkingv1beta1.NetworkInterface{nic}, queue)
 			}
 		},
 	}
@@ -261,9 +261,9 @@ func (r *LoadBalancerReconciler) enqueueByNetworkInterface() handler.EventHandle
 func (r *LoadBalancerReconciler) enqueueByNetwork() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		log := ctrl.LoggerFrom(ctx)
-		network := obj.(*networkingv1alpha1.Network)
+		network := obj.(*networkingv1beta1.Network)
 
-		loadBalancerList := &networkingv1alpha1.LoadBalancerList{}
+		loadBalancerList := &networkingv1beta1.LoadBalancerList{}
 		if err := r.List(ctx, loadBalancerList,
 			client.InNamespace(network.Namespace),
 			client.MatchingFields{networking.LoadBalancerNetworkNameField: network.Name},
@@ -272,40 +272,40 @@ func (r *LoadBalancerReconciler) enqueueByNetwork() handler.EventHandler {
 			return nil
 		}
 
-		return clientutils.ReconcileRequestsFromObjectStructSlice[*networkingv1alpha1.LoadBalancer](loadBalancerList.Items)
+		return clientutils.ReconcileRequestsFromObjectStructSlice[*networkingv1beta1.LoadBalancer](loadBalancerList.Items)
 	})
 }
 
 func (r *LoadBalancerReconciler) networkStateChangedPredicate() predicate.Predicate {
 	return predicate.Funcs{
 		UpdateFunc: func(evt event.UpdateEvent) bool {
-			oldNetwork := evt.ObjectOld.(*networkingv1alpha1.Network)
-			newNetwork := evt.ObjectNew.(*networkingv1alpha1.Network)
+			oldNetwork := evt.ObjectOld.(*networkingv1beta1.Network)
+			newNetwork := evt.ObjectNew.(*networkingv1beta1.Network)
 			return oldNetwork.Status.State != newNetwork.Status.State
 		},
 	}
 }
 
 func (r *LoadBalancerReconciler) networkInterfaceAvailablePredicate() predicate.Predicate {
-	isNetworkInterfaceAvailable := func(nic *networkingv1alpha1.NetworkInterface) bool {
-		return nic.Status.State == networkingv1alpha1.NetworkInterfaceStateAvailable
+	isNetworkInterfaceAvailable := func(nic *networkingv1beta1.NetworkInterface) bool {
+		return nic.Status.State == networkingv1beta1.NetworkInterfaceStateAvailable
 	}
 	return predicate.Funcs{
 		CreateFunc: func(evt event.CreateEvent) bool {
-			nic := evt.Object.(*networkingv1alpha1.NetworkInterface)
+			nic := evt.Object.(*networkingv1beta1.NetworkInterface)
 			return isNetworkInterfaceAvailable(nic)
 		},
 		UpdateFunc: func(evt event.UpdateEvent) bool {
-			oldNic := evt.ObjectOld.(*networkingv1alpha1.NetworkInterface)
-			newNic := evt.ObjectNew.(*networkingv1alpha1.NetworkInterface)
+			oldNic := evt.ObjectOld.(*networkingv1beta1.NetworkInterface)
+			newNic := evt.ObjectNew.(*networkingv1beta1.NetworkInterface)
 			return isNetworkInterfaceAvailable(oldNic) || isNetworkInterfaceAvailable(newNic)
 		},
 		DeleteFunc: func(evt event.DeleteEvent) bool {
-			nic := evt.Object.(*networkingv1alpha1.NetworkInterface)
+			nic := evt.Object.(*networkingv1beta1.NetworkInterface)
 			return isNetworkInterfaceAvailable(nic)
 		},
 		GenericFunc: func(evt event.GenericEvent) bool {
-			nic := evt.Object.(*networkingv1alpha1.NetworkInterface)
+			nic := evt.Object.(*networkingv1beta1.NetworkInterface)
 			return isNetworkInterfaceAvailable(nic)
 		},
 	}
@@ -313,15 +313,15 @@ func (r *LoadBalancerReconciler) networkInterfaceAvailablePredicate() predicate.
 
 func (r *LoadBalancerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&networkingv1alpha1.LoadBalancer{}).
-		Owns(&networkingv1alpha1.LoadBalancerRouting{}).
+		For(&networkingv1beta1.LoadBalancer{}).
+		Owns(&networkingv1beta1.LoadBalancerRouting{}).
 		Watches(
-			&networkingv1alpha1.Network{},
+			&networkingv1beta1.Network{},
 			r.enqueueByNetwork(),
 			builder.WithPredicates(r.networkStateChangedPredicate()),
 		).
 		Watches(
-			&networkingv1alpha1.NetworkInterface{},
+			&networkingv1beta1.NetworkInterface{},
 			r.enqueueByNetworkInterface(),
 			builder.WithPredicates(r.networkInterfaceAvailablePredicate()),
 		).

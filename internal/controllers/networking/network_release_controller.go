@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"golang.org/x/exp/slices"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -42,7 +42,7 @@ type NetworkReleaseReconciler struct {
 
 func (r *NetworkReleaseReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	network := &networkingv1alpha1.Network{}
+	network := &networkingv1beta1.Network{}
 	if err := r.Get(ctx, req.NamespacedName, network); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -50,7 +50,7 @@ func (r *NetworkReleaseReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	return r.reconcileExists(ctx, log, network)
 }
 
-func (r *NetworkReleaseReconciler) reconcileExists(ctx context.Context, log logr.Logger, network *networkingv1alpha1.Network) (ctrl.Result, error) {
+func (r *NetworkReleaseReconciler) reconcileExists(ctx context.Context, log logr.Logger, network *networkingv1beta1.Network) (ctrl.Result, error) {
 	if !network.DeletionTimestamp.IsZero() {
 		log.V(1).Info("Network is already deleting, nothing to do")
 		return ctrl.Result{}, nil
@@ -61,9 +61,9 @@ func (r *NetworkReleaseReconciler) reconcileExists(ctx context.Context, log logr
 
 func (r *NetworkReleaseReconciler) filterExistingNetworkPeeringClaimRefs(
 	ctx context.Context,
-	network *networkingv1alpha1.Network,
-) ([]networkingv1alpha1.NetworkPeeringClaimRef, error) {
-	var filtered []networkingv1alpha1.NetworkPeeringClaimRef
+	network *networkingv1beta1.Network,
+) ([]networkingv1beta1.NetworkPeeringClaimRef, error) {
+	var filtered []networkingv1beta1.NetworkPeeringClaimRef
 	for _, peeringClaimRef := range network.Spec.PeeringClaimRefs {
 		ok, err := r.networkPeeringClaimExists(ctx, network, peeringClaimRef)
 		if err != nil {
@@ -79,8 +79,8 @@ func (r *NetworkReleaseReconciler) filterExistingNetworkPeeringClaimRefs(
 
 func (r *NetworkReleaseReconciler) networkPeeringClaimExists(
 	ctx context.Context,
-	network *networkingv1alpha1.Network,
-	peeringClaimRef networkingv1alpha1.NetworkPeeringClaimRef,
+	network *networkingv1beta1.Network,
+	peeringClaimRef networkingv1beta1.NetworkPeeringClaimRef,
 ) (bool, error) {
 	if _, ok := r.AbsenceCache.Get(peeringClaimRef.UID); ok {
 		return false, nil
@@ -88,7 +88,7 @@ func (r *NetworkReleaseReconciler) networkPeeringClaimExists(
 
 	claimer := &metav1.PartialObjectMetadata{
 		TypeMeta: metav1.TypeMeta{
-			APIVersion: networkingv1alpha1.SchemeGroupVersion.String(),
+			APIVersion: networkingv1beta1.SchemeGroupVersion.String(),
 			Kind:       "Network",
 		},
 	}
@@ -106,8 +106,8 @@ func (r *NetworkReleaseReconciler) networkPeeringClaimExists(
 
 func (r *NetworkReleaseReconciler) releaseNetwork(
 	ctx context.Context,
-	network *networkingv1alpha1.Network,
-	filteredPeeringClaimRefs []networkingv1alpha1.NetworkPeeringClaimRef,
+	network *networkingv1beta1.Network,
+	filteredPeeringClaimRefs []networkingv1beta1.NetworkPeeringClaimRef,
 ) error {
 	baseNetwork := network.DeepCopy()
 	network.Spec.PeeringClaimRefs = filteredPeeringClaimRefs
@@ -117,7 +117,7 @@ func (r *NetworkReleaseReconciler) releaseNetwork(
 	return nil
 }
 
-func (r *NetworkReleaseReconciler) reconcile(ctx context.Context, log logr.Logger, network *networkingv1alpha1.Network) (ctrl.Result, error) {
+func (r *NetworkReleaseReconciler) reconcile(ctx context.Context, log logr.Logger, network *networkingv1beta1.Network) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	if len(network.Spec.PeeringClaimRefs) == 0 {
@@ -150,17 +150,17 @@ func (r *NetworkReleaseReconciler) reconcile(ctx context.Context, log logr.Logge
 
 func (r *NetworkReleaseReconciler) networkClaimedPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		network := obj.(*networkingv1alpha1.Network)
+		network := obj.(*networkingv1beta1.Network)
 		return len(network.Spec.PeeringClaimRefs) > 0
 	})
 }
 
 func (r *NetworkReleaseReconciler) enqueueByNetwork() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		network := obj.(*networkingv1alpha1.Network)
+		network := obj.(*networkingv1beta1.Network)
 		log := ctrl.LoggerFrom(ctx)
 
-		networkList := &networkingv1alpha1.NetworkList{}
+		networkList := &networkingv1beta1.NetworkList{}
 		if err := r.List(ctx, networkList); err != nil {
 			log.Error(err, "Error listing networks")
 			return nil
@@ -187,7 +187,7 @@ func (r *NetworkReleaseReconciler) enqueueByNetwork() handler.EventHandler {
 
 func (r *NetworkReleaseReconciler) networkDeletingPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		network := obj.(*networkingv1alpha1.Network)
+		network := obj.(*networkingv1beta1.Network)
 		return !network.DeletionTimestamp.IsZero()
 	})
 }
@@ -196,11 +196,11 @@ func (r *NetworkReleaseReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("networkrelease").
 		For(
-			&networkingv1alpha1.Network{},
+			&networkingv1beta1.Network{},
 			builder.WithPredicates(r.networkClaimedPredicate()),
 		).
 		Watches(
-			&networkingv1alpha1.Network{},
+			&networkingv1beta1.Network{},
 			r.enqueueByNetwork(),
 			builder.WithPredicates(r.networkDeletingPredicate()),
 		).

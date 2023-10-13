@@ -23,7 +23,7 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/onmetal/controller-utils/clientutils"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	"github.com/onmetal/onmetal-api/utils/slices"
 	"k8s.io/apimachinery/pkg/types"
@@ -49,7 +49,7 @@ type MachineClassReconciler struct {
 // Reconcile moves the current state of the cluster closer to the desired state
 func (r *MachineClassReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	machineClass := &computev1alpha1.MachineClass{}
+	machineClass := &computev1beta1.MachineClass{}
 	if err := r.Get(ctx, req.NamespacedName, machineClass); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -60,9 +60,9 @@ func (r *MachineClassReconciler) Reconcile(ctx context.Context, req ctrl.Request
 func (r *MachineClassReconciler) listReferencingMachinesWithReader(
 	ctx context.Context,
 	rd client.Reader,
-	machineClass *computev1alpha1.MachineClass,
-) ([]computev1alpha1.Machine, error) {
-	machineList := &computev1alpha1.MachineList{}
+	machineClass *computev1beta1.MachineClass,
+) ([]computev1beta1.Machine, error) {
+	machineList := &computev1beta1.MachineList{}
 	if err := rd.List(ctx, machineList,
 		client.InNamespace(machineClass.Namespace),
 		client.MatchingFields{computeclient.MachineSpecMachineClassRefNameField: machineClass.Name},
@@ -73,16 +73,16 @@ func (r *MachineClassReconciler) listReferencingMachinesWithReader(
 	return machineList.Items, nil
 }
 
-func (r *MachineClassReconciler) collectMachineNames(machines []computev1alpha1.Machine) []string {
-	machineNames := slices.MapRef(machines, func(machine *computev1alpha1.Machine) string {
+func (r *MachineClassReconciler) collectMachineNames(machines []computev1beta1.Machine) []string {
+	machineNames := slices.MapRef(machines, func(machine *computev1beta1.Machine) string {
 		return machine.Name
 	})
 	sort.Strings(machineNames)
 	return machineNames
 }
 
-func (r *MachineClassReconciler) delete(ctx context.Context, log logr.Logger, machineClass *computev1alpha1.MachineClass) (ctrl.Result, error) {
-	if !controllerutil.ContainsFinalizer(machineClass, computev1alpha1.MachineClassFinalizer) {
+func (r *MachineClassReconciler) delete(ctx context.Context, log logr.Logger, machineClass *computev1beta1.MachineClass) (ctrl.Result, error) {
+	if !controllerutil.ContainsFinalizer(machineClass, computev1beta1.MachineClassFinalizer) {
 		return ctrl.Result{}, nil
 	}
 
@@ -105,7 +105,7 @@ func (r *MachineClassReconciler) delete(ctx context.Context, log logr.Logger, ma
 	}
 
 	log.V(1).Info("Machine class is not in use anymore, removing finalizer")
-	if err := clientutils.PatchRemoveFinalizer(ctx, r.Client, machineClass, computev1alpha1.MachineClassFinalizer); err != nil {
+	if err := clientutils.PatchRemoveFinalizer(ctx, r.Client, machineClass, computev1beta1.MachineClassFinalizer); err != nil {
 		return ctrl.Result{}, err
 	}
 
@@ -113,9 +113,9 @@ func (r *MachineClassReconciler) delete(ctx context.Context, log logr.Logger, ma
 	return ctrl.Result{}, nil
 }
 
-func (r *MachineClassReconciler) reconcile(ctx context.Context, log logr.Logger, machineClass *computev1alpha1.MachineClass) (ctrl.Result, error) {
+func (r *MachineClassReconciler) reconcile(ctx context.Context, log logr.Logger, machineClass *computev1beta1.MachineClass) (ctrl.Result, error) {
 	log.V(1).Info("Ensuring finalizer")
-	if modified, err := clientutils.PatchEnsureFinalizer(ctx, r.Client, machineClass, computev1alpha1.MachineClassFinalizer); err != nil || modified {
+	if modified, err := clientutils.PatchEnsureFinalizer(ctx, r.Client, machineClass, computev1beta1.MachineClassFinalizer); err != nil || modified {
 		return ctrl.Result{}, err
 	}
 
@@ -123,7 +123,7 @@ func (r *MachineClassReconciler) reconcile(ctx context.Context, log logr.Logger,
 	return ctrl.Result{}, nil
 }
 
-func (r *MachineClassReconciler) reconcileExists(ctx context.Context, log logr.Logger, machineClass *computev1alpha1.MachineClass) (ctrl.Result, error) {
+func (r *MachineClassReconciler) reconcileExists(ctx context.Context, log logr.Logger, machineClass *computev1beta1.MachineClass) (ctrl.Result, error) {
 	if !machineClass.DeletionTimestamp.IsZero() {
 		return r.delete(ctx, log, machineClass)
 	}
@@ -133,12 +133,12 @@ func (r *MachineClassReconciler) reconcileExists(ctx context.Context, log logr.L
 // SetupWithManager sets up the controller with the Manager.
 func (r *MachineClassReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&computev1alpha1.MachineClass{}).
+		For(&computev1beta1.MachineClass{}).
 		Watches(
-			&computev1alpha1.Machine{},
+			&computev1beta1.Machine{},
 			handler.Funcs{
 				DeleteFunc: func(ctx context.Context, event event.DeleteEvent, queue workqueue.RateLimitingInterface) {
-					machine := event.Object.(*computev1alpha1.Machine)
+					machine := event.Object.(*computev1beta1.Machine)
 					queue.Add(ctrl.Request{NamespacedName: types.NamespacedName{Name: machine.Spec.MachineClassRef.Name}})
 				},
 			},

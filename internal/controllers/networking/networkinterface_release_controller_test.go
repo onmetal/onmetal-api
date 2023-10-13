@@ -16,8 +16,8 @@
 package networking
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -32,15 +32,15 @@ var _ = Describe("NetworkInterfaceReleaseReconciler", func() {
 
 	It("should release network interfaces whose owner is gone", func(ctx SpecContext) {
 		By("creating a network interface referencing an owner that does not exist")
-		nic := &networkingv1alpha1.NetworkInterface{
+		nic := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "nic-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{Name: "my-network"},
-				IPs:        []networkingv1alpha1.IPSource{{Value: commonv1alpha1.MustParseNewIP("10.0.0.1")}},
-				MachineRef: &commonv1alpha1.LocalUIDReference{
+				IPs:        []networkingv1beta1.IPSource{{Value: commonv1beta1.MustParseNewIP("10.0.0.1")}},
+				MachineRef: &commonv1beta1.LocalUIDReference{
 					Name: "should-not-exist",
 					UID:  uuid.NewUUID(),
 				},

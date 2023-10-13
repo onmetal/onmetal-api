@@ -20,7 +20,7 @@ import (
 	"math/rand"
 
 	"github.com/go-logr/logr"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/client/ipam"
 	"go4.org/netipx"
 	corev1 "k8s.io/api/core/v1"
@@ -49,7 +49,7 @@ type PrefixAllocationScheduler struct {
 // move the current state of the cluster closer to the desired state.
 func (s *PrefixAllocationScheduler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	allocation := &ipamv1alpha1.PrefixAllocation{}
+	allocation := &ipamv1beta1.PrefixAllocation{}
 	if err := s.Get(ctx, req.NamespacedName, allocation); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -57,25 +57,25 @@ func (s *PrefixAllocationScheduler) Reconcile(ctx context.Context, req ctrl.Requ
 	return s.reconcileExists(ctx, log, allocation)
 }
 
-func (s *PrefixAllocationScheduler) reconcileExists(ctx context.Context, log logr.Logger, allocation *ipamv1alpha1.PrefixAllocation) (ctrl.Result, error) {
+func (s *PrefixAllocationScheduler) reconcileExists(ctx context.Context, log logr.Logger, allocation *ipamv1beta1.PrefixAllocation) (ctrl.Result, error) {
 	if !allocation.DeletionTimestamp.IsZero() {
 		return ctrl.Result{}, nil
 	}
 	return s.reconcile(ctx, log, allocation)
 }
 
-func isPrefixAllocatedAndNotDeleting(prefix *ipamv1alpha1.Prefix) bool {
+func isPrefixAllocatedAndNotDeleting(prefix *ipamv1beta1.Prefix) bool {
 	return prefix.DeletionTimestamp.IsZero() &&
-		prefix.Status.Phase == ipamv1alpha1.PrefixPhaseAllocated
+		prefix.Status.Phase == ipamv1beta1.PrefixPhaseAllocated
 }
 
-func (s *PrefixAllocationScheduler) prefixForAllocation(ctx context.Context, log logr.Logger, allocation *ipamv1alpha1.PrefixAllocation) (string, error) {
+func (s *PrefixAllocationScheduler) prefixForAllocation(ctx context.Context, log logr.Logger, allocation *ipamv1beta1.PrefixAllocation) (string, error) {
 	sel, err := metav1.LabelSelectorAsSelector(allocation.Spec.PrefixSelector)
 	if err != nil {
 		return "", fmt.Errorf("error building label selector: %w", err)
 	}
 
-	list := &ipamv1alpha1.PrefixList{}
+	list := &ipamv1beta1.PrefixList{}
 	if err := s.List(ctx, list,
 		client.InNamespace(allocation.Namespace),
 		client.MatchingLabelsSelector{Selector: sel},
@@ -84,7 +84,7 @@ func (s *PrefixAllocationScheduler) prefixForAllocation(ctx context.Context, log
 		return "", fmt.Errorf("error listing prefixes: %w", err)
 	}
 
-	var suitable []ipamv1alpha1.Prefix
+	var suitable []ipamv1beta1.Prefix
 	for _, prefix := range list.Items {
 		if !isPrefixAllocatedAndNotDeleting(&prefix) {
 			continue
@@ -102,7 +102,7 @@ func (s *PrefixAllocationScheduler) prefixForAllocation(ctx context.Context, log
 	return suitable[rand.Intn(len(suitable))].Name, nil
 }
 
-func prefixCompatibleWithAllocation(prefix *ipamv1alpha1.Prefix, allocation *ipamv1alpha1.PrefixAllocation) bool {
+func prefixCompatibleWithAllocation(prefix *ipamv1beta1.Prefix, allocation *ipamv1beta1.PrefixAllocation) bool {
 	if prefix.Spec.IPFamily != allocation.Spec.IPFamily {
 		return false
 	}
@@ -115,7 +115,7 @@ func prefixCompatibleWithAllocation(prefix *ipamv1alpha1.Prefix, allocation *ipa
 	return true
 }
 
-func prefixFitsAllocation(prefix *ipamv1alpha1.Prefix, allocation *ipamv1alpha1.PrefixAllocation) bool {
+func prefixFitsAllocation(prefix *ipamv1beta1.Prefix, allocation *ipamv1beta1.PrefixAllocation) bool {
 	if !prefixCompatibleWithAllocation(prefix, allocation) {
 		return false
 	}
@@ -138,7 +138,7 @@ func prefixFitsAllocation(prefix *ipamv1alpha1.Prefix, allocation *ipamv1alpha1.
 	}
 }
 
-func (s *PrefixAllocationScheduler) reconcile(ctx context.Context, log logr.Logger, allocation *ipamv1alpha1.PrefixAllocation) (ctrl.Result, error) {
+func (s *PrefixAllocationScheduler) reconcile(ctx context.Context, log logr.Logger, allocation *ipamv1beta1.PrefixAllocation) (ctrl.Result, error) {
 	if allocation.Spec.PrefixRef != nil {
 		log.V(1).Info("Allocation has already been scheduled")
 		return ctrl.Result{}, nil
@@ -175,9 +175,9 @@ func (s *PrefixAllocationScheduler) reconcile(ctx context.Context, log logr.Logg
 func (s *PrefixAllocationScheduler) SetupWithManager(mgr manager.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("prefixallocationscheduler").
-		For(&ipamv1alpha1.PrefixAllocation{}).
+		For(&ipamv1beta1.PrefixAllocation{}).
 		Watches(
-			&ipamv1alpha1.Prefix{},
+			&ipamv1beta1.Prefix{},
 			s.enqueueByMatchingPrefix(),
 		).
 		Complete(s)
@@ -185,13 +185,13 @@ func (s *PrefixAllocationScheduler) SetupWithManager(mgr manager.Manager) error 
 
 func (s *PrefixAllocationScheduler) enqueueByMatchingPrefix() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		prefix := obj.(*ipamv1alpha1.Prefix)
+		prefix := obj.(*ipamv1beta1.Prefix)
 		log := ctrl.LoggerFrom(ctx)
 		if !isPrefixAllocatedAndNotDeleting(prefix) {
 			return nil
 		}
 
-		list := &ipamv1alpha1.PrefixAllocationList{}
+		list := &ipamv1beta1.PrefixAllocationList{}
 		if err := s.List(ctx, list,
 			client.InNamespace(prefix.Namespace),
 			client.MatchingFields{

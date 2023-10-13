@@ -17,7 +17,8 @@
 package networking
 
 import (
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	"github.com/onmetal/onmetal-api/api/common/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -31,12 +32,12 @@ var _ = Describe("NetworkProtectionReconciler", func() {
 	ns := SetupNamespace(&k8sClient)
 
 	var (
-		network *networkingv1alpha1.Network
+		network *networkingv1beta1.Network
 	)
 
 	BeforeEach(func(ctx SpecContext) {
 		By("creating a network")
-		network = &networkingv1alpha1.Network{
+		network = &networkingv1beta1.Network{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "my-network-",
@@ -47,19 +48,19 @@ var _ = Describe("NetworkProtectionReconciler", func() {
 
 	It("should add and remove a finalizer for a network in use/not used by a network interface", func(ctx SpecContext) {
 		By("creating a network interface referencing this network")
-		networkInterface := &networkingv1alpha1.NetworkInterface{
+		networkInterface := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "my-networkinterface-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{
 					Name: network.Name,
 				},
 				IPFamilies: []corev1.IPFamily{
 					corev1.IPv4Protocol,
 				},
-				IPs: []networkingv1alpha1.IPSource{{
+				IPs: []networkingv1beta1.IPSource{{
 					Value: v1beta1.MustParseNewIP("10.0.0.1"),
 				}},
 			},
@@ -94,19 +95,19 @@ var _ = Describe("NetworkProtectionReconciler", func() {
 
 	It("should remove a finalizer for a network in deletion state once the reference network interface is deleted", func(ctx SpecContext) {
 		By("creating a network interface referencing this network")
-		networkInterface := &networkingv1alpha1.NetworkInterface{
+		networkInterface := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "my-networkinterface-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{
 					Name: network.Name,
 				},
 				IPFamilies: []corev1.IPFamily{
 					corev1.IPv4Protocol,
 				},
-				IPs: []networkingv1alpha1.IPSource{{
+				IPs: []networkingv1beta1.IPSource{{
 					Value: v1beta1.MustParseNewIP("10.0.0.1"),
 				}},
 			},
@@ -151,19 +152,19 @@ var _ = Describe("NetworkProtectionReconciler", func() {
 
 	It("should keep a finalizer if one of two network interfaces is removed", func(ctx SpecContext) {
 		By("creating the first network interface referencing this network")
-		networkInterface := &networkingv1alpha1.NetworkInterface{
+		networkInterface := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "my-networkinterface-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{
 					Name: network.Name,
 				},
 				IPFamilies: []corev1.IPFamily{
 					corev1.IPv4Protocol,
 				},
-				IPs: []networkingv1alpha1.IPSource{{
+				IPs: []networkingv1beta1.IPSource{{
 					Value: v1beta1.MustParseNewIP("10.0.0.1"),
 				}},
 			},
@@ -171,19 +172,19 @@ var _ = Describe("NetworkProtectionReconciler", func() {
 		Expect(k8sClient.Create(ctx, networkInterface)).To(Succeed())
 
 		By("creating a second network interface referencing this network")
-		networkInterface2 := &networkingv1alpha1.NetworkInterface{
+		networkInterface2 := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "my-networkinterface-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{
 					Name: network.Name,
 				},
 				IPFamilies: []corev1.IPFamily{
 					corev1.IPv4Protocol,
 				},
-				IPs: []networkingv1alpha1.IPSource{{
+				IPs: []networkingv1beta1.IPSource{{
 					Value: v1beta1.MustParseNewIP("10.0.0.2"),
 				}},
 			},

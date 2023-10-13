@@ -16,8 +16,8 @@
 package networking
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -32,15 +32,15 @@ var _ = Describe("VirtualIPReleaseReconciler", func() {
 
 	It("should release virtual IPs whose owner is gone", func(ctx SpecContext) {
 		By("creating a virtual IP referencing an owner that does not exist")
-		nic := &networkingv1alpha1.VirtualIP{
+		nic := &networkingv1beta1.VirtualIP{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "nic-",
 			},
-			Spec: networkingv1alpha1.VirtualIPSpec{
-				Type:     networkingv1alpha1.VirtualIPTypePublic,
+			Spec: networkingv1beta1.VirtualIPSpec{
+				Type:     networkingv1beta1.VirtualIPTypePublic,
 				IPFamily: corev1.IPv4Protocol,
-				TargetRef: &commonv1alpha1.LocalUIDReference{
+				TargetRef: &commonv1beta1.LocalUIDReference{
 					Name: "should-not-exist",
 					UID:  uuid.NewUUID(),
 				},

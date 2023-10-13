@@ -15,8 +15,8 @@
 package compute
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/utils/annotations"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
@@ -34,36 +34,36 @@ var _ = Describe("MachineEphemeralVolumeController", func() {
 
 	It("should manage ephemeral volumes for a machine", func(ctx SpecContext) {
 		By("creating a volume that will be referenced by the machine")
-		refVolume := &storagev1alpha1.Volume{
+		refVolume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "ref-volume-",
 			},
-			Spec: storagev1alpha1.VolumeSpec{},
+			Spec: storagev1beta1.VolumeSpec{},
 		}
 		Expect(k8sClient.Create(ctx, refVolume)).To(Succeed())
 
 		By("creating a machine")
-		machine := &computev1alpha1.Machine{
+		machine := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "machine-",
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
-				Volumes: []computev1alpha1.Volume{
+				Volumes: []computev1beta1.Volume{
 					{
 						Name: "ref-volume",
-						VolumeSource: computev1alpha1.VolumeSource{
+						VolumeSource: computev1beta1.VolumeSource{
 							VolumeRef: &corev1.LocalObjectReference{Name: refVolume.Name},
 						},
 					},
 					{
 						Name: "ephem-volume",
-						VolumeSource: computev1alpha1.VolumeSource{
-							Ephemeral: &computev1alpha1.EphemeralVolumeSource{
-								VolumeTemplate: &storagev1alpha1.VolumeTemplateSpec{
-									Spec: storagev1alpha1.VolumeSpec{},
+						VolumeSource: computev1beta1.VolumeSource{
+							Ephemeral: &computev1beta1.EphemeralVolumeSource{
+								VolumeTemplate: &storagev1beta1.VolumeTemplateSpec{
+									Spec: storagev1beta1.VolumeSpec{},
 								},
 							},
 						},
@@ -74,22 +74,22 @@ var _ = Describe("MachineEphemeralVolumeController", func() {
 		Expect(k8sClient.Create(ctx, machine)).To(Succeed())
 
 		By("creating an undesired controlled volume")
-		undesiredControlledVolume := &storagev1alpha1.Volume{
+		undesiredControlledVolume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "undesired-ctrl-volume-",
 			},
-			Spec: storagev1alpha1.VolumeSpec{},
+			Spec: storagev1beta1.VolumeSpec{},
 		}
 		annotations.SetDefaultEphemeralManagedBy(undesiredControlledVolume)
 		_ = ctrl.SetControllerReference(machine, undesiredControlledVolume, k8sClient.Scheme())
 		Expect(k8sClient.Create(ctx, undesiredControlledVolume)).To(Succeed())
 
 		By("waiting for the ephemeral volume to exist")
-		ephemVolume := &storagev1alpha1.Volume{
+		ephemVolume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace: ns.Name,
-				Name:      computev1alpha1.MachineEphemeralVolumeName(machine.Name, "ephem-volume"),
+				Name:      computev1beta1.MachineEphemeralVolumeName(machine.Name, "ephem-volume"),
 			},
 		}
 		Eventually(Get(ephemVolume)).Should(Succeed())
@@ -103,24 +103,24 @@ var _ = Describe("MachineEphemeralVolumeController", func() {
 
 	It("should not delete externally managed volumes for a machine", func(ctx SpecContext) {
 		By("creating a machine")
-		machine := &computev1alpha1.Machine{
+		machine := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "machine-",
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
 			},
 		}
 		Expect(k8sClient.Create(ctx, machine)).To(Succeed())
 
 		By("creating an undesired controlled volume")
-		externalVolume := &storagev1alpha1.Volume{
+		externalVolume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "external-volume-",
 			},
-			Spec: storagev1alpha1.VolumeSpec{},
+			Spec: storagev1beta1.VolumeSpec{},
 		}
 		_ = ctrl.SetControllerReference(machine, externalVolume, k8sClient.Scheme())
 		Expect(k8sClient.Create(ctx, externalVolume)).To(Succeed())

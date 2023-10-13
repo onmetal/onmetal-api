@@ -23,8 +23,8 @@ import (
 	"github.com/onmetal/onmetal-api/utils/annotations"
 
 	"github.com/go-logr/logr"
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	networkingclient "github.com/onmetal/onmetal-api/internal/client/networking"
 	klogutils "github.com/onmetal/onmetal-api/utils/klog"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -46,7 +46,7 @@ type NetworkInterfaceEphemeralVirtualIPReconciler struct {
 
 func (r *NetworkInterfaceEphemeralVirtualIPReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	nic := &networkingv1alpha1.NetworkInterface{}
+	nic := &networkingv1beta1.NetworkInterface{}
 	if err := r.Get(ctx, req.NamespacedName, nic); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -54,7 +54,7 @@ func (r *NetworkInterfaceEphemeralVirtualIPReconciler) Reconcile(ctx context.Con
 	return r.reconcileExists(ctx, log, nic)
 }
 
-func (r *NetworkInterfaceEphemeralVirtualIPReconciler) reconcileExists(ctx context.Context, log logr.Logger, nic *networkingv1alpha1.NetworkInterface) (ctrl.Result, error) {
+func (r *NetworkInterfaceEphemeralVirtualIPReconciler) reconcileExists(ctx context.Context, log logr.Logger, nic *networkingv1beta1.NetworkInterface) (ctrl.Result, error) {
 	if !nic.DeletionTimestamp.IsZero() {
 		return ctrl.Result{}, nil
 	}
@@ -62,8 +62,8 @@ func (r *NetworkInterfaceEphemeralVirtualIPReconciler) reconcileExists(ctx conte
 	return r.reconcile(ctx, log, nic)
 }
 
-func (r *NetworkInterfaceEphemeralVirtualIPReconciler) ephemeralNetworkInterfaceVirtualIPByName(nic *networkingv1alpha1.NetworkInterface) map[string]*networkingv1alpha1.VirtualIP {
-	res := make(map[string]*networkingv1alpha1.VirtualIP)
+func (r *NetworkInterfaceEphemeralVirtualIPReconciler) ephemeralNetworkInterfaceVirtualIPByName(nic *networkingv1beta1.NetworkInterface) map[string]*networkingv1beta1.VirtualIP {
+	res := make(map[string]*networkingv1beta1.VirtualIP)
 
 	vipSrc := nic.Spec.VirtualIP
 	if vipSrc == nil {
@@ -74,8 +74,8 @@ func (r *NetworkInterfaceEphemeralVirtualIPReconciler) ephemeralNetworkInterface
 		return res
 	}
 
-	virtualIPName := networkingv1alpha1.NetworkInterfaceVirtualIPName(nic.Name, *vipSrc)
-	virtualIP := &networkingv1alpha1.VirtualIP{
+	virtualIPName := networkingv1beta1.NetworkInterfaceVirtualIPName(nic.Name, *vipSrc)
+	virtualIP := &networkingv1beta1.VirtualIP{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace:   nic.Namespace,
 			Name:        virtualIPName,
@@ -86,7 +86,7 @@ func (r *NetworkInterfaceEphemeralVirtualIPReconciler) ephemeralNetworkInterface
 	}
 	annotations.SetDefaultEphemeralManagedBy(virtualIP)
 	_ = ctrl.SetControllerReference(nic, virtualIP, r.Scheme())
-	virtualIP.Spec.TargetRef = &commonv1alpha1.LocalUIDReference{
+	virtualIP.Spec.TargetRef = &commonv1beta1.LocalUIDReference{
 		Name: nic.Name,
 		UID:  nic.UID,
 	}
@@ -95,7 +95,7 @@ func (r *NetworkInterfaceEphemeralVirtualIPReconciler) ephemeralNetworkInterface
 	return res
 }
 
-func (r *NetworkInterfaceEphemeralVirtualIPReconciler) handleExistingVirtualIP(ctx context.Context, log logr.Logger, nic *networkingv1alpha1.NetworkInterface, shouldManage bool, virtualIP *networkingv1alpha1.VirtualIP) error {
+func (r *NetworkInterfaceEphemeralVirtualIPReconciler) handleExistingVirtualIP(ctx context.Context, log logr.Logger, nic *networkingv1beta1.NetworkInterface, shouldManage bool, virtualIP *networkingv1beta1.VirtualIP) error {
 	if annotations.IsDefaultEphemeralControlledBy(virtualIP, nic) {
 		if shouldManage {
 			log.V(1).Info("Ephemeral virtual IP is present and controlled by network interface")
@@ -123,8 +123,8 @@ func (r *NetworkInterfaceEphemeralVirtualIPReconciler) handleExistingVirtualIP(c
 func (r *NetworkInterfaceEphemeralVirtualIPReconciler) handleCreateVirtualIP(
 	ctx context.Context,
 	log logr.Logger,
-	nic *networkingv1alpha1.NetworkInterface,
-	virtualIP *networkingv1alpha1.VirtualIP,
+	nic *networkingv1beta1.NetworkInterface,
+	virtualIP *networkingv1beta1.VirtualIP,
 ) error {
 	log.V(1).Info("Creating virtual IP")
 	virtualIPKey := client.ObjectKeyFromObject(virtualIP)
@@ -148,11 +148,11 @@ func (r *NetworkInterfaceEphemeralVirtualIPReconciler) handleCreateVirtualIP(
 	return r.handleExistingVirtualIP(ctx, log, nic, true, virtualIP)
 }
 
-func (r *NetworkInterfaceEphemeralVirtualIPReconciler) reconcile(ctx context.Context, log logr.Logger, nic *networkingv1alpha1.NetworkInterface) (ctrl.Result, error) {
+func (r *NetworkInterfaceEphemeralVirtualIPReconciler) reconcile(ctx context.Context, log logr.Logger, nic *networkingv1beta1.NetworkInterface) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	log.V(1).Info("Listing virtual IPs")
-	virtualIPList := &networkingv1alpha1.VirtualIPList{}
+	virtualIPList := &networkingv1beta1.VirtualIPList{}
 	if err := r.List(ctx, virtualIPList,
 		client.InNamespace(nic.Namespace),
 	); err != nil {
@@ -191,17 +191,17 @@ func (r *NetworkInterfaceEphemeralVirtualIPReconciler) reconcile(ctx context.Con
 
 func (r *NetworkInterfaceEphemeralVirtualIPReconciler) networkInterfaceNotDeletingPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		networkInterface := obj.(*networkingv1alpha1.NetworkInterface)
+		networkInterface := obj.(*networkingv1beta1.NetworkInterface)
 		return networkInterface.DeletionTimestamp.IsZero()
 	})
 }
 
 func (r *NetworkInterfaceEphemeralVirtualIPReconciler) enqueueByVirtualIP() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		virtualIP := obj.(*networkingv1alpha1.VirtualIP)
+		virtualIP := obj.(*networkingv1beta1.VirtualIP)
 		log := ctrl.LoggerFrom(ctx)
 
-		nicList := &networkingv1alpha1.NetworkInterfaceList{}
+		nicList := &networkingv1beta1.NetworkInterfaceList{}
 		if err := r.List(ctx, nicList,
 			client.InNamespace(virtualIP.Namespace),
 			client.MatchingFields{
@@ -228,14 +228,14 @@ func (r *NetworkInterfaceEphemeralVirtualIPReconciler) SetupWithManager(mgr ctrl
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("networkinterfaceephemeralvirtualip").
 		For(
-			&networkingv1alpha1.NetworkInterface{},
+			&networkingv1beta1.NetworkInterface{},
 			builder.WithPredicates(
 				r.networkInterfaceNotDeletingPredicate(),
 			),
 		).
-		Owns(&networkingv1alpha1.VirtualIP{}).
+		Owns(&networkingv1beta1.VirtualIP{}).
 		Watches(
-			&networkingv1alpha1.VirtualIP{},
+			&networkingv1beta1.VirtualIP{},
 			r.enqueueByVirtualIP(),
 		).
 		Complete(r)

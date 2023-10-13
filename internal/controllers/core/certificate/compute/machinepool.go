@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"strings"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/controllers/core/certificate/generic"
 	"golang.org/x/exp/slices"
 	authv1 "k8s.io/api/authorization/v1"
@@ -44,8 +44,8 @@ func IsMachinePoolClientCert(csr *certificatesv1.CertificateSigningRequest, x509
 }
 
 func ValidateMachinePoolClientCSR(req *x509.CertificateRequest, usages sets.Set[certificatesv1.KeyUsage]) error {
-	if !slices.Equal([]string{computev1alpha1.MachinePoolsGroup}, req.Subject.Organization) {
-		return fmt.Errorf("organization is not %s", computev1alpha1.MachinePoolsGroup)
+	if !slices.Equal([]string{computev1beta1.MachinePoolsGroup}, req.Subject.Organization) {
+		return fmt.Errorf("organization is not %s", computev1beta1.MachinePoolsGroup)
 	}
 
 	if len(req.DNSNames) > 0 {
@@ -61,8 +61,8 @@ func ValidateMachinePoolClientCSR(req *x509.CertificateRequest, usages sets.Set[
 		return fmt.Errorf("uri subject alternative names are not allowed")
 	}
 
-	if !strings.HasPrefix(req.Subject.CommonName, computev1alpha1.MachinePoolUserNamePrefix) {
-		return fmt.Errorf("subject common name does not begin with %s", computev1alpha1.MachinePoolUserNamePrefix)
+	if !strings.HasPrefix(req.Subject.CommonName, computev1beta1.MachinePoolUserNamePrefix) {
+		return fmt.Errorf("subject common name does not begin with %s", computev1beta1.MachinePoolUserNamePrefix)
 	}
 
 	if !MachinePoolRequiredUsages.Equal(usages) {

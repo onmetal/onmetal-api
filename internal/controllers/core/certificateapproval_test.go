@@ -18,9 +18,9 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	utilcertificate "github.com/onmetal/onmetal-api/utils/certificate"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -57,20 +57,20 @@ var _ = Describe("CertificateApprovalController", func() {
 			)
 		},
 		Entry("machine pool",
-			computev1alpha1.MachinePoolCommonName("my-pool"),
-			computev1alpha1.MachinePoolsGroup,
+			computev1beta1.MachinePoolCommonName("my-pool"),
+			computev1beta1.MachinePoolsGroup,
 		),
 		Entry("volume pool",
-			storagev1alpha1.VolumePoolCommonName("my-pool"),
-			storagev1alpha1.VolumePoolsGroup,
+			storagev1beta1.VolumePoolCommonName("my-pool"),
+			storagev1beta1.VolumePoolsGroup,
 		),
 		Entry("bucket pool",
-			storagev1alpha1.BucketPoolCommonName("my-pool"),
-			storagev1alpha1.BucketPoolsGroup,
+			storagev1beta1.BucketPoolCommonName("my-pool"),
+			storagev1beta1.BucketPoolsGroup,
 		),
 		Entry("network plugin",
-			networkingv1alpha1.NetworkPluginCommonName("my-plugin"),
-			networkingv1alpha1.NetworkPluginsGroup,
+			networkingv1beta1.NetworkPluginCommonName("my-plugin"),
+			networkingv1beta1.NetworkPluginsGroup,
 		),
 	)
 })

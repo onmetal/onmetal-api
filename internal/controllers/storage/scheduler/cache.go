@@ -21,8 +21,8 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	"github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	"github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"golang.org/x/exp/maps"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/types"
@@ -81,7 +81,7 @@ func (n *ContainerInfo) MaxAllocatable(className string) resource.Quantity {
 			assigned.Add(*instance.instance.Spec.Resources.Storage())
 		}
 	}
-	allocatable, ok := n.node.Status.Allocatable[corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeVolumeClass, className)]
+	allocatable, ok := n.node.Status.Allocatable[corev1beta1.ClassCountFor(corev1beta1.ClassTypeVolumeClass, className)]
 	if !ok {
 		return *resource.NewQuantity(0, resource.BinarySI)
 	}

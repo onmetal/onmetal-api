@@ -23,8 +23,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	. "sigs.k8s.io/controller-runtime/pkg/envtest/komega"
 
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 )
 
 var _ = Describe("BucketScheduler", func() {
@@ -32,17 +32,17 @@ var _ = Describe("BucketScheduler", func() {
 
 	BeforeEach(func(ctx SpecContext) {
 		By("waiting for the cached client to report no bucket pools")
-		Eventually(New(cacheK8sClient).ObjectList(&storagev1alpha1.BucketPoolList{})).Should(HaveField("Items", BeEmpty()))
+		Eventually(New(cacheK8sClient).ObjectList(&storagev1beta1.BucketPoolList{})).Should(HaveField("Items", BeEmpty()))
 	})
 
 	AfterEach(func(ctx SpecContext) {
 		By("deleting all bucket pools")
-		Expect(k8sClient.DeleteAllOf(ctx, &storagev1alpha1.BucketPool{})).To(Succeed())
+		Expect(k8sClient.DeleteAllOf(ctx, &storagev1beta1.BucketPool{})).To(Succeed())
 	})
 
 	It("should schedule buckets on bucket pools", func(ctx SpecContext) {
 		By("creating a bucket pool")
-		bucketPool := &storagev1alpha1.BucketPool{
+		bucketPool := &storagev1beta1.BucketPool{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-pool-",
 			},
@@ -56,12 +56,12 @@ var _ = Describe("BucketScheduler", func() {
 			To(Succeed(), "failed to patch bucket pool status")
 
 		By("creating a bucket w/ the requested bucket class")
-		bucket := &storagev1alpha1.Bucket{
+		bucket := &storagev1beta1.Bucket{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "test-bucket-",
 			},
-			Spec: storagev1alpha1.BucketSpec{
+			Spec: storagev1beta1.BucketSpec{
 				BucketClassRef: &corev1.LocalObjectReference{Name: "my-bucketclass"},
 			},
 		}
@@ -77,18 +77,18 @@ var _ = Describe("BucketScheduler", func() {
 
 	It("should schedule schedule buckets onto bucket pools if the pool becomes available later than the bucket", func(ctx SpecContext) {
 		By("creating a bucket w/ the requested bucket class")
-		bucket := &storagev1alpha1.Bucket{
+		bucket := &storagev1beta1.Bucket{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "test-bucket-",
 			},
-			Spec: storagev1alpha1.BucketSpec{
+			Spec: storagev1beta1.BucketSpec{
 				BucketClassRef: &corev1.LocalObjectReference{Name: "my-bucketclass"},
 			},
 		}
 		Expect(k8sClient.Create(ctx, bucket)).To(Succeed(), "failed to create bucket")
 
-		bucketPools := &storagev1alpha1.BucketPoolList{}
+		bucketPools := &storagev1beta1.BucketPoolList{}
 		Expect(k8sClient.List(ctx, bucketPools)).To(Succeed(), "failed to create bucket pool")
 
 		By("waiting for the bucket to indicate it is pending")
@@ -99,7 +99,7 @@ var _ = Describe("BucketScheduler", func() {
 		}).Should(Succeed())
 
 		By("creating a bucket pool")
-		bucketPool := &storagev1alpha1.BucketPool{
+		bucketPool := &storagev1beta1.BucketPool{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-pool-",
 			},
@@ -121,7 +121,7 @@ var _ = Describe("BucketScheduler", func() {
 
 	It("should schedule onto bucket pools with matching labels", func(ctx SpecContext) {
 		By("creating a bucket pool w/o matching labels")
-		bucketPoolNoMatchingLabels := &storagev1alpha1.BucketPool{
+		bucketPoolNoMatchingLabels := &storagev1beta1.BucketPool{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-pool-",
 			},
@@ -135,7 +135,7 @@ var _ = Describe("BucketScheduler", func() {
 			To(Succeed(), "failed to patch bucket pool status")
 
 		By("creating a bucket pool w/ matching labels")
-		bucketPoolMatchingLabels := &storagev1alpha1.BucketPool{
+		bucketPoolMatchingLabels := &storagev1beta1.BucketPool{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-pool-",
 				Labels: map[string]string{
@@ -152,12 +152,12 @@ var _ = Describe("BucketScheduler", func() {
 			To(Succeed(), "failed to patch bucket pool status")
 
 		By("creating a bucket w/ the requested bucket class")
-		bucket := &storagev1alpha1.Bucket{
+		bucket := &storagev1beta1.Bucket{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "test-bucket-",
 			},
-			Spec: storagev1alpha1.BucketSpec{
+			Spec: storagev1beta1.BucketSpec{
 				BucketPoolSelector: map[string]string{
 					"foo": "bar",
 				},
@@ -176,20 +176,20 @@ var _ = Describe("BucketScheduler", func() {
 
 	It("should schedule a bucket with corresponding tolerations onto a bucket pool with taints", func(ctx SpecContext) {
 		By("creating a bucket pool w/ taints")
-		taintedBucketPool := &storagev1alpha1.BucketPool{
+		taintedBucketPool := &storagev1beta1.BucketPool{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "test-pool-",
 			},
-			Spec: storagev1alpha1.BucketPoolSpec{
-				Taints: []commonv1alpha1.Taint{
+			Spec: storagev1beta1.BucketPoolSpec{
+				Taints: []commonv1beta1.Taint{
 					{
 						Key:    "key",
 						Value:  "value",
-						Effect: commonv1alpha1.TaintEffectNoSchedule,
+						Effect: commonv1beta1.TaintEffectNoSchedule,
 					},
 					{
 						Key:    "key1",
-						Effect: commonv1alpha1.TaintEffectNoSchedule,
+						Effect: commonv1beta1.TaintEffectNoSchedule,
 					},
 				},
 			},
@@ -203,12 +203,12 @@ var _ = Describe("BucketScheduler", func() {
 			To(Succeed(), "failed to patch the bucket pool status")
 
 		By("creating a bucket")
-		bucket := &storagev1alpha1.Bucket{
+		bucket := &storagev1beta1.Bucket{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "test-bucket-",
 			},
-			Spec: storagev1alpha1.BucketSpec{
+			Spec: storagev1beta1.BucketSpec{
 				BucketClassRef: &corev1.LocalObjectReference{Name: "my-bucketclass"},
 			},
 		}
@@ -223,11 +223,11 @@ var _ = Describe("BucketScheduler", func() {
 
 		By("patching the bucket to contain only one of the corresponding tolerations")
 		bucketBase := bucket.DeepCopy()
-		bucket.Spec.Tolerations = append(bucket.Spec.Tolerations, commonv1alpha1.Toleration{
+		bucket.Spec.Tolerations = append(bucket.Spec.Tolerations, commonv1beta1.Toleration{
 			Key:      "key",
 			Value:    "value",
-			Effect:   commonv1alpha1.TaintEffectNoSchedule,
-			Operator: commonv1alpha1.TolerationOpEqual,
+			Effect:   commonv1beta1.TaintEffectNoSchedule,
+			Operator: commonv1beta1.TolerationOpEqual,
 		})
 		Expect(k8sClient.Patch(ctx, bucket, client.MergeFrom(bucketBase))).To(Succeed(), "failed to patch the bucket's spec")
 
@@ -239,10 +239,10 @@ var _ = Describe("BucketScheduler", func() {
 
 		By("patching the bucket to contain all of the corresponding tolerations")
 		bucketBase = bucket.DeepCopy()
-		bucket.Spec.Tolerations = append(bucket.Spec.Tolerations, commonv1alpha1.Toleration{
+		bucket.Spec.Tolerations = append(bucket.Spec.Tolerations, commonv1beta1.Toleration{
 			Key:      "key1",
-			Effect:   commonv1alpha1.TaintEffectNoSchedule,
-			Operator: commonv1alpha1.TolerationOpExists,
+			Effect:   commonv1beta1.TaintEffectNoSchedule,
+			Operator: commonv1beta1.TolerationOpExists,
 		})
 		Expect(k8sClient.Patch(ctx, bucket, client.MergeFrom(bucketBase))).To(Succeed(), "failed to patch the bucket's spec")
 

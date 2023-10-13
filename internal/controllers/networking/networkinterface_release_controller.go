@@ -19,8 +19,8 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/lru"
@@ -43,7 +43,7 @@ type NetworkInterfaceReleaseReconciler struct {
 
 func (r *NetworkInterfaceReleaseReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	nic := &networkingv1alpha1.NetworkInterface{}
+	nic := &networkingv1beta1.NetworkInterface{}
 	if err := r.Get(ctx, req.NamespacedName, nic); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -51,7 +51,7 @@ func (r *NetworkInterfaceReleaseReconciler) Reconcile(ctx context.Context, req c
 	return r.reconcileExists(ctx, log, nic)
 }
 
-func (r *NetworkInterfaceReleaseReconciler) reconcileExists(ctx context.Context, log logr.Logger, nic *networkingv1alpha1.NetworkInterface) (ctrl.Result, error) {
+func (r *NetworkInterfaceReleaseReconciler) reconcileExists(ctx context.Context, log logr.Logger, nic *networkingv1beta1.NetworkInterface) (ctrl.Result, error) {
 	if !nic.DeletionTimestamp.IsZero() {
 		log.V(1).Info("Network interface is already deleting, nothing to do")
 		return ctrl.Result{}, nil
@@ -60,7 +60,7 @@ func (r *NetworkInterfaceReleaseReconciler) reconcileExists(ctx context.Context,
 	return r.reconcile(ctx, log, nic)
 }
 
-func (r *NetworkInterfaceReleaseReconciler) networkInterfaceClaimExists(ctx context.Context, nic *networkingv1alpha1.NetworkInterface) (bool, error) {
+func (r *NetworkInterfaceReleaseReconciler) networkInterfaceClaimExists(ctx context.Context, nic *networkingv1beta1.NetworkInterface) (bool, error) {
 	claimRef := nic.Spec.MachineRef
 	if _, ok := r.AbsenceCache.Get(claimRef.UID); ok {
 		return false, nil
@@ -68,7 +68,7 @@ func (r *NetworkInterfaceReleaseReconciler) networkInterfaceClaimExists(ctx cont
 
 	claimer := &metav1.PartialObjectMetadata{
 		TypeMeta: metav1.TypeMeta{
-			APIVersion: computev1alpha1.SchemeGroupVersion.String(),
+			APIVersion: computev1beta1.SchemeGroupVersion.String(),
 			Kind:       "Machine",
 		},
 	}
@@ -84,7 +84,7 @@ func (r *NetworkInterfaceReleaseReconciler) networkInterfaceClaimExists(ctx cont
 	return true, nil
 }
 
-func (r *NetworkInterfaceReleaseReconciler) releaseNetworkInterface(ctx context.Context, nic *networkingv1alpha1.NetworkInterface) error {
+func (r *NetworkInterfaceReleaseReconciler) releaseNetworkInterface(ctx context.Context, nic *networkingv1beta1.NetworkInterface) error {
 	baseNic := nic.DeepCopy()
 	nic.Spec.MachineRef = nil
 	if err := r.Patch(ctx, nic, client.StrategicMergeFrom(baseNic, client.MergeFromWithOptimisticLock{})); err != nil {
@@ -93,7 +93,7 @@ func (r *NetworkInterfaceReleaseReconciler) releaseNetworkInterface(ctx context.
 	return nil
 }
 
-func (r *NetworkInterfaceReleaseReconciler) reconcile(ctx context.Context, log logr.Logger, nic *networkingv1alpha1.NetworkInterface) (ctrl.Result, error) {
+func (r *NetworkInterfaceReleaseReconciler) reconcile(ctx context.Context, log logr.Logger, nic *networkingv1beta1.NetworkInterface) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	if nic.Spec.MachineRef == nil {
@@ -126,17 +126,17 @@ func (r *NetworkInterfaceReleaseReconciler) reconcile(ctx context.Context, log l
 
 func (r *NetworkInterfaceReleaseReconciler) networkInterfaceClaimedPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		nic := obj.(*networkingv1alpha1.NetworkInterface)
+		nic := obj.(*networkingv1beta1.NetworkInterface)
 		return nic.Spec.MachineRef != nil
 	})
 }
 
 func (r *NetworkInterfaceReleaseReconciler) enqueueByMachine() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		machine := obj.(*computev1alpha1.Machine)
+		machine := obj.(*computev1beta1.Machine)
 		log := ctrl.LoggerFrom(ctx)
 
-		nicList := &networkingv1alpha1.NetworkInterfaceList{}
+		nicList := &networkingv1beta1.NetworkInterfaceList{}
 		if err := r.List(ctx, nicList,
 			client.InNamespace(machine.Namespace),
 		); err != nil {
@@ -163,7 +163,7 @@ func (r *NetworkInterfaceReleaseReconciler) enqueueByMachine() handler.EventHand
 
 func (r *NetworkInterfaceReleaseReconciler) machineDeletingPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		machine := obj.(*computev1alpha1.Machine)
+		machine := obj.(*computev1beta1.Machine)
 		return !machine.DeletionTimestamp.IsZero()
 	})
 }
@@ -172,11 +172,11 @@ func (r *NetworkInterfaceReleaseReconciler) SetupWithManager(mgr ctrl.Manager) e
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("networkinterfacerelease").
 		For(
-			&networkingv1alpha1.NetworkInterface{},
+			&networkingv1beta1.NetworkInterface{},
 			builder.WithPredicates(r.networkInterfaceClaimedPredicate()),
 		).
 		Watches(
-			&computev1alpha1.Machine{},
+			&computev1beta1.Machine{},
 			r.enqueueByMachine(),
 			builder.WithPredicates(r.machineDeletingPredicate()),
 		).

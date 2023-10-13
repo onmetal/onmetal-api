@@ -20,7 +20,8 @@ import (
 	"math/rand"
 
 	"github.com/go-logr/logr"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	"github.com/onmetal/onmetal-api/api/common/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	storageclient "github.com/onmetal/onmetal-api/internal/client/storage"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -48,7 +49,7 @@ type BucketScheduler struct {
 func (s *BucketScheduler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
 
-	bucket := &storagev1alpha1.Bucket{}
+	bucket := &storagev1beta1.Bucket{}
 	if err := s.Get(ctx, req.NamespacedName, bucket); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -64,9 +65,9 @@ func (s *BucketScheduler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 	return s.schedule(ctx, log, bucket)
 }
 
-func (s *BucketScheduler) schedule(ctx context.Context, log logr.Logger, bucket *storagev1alpha1.Bucket) (ctrl.Result, error) {
+func (s *BucketScheduler) schedule(ctx context.Context, log logr.Logger, bucket *storagev1beta1.Bucket) (ctrl.Result, error) {
 	log.Info("Scheduling bucket")
-	list := &storagev1alpha1.BucketPoolList{}
+	list := &storagev1beta1.BucketPoolList{}
 	if err := s.List(ctx, list,
 		client.MatchingFields{storageclient.BucketPoolAvailableBucketClassesField: bucket.Spec.BucketClassRef.Name},
 		client.MatchingLabels(bucket.Spec.BucketPoolSelector),
@@ -74,7 +75,7 @@ func (s *BucketScheduler) schedule(ctx context.Context, log logr.Logger, bucket 
 		return ctrl.Result{}, fmt.Errorf("error listing bucket pools: %w", err)
 	}
 
-	var available []storagev1alpha1.BucketPool
+	var available []storagev1beta1.BucketPool
 	for _, bucketPool := range list.Items {
 		if bucketPool.DeletionTimestamp.IsZero() {
 			available = append(available, bucketPool)
@@ -87,7 +88,7 @@ func (s *BucketScheduler) schedule(ctx context.Context, log logr.Logger, bucket 
 	}
 
 	// Filter bucket pools by checking if the bucket tolerates all the taints of a bucket pool
-	var filtered []storagev1alpha1.BucketPool
+	var filtered []storagev1beta1.BucketPool
 	for _, pool := range available {
 		if v1beta1.TolerateTaints(bucket.Spec.Tolerations, pool.Spec.Taints) {
 			filtered = append(filtered, pool)
@@ -116,7 +117,7 @@ func (s *BucketScheduler) schedule(ctx context.Context, log logr.Logger, bucket 
 	return ctrl.Result{}, nil
 }
 
-func filterBucket(bucket *storagev1alpha1.Bucket) bool {
+func filterBucket(bucket *storagev1beta1.Bucket) bool {
 	return bucket.DeletionTimestamp.IsZero() &&
 		bucket.Spec.BucketPoolRef == nil &&
 		bucket.Spec.BucketClassRef != nil
@@ -124,13 +125,13 @@ func filterBucket(bucket *storagev1alpha1.Bucket) bool {
 
 func (s *BucketScheduler) enqueueRequestsByBucketPool() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, object client.Object) []ctrl.Request {
-		pool := object.(*storagev1alpha1.BucketPool)
+		pool := object.(*storagev1beta1.BucketPool)
 		log := ctrl.LoggerFrom(ctx)
 		if !pool.DeletionTimestamp.IsZero() {
 			return nil
 		}
 
-		list := &storagev1alpha1.BucketList{}
+		list := &storagev1beta1.BucketList{}
 		if err := s.List(ctx, list, client.MatchingFields{storageclient.BucketSpecBucketPoolRefNameField: ""}); err != nil {
 			log.Error(err, "error listing unscheduled buckets")
 			return nil
@@ -166,15 +167,15 @@ func (s *BucketScheduler) SetupWithManager(mgr manager.Manager) error {
 
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("bucket-scheduler").
-		For(&storagev1alpha1.Bucket{},
+		For(&storagev1beta1.Bucket{},
 			builder.WithPredicates(predicate.NewPredicateFuncs(func(object client.Object) bool {
-				bucket := object.(*storagev1alpha1.Bucket)
+				bucket := object.(*storagev1beta1.Bucket)
 				return filterBucket(bucket)
 			})),
 		).
 		// Enqueue unscheduled buckets if a bucket pool w/ required bucket classes becomes available.
 		Watches(
-			&storagev1alpha1.BucketPool{},
+			&storagev1beta1.BucketPool{},
 			s.enqueueRequestsByBucketPool(),
 		).
 		Complete(s)

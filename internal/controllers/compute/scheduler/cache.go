@@ -21,8 +21,8 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
-	"github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	"github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	"golang.org/x/exp/maps"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -31,15 +31,15 @@ import (
 )
 
 type CacheStrategy interface {
-	Key(instance *v1beta.Machine) (types.UID, error)
-	ContainerKey(instance *v1beta.Machine) string
+	Key(instance *v1beta1.Machine) (types.UID, error)
+	ContainerKey(instance *v1beta1.Machine) string
 }
 
 type defaultCacheStrategy struct{}
 
 var DefaultCacheStrategy CacheStrategy = defaultCacheStrategy{}
 
-func (defaultCacheStrategy) Key(instance *v1beta.Machine) (types.UID, error) {
+func (defaultCacheStrategy) Key(instance *v1beta1.Machine) (types.UID, error) {
 	uid := instance.GetUID()
 	if uid == "" {
 		return "", fmt.Errorf("instance has no UID")
@@ -47,7 +47,7 @@ func (defaultCacheStrategy) Key(instance *v1beta.Machine) (types.UID, error) {
 	return uid, nil
 }
 
-func (defaultCacheStrategy) ContainerKey(instance *v1beta.Machine) string {
+func (defaultCacheStrategy) ContainerKey(instance *v1beta1.Machine) string {
 	if instance.Spec.MachinePoolRef == nil {
 		return ""
 	}
@@ -55,11 +55,11 @@ func (defaultCacheStrategy) ContainerKey(instance *v1beta.Machine) string {
 }
 
 type InstanceInfo struct {
-	instance *v1beta.Machine
+	instance *v1beta1.Machine
 }
 
 type ContainerInfo struct {
-	node      *v1beta.MachinePool
+	node      *v1beta1.MachinePool
 	instances map[types.UID]*InstanceInfo
 }
 
@@ -69,7 +69,7 @@ func newNodeInfo() *ContainerInfo {
 	}
 }
 
-func (n *ContainerInfo) Node() *v1beta.MachinePool {
+func (n *ContainerInfo) Node() *v1beta1.MachinePool {
 	return n.node
 }
 
@@ -81,7 +81,7 @@ func (n *ContainerInfo) MaxAllocatable(className string) int64 {
 		}
 	}
 
-	class, ok := n.node.Status.Allocatable[corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, className)]
+	class, ok := n.node.Status.Allocatable[corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, className)]
 	if !ok {
 		return 0
 	}
@@ -101,7 +101,7 @@ func (n *ContainerInfo) shallowCopy() *ContainerInfo {
 }
 
 type instanceState struct {
-	instance        *v1beta.Machine
+	instance        *v1beta1.Machine
 	bindingFinished bool
 }
 
@@ -173,7 +173,7 @@ func (c *Cache) Snapshot() *Snapshot {
 	return snapshot
 }
 
-func (c *Cache) IsAssumedInstance(instance *v1beta.Machine) (bool, error) {
+func (c *Cache) IsAssumedInstance(instance *v1beta1.Machine) (bool, error) {
 	key, err := c.strategy.Key(instance)
 	if err != nil {
 		return false, err
@@ -184,7 +184,7 @@ func (c *Cache) IsAssumedInstance(instance *v1beta.Machine) (bool, error) {
 	return c.assumedInstances.Has(key), nil
 }
 
-func (c *Cache) AssumeInstance(instance *v1beta.Machine) error {
+func (c *Cache) AssumeInstance(instance *v1beta1.Machine) error {
 	log := c.log.WithValues("Instance", klog.KObj(instance))
 	key, err := c.strategy.Key(instance)
 	if err != nil {
@@ -203,7 +203,7 @@ func (c *Cache) AssumeInstance(instance *v1beta.Machine) error {
 	return nil
 }
 
-func (c *Cache) ForgetInstance(instance *v1beta.Machine) error {
+func (c *Cache) ForgetInstance(instance *v1beta1.Machine) error {
 	log := c.log.WithValues("Instance", klog.KObj(instance))
 	key, err := c.strategy.Key(instance)
 	if err != nil {
@@ -226,7 +226,7 @@ func (c *Cache) ForgetInstance(instance *v1beta.Machine) error {
 	return fmt.Errorf("instance %s(%v) wasn't assumed so cannot be forgotten", key, klog.KObj(instance))
 }
 
-func (c *Cache) FinishBinding(instance *v1beta.Machine) error {
+func (c *Cache) FinishBinding(instance *v1beta1.Machine) error {
 	log := c.log.WithValues("Instance", klog.KObj(instance))
 	key, err := c.strategy.Key(instance)
 	if err != nil {
@@ -245,7 +245,7 @@ func (c *Cache) FinishBinding(instance *v1beta.Machine) error {
 	return nil
 }
 
-func (c *Cache) AddContainer(node *v1beta.MachinePool) {
+func (c *Cache) AddContainer(node *v1beta1.MachinePool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -257,7 +257,7 @@ func (c *Cache) AddContainer(node *v1beta.MachinePool) {
 	n.node = node
 }
 
-func (c *Cache) UpdateContainer(_, newNode *v1beta.MachinePool) {
+func (c *Cache) UpdateContainer(_, newNode *v1beta1.MachinePool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -269,7 +269,7 @@ func (c *Cache) UpdateContainer(_, newNode *v1beta.MachinePool) {
 	n.node = newNode
 }
 
-func (c *Cache) RemoveContainer(node *v1beta.MachinePool) error {
+func (c *Cache) RemoveContainer(node *v1beta1.MachinePool) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -285,7 +285,7 @@ func (c *Cache) RemoveContainer(node *v1beta.MachinePool) error {
 	return nil
 }
 
-func (c *Cache) AddInstance(instance *v1beta.Machine) error {
+func (c *Cache) AddInstance(instance *v1beta1.Machine) error {
 	log := c.log.WithValues("Instance", klog.KObj(instance))
 	key, err := c.strategy.Key(instance)
 	if err != nil {
@@ -319,7 +319,7 @@ func (c *Cache) AddInstance(instance *v1beta.Machine) error {
 	}
 }
 
-func (c *Cache) UpdateInstance(oldInstance, newInstance *v1beta.Machine) error {
+func (c *Cache) UpdateInstance(oldInstance, newInstance *v1beta1.Machine) error {
 	log := c.log.WithValues("Instance", klog.KObj(oldInstance))
 	key, err := c.strategy.Key(oldInstance)
 	if err != nil {
@@ -354,7 +354,7 @@ func (c *Cache) UpdateInstance(oldInstance, newInstance *v1beta.Machine) error {
 	return nil
 }
 
-func (c *Cache) RemoveInstance(instance *v1beta.Machine) error {
+func (c *Cache) RemoveInstance(instance *v1beta1.Machine) error {
 	log := c.log.WithValues("Instance", klog.KObj(instance))
 	key, err := c.strategy.Key(instance)
 	if err != nil {
@@ -383,12 +383,12 @@ func (c *Cache) RemoveInstance(instance *v1beta.Machine) error {
 	return nil
 }
 
-func (c *Cache) updateInstance(log logr.Logger, key types.UID, oldInstance, newInstance *v1beta.Machine) {
+func (c *Cache) updateInstance(log logr.Logger, key types.UID, oldInstance, newInstance *v1beta1.Machine) {
 	c.removeInstance(log, key, oldInstance)
 	c.addInstance(log, key, newInstance, false)
 }
 
-func (c *Cache) addInstance(_ logr.Logger, key types.UID, instance *v1beta.Machine, assume bool) {
+func (c *Cache) addInstance(_ logr.Logger, key types.UID, instance *v1beta1.Machine, assume bool) {
 	containerKey := c.strategy.ContainerKey(instance)
 	n, ok := c.nodes[containerKey]
 	if !ok {
@@ -405,7 +405,7 @@ func (c *Cache) addInstance(_ logr.Logger, key types.UID, instance *v1beta.Machi
 	}
 }
 
-func (c *Cache) removeInstance(log logr.Logger, key types.UID, instance *v1beta.Machine) {
+func (c *Cache) removeInstance(log logr.Logger, key types.UID, instance *v1beta1.Machine) {
 	containerKey := c.strategy.ContainerKey(instance)
 	n, ok := c.nodes[containerKey]
 	if !ok {

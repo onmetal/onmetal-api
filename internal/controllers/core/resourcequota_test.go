@@ -15,8 +15,8 @@
 package core_test
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -31,17 +31,17 @@ var _ = Describe("ResourceNamespaceController", func() {
 	var (
 		ctx          = SetupContext()
 		ns           = SetupTest(ctx)
-		machineClass = &computev1alpha1.MachineClass{}
+		machineClass = &computev1beta1.MachineClass{}
 	)
 
 	BeforeEach(func() {
-		*machineClass = computev1alpha1.MachineClass{
+		*machineClass = computev1beta1.MachineClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "machine-class-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceCPU:    resource.MustParse("1"),
-				corev1alpha1.ResourceMemory: resource.MustParse("1Gi"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceCPU:    resource.MustParse("1"),
+				corev1beta1.ResourceMemory: resource.MustParse("1Gi"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, machineClass)).To(Succeed())
@@ -49,27 +49,27 @@ var _ = Describe("ResourceNamespaceController", func() {
 
 	It("should mark the namespace with the replenish quota annotation", MustPassRepeatedly(3), func() {
 		By("creating a machine")
-		machine := &computev1alpha1.Machine{
+		machine := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "machine-",
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
 			},
 		}
 		Expect(k8sClient.Create(ctx, machine)).To(Succeed())
 
 		By("creating a resource quota")
-		resourceQuota := &corev1alpha1.ResourceQuota{
+		resourceQuota := &corev1beta1.ResourceQuota{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "resource-quota-",
 			},
-			Spec: corev1alpha1.ResourceQuotaSpec{
-				Hard: corev1alpha1.ResourceList{
-					corev1alpha1.ResourceRequestsCPU:    resource.MustParse("2"),
-					corev1alpha1.ResourceRequestsMemory: resource.MustParse("2Gi"),
+			Spec: corev1beta1.ResourceQuotaSpec{
+				Hard: corev1beta1.ResourceList{
+					corev1beta1.ResourceRequestsCPU:    resource.MustParse("2"),
+					corev1beta1.ResourceRequestsMemory: resource.MustParse("2Gi"),
 				},
 			},
 		}
@@ -78,9 +78,9 @@ var _ = Describe("ResourceNamespaceController", func() {
 		By("waiting for the resource quota to report status")
 		Eventually(Object(resourceQuota)).Should(HaveField("Status", SatisfyAll(
 			HaveField("Hard", resourceQuota.Spec.Hard),
-			HaveField("Used", corev1alpha1.ResourceList{
-				corev1alpha1.ResourceRequestsCPU:    resource.MustParse("1"),
-				corev1alpha1.ResourceRequestsMemory: resource.MustParse("1Gi"),
+			HaveField("Used", corev1beta1.ResourceList{
+				corev1beta1.ResourceRequestsCPU:    resource.MustParse("1"),
+				corev1beta1.ResourceRequestsMemory: resource.MustParse("1Gi"),
 			}),
 		)))
 
@@ -94,9 +94,9 @@ var _ = Describe("ResourceNamespaceController", func() {
 		By("waiting for the resource quota to be updated")
 		Eventually(Object(resourceQuota)).Should(HaveField("Status", SatisfyAll(
 			HaveField("Hard", resourceQuota.Spec.Hard),
-			HaveField("Used", corev1alpha1.ResourceList{
-				corev1alpha1.ResourceRequestsCPU:    resource.MustParse("0"),
-				corev1alpha1.ResourceRequestsMemory: resource.MustParse("0"),
+			HaveField("Used", corev1beta1.ResourceList{
+				corev1beta1.ResourceRequestsCPU:    resource.MustParse("0"),
+				corev1beta1.ResourceRequestsMemory: resource.MustParse("0"),
 			}),
 		)))
 

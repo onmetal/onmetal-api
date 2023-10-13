@@ -18,7 +18,8 @@ package storage
 
 import (
 	. "github.com/onmetal/controller-utils/testutils"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -27,8 +28,6 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 )
 
 var _ = Describe("BucketClass controller", func() {
@@ -36,24 +35,24 @@ var _ = Describe("BucketClass controller", func() {
 
 	It("should finalize the bucket class if no bucket is using it", func(ctx SpecContext) {
 		By("creating the bucket class consumed by the bucket")
-		bucketClass := &storagev1alpha1.BucketClass{
+		bucketClass := &storagev1beta1.BucketClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "bucketclass-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceTPS:  resource.MustParse("100Mi"),
-				corev1alpha1.ResourceIOPS: resource.MustParse("100"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceTPS:  resource.MustParse("100Mi"),
+				corev1beta1.ResourceIOPS: resource.MustParse("100"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, bucketClass)).Should(Succeed())
 
 		By("creating the bucket")
-		bucket := &storagev1alpha1.Bucket{
+		bucket := &storagev1beta1.Bucket{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "bucket-",
 			},
-			Spec: storagev1alpha1.BucketSpec{
+			Spec: storagev1beta1.BucketSpec{
 				BucketClassRef: &corev1.LocalObjectReference{Name: bucketClass.Name},
 			},
 		}
@@ -66,7 +65,7 @@ var _ = Describe("BucketClass controller", func() {
 			Expect(client.IgnoreNotFound(err)).NotTo(HaveOccurred())
 			g.Expect(err).NotTo(HaveOccurred())
 			return bucketClass.Finalizers
-		}).Should(ContainElement(storagev1alpha1.BucketClassFinalizer))
+		}).Should(ContainElement(storagev1beta1.BucketClassFinalizer))
 
 		By("issuing a delete request for the bucket class")
 		Expect(k8sClient.Delete(ctx, bucketClass)).Should(Succeed())
@@ -76,7 +75,7 @@ var _ = Describe("BucketClass controller", func() {
 			err := k8sClient.Get(ctx, bucketClassKey, bucketClass)
 			g.Expect(err).NotTo(HaveOccurred())
 			return bucketClass.Finalizers
-		}).Should(ContainElement(storagev1alpha1.BucketClassFinalizer))
+		}).Should(ContainElement(storagev1beta1.BucketClassFinalizer))
 
 		By("deleting the referencing bucket")
 		Expect(k8sClient.Delete(ctx, bucket)).Should(Succeed())

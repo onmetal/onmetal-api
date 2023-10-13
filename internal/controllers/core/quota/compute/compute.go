@@ -15,7 +15,7 @@
 package compute
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/controllers/core/quota/generic"
 )
 
@@ -26,6 +26,6 @@ var (
 
 func init() {
 	replenishReconcilersBuilder.Register(
-		&computev1alpha1.Machine{},
+		&computev1beta1.Machine{},
 	)
 }

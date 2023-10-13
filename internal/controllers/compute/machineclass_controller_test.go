@@ -17,7 +17,8 @@
 package compute
 
 import (
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -26,8 +27,6 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 )
 
 var _ = Describe("machineclass controller", func() {
@@ -35,24 +34,24 @@ var _ = Describe("machineclass controller", func() {
 
 	It("removes the finalizer from machineclass only if there's no machine still using the machineclass", func(ctx SpecContext) {
 		By("creating the machineclass consumed by the machine")
-		machineClass := &computev1alpha1.MachineClass{
+		machineClass := &computev1beta1.MachineClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "machineclass-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceCPU:    resource.MustParse("300m"),
-				corev1alpha1.ResourceMemory: resource.MustParse("1Gi"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceCPU:    resource.MustParse("300m"),
+				corev1beta1.ResourceMemory: resource.MustParse("1Gi"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, machineClass)).Should(Succeed())
 
 		By("creating the machine")
-		m := &computev1alpha1.Machine{
+		m := &computev1beta1.Machine{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "machine-",
 			},
-			Spec: computev1alpha1.MachineSpec{
+			Spec: computev1beta1.MachineSpec{
 				Image: "my-image",
 				MachineClassRef: corev1.LocalObjectReference{
 					Name: machineClass.Name,
@@ -68,7 +67,7 @@ var _ = Describe("machineclass controller", func() {
 			Expect(client.IgnoreNotFound(err)).To(Succeed(), "errors other than `not found` are not expected")
 			g.Expect(err).NotTo(HaveOccurred())
 			return machineClass.Finalizers
-		}).Should(ContainElement(computev1alpha1.MachineClassFinalizer))
+		}).Should(ContainElement(computev1beta1.MachineClassFinalizer))
 
 		By("checking the machineclass and its finalizer consistently exist upon deletion ")
 		Expect(k8sClient.Delete(ctx, machineClass)).Should(Succeed())
@@ -78,7 +77,7 @@ var _ = Describe("machineclass controller", func() {
 			Expect(client.IgnoreNotFound(err)).To(Succeed(), "errors other than `not found` are not expected")
 			g.Expect(err).NotTo(HaveOccurred())
 			return machineClass.Finalizers
-		}).Should(ContainElement(computev1alpha1.MachineClassFinalizer))
+		}).Should(ContainElement(computev1beta1.MachineClassFinalizer))
 
 		By("checking the machineclass is eventually gone after the deletion of the machine")
 		Expect(k8sClient.Delete(ctx, m)).Should(Succeed())

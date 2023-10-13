@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"strings"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/controllers/core/certificate/generic"
 	"golang.org/x/exp/slices"
 	authv1 "k8s.io/api/authorization/v1"
@@ -44,8 +44,8 @@ func IsBucketPoolClientCert(csr *certificatesv1.CertificateSigningRequest, x509c
 }
 
 func ValidateBucketPoolClientCSR(req *x509.CertificateRequest, usages sets.Set[certificatesv1.KeyUsage]) error {
-	if !slices.Equal([]string{storagev1alpha1.BucketPoolsGroup}, req.Subject.Organization) {
-		return fmt.Errorf("organization is not %s", storagev1alpha1.BucketPoolsGroup)
+	if !slices.Equal([]string{storagev1beta1.BucketPoolsGroup}, req.Subject.Organization) {
+		return fmt.Errorf("organization is not %s", storagev1beta1.BucketPoolsGroup)
 	}
 
 	if len(req.DNSNames) > 0 {
@@ -61,8 +61,8 @@ func ValidateBucketPoolClientCSR(req *x509.CertificateRequest, usages sets.Set[c
 		return fmt.Errorf("uri subject alternative names are not allowed")
 	}
 
-	if !strings.HasPrefix(req.Subject.CommonName, storagev1alpha1.BucketPoolUserNamePrefix) {
-		return fmt.Errorf("subject common name does not begin with %s", storagev1alpha1.BucketPoolUserNamePrefix)
+	if !strings.HasPrefix(req.Subject.CommonName, storagev1beta1.BucketPoolUserNamePrefix) {
+		return fmt.Errorf("subject common name does not begin with %s", storagev1beta1.BucketPoolUserNamePrefix)
 	}
 
 	if !BucketPoolRequiredUsages.Equal(usages) {

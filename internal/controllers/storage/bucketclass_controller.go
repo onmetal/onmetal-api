@@ -23,7 +23,7 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/onmetal/controller-utils/clientutils"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	storageclient "github.com/onmetal/onmetal-api/internal/client/storage"
 	"github.com/onmetal/onmetal-api/utils/slices"
 	"k8s.io/apimachinery/pkg/types"
@@ -49,7 +49,7 @@ type BucketClassReconciler struct {
 // Reconcile moves the current state of the cluster closer to the desired state.
 func (r *BucketClassReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	bucketClass := &storagev1alpha1.BucketClass{}
+	bucketClass := &storagev1beta1.BucketClass{}
 	if err := r.Get(ctx, req.NamespacedName, bucketClass); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -60,9 +60,9 @@ func (r *BucketClassReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 func (r *BucketClassReconciler) listReferencingBucketsWithReader(
 	ctx context.Context,
 	rd client.Reader,
-	bucketClass *storagev1alpha1.BucketClass,
-) ([]storagev1alpha1.Bucket, error) {
-	bucketList := &storagev1alpha1.BucketList{}
+	bucketClass *storagev1beta1.BucketClass,
+) ([]storagev1beta1.Bucket, error) {
+	bucketList := &storagev1beta1.BucketList{}
 	if err := rd.List(ctx, bucketList,
 		client.InNamespace(bucketClass.Namespace),
 		client.MatchingFields{storageclient.BucketSpecBucketClassRefNameField: bucketClass.Name},
@@ -72,16 +72,16 @@ func (r *BucketClassReconciler) listReferencingBucketsWithReader(
 	return bucketList.Items, nil
 }
 
-func (r *BucketClassReconciler) collectBucketNames(buckets []storagev1alpha1.Bucket) []string {
-	bucketNames := slices.MapRef(buckets, func(bucket *storagev1alpha1.Bucket) string {
+func (r *BucketClassReconciler) collectBucketNames(buckets []storagev1beta1.Bucket) []string {
+	bucketNames := slices.MapRef(buckets, func(bucket *storagev1beta1.Bucket) string {
 		return bucket.Name
 	})
 	sort.Strings(bucketNames)
 	return bucketNames
 }
 
-func (r *BucketClassReconciler) delete(ctx context.Context, log logr.Logger, bucketClass *storagev1alpha1.BucketClass) (ctrl.Result, error) {
-	if !controllerutil.ContainsFinalizer(bucketClass, storagev1alpha1.BucketClassFinalizer) {
+func (r *BucketClassReconciler) delete(ctx context.Context, log logr.Logger, bucketClass *storagev1beta1.BucketClass) (ctrl.Result, error) {
+	if !controllerutil.ContainsFinalizer(bucketClass, storagev1beta1.BucketClassFinalizer) {
 		return ctrl.Result{}, nil
 	}
 
@@ -104,7 +104,7 @@ func (r *BucketClassReconciler) delete(ctx context.Context, log logr.Logger, buc
 	}
 
 	log.V(1).Info("Bucket Class is not used anymore, removing finalizer")
-	if err := clientutils.PatchRemoveFinalizer(ctx, r.Client, bucketClass, storagev1alpha1.BucketClassFinalizer); err != nil {
+	if err := clientutils.PatchRemoveFinalizer(ctx, r.Client, bucketClass, storagev1beta1.BucketClassFinalizer); err != nil {
 		return ctrl.Result{}, err
 	}
 
@@ -112,9 +112,9 @@ func (r *BucketClassReconciler) delete(ctx context.Context, log logr.Logger, buc
 	return ctrl.Result{}, nil
 }
 
-func (r *BucketClassReconciler) reconcile(ctx context.Context, log logr.Logger, bucketClass *storagev1alpha1.BucketClass) (ctrl.Result, error) {
+func (r *BucketClassReconciler) reconcile(ctx context.Context, log logr.Logger, bucketClass *storagev1beta1.BucketClass) (ctrl.Result, error) {
 	log.V(1).Info("Ensuring finalizer")
-	if modified, err := clientutils.PatchEnsureFinalizer(ctx, r.Client, bucketClass, storagev1alpha1.BucketClassFinalizer); err != nil || modified {
+	if modified, err := clientutils.PatchEnsureFinalizer(ctx, r.Client, bucketClass, storagev1beta1.BucketClassFinalizer); err != nil || modified {
 		return ctrl.Result{}, err
 	}
 
@@ -122,7 +122,7 @@ func (r *BucketClassReconciler) reconcile(ctx context.Context, log logr.Logger, 
 	return ctrl.Result{}, nil
 }
 
-func (r *BucketClassReconciler) reconcileExists(ctx context.Context, log logr.Logger, bucketClass *storagev1alpha1.BucketClass) (ctrl.Result, error) {
+func (r *BucketClassReconciler) reconcileExists(ctx context.Context, log logr.Logger, bucketClass *storagev1beta1.BucketClass) (ctrl.Result, error) {
 	if !bucketClass.DeletionTimestamp.IsZero() {
 		return r.delete(ctx, log, bucketClass)
 	}
@@ -132,12 +132,12 @@ func (r *BucketClassReconciler) reconcileExists(ctx context.Context, log logr.Lo
 // SetupWithManager sets up the controller with the Manager.
 func (r *BucketClassReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&storagev1alpha1.BucketClass{}).
+		For(&storagev1beta1.BucketClass{}).
 		Watches(
-			&storagev1alpha1.Bucket{},
+			&storagev1beta1.Bucket{},
 			handler.Funcs{
 				DeleteFunc: func(ctx context.Context, event event.DeleteEvent, queue workqueue.RateLimitingInterface) {
-					bucket := event.Object.(*storagev1alpha1.Bucket)
+					bucket := event.Object.(*storagev1beta1.Bucket)
 					bucketClassRef := bucket.Spec.BucketClassRef
 					if bucketClassRef == nil {
 						return

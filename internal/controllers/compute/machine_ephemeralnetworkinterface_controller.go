@@ -23,9 +23,9 @@ import (
 	"golang.org/x/exp/maps"
 
 	"github.com/go-logr/logr"
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog/v2"
@@ -45,7 +45,7 @@ type MachineEphemeralNetworkInterfaceReconciler struct {
 
 func (r *MachineEphemeralNetworkInterfaceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	machine := &computev1alpha1.Machine{}
+	machine := &computev1beta1.Machine{}
 	if err := r.Get(ctx, req.NamespacedName, machine); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -53,7 +53,7 @@ func (r *MachineEphemeralNetworkInterfaceReconciler) Reconcile(ctx context.Conte
 	return r.reconcileExists(ctx, log, machine)
 }
 
-func (r *MachineEphemeralNetworkInterfaceReconciler) reconcileExists(ctx context.Context, log logr.Logger, machine *computev1alpha1.Machine) (ctrl.Result, error) {
+func (r *MachineEphemeralNetworkInterfaceReconciler) reconcileExists(ctx context.Context, log logr.Logger, machine *computev1beta1.Machine) (ctrl.Result, error) {
 	if !machine.DeletionTimestamp.IsZero() {
 		log.V(1).Info("Machine is deleting, nothing to do")
 		return ctrl.Result{}, nil
@@ -62,16 +62,16 @@ func (r *MachineEphemeralNetworkInterfaceReconciler) reconcileExists(ctx context
 	return r.reconcile(ctx, log, machine)
 }
 
-func (r *MachineEphemeralNetworkInterfaceReconciler) ephemeralNetworkInterfaceByName(machine *computev1alpha1.Machine) map[string]*networkingv1alpha1.NetworkInterface {
-	res := make(map[string]*networkingv1alpha1.NetworkInterface)
+func (r *MachineEphemeralNetworkInterfaceReconciler) ephemeralNetworkInterfaceByName(machine *computev1beta1.Machine) map[string]*networkingv1beta1.NetworkInterface {
+	res := make(map[string]*networkingv1beta1.NetworkInterface)
 	for _, machineNic := range machine.Spec.NetworkInterfaces {
 		ephemeral := machineNic.Ephemeral
 		if ephemeral == nil {
 			continue
 		}
 
-		nicName := computev1alpha1.MachineEphemeralNetworkInterfaceName(machine.Name, machineNic.Name)
-		nic := &networkingv1alpha1.NetworkInterface{
+		nicName := computev1beta1.MachineEphemeralNetworkInterfaceName(machine.Name, machineNic.Name)
+		nic := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:   machine.Namespace,
 				Name:        nicName,
@@ -82,7 +82,7 @@ func (r *MachineEphemeralNetworkInterfaceReconciler) ephemeralNetworkInterfaceBy
 		}
 		annotations.SetDefaultEphemeralManagedBy(nic)
 		_ = ctrl.SetControllerReference(machine, nic, r.Scheme())
-		nic.Spec.MachineRef = &commonv1alpha1.LocalUIDReference{
+		nic.Spec.MachineRef = &commonv1beta1.LocalUIDReference{
 			Name: machine.Name,
 			UID:  machine.UID,
 		}
@@ -91,7 +91,7 @@ func (r *MachineEphemeralNetworkInterfaceReconciler) ephemeralNetworkInterfaceBy
 	return res
 }
 
-func (r *MachineEphemeralNetworkInterfaceReconciler) handleExistingNetworkInterface(ctx context.Context, log logr.Logger, machine *computev1alpha1.Machine, shouldManage bool, nic *networkingv1alpha1.NetworkInterface) error {
+func (r *MachineEphemeralNetworkInterfaceReconciler) handleExistingNetworkInterface(ctx context.Context, log logr.Logger, machine *computev1beta1.Machine, shouldManage bool, nic *networkingv1beta1.NetworkInterface) error {
 	if annotations.IsDefaultEphemeralControlledBy(nic, machine) {
 		if shouldManage {
 			log.V(1).Info("Ephemeral network interface is present and controlled by machine")
@@ -119,8 +119,8 @@ func (r *MachineEphemeralNetworkInterfaceReconciler) handleExistingNetworkInterf
 func (r *MachineEphemeralNetworkInterfaceReconciler) handleCreateNetworkInterface(
 	ctx context.Context,
 	log logr.Logger,
-	machine *computev1alpha1.Machine,
-	nic *networkingv1alpha1.NetworkInterface,
+	machine *computev1beta1.Machine,
+	nic *networkingv1beta1.NetworkInterface,
 ) error {
 	log.V(1).Info("Creating network interface")
 	nicKey := client.ObjectKeyFromObject(nic)
@@ -142,11 +142,11 @@ func (r *MachineEphemeralNetworkInterfaceReconciler) handleCreateNetworkInterfac
 	return r.handleExistingNetworkInterface(ctx, log, machine, true, nic)
 }
 
-func (r *MachineEphemeralNetworkInterfaceReconciler) reconcile(ctx context.Context, log logr.Logger, machine *computev1alpha1.Machine) (ctrl.Result, error) {
+func (r *MachineEphemeralNetworkInterfaceReconciler) reconcile(ctx context.Context, log logr.Logger, machine *computev1beta1.Machine) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	log.V(1).Info("Listing network interfaces")
-	nicList := &networkingv1alpha1.NetworkInterfaceList{}
+	nicList := &networkingv1beta1.NetworkInterfaceList{}
 	if err := r.List(ctx, nicList,
 		client.InNamespace(machine.Namespace),
 	); err != nil {
@@ -183,17 +183,17 @@ func (r *MachineEphemeralNetworkInterfaceReconciler) reconcile(ctx context.Conte
 
 func (r *MachineEphemeralNetworkInterfaceReconciler) machineNotDeletingPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		machine := obj.(*computev1alpha1.Machine)
+		machine := obj.(*computev1beta1.Machine)
 		return machine.DeletionTimestamp.IsZero()
 	})
 }
 
 func (r *MachineEphemeralNetworkInterfaceReconciler) enqueueByNetworkInterface() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		nic := obj.(*networkingv1alpha1.NetworkInterface)
+		nic := obj.(*networkingv1beta1.NetworkInterface)
 		log := ctrl.LoggerFrom(ctx)
 
-		machineList := &computev1alpha1.MachineList{}
+		machineList := &computev1beta1.MachineList{}
 		if err := r.List(ctx, machineList,
 			client.InNamespace(nic.Namespace),
 			client.MatchingFields{
@@ -220,16 +220,16 @@ func (r *MachineEphemeralNetworkInterfaceReconciler) SetupWithManager(mgr ctrl.M
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("machineephemeralnetworkinterface").
 		For(
-			&computev1alpha1.Machine{},
+			&computev1beta1.Machine{},
 			builder.WithPredicates(
 				r.machineNotDeletingPredicate(),
 			),
 		).
 		Owns(
-			&networkingv1alpha1.NetworkInterface{},
+			&networkingv1beta1.NetworkInterface{},
 		).
 		Watches(
-			&networkingv1alpha1.NetworkInterface{},
+			&networkingv1beta1.NetworkInterface{},
 			r.enqueueByNetworkInterface(),
 		).
 		Complete(r)

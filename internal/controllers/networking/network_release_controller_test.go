@@ -16,7 +16,7 @@
 package networking
 
 import (
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -30,13 +30,13 @@ var _ = Describe("NetworkReleaseReconciler", func() {
 
 	It("should release network interfaces whose owner is gone", func(ctx SpecContext) {
 		By("creating a network having a peering claim that does not exist")
-		network := &networkingv1alpha1.Network{
+		network := &networkingv1beta1.Network{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "network-",
 			},
-			Spec: networkingv1alpha1.NetworkSpec{
-				PeeringClaimRefs: []networkingv1alpha1.NetworkPeeringClaimRef{
+			Spec: networkingv1beta1.NetworkSpec{
+				PeeringClaimRefs: []networkingv1beta1.NetworkPeeringClaimRef{
 					{
 						Name: "should-not-exist",
 						UID:  uuid.NewUUID(),

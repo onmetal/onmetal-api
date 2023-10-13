@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/lru"
@@ -42,7 +42,7 @@ type VirtualIPReleaseReconciler struct {
 
 func (r *VirtualIPReleaseReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	virtualIP := &networkingv1alpha1.VirtualIP{}
+	virtualIP := &networkingv1beta1.VirtualIP{}
 	if err := r.Get(ctx, req.NamespacedName, virtualIP); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -50,7 +50,7 @@ func (r *VirtualIPReleaseReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	return r.reconcileExists(ctx, log, virtualIP)
 }
 
-func (r *VirtualIPReleaseReconciler) reconcileExists(ctx context.Context, log logr.Logger, virtualIP *networkingv1alpha1.VirtualIP) (ctrl.Result, error) {
+func (r *VirtualIPReleaseReconciler) reconcileExists(ctx context.Context, log logr.Logger, virtualIP *networkingv1beta1.VirtualIP) (ctrl.Result, error) {
 	if !virtualIP.DeletionTimestamp.IsZero() {
 		log.V(1).Info("Virtual IP is already deleting, nothing to do")
 		return ctrl.Result{}, nil
@@ -59,7 +59,7 @@ func (r *VirtualIPReleaseReconciler) reconcileExists(ctx context.Context, log lo
 	return r.reconcile(ctx, log, virtualIP)
 }
 
-func (r *VirtualIPReleaseReconciler) virtualIPClaimExists(ctx context.Context, virtualIP *networkingv1alpha1.VirtualIP) (bool, error) {
+func (r *VirtualIPReleaseReconciler) virtualIPClaimExists(ctx context.Context, virtualIP *networkingv1beta1.VirtualIP) (bool, error) {
 	claimRef := virtualIP.Spec.TargetRef
 	if _, ok := r.AbsenceCache.Get(claimRef.UID); ok {
 		return false, nil
@@ -67,7 +67,7 @@ func (r *VirtualIPReleaseReconciler) virtualIPClaimExists(ctx context.Context, v
 
 	claimer := &metav1.PartialObjectMetadata{
 		TypeMeta: metav1.TypeMeta{
-			APIVersion: networkingv1alpha1.SchemeGroupVersion.String(),
+			APIVersion: networkingv1beta1.SchemeGroupVersion.String(),
 			Kind:       "NetworkInterface",
 		},
 	}
@@ -83,7 +83,7 @@ func (r *VirtualIPReleaseReconciler) virtualIPClaimExists(ctx context.Context, v
 	return true, nil
 }
 
-func (r *VirtualIPReleaseReconciler) releaseVirtualIP(ctx context.Context, virtualIP *networkingv1alpha1.VirtualIP) error {
+func (r *VirtualIPReleaseReconciler) releaseVirtualIP(ctx context.Context, virtualIP *networkingv1beta1.VirtualIP) error {
 	baseNic := virtualIP.DeepCopy()
 	virtualIP.Spec.TargetRef = nil
 	if err := r.Patch(ctx, virtualIP, client.StrategicMergeFrom(baseNic, client.MergeFromWithOptimisticLock{})); err != nil {
@@ -92,7 +92,7 @@ func (r *VirtualIPReleaseReconciler) releaseVirtualIP(ctx context.Context, virtu
 	return nil
 }
 
-func (r *VirtualIPReleaseReconciler) reconcile(ctx context.Context, log logr.Logger, virtualIP *networkingv1alpha1.VirtualIP) (ctrl.Result, error) {
+func (r *VirtualIPReleaseReconciler) reconcile(ctx context.Context, log logr.Logger, virtualIP *networkingv1beta1.VirtualIP) (ctrl.Result, error) {
 	log.V(1).Info("Reconcile")
 
 	if virtualIP.Spec.TargetRef == nil {
@@ -125,17 +125,17 @@ func (r *VirtualIPReleaseReconciler) reconcile(ctx context.Context, log logr.Log
 
 func (r *VirtualIPReleaseReconciler) virtualIPClaimedPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		virtualIP := obj.(*networkingv1alpha1.VirtualIP)
+		virtualIP := obj.(*networkingv1beta1.VirtualIP)
 		return virtualIP.Spec.TargetRef != nil
 	})
 }
 
 func (r *VirtualIPReleaseReconciler) enqueueByNetworkInterface() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		nic := obj.(*networkingv1alpha1.NetworkInterface)
+		nic := obj.(*networkingv1beta1.NetworkInterface)
 		log := ctrl.LoggerFrom(ctx)
 
-		virtualIPList := &networkingv1alpha1.VirtualIPList{}
+		virtualIPList := &networkingv1beta1.VirtualIPList{}
 		if err := r.List(ctx, virtualIPList,
 			client.InNamespace(nic.Namespace),
 		); err != nil {
@@ -162,7 +162,7 @@ func (r *VirtualIPReleaseReconciler) enqueueByNetworkInterface() handler.EventHa
 
 func (r *VirtualIPReleaseReconciler) networkInterfaceDeletingPredicate() predicate.Predicate {
 	return predicate.NewPredicateFuncs(func(obj client.Object) bool {
-		nic := obj.(*networkingv1alpha1.NetworkInterface)
+		nic := obj.(*networkingv1beta1.NetworkInterface)
 		return !nic.DeletionTimestamp.IsZero()
 	})
 }
@@ -171,11 +171,11 @@ func (r *VirtualIPReleaseReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("virtualiprelease").
 		For(
-			&networkingv1alpha1.VirtualIP{},
+			&networkingv1beta1.VirtualIP{},
 			builder.WithPredicates(r.virtualIPClaimedPredicate()),
 		).
 		Watches(
-			&networkingv1alpha1.NetworkInterface{},
+			&networkingv1beta1.NetworkInterface{},
 			r.enqueueByNetworkInterface(),
 			builder.WithPredicates(r.networkInterfaceDeletingPredicate()),
 		).

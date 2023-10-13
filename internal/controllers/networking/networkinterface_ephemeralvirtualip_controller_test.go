@@ -16,8 +16,8 @@
 package networking
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"github.com/onmetal/onmetal-api/utils/annotations"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
@@ -34,26 +34,26 @@ var _ = Describe("NetworkInterfaceEphemeralVirtualIP", func() {
 
 	It("should create ephemeral virtual IPs for a network interface", func(ctx SpecContext) {
 		By("creating a network interface that requires a virtual IP")
-		vipSrc := networkingv1alpha1.VirtualIPSource{
-			Ephemeral: &networkingv1alpha1.EphemeralVirtualIPSource{
-				VirtualIPTemplate: &networkingv1alpha1.VirtualIPTemplateSpec{
-					Spec: networkingv1alpha1.VirtualIPSpec{
-						Type:     networkingv1alpha1.VirtualIPTypePublic,
+		vipSrc := networkingv1beta1.VirtualIPSource{
+			Ephemeral: &networkingv1beta1.EphemeralVirtualIPSource{
+				VirtualIPTemplate: &networkingv1beta1.VirtualIPTemplateSpec{
+					Spec: networkingv1beta1.VirtualIPSpec{
+						Type:     networkingv1beta1.VirtualIPTypePublic,
 						IPFamily: corev1.IPv4Protocol,
 					},
 				},
 			},
 		}
-		nic := &networkingv1alpha1.NetworkInterface{
+		nic := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "nic-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{Name: "my-network"},
-				IPs: []networkingv1alpha1.IPSource{
+				IPs: []networkingv1beta1.IPSource{
 					{
-						Value: commonv1alpha1.MustParseNewIP("10.0.0.1"),
+						Value: commonv1beta1.MustParseNewIP("10.0.0.1"),
 					},
 				},
 				VirtualIP: &vipSrc,
@@ -62,18 +62,18 @@ var _ = Describe("NetworkInterfaceEphemeralVirtualIP", func() {
 		Expect(k8sClient.Create(ctx, nic)).To(Succeed())
 
 		By("waiting for the virtual IP to exist")
-		vip := &networkingv1alpha1.VirtualIP{
+		vip := &networkingv1beta1.VirtualIP{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace: ns.Name,
-				Name:      networkingv1alpha1.NetworkInterfaceVirtualIPName(nic.Name, vipSrc),
+				Name:      networkingv1beta1.NetworkInterfaceVirtualIPName(nic.Name, vipSrc),
 			},
 		}
 		Eventually(Object(vip)).Should(SatisfyAll(
 			BeControlledBy(nic),
-			HaveField("Spec", networkingv1alpha1.VirtualIPSpec{
-				Type:     networkingv1alpha1.VirtualIPTypePublic,
+			HaveField("Spec", networkingv1beta1.VirtualIPSpec{
+				Type:     networkingv1beta1.VirtualIPTypePublic,
 				IPFamily: corev1.IPv4Protocol,
-				TargetRef: &commonv1alpha1.LocalUIDReference{
+				TargetRef: &commonv1beta1.LocalUIDReference{
 					Name: nic.Name,
 					UID:  nic.UID,
 				},
@@ -83,26 +83,26 @@ var _ = Describe("NetworkInterfaceEphemeralVirtualIP", func() {
 
 	It("should delete undesired virtual IPs for a network interface", func(ctx SpecContext) {
 		By("creating a network interface")
-		nic := &networkingv1alpha1.NetworkInterface{
+		nic := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "nic-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{Name: "my-network"},
-				IPs:        []networkingv1alpha1.IPSource{{Value: commonv1alpha1.MustParseNewIP("10.0.0.1")}},
+				IPs:        []networkingv1beta1.IPSource{{Value: commonv1beta1.MustParseNewIP("10.0.0.1")}},
 			},
 		}
 		Expect(k8sClient.Create(ctx, nic)).To(Succeed())
 
 		By("creating an undesired virtual IP")
-		vip := &networkingv1alpha1.VirtualIP{
+		vip := &networkingv1beta1.VirtualIP{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "undesired-vip-",
 			},
-			Spec: networkingv1alpha1.VirtualIPSpec{
-				Type:     networkingv1alpha1.VirtualIPTypePublic,
+			Spec: networkingv1beta1.VirtualIPSpec{
+				Type:     networkingv1beta1.VirtualIPTypePublic,
 				IPFamily: corev1.IPv4Protocol,
 			},
 		}
@@ -116,26 +116,26 @@ var _ = Describe("NetworkInterfaceEphemeralVirtualIP", func() {
 
 	It("should not delete externally managed virtual IPs for a network interface", func(ctx SpecContext) {
 		By("creating a network interface")
-		nic := &networkingv1alpha1.NetworkInterface{
+		nic := &networkingv1beta1.NetworkInterface{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "nic-",
 			},
-			Spec: networkingv1alpha1.NetworkInterfaceSpec{
+			Spec: networkingv1beta1.NetworkInterfaceSpec{
 				NetworkRef: corev1.LocalObjectReference{Name: "my-network"},
-				IPs:        []networkingv1alpha1.IPSource{{Value: commonv1alpha1.MustParseNewIP("10.0.0.1")}},
+				IPs:        []networkingv1beta1.IPSource{{Value: commonv1beta1.MustParseNewIP("10.0.0.1")}},
 			},
 		}
 		Expect(k8sClient.Create(ctx, nic)).To(Succeed())
 
 		By("creating an undesired virtual IP")
-		externalVip := &networkingv1alpha1.VirtualIP{
+		externalVip := &networkingv1beta1.VirtualIP{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:    ns.Name,
 				GenerateName: "external-vip-",
 			},
-			Spec: networkingv1alpha1.VirtualIPSpec{
-				Type:     networkingv1alpha1.VirtualIPTypePublic,
+			Spec: networkingv1beta1.VirtualIPSpec{
+				Type:     networkingv1beta1.VirtualIPTypePublic,
 				IPFamily: corev1.IPv4Protocol,
 			},
 		}

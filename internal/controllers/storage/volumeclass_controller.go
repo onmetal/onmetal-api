@@ -23,7 +23,7 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/onmetal/controller-utils/clientutils"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	storageclient "github.com/onmetal/onmetal-api/internal/client/storage"
 	"github.com/onmetal/onmetal-api/utils/slices"
 	"k8s.io/apimachinery/pkg/types"
@@ -49,7 +49,7 @@ type VolumeClassReconciler struct {
 // Reconcile moves the current state of the cluster closer to the desired state.
 func (r *VolumeClassReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	volumeClass := &storagev1alpha1.VolumeClass{}
+	volumeClass := &storagev1beta1.VolumeClass{}
 	if err := r.Get(ctx, req.NamespacedName, volumeClass); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -60,9 +60,9 @@ func (r *VolumeClassReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 func (r *VolumeClassReconciler) listReferencingVolumesWithReader(
 	ctx context.Context,
 	rd client.Reader,
-	volumeClass *storagev1alpha1.VolumeClass,
-) ([]storagev1alpha1.Volume, error) {
-	volumeList := &storagev1alpha1.VolumeList{}
+	volumeClass *storagev1beta1.VolumeClass,
+) ([]storagev1beta1.Volume, error) {
+	volumeList := &storagev1beta1.VolumeList{}
 	if err := rd.List(ctx, volumeList,
 		client.InNamespace(volumeClass.Namespace),
 		client.MatchingFields{storageclient.VolumeSpecVolumeClassRefNameField: volumeClass.Name},
@@ -72,16 +72,16 @@ func (r *VolumeClassReconciler) listReferencingVolumesWithReader(
 	return volumeList.Items, nil
 }
 
-func (r *VolumeClassReconciler) collectVolumeNames(volumes []storagev1alpha1.Volume) []string {
-	volumeNames := slices.MapRef(volumes, func(volume *storagev1alpha1.Volume) string {
+func (r *VolumeClassReconciler) collectVolumeNames(volumes []storagev1beta1.Volume) []string {
+	volumeNames := slices.MapRef(volumes, func(volume *storagev1beta1.Volume) string {
 		return volume.Name
 	})
 	sort.Strings(volumeNames)
 	return volumeNames
 }
 
-func (r *VolumeClassReconciler) delete(ctx context.Context, log logr.Logger, volumeClass *storagev1alpha1.VolumeClass) (ctrl.Result, error) {
-	if !controllerutil.ContainsFinalizer(volumeClass, storagev1alpha1.VolumeClassFinalizer) {
+func (r *VolumeClassReconciler) delete(ctx context.Context, log logr.Logger, volumeClass *storagev1beta1.VolumeClass) (ctrl.Result, error) {
+	if !controllerutil.ContainsFinalizer(volumeClass, storagev1beta1.VolumeClassFinalizer) {
 		return ctrl.Result{}, nil
 	}
 
@@ -104,7 +104,7 @@ func (r *VolumeClassReconciler) delete(ctx context.Context, log logr.Logger, vol
 	}
 
 	log.V(1).Info("Volume Class is not used anymore, removing finalizer")
-	if err := clientutils.PatchRemoveFinalizer(ctx, r.Client, volumeClass, storagev1alpha1.VolumeClassFinalizer); err != nil {
+	if err := clientutils.PatchRemoveFinalizer(ctx, r.Client, volumeClass, storagev1beta1.VolumeClassFinalizer); err != nil {
 		return ctrl.Result{}, err
 	}
 
@@ -112,9 +112,9 @@ func (r *VolumeClassReconciler) delete(ctx context.Context, log logr.Logger, vol
 	return ctrl.Result{}, nil
 }
 
-func (r *VolumeClassReconciler) reconcile(ctx context.Context, log logr.Logger, volumeClass *storagev1alpha1.VolumeClass) (ctrl.Result, error) {
+func (r *VolumeClassReconciler) reconcile(ctx context.Context, log logr.Logger, volumeClass *storagev1beta1.VolumeClass) (ctrl.Result, error) {
 	log.V(1).Info("Ensuring finalizer")
-	if modified, err := clientutils.PatchEnsureFinalizer(ctx, r.Client, volumeClass, storagev1alpha1.VolumeClassFinalizer); err != nil || modified {
+	if modified, err := clientutils.PatchEnsureFinalizer(ctx, r.Client, volumeClass, storagev1beta1.VolumeClassFinalizer); err != nil || modified {
 		return ctrl.Result{}, err
 	}
 
@@ -122,7 +122,7 @@ func (r *VolumeClassReconciler) reconcile(ctx context.Context, log logr.Logger, 
 	return ctrl.Result{}, nil
 }
 
-func (r *VolumeClassReconciler) reconcileExists(ctx context.Context, log logr.Logger, volumeClass *storagev1alpha1.VolumeClass) (ctrl.Result, error) {
+func (r *VolumeClassReconciler) reconcileExists(ctx context.Context, log logr.Logger, volumeClass *storagev1beta1.VolumeClass) (ctrl.Result, error) {
 	if !volumeClass.DeletionTimestamp.IsZero() {
 		return r.delete(ctx, log, volumeClass)
 	}
@@ -132,12 +132,12 @@ func (r *VolumeClassReconciler) reconcileExists(ctx context.Context, log logr.Lo
 // SetupWithManager sets up the controller with the Manager.
 func (r *VolumeClassReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&storagev1alpha1.VolumeClass{}).
+		For(&storagev1beta1.VolumeClass{}).
 		Watches(
-			&storagev1alpha1.Volume{},
+			&storagev1beta1.Volume{},
 			handler.Funcs{
 				DeleteFunc: func(ctx context.Context, event event.DeleteEvent, queue workqueue.RateLimitingInterface) {
-					volume := event.Object.(*storagev1alpha1.Volume)
+					volume := event.Object.(*storagev1beta1.Volume)
 					volumeClassRef := volume.Spec.VolumeClassRef
 					if volumeClassRef == nil {
 						return

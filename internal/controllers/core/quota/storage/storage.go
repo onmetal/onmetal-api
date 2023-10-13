@@ -15,7 +15,7 @@
 package storage
 
 import (
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/controllers/core/quota/generic"
 )
 
@@ -26,7 +26,7 @@ var (
 
 func init() {
 	replenishReconcilersBuilder.Register(
-		&storagev1alpha1.Volume{},
-		&storagev1alpha1.Bucket{},
+		&storagev1beta1.Volume{},
+		&storagev1beta1.Bucket{},
 	)
 }

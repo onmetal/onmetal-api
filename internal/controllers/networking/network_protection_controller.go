@@ -23,7 +23,7 @@ import (
 	"github.com/go-logr/logr"
 	"github.com/onmetal/controller-utils/clientutils"
 	"github.com/onmetal/controller-utils/metautils"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/client/networking"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
@@ -51,7 +51,7 @@ type NetworkProtectionReconciler struct {
 
 func (r *NetworkProtectionReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := ctrl.LoggerFrom(ctx)
-	network := &networkingv1alpha1.Network{}
+	network := &networkingv1beta1.Network{}
 	if err := r.Get(ctx, req.NamespacedName, network); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
@@ -59,14 +59,14 @@ func (r *NetworkProtectionReconciler) Reconcile(ctx context.Context, req ctrl.Re
 	return r.reconcileExists(ctx, log, network)
 }
 
-func (r *NetworkProtectionReconciler) reconcileExists(ctx context.Context, log logr.Logger, network *networkingv1alpha1.Network) (ctrl.Result, error) {
+func (r *NetworkProtectionReconciler) reconcileExists(ctx context.Context, log logr.Logger, network *networkingv1beta1.Network) (ctrl.Result, error) {
 	if !network.DeletionTimestamp.IsZero() {
 		return r.delete(ctx, log, network)
 	}
 	return r.reconcile(ctx, log, network)
 }
 
-func (r *NetworkProtectionReconciler) delete(ctx context.Context, log logr.Logger, network *networkingv1alpha1.Network) (ctrl.Result, error) {
+func (r *NetworkProtectionReconciler) delete(ctx context.Context, log logr.Logger, network *networkingv1beta1.Network) (ctrl.Result, error) {
 	log.Info("Deleting Network")
 
 	if ok, err := r.isNetworkInUse(ctx, log, network); err != nil || ok {
@@ -82,7 +82,7 @@ func (r *NetworkProtectionReconciler) delete(ctx context.Context, log logr.Logge
 	return ctrl.Result{}, nil
 }
 
-func (r *NetworkProtectionReconciler) reconcile(ctx context.Context, log logr.Logger, network *networkingv1alpha1.Network) (ctrl.Result, error) {
+func (r *NetworkProtectionReconciler) reconcile(ctx context.Context, log logr.Logger, network *networkingv1beta1.Network) (ctrl.Result, error) {
 	log.Info("Reconcile Network")
 
 	log.V(1).Info("Ensuring finalizer on Network")
@@ -97,7 +97,7 @@ func (r *NetworkProtectionReconciler) reconcile(ctx context.Context, log logr.Lo
 func (r *NetworkProtectionReconciler) isNetworkInUseByType(
 	ctx context.Context,
 	log logr.Logger,
-	network *networkingv1alpha1.Network,
+	network *networkingv1beta1.Network,
 	obj client.Object,
 	networkField string,
 ) (bool, error) {
@@ -135,7 +135,7 @@ func (r *NetworkProtectionReconciler) isNetworkInUseByType(
 	return false, nil
 }
 
-func (r *NetworkProtectionReconciler) isNetworkInUse(ctx context.Context, log logr.Logger, network *networkingv1alpha1.Network) (bool, error) {
+func (r *NetworkProtectionReconciler) isNetworkInUse(ctx context.Context, log logr.Logger, network *networkingv1beta1.Network) (bool, error) {
 	log.V(1).Info("Checking if the network is in use")
 
 	typesAndFields := []struct {
@@ -143,15 +143,15 @@ func (r *NetworkProtectionReconciler) isNetworkInUse(ctx context.Context, log lo
 		Field string
 	}{
 		{
-			Type:  &networkingv1alpha1.NetworkInterface{},
+			Type:  &networkingv1beta1.NetworkInterface{},
 			Field: networking.NetworkInterfaceSpecNetworkRefNameField,
 		},
 		{
-			Type:  &networkingv1alpha1.LoadBalancer{},
+			Type:  &networkingv1beta1.LoadBalancer{},
 			Field: networking.LoadBalancerNetworkNameField,
 		},
 		{
-			Type:  &networkingv1alpha1.NATGateway{},
+			Type:  &networkingv1beta1.NATGateway{},
 			Field: networking.NATGatewayNetworkNameField,
 		},
 	}
@@ -172,17 +172,17 @@ func (r *NetworkProtectionReconciler) isNetworkInUse(ctx context.Context, log lo
 func (r *NetworkProtectionReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		Named("networkprotection").
-		For(&networkingv1alpha1.Network{}).
+		For(&networkingv1beta1.Network{}).
 		Watches(
-			&networkingv1alpha1.NetworkInterface{},
+			&networkingv1beta1.NetworkInterface{},
 			r.enqueueByNetworkInterface(),
 		).
 		Watches(
-			&networkingv1alpha1.LoadBalancer{},
+			&networkingv1beta1.LoadBalancer{},
 			r.enqueueByLoadBalancer(),
 		).
 		Watches(
-			&networkingv1alpha1.NATGateway{},
+			&networkingv1beta1.NATGateway{},
 			r.enqueueByNATGateway(),
 		).
 		Complete(r)
@@ -190,7 +190,7 @@ func (r *NetworkProtectionReconciler) SetupWithManager(mgr ctrl.Manager) error {
 
 func (r *NetworkProtectionReconciler) enqueueByNetworkInterface() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		nic := obj.(*networkingv1alpha1.NetworkInterface)
+		nic := obj.(*networkingv1beta1.NetworkInterface)
 
 		var res []ctrl.Request
 		networkKey := types.NamespacedName{
@@ -205,7 +205,7 @@ func (r *NetworkProtectionReconciler) enqueueByNetworkInterface() handler.EventH
 
 func (r *NetworkProtectionReconciler) enqueueByLoadBalancer() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		loadBalancer := obj.(*networkingv1alpha1.LoadBalancer)
+		loadBalancer := obj.(*networkingv1beta1.LoadBalancer)
 
 		var res []ctrl.Request
 		networkKey := types.NamespacedName{
@@ -220,7 +220,7 @@ func (r *NetworkProtectionReconciler) enqueueByLoadBalancer() handler.EventHandl
 
 func (r *NetworkProtectionReconciler) enqueueByNATGateway() handler.EventHandler {
 	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
-		natGateway := obj.(*networkingv1alpha1.NATGateway)
+		natGateway := obj.(*networkingv1beta1.NATGateway)
 
 		var res []ctrl.Request
 		networkKey := types.NamespacedName{
