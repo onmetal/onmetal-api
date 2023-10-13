@@ -23,20 +23,20 @@ func addDefaultingFuncs(scheme *runtime.Scheme) error {
 	return RegisterDefaults(scheme)
 }
 
-func SetDefaults_VolumeStatus(status *v1alpha1.VolumeStatus) {
+func SetDefaults_VolumeStatus(status *v1beta1.VolumeStatus) {
 	if status.State == "" {
-		status.State = v1alpha1.VolumeStatePending
+		status.State = v1beta1.VolumeStatePending
 	}
 }
 
-func SetDefaults_BucketStatus(status *v1alpha1.BucketStatus) {
+func SetDefaults_BucketStatus(status *v1beta1.BucketStatus) {
 	if status.State == "" {
-		status.State = v1alpha1.BucketStatePending
+		status.State = v1beta1.BucketStatePending
 	}
 }
 
-func SetDefaults_VolumeClass(volumeClass *v1alpha1.VolumeClass) {
+func SetDefaults_VolumeClass(volumeClass *v1beta1.VolumeClass) {
 	if volumeClass.ResizePolicy == "" {
-		volumeClass.ResizePolicy = v1alpha1.ResizePolicyStatic
+		volumeClass.ResizePolicy = v1beta1.ResizePolicyStatic
 	}
 }

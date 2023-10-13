@@ -20,7 +20,6 @@ import (
 	"math/rand"
 
 	"github.com/go-logr/logr"
-	"github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 	storageclient "github.com/onmetal/onmetal-api/internal/client/storage"
 	corev1 "k8s.io/api/core/v1"
@@ -90,7 +89,7 @@ func (s *BucketScheduler) schedule(ctx context.Context, log logr.Logger, bucket 
 	// Filter bucket pools by checking if the bucket tolerates all the taints of a bucket pool
 	var filtered []storagev1alpha1.BucketPool
 	for _, pool := range available {
-		if v1alpha1.TolerateTaints(bucket.Spec.Tolerations, pool.Spec.Taints) {
+		if v1beta1.TolerateTaints(bucket.Spec.Tolerations, pool.Spec.Taints) {
 			filtered = append(filtered, pool)
 		}
 	}

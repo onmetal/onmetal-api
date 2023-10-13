@@ -24,7 +24,7 @@ func addDefaultingFuncs(scheme *runtime.Scheme) error {
 	return RegisterDefaults(scheme)
 }
 
-func SetDefaults_PrefixSpec(spec *v1alpha1.PrefixSpec) {
+func SetDefaults_PrefixSpec(spec *v1beta1.PrefixSpec) {
 	if string(spec.IPFamily) == "" && spec.Prefix.IsValid() && spec.PrefixLength == 0 {
 		switch {
 		case spec.Prefix.IP().Is4():
@@ -35,7 +35,7 @@ func SetDefaults_PrefixSpec(spec *v1alpha1.PrefixSpec) {
 	}
 }
 
-func SetDefaults_PrefixAllocationSpec(spec *v1alpha1.PrefixAllocationSpec) {
+func SetDefaults_PrefixAllocationSpec(spec *v1beta1.PrefixAllocationSpec) {
 	if string(spec.IPFamily) == "" && spec.Prefix.IsValid() && spec.PrefixLength == 0 {
 		switch {
 		case spec.Prefix.IP().Is4():
@@ -46,14 +46,14 @@ func SetDefaults_PrefixAllocationSpec(spec *v1alpha1.PrefixAllocationSpec) {
 	}
 }
 
-func SetDefaults_PrefixAllocationStatus(status *v1alpha1.PrefixAllocationStatus) {
+func SetDefaults_PrefixAllocationStatus(status *v1beta1.PrefixAllocationStatus) {
 	if status.Phase == "" {
-		status.Phase = v1alpha1.PrefixAllocationPhasePending
+		status.Phase = v1beta1.PrefixAllocationPhasePending
 	}
 }
 
-func SetDefaults_PrefixStatus(status *v1alpha1.PrefixStatus) {
+func SetDefaults_PrefixStatus(status *v1beta1.PrefixStatus) {
 	if status.Phase == "" {
-		status.Phase = v1alpha1.PrefixPhasePending
+		status.Phase = v1beta1.PrefixPhasePending
 	}
 }

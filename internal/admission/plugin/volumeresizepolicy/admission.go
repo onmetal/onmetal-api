@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 	"github.com/onmetal/onmetal-api/client-go/onmetalapi"
 	"github.com/onmetal/onmetal-api/internal/apis/core"
 	"github.com/onmetal/onmetal-api/internal/apis/storage"
@@ -83,11 +82,11 @@ func (v *VolumeExpansion) Validate(ctx context.Context, a admission.Attributes, 
 	}
 
 	switch volumeClass.ResizePolicy {
-	case v1alpha1.ResizePolicyStatic:
+	case v1beta1.ResizePolicyStatic:
 		if volumeSize.Value() != oldVolumeSize.Value() {
 			return apierrors.NewBadRequest("VolumeClass ResizePolicy does not allow resizing")
 		}
-	case v1alpha1.ResizePolicyExpandOnly:
+	case v1beta1.ResizePolicyExpandOnly:
 		if volumeSize.Value() < oldVolumeSize.Value() {
 			return apierrors.NewBadRequest("VolumeClass ResizePolicy does not allow shrinking")
 		}

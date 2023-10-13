@@ -12,8 +12,8 @@ resources:
   domain: onmetal.de
   group: compute
   kind: MachineClass
-  path: github.com/onmetal/onmetal-api/api/compute/v1alpha1
-  version: v1alpha1
+  path: github.com/onmetal/onmetal-api/api/compute/v1beta1
+  version: v1beta1
 - api:
     crdVersion: v1
     namespaced: true
@@ -21,8 +21,8 @@ resources:
   domain: onmetal.de
   group: compute
   kind: MachinePool
-  path: github.com/onmetal/onmetal-api/api/compute/v1alpha1
-  version: v1alpha1
+  path: github.com/onmetal/onmetal-api/api/compute/v1beta1
+  version: v1beta1
 - api:
     crdVersion: v1
     namespaced: true
@@ -30,8 +30,8 @@ resources:
   domain: onmetal.de
   group: storage
   kind: VolumePool
-  path: github.com/onmetal/onmetal-api/api/storage/v1alpha1
-  version: v1alpha1
+  path: github.com/onmetal/onmetal-api/api/storage/v1beta1
+  version: v1beta1
 - api:
     crdVersion: v1
     namespaced: true
@@ -39,8 +39,8 @@ resources:
   domain: onmetal.de
   group: storage
   kind: VolumeClass
-  path: github.com/onmetal/onmetal-api/api/storage/v1alpha1
-  version: v1alpha1
+  path: github.com/onmetal/onmetal-api/api/storage/v1beta1
+  version: v1beta1
 - api:
     crdVersion: v1
     namespaced: true
@@ -48,8 +48,8 @@ resources:
   domain: onmetal.de
   group: storage
   kind: Volume
-  path: github.com/onmetal/onmetal-api/api/storage/v1alpha1
-  version: v1alpha1
+  path: github.com/onmetal/onmetal-api/api/storage/v1beta1
+  version: v1beta1
   webhooks:
     validation: true
     webhookVersion: v1
@@ -60,8 +60,8 @@ resources:
   domain: onmetal.de
   group: compute
   kind: Machine
-  path: github.com/onmetal/onmetal-api/api/compute/v1alpha1
-  version: v1alpha1
+  path: github.com/onmetal/onmetal-api/api/compute/v1beta1
+  version: v1beta1
   webhooks:
     validation: true
     webhookVersion: v1
@@ -72,14 +72,14 @@ resources:
   domain: api.onmetal.de
   group: ipam
   kind: Prefix
-  path: github.com/onmetal/onmetal-api/api/ipam/v1alpha1
-  version: v1alpha1
+  path: github.com/onmetal/onmetal-api/api/ipam/v1beta1
+  version: v1beta1
 - api:
     crdVersion: v1
     namespaced: true
   domain: api.onmetal.de
   group: ipam
   kind: PrefixAllocation
-  path: github.com/onmetal/onmetal-api/api/ipam/v1alpha1
-  version: v1alpha1
+  path: github.com/onmetal/onmetal-api/api/ipam/v1beta1
+  version: v1beta1
 version: "3"

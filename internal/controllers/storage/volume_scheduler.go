@@ -19,7 +19,6 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	"github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
 	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 	storageclient "github.com/onmetal/onmetal-api/internal/client/storage"
@@ -100,7 +99,7 @@ func (s *VolumeScheduler) matchesLabels(ctx context.Context, pool *scheduler.Con
 }
 
 func (s *VolumeScheduler) tolerateTaints(ctx context.Context, pool *scheduler.ContainerInfo, volume *storagev1alpha1.Volume) bool {
-	return v1alpha1.TolerateTaints(volume.Spec.Tolerations, pool.Node().Spec.Taints)
+	return v1beta1.TolerateTaints(volume.Spec.Tolerations, pool.Node().Spec.Taints)
 }
 
 func (s *VolumeScheduler) fitsPool(ctx context.Context, pool *scheduler.ContainerInfo, volume *storagev1alpha1.Volume) bool {

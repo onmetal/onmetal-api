@@ -22,7 +22,6 @@ import (
 	"unicode/utf8"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	"github.com/onmetal/onmetal-api/utils/equality"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/api/validation"
@@ -78,7 +77,7 @@ func ValidateImmutableField(newVal, oldVal interface{}, fldPath *field.Path) fie
 func ValidateImmutableFieldWithDiff(newVal, oldVal interface{}, fldPath *field.Path) field.ErrorList {
 	var allErrs field.ErrorList
 	if !equality.Semantic.DeepEqual(oldVal, newVal) {
-		diff := cmp.Diff(oldVal, newVal, cmp.Comparer(v1alpha1.EqualIPs), cmp.Comparer(v1alpha1.EqualIPPrefixes))
+		diff := cmp.Diff(oldVal, newVal, cmp.Comparer(v1beta1.EqualIPs), cmp.Comparer(v1beta1.EqualIPPrefixes))
 		allErrs = append(allErrs, field.Forbidden(fldPath, fmt.Sprintf("%s\n%s", validation.FieldImmutableErrorMsg, diff)))
 	}
 	return allErrs

@@ -23,26 +23,26 @@ func addDefaultingFuncs(scheme *runtime.Scheme) error {
 	return RegisterDefaults(scheme)
 }
 
-func SetDefaults_VolumeStatus(status *v1alpha1.VolumeStatus) {
+func SetDefaults_VolumeStatus(status *v1beta.VolumeStatus) {
 	if status.State == "" {
-		status.State = v1alpha1.VolumeStatePending
+		status.State = v1beta.VolumeStatePending
 	}
 }
 
-func SetDefaults_NetworkInterfaceStatus(status *v1alpha1.NetworkInterfaceStatus) {
+func SetDefaults_NetworkInterfaceStatus(status *v1beta.NetworkInterfaceStatus) {
 	if status.State == "" {
-		status.State = v1alpha1.NetworkInterfaceStatePending
+		status.State = v1beta.NetworkInterfaceStatePending
 	}
 }
 
-func SetDefaults_MachineStatus(status *v1alpha1.MachineStatus) {
+func SetDefaults_MachineStatus(status *v1beta.MachineStatus) {
 	if status.State == "" {
-		status.State = v1alpha1.MachineStatePending
+		status.State = v1beta.MachineStatePending
 	}
 }
 
-func SetDefaults_MachineSpec(spec *v1alpha1.MachineSpec) {
+func SetDefaults_MachineSpec(spec *v1beta.MachineSpec) {
 	if spec.Power == "" {
-		spec.Power = v1alpha1.PowerOn
+		spec.Power = v1beta.PowerOn
 	}
 }

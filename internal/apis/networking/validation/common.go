@@ -17,7 +17,6 @@ package validation
 import (
 	"fmt"
 
-	"github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	commonvalidation "github.com/onmetal/onmetal-api/internal/apis/common/validation"
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
 	corev1 "k8s.io/api/core/v1"
@@ -41,7 +40,7 @@ func validateIPSource(ipSource networking.IPSource, idx int, ipFamily corev1.IPF
 			numSources++
 			allErrs = append(allErrs, validateEphemeralPrefixSource(ipFamily, ephemeral, fldPath.Child("ephemeral"))...)
 			if objectMeta != nil && objectMeta.Name != "" {
-				prefixName := v1alpha1.NetworkInterfaceIPIPAMPrefixName(objectMeta.Name, idx)
+				prefixName := v1beta1.NetworkInterfaceIPIPAMPrefixName(objectMeta.Name, idx)
 				for _, msg := range apivalidation.NameIsDNSLabel(prefixName, false) {
 					allErrs = append(allErrs, field.Invalid(fldPath, prefixName, fmt.Sprintf("resulting prefix name %q is invalid: %s", prefixName, msg)))
 				}

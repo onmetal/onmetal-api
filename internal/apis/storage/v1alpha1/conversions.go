@@ -17,7 +17,6 @@ package v1alpha1
 import (
 	"fmt"
 
-	"github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -27,8 +26,8 @@ func addConversionFuncs(scheme *runtime.Scheme) error {
 		func(label, value string) (internalLabel, internalValue string, err error) {
 			switch label {
 			case "metadata.name", "metadata.namespace",
-				v1alpha1.VolumeVolumePoolRefNameField,
-				v1alpha1.VolumeVolumeClassRefNameField:
+				v1beta1.VolumeVolumePoolRefNameField,
+				v1beta1.VolumeVolumeClassRefNameField:
 				return label, value, nil
 			default:
 				return "", "", fmt.Errorf("field label not supported: %s", label)
@@ -42,8 +41,8 @@ func addConversionFuncs(scheme *runtime.Scheme) error {
 		func(label, value string) (internalLabel, internalValue string, err error) {
 			switch label {
 			case "metadata.name", "metadata.namespace",
-				v1alpha1.BucketBucketPoolRefNameField,
-				v1alpha1.BucketBucketClassRefNameField:
+				v1beta1.BucketBucketPoolRefNameField,
+				v1beta1.BucketBucketClassRefNameField:
 				return label, value, nil
 			default:
 				return "", "", fmt.Errorf("field label not supported: %s", label)

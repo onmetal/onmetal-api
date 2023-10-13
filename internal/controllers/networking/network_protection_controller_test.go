@@ -17,7 +17,6 @@
 package networking
 
 import (
-	"github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
@@ -61,7 +60,7 @@ var _ = Describe("NetworkProtectionReconciler", func() {
 					corev1.IPv4Protocol,
 				},
 				IPs: []networkingv1alpha1.IPSource{{
-					Value: v1alpha1.MustParseNewIP("10.0.0.1"),
+					Value: v1beta1.MustParseNewIP("10.0.0.1"),
 				}},
 			},
 		}
@@ -108,7 +107,7 @@ var _ = Describe("NetworkProtectionReconciler", func() {
 					corev1.IPv4Protocol,
 				},
 				IPs: []networkingv1alpha1.IPSource{{
-					Value: v1alpha1.MustParseNewIP("10.0.0.1"),
+					Value: v1beta1.MustParseNewIP("10.0.0.1"),
 				}},
 			},
 		}
@@ -165,7 +164,7 @@ var _ = Describe("NetworkProtectionReconciler", func() {
 					corev1.IPv4Protocol,
 				},
 				IPs: []networkingv1alpha1.IPSource{{
-					Value: v1alpha1.MustParseNewIP("10.0.0.1"),
+					Value: v1beta1.MustParseNewIP("10.0.0.1"),
 				}},
 			},
 		}
@@ -185,7 +184,7 @@ var _ = Describe("NetworkProtectionReconciler", func() {
 					corev1.IPv4Protocol,
 				},
 				IPs: []networkingv1alpha1.IPSource{{
-					Value: v1alpha1.MustParseNewIP("10.0.0.2"),
+					Value: v1beta1.MustParseNewIP("10.0.0.2"),
 				}},
 			},
 		}

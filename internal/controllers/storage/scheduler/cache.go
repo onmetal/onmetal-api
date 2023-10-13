@@ -32,15 +32,15 @@ import (
 )
 
 type CacheStrategy interface {
-	Key(instance *v1alpha1.Volume) (types.UID, error)
-	ContainerKey(instance *v1alpha1.Volume) string
+	Key(instance *v1beta1.Volume) (types.UID, error)
+	ContainerKey(instance *v1beta1.Volume) string
 }
 
 type defaultCacheStrategy struct{}
 
 var DefaultCacheStrategy CacheStrategy = defaultCacheStrategy{}
 
-func (defaultCacheStrategy) Key(instance *v1alpha1.Volume) (types.UID, error) {
+func (defaultCacheStrategy) Key(instance *v1beta1.Volume) (types.UID, error) {
 	uid := instance.GetUID()
 	if uid == "" {
 		return "", fmt.Errorf("instance has no UID")
@@ -48,7 +48,7 @@ func (defaultCacheStrategy) Key(instance *v1alpha1.Volume) (types.UID, error) {
 	return uid, nil
 }
 
-func (defaultCacheStrategy) ContainerKey(instance *v1alpha1.Volume) string {
+func (defaultCacheStrategy) ContainerKey(instance *v1beta1.Volume) string {
 	if instance.Spec.VolumePoolRef == nil {
 		return ""
 	}
@@ -56,11 +56,11 @@ func (defaultCacheStrategy) ContainerKey(instance *v1alpha1.Volume) string {
 }
 
 type InstanceInfo struct {
-	instance *v1alpha1.Volume
+	instance *v1beta1.Volume
 }
 
 type ContainerInfo struct {
-	node      *v1alpha1.VolumePool
+	node      *v1beta1.VolumePool
 	instances map[types.UID]*InstanceInfo
 }
 
@@ -70,7 +70,7 @@ func newNodeInfo() *ContainerInfo {
 	}
 }
 
-func (n *ContainerInfo) Node() *v1alpha1.VolumePool {
+func (n *ContainerInfo) Node() *v1beta1.VolumePool {
 	return n.node
 }
 
@@ -102,7 +102,7 @@ func (n *ContainerInfo) shallowCopy() *ContainerInfo {
 }
 
 type instanceState struct {
-	instance        *v1alpha1.Volume
+	instance        *v1beta1.Volume
 	bindingFinished bool
 }
 
@@ -174,7 +174,7 @@ func (c *Cache) Snapshot() *Snapshot {
 	return snapshot
 }
 
-func (c *Cache) IsAssumedInstance(instance *v1alpha1.Volume) (bool, error) {
+func (c *Cache) IsAssumedInstance(instance *v1beta1.Volume) (bool, error) {
 	key, err := c.strategy.Key(instance)
 	if err != nil {
 		return false, err
@@ -185,7 +185,7 @@ func (c *Cache) IsAssumedInstance(instance *v1alpha1.Volume) (bool, error) {
 	return c.assumedInstances.Has(key), nil
 }
 
-func (c *Cache) AssumeInstance(instance *v1alpha1.Volume) error {
+func (c *Cache) AssumeInstance(instance *v1beta1.Volume) error {
 	log := c.log.WithValues("Instance", klog.KObj(instance))
 	key, err := c.strategy.Key(instance)
 	if err != nil {
@@ -204,7 +204,7 @@ func (c *Cache) AssumeInstance(instance *v1alpha1.Volume) error {
 	return nil
 }
 
-func (c *Cache) ForgetInstance(instance *v1alpha1.Volume) error {
+func (c *Cache) ForgetInstance(instance *v1beta1.Volume) error {
 	log := c.log.WithValues("Instance", klog.KObj(instance))
 	key, err := c.strategy.Key(instance)
 	if err != nil {
@@ -227,7 +227,7 @@ func (c *Cache) ForgetInstance(instance *v1alpha1.Volume) error {
 	return fmt.Errorf("instance %s(%v) wasn't assumed so cannot be forgotten", key, klog.KObj(instance))
 }
 
-func (c *Cache) FinishBinding(instance *v1alpha1.Volume) error {
+func (c *Cache) FinishBinding(instance *v1beta1.Volume) error {
 	log := c.log.WithValues("Instance", klog.KObj(instance))
 	key, err := c.strategy.Key(instance)
 	if err != nil {
@@ -246,7 +246,7 @@ func (c *Cache) FinishBinding(instance *v1alpha1.Volume) error {
 	return nil
 }
 
-func (c *Cache) AddContainer(node *v1alpha1.VolumePool) {
+func (c *Cache) AddContainer(node *v1beta1.VolumePool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -258,7 +258,7 @@ func (c *Cache) AddContainer(node *v1alpha1.VolumePool) {
 	n.node = node
 }
 
-func (c *Cache) UpdateContainer(_, newNode *v1alpha1.VolumePool) {
+func (c *Cache) UpdateContainer(_, newNode *v1beta1.VolumePool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -270,7 +270,7 @@ func (c *Cache) UpdateContainer(_, newNode *v1alpha1.VolumePool) {
 	n.node = newNode
 }
 
-func (c *Cache) RemoveContainer(node *v1alpha1.VolumePool) error {
+func (c *Cache) RemoveContainer(node *v1beta1.VolumePool) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -286,7 +286,7 @@ func (c *Cache) RemoveContainer(node *v1alpha1.VolumePool) error {
 	return nil
 }
 
-func (c *Cache) AddInstance(instance *v1alpha1.Volume) error {
+func (c *Cache) AddInstance(instance *v1beta1.Volume) error {
 	log := c.log.WithValues("Instance", klog.KObj(instance))
 	key, err := c.strategy.Key(instance)
 	if err != nil {
@@ -320,7 +320,7 @@ func (c *Cache) AddInstance(instance *v1alpha1.Volume) error {
 	}
 }
 
-func (c *Cache) UpdateInstance(oldInstance, newInstance *v1alpha1.Volume) error {
+func (c *Cache) UpdateInstance(oldInstance, newInstance *v1beta1.Volume) error {
 	log := c.log.WithValues("Instance", klog.KObj(oldInstance))
 	key, err := c.strategy.Key(oldInstance)
 	if err != nil {
@@ -355,7 +355,7 @@ func (c *Cache) UpdateInstance(oldInstance, newInstance *v1alpha1.Volume) error 
 	return nil
 }
 
-func (c *Cache) RemoveInstance(instance *v1alpha1.Volume) error {
+func (c *Cache) RemoveInstance(instance *v1beta1.Volume) error {
 	log := c.log.WithValues("Instance", klog.KObj(instance))
 	key, err := c.strategy.Key(instance)
 	if err != nil {
@@ -384,12 +384,12 @@ func (c *Cache) RemoveInstance(instance *v1alpha1.Volume) error {
 	return nil
 }
 
-func (c *Cache) updateInstance(log logr.Logger, key types.UID, oldInstance, newInstance *v1alpha1.Volume) {
+func (c *Cache) updateInstance(log logr.Logger, key types.UID, oldInstance, newInstance *v1beta1.Volume) {
 	c.removeInstance(log, key, oldInstance)
 	c.addInstance(log, key, newInstance, false)
 }
 
-func (c *Cache) addInstance(_ logr.Logger, key types.UID, instance *v1alpha1.Volume, assume bool) {
+func (c *Cache) addInstance(_ logr.Logger, key types.UID, instance *v1beta1.Volume, assume bool) {
 	containerKey := c.strategy.ContainerKey(instance)
 	n, ok := c.nodes[containerKey]
 	if !ok {
@@ -406,7 +406,7 @@ func (c *Cache) addInstance(_ logr.Logger, key types.UID, instance *v1alpha1.Vol
 	}
 }
 
-func (c *Cache) removeInstance(log logr.Logger, key types.UID, instance *v1alpha1.Volume) {
+func (c *Cache) removeInstance(log logr.Logger, key types.UID, instance *v1beta1.Volume) {
 	containerKey := c.strategy.ContainerKey(instance)
 	n, ok := c.nodes[containerKey]
 	if !ok {

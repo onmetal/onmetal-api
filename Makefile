@@ -145,12 +145,12 @@ docs: gen-crd-api-reference-docs ## Run go generate to generate API reference do
 
 .PHONY: start-docs
 start-docs: ## Start the local mkdocs based development environment.
-	docker build -t $(IMAGE) -f docs/Dockerfile . --load
-	docker run -p 8000:8000 -v `pwd`/:/docs $(IMAGE)
+	podman build -t $(IMAGE) -f docs/Dockerfile . --load
+	podman run -p 8000:8000 -v `pwd`/:/docs $(IMAGE)
 
 .PHONY: clean-docs
 clean-docs: ## Remove all local mkdocs Docker images (cleanup).
-	docker container prune --force --filter "label=project=onmetal_api_documentation"
+	podman container prune --force --filter "label=project=onmetal_api_documentation"
 
 .PHONY: test
 test: manifests generate fmt vet test-only ## Run tests.
@@ -182,56 +182,56 @@ docker-build: \
 	docker-build-onmetal-apiserver docker-build-onmetal-controller-manager \
 	docker-build-machinepoollet docker-build-machinebroker docker-build-orictl-machine \
 	docker-build-volumepoollet docker-build-volumebroker docker-build-orictl-volume \
-	docker-build-bucketpoollet docker-build-bucketbroker docker-build-orictl-bucket ## Build docker image with the manager.
+	docker-build-bucketpoollet docker-build-bucketbroker docker-build-orictl-bucket ## Build podman image with the manager.
 
 .PHONY: docker-build-onmetal-apiserver
 docker-build-onmetal-apiserver: ## Build onmetal-apiserver.
-	docker build --target apiserver -t ${APISERVER_IMG} .
+	podman build --target apiserver -t ${APISERVER_IMG} .
 
 .PHONY: docker-build-onmetal-controller-manager
 docker-build-onmetal-controller-manager: ## Build onmetal-controller-manager.
-	docker build --target manager -t ${CONTROLLER_IMG} .
+	podman build --target manager -t ${CONTROLLER_IMG} .
 
 .PHONY: docker-build-machinepoollet
 docker-build-machinepoollet: ## Build machinepoollet image.
-	docker build --target machinepoollet -t ${MACHINEPOOLLET_IMG} .
+	podman build --target machinepoollet -t ${MACHINEPOOLLET_IMG} .
 
 .PHONY: docker-build-machinebroker
 docker-build-machinebroker: ## Build machinebroker image.
-	docker build --target machinebroker -t ${MACHINEBROKER_IMG} .
+	podman build --target machinebroker -t ${MACHINEBROKER_IMG} .
 
 .PHONY: docker-build-orictl-machine
 docker-build-orictl-machine: ## Build orictl-machine image.
-	docker build --target orictl-machine -t ${ORICTL_MACHINE_IMG} .
+	podman build --target orictl-machine -t ${ORICTL_MACHINE_IMG} .
 
 .PHONY: docker-build-volumepoollet
 docker-build-volumepoollet: ## Build volumepoollet image.
-	docker build --target volumepoollet -t ${VOLUMEPOOLLET_IMG} .
+	podman build --target volumepoollet -t ${VOLUMEPOOLLET_IMG} .
 
 .PHONY: docker-build-volumebroker
 docker-build-volumebroker: ## Build volumebroker image.
-	docker build --target volumebroker -t ${VOLUMEBROKER_IMG} .
+	podman build --target volumebroker -t ${VOLUMEBROKER_IMG} .
 
 .PHONY: docker-build-orictl-volume
 docker-build-orictl-volume: ## Build orictl-volume image.
-	docker build --target orictl-volume -t ${ORICTL_VOLUME_IMG} .
+	podman build --target orictl-volume -t ${ORICTL_VOLUME_IMG} .
 
 .PHONY: docker-build-bucketpoollet
 docker-build-bucketpoollet: ## Build bucketpoollet image.
-	docker build --target bucketpoollet -t ${BUCKETPOOLLET_IMG} .
+	podman build --target bucketpoollet -t ${BUCKETPOOLLET_IMG} .
 
 .PHONY: docker-build-bucketbroker
 docker-build-bucketbroker: ## Build bucketbroker image.
-	docker build --target bucketbroker -t ${BUCKETBROKER_IMG} .
+	podman build --target bucketbroker -t ${BUCKETBROKER_IMG} .
 
 .PHONY: docker-build-orictl-bucket
 docker-build-orictl-bucket: ## Build orictl-bucket image.
-	docker build --target orictl-bucket -t ${ORICTL_BUCKET_IMG} .
+	podman build --target orictl-bucket -t ${ORICTL_BUCKET_IMG} .
 
 .PHONY: docker-push
-docker-push: ## Push docker image with the manager.
-	docker push ${CONTROLLER_IMG}
-	docker push ${APISERVER_IMG}
+docker-push: ## Push podman image with the manager.
+	podman push ${CONTROLLER_IMG}
+	podman push ${APISERVER_IMG}
 
 ##@ Deployment
 
@@ -257,11 +257,11 @@ undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/confi
 
 .PHONY: kind-build-apiserver
 kind-build-apiserver: ## Build the apiserver for usage in kind.
-	docker build --target apiserver -t apiserver .
+	podman build --target apiserver -t apiserver .
 
 .PHONY: kind-build-controller
 kind-build-controller: ## Build the controller for usage in kind.
-	docker build --target manager -t controller .
+	podman build --target manager -t controller .
 
 .PHONY: kind-build
 kind-build: kind-build-apiserver kind-build-controller ## Build the apiserver and controller for usage in kind.

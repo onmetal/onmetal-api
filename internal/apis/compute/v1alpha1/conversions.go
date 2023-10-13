@@ -27,8 +27,8 @@ func addConversionFuncs(scheme *runtime.Scheme) error {
 		func(label, value string) (internalLabel, internalValue string, err error) {
 			switch label {
 			case "metadata.name", "metadata.namespace",
-				v1alpha1.MachineMachinePoolRefNameField,
-				v1alpha1.MachineMachineClassRefNameField:
+				v1beta.MachineMachinePoolRefNameField,
+				v1beta.MachineMachineClassRefNameField:
 				return label, value, nil
 			default:
 				return "", "", fmt.Errorf("field label not supported: %s", label)

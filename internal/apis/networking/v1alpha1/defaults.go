@@ -17,7 +17,6 @@
 package v1alpha1
 
 import (
-	"github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -35,26 +34,26 @@ func addDefaultingFuncs(scheme *runtime.Scheme) error {
 	return RegisterDefaults(scheme)
 }
 
-func SetDefaults_NetworkPolicySpec(spec *v1alpha1.NetworkPolicySpec) {
-	policyTypes := sets.New[v1alpha1.PolicyType](spec.PolicyTypes...)
+func SetDefaults_NetworkPolicySpec(spec *v1beta1.NetworkPolicySpec) {
+	policyTypes := sets.New[v1beta1.PolicyType](spec.PolicyTypes...)
 	if len(spec.Ingress) > 0 {
-		policyTypes.Insert(v1alpha1.PolicyTypeIngress)
+		policyTypes.Insert(v1beta1.PolicyTypeIngress)
 	}
 	if len(spec.Egress) > 0 {
-		policyTypes.Insert(v1alpha1.PolicyTypeEgress)
+		policyTypes.Insert(v1beta1.PolicyTypeEgress)
 	}
 	spec.PolicyTypes = sets.List(policyTypes)
 }
 
-func SetDefaults_NetworkInterfaceSpec(spec *v1alpha1.NetworkInterfaceSpec) {
+func SetDefaults_NetworkInterfaceSpec(spec *v1beta1.NetworkInterfaceSpec) {
 	setDefaults_IPFamiliesIPSources(&spec.IPFamilies, &spec.IPs)
 }
 
-func SetDefaults_LoadBalancerSpec(spec *v1alpha1.LoadBalancerSpec) {
+func SetDefaults_LoadBalancerSpec(spec *v1beta1.LoadBalancerSpec) {
 	setDefaults_IPFamiliesIPSources(&spec.IPFamilies, &spec.IPs)
 }
 
-func setDefaults_IPFamiliesIPSources(ipFamilies *[]corev1.IPFamily, ipSources *[]v1alpha1.IPSource) {
+func setDefaults_IPFamiliesIPSources(ipFamilies *[]corev1.IPFamily, ipSources *[]v1beta1.IPSource) {
 	if len(*ipFamilies) > 0 {
 		if len(*ipFamilies) == len(*ipSources) {
 			for i, ip := range *ipSources {
@@ -90,14 +89,14 @@ func setDefaults_IPFamiliesIPSources(ipFamilies *[]corev1.IPFamily, ipSources *[
 	}
 }
 
-func SetDefaults_NetworkInterfaceStatus(status *v1alpha1.NetworkInterfaceStatus) {
+func SetDefaults_NetworkInterfaceStatus(status *v1beta1.NetworkInterfaceStatus) {
 	if status.State == "" {
-		status.State = v1alpha1.NetworkInterfaceStatePending
+		status.State = v1beta1.NetworkInterfaceStatePending
 	}
 }
 
-func SetDefaults_NATGatewaySpec(spec *v1alpha1.NATGatewaySpec) {
+func SetDefaults_NATGatewaySpec(spec *v1beta1.NATGatewaySpec) {
 	if spec.PortsPerNetworkInterface == nil {
-		spec.PortsPerNetworkInterface = pointer.Int32(v1alpha1.DefaultPortsPerNetworkInterface)
+		spec.PortsPerNetworkInterface = pointer.Int32(v1beta1.DefaultPortsPerNetworkInterface)
 	}
 }
