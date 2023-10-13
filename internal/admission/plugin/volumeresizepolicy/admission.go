@@ -17,6 +17,7 @@ package volumeresizepolicy
 import (
 	"context"
 	"fmt"
+	"github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"io"
 
 	"github.com/onmetal/onmetal-api/client-go/onmetalapi"
@@ -76,7 +77,7 @@ func (v *VolumeExpansion) Validate(ctx context.Context, a admission.Attributes, 
 	}
 
 	// Volume size changed, therefore we need to check whether the VolumeClass supports Volume expansion
-	volumeClass, err := v.client.StorageV1alpha1().VolumeClasses().Get(ctx, volume.Spec.VolumeClassRef.Name, v1.GetOptions{})
+	volumeClass, err := v.client.StorageV1beta1().VolumeClasses().Get(ctx, volume.Spec.VolumeClassRef.Name, v1.GetOptions{})
 	if err != nil {
 		return apierrors.NewBadRequest(fmt.Sprintf("Could not get VolumeClass for Volume: %v", err))
 	}

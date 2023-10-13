@@ -17,13 +17,13 @@ package validation
 import (
 	"fmt"
 
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	onmetalapivalidation "github.com/onmetal/onmetal-api/internal/api/validation"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 )
 
-func ValidateIPPrefix(ipFamily corev1.IPFamily, ipPrefix commonv1alpha1.IPPrefix, fldPath *field.Path) field.ErrorList {
+func ValidateIPPrefix(ipFamily corev1.IPFamily, ipPrefix commonv1beta1.IPPrefix, fldPath *field.Path) field.ErrorList {
 	var allErrs field.ErrorList
 
 	if !ipPrefix.IsValid() {
@@ -39,7 +39,7 @@ func ValidateIPPrefix(ipFamily corev1.IPFamily, ipPrefix commonv1alpha1.IPPrefix
 	return allErrs
 }
 
-func ValidateIP(ipFamily corev1.IPFamily, ip commonv1alpha1.IP, fldPath *field.Path) field.ErrorList {
+func ValidateIP(ipFamily corev1.IPFamily, ip commonv1beta1.IP, fldPath *field.Path) field.ErrorList {
 	var allErrs field.ErrorList
 
 	if !ip.IsValid() {

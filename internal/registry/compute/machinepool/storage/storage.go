@@ -20,7 +20,6 @@ import (
 
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	"github.com/onmetal/onmetal-api/internal/apis/compute"
-	"github.com/onmetal/onmetal-api/internal/apis/compute/v1alpha1"
 	"github.com/onmetal/onmetal-api/internal/machinepoollet/client"
 	"github.com/onmetal/onmetal-api/internal/registry/compute/machinepool"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -84,7 +83,7 @@ func NewStorage(optsGetter generic.RESTOptionsGetter, machinePoolletClientConfig
 		}
 		// TODO: Remove the conversion. Consider only return the MachinePoolAddresses
 		externalMachinePool := &computev1alpha1.MachinePool{}
-		if err := v1alpha1.Convert_compute_MachinePool_To_v1alpha1_MachinePool(machinePool, externalMachinePool, nil); err != nil {
+		if err := v1beta1.Convert_compute_MachinePool_To_v1alpha1_MachinePool(machinePool, externalMachinePool, nil); err != nil {
 			return nil, fmt.Errorf("failed to convert to v1alpha1.MachinePool: %v", err)
 		}
 		return externalMachinePool, nil

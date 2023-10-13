@@ -17,7 +17,7 @@ package validation
 import (
 	"fmt"
 
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	onmetalapivalidation "github.com/onmetal/onmetal-api/internal/api/validation"
 	commonvalidation "github.com/onmetal/onmetal-api/internal/apis/common/validation"
 	"github.com/onmetal/onmetal-api/internal/apis/ipam"
@@ -38,7 +38,7 @@ func ValidatePrefix(prefix *ipam.Prefix) field.ErrorList {
 	return allErrs
 }
 
-func validateIPFamilyAndOptionalPrefixAndLength(ipFamily corev1.IPFamily, prefix *commonv1alpha1.IPPrefix, prefixLength int32, fldPath *field.Path) field.ErrorList {
+func validateIPFamilyAndOptionalPrefixAndLength(ipFamily corev1.IPFamily, prefix *commonv1beta1.IPPrefix, prefixLength int32, fldPath *field.Path) field.ErrorList {
 	var allErrs field.ErrorList
 
 	allErrs = append(allErrs, onmetalapivalidation.ValidateIPFamily(ipFamily, fldPath.Child("ipFamily"))...)

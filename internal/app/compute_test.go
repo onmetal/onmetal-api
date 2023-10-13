@@ -15,8 +15,8 @@
 package app_test
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -31,7 +31,7 @@ var _ = Describe("Compute", func() {
 	var (
 		ctx          = SetupContext()
 		ns           = SetupTest(ctx)
-		machineClass = &computev1alpha1.MachineClass{}
+		machineClass = &computev1beta1.MachineClass{}
 	)
 
 	const (
@@ -39,13 +39,13 @@ var _ = Describe("Compute", func() {
 	)
 
 	BeforeEach(func() {
-		*machineClass = computev1alpha1.MachineClass{
+		*machineClass = computev1beta1.MachineClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "machine-class-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceCPU:    resource.MustParse("1"),
-				corev1alpha1.ResourceMemory: resource.MustParse("1Gi"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceCPU:    resource.MustParse("1"),
+				corev1beta1.ResourceMemory: resource.MustParse("1Gi"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, machineClass)).To(Succeed(), "failed to create test machine class")
@@ -55,22 +55,22 @@ var _ = Describe("Compute", func() {
 	Context("Machine", func() {
 		It("should correctly apply machines with volumes and default devices", func() {
 			By("applying a machine with volumes")
-			machine := &computev1alpha1.Machine{
+			machine := &computev1beta1.Machine{
 				TypeMeta: metav1.TypeMeta{
-					APIVersion: computev1alpha1.SchemeGroupVersion.String(),
+					APIVersion: computev1beta1.SchemeGroupVersion.String(),
 					Kind:       "Machine",
 				},
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace: ns.Name,
 					Name:      "my-machine",
 				},
-				Spec: computev1alpha1.MachineSpec{
+				Spec: computev1beta1.MachineSpec{
 					MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
-					Volumes: []computev1alpha1.Volume{
+					Volumes: []computev1beta1.Volume{
 						{
 							Name: "foo",
-							VolumeSource: computev1alpha1.VolumeSource{
-								EmptyDisk: &computev1alpha1.EmptyDiskVolumeSource{},
+							VolumeSource: computev1beta1.VolumeSource{
+								EmptyDisk: &computev1beta1.EmptyDiskVolumeSource{},
 							},
 						},
 					},
@@ -79,39 +79,39 @@ var _ = Describe("Compute", func() {
 			Expect(k8sClient.Patch(ctx, machine, client.Apply, fieldOwner)).To(Succeed())
 
 			By("inspecting the machine's volumes")
-			Expect(machine.Spec.Volumes).To(Equal([]computev1alpha1.Volume{
+			Expect(machine.Spec.Volumes).To(Equal([]computev1beta1.Volume{
 				{
 					Name:   "foo",
 					Device: pointer.String("oda"),
-					VolumeSource: computev1alpha1.VolumeSource{
-						EmptyDisk: &computev1alpha1.EmptyDiskVolumeSource{},
+					VolumeSource: computev1beta1.VolumeSource{
+						EmptyDisk: &computev1beta1.EmptyDiskVolumeSource{},
 					},
 				},
 			}))
 
 			By("applying a changed machine with a second volume")
-			machine = &computev1alpha1.Machine{
+			machine = &computev1beta1.Machine{
 				TypeMeta: metav1.TypeMeta{
-					APIVersion: computev1alpha1.SchemeGroupVersion.String(),
+					APIVersion: computev1beta1.SchemeGroupVersion.String(),
 					Kind:       "Machine",
 				},
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace: ns.Name,
 					Name:      "my-machine",
 				},
-				Spec: computev1alpha1.MachineSpec{
+				Spec: computev1beta1.MachineSpec{
 					MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
-					Volumes: []computev1alpha1.Volume{
+					Volumes: []computev1beta1.Volume{
 						{
 							Name: "foo",
-							VolumeSource: computev1alpha1.VolumeSource{
-								EmptyDisk: &computev1alpha1.EmptyDiskVolumeSource{},
+							VolumeSource: computev1beta1.VolumeSource{
+								EmptyDisk: &computev1beta1.EmptyDiskVolumeSource{},
 							},
 						},
 						{
 							Name: "bar",
-							VolumeSource: computev1alpha1.VolumeSource{
-								EmptyDisk: &computev1alpha1.EmptyDiskVolumeSource{},
+							VolumeSource: computev1beta1.VolumeSource{
+								EmptyDisk: &computev1beta1.EmptyDiskVolumeSource{},
 							},
 						},
 					},
@@ -120,40 +120,40 @@ var _ = Describe("Compute", func() {
 			Expect(k8sClient.Patch(ctx, machine, client.Apply, fieldOwner)).To(Succeed())
 
 			By("inspecting the machine's volumes")
-			Expect(machine.Spec.Volumes).To(Equal([]computev1alpha1.Volume{
+			Expect(machine.Spec.Volumes).To(Equal([]computev1beta1.Volume{
 				{
 					Name:   "foo",
 					Device: pointer.String("oda"),
-					VolumeSource: computev1alpha1.VolumeSource{
-						EmptyDisk: &computev1alpha1.EmptyDiskVolumeSource{},
+					VolumeSource: computev1beta1.VolumeSource{
+						EmptyDisk: &computev1beta1.EmptyDiskVolumeSource{},
 					},
 				},
 				{
 					Name:   "bar",
 					Device: pointer.String("odb"),
-					VolumeSource: computev1alpha1.VolumeSource{
-						EmptyDisk: &computev1alpha1.EmptyDiskVolumeSource{},
+					VolumeSource: computev1beta1.VolumeSource{
+						EmptyDisk: &computev1beta1.EmptyDiskVolumeSource{},
 					},
 				},
 			}))
 
 			By("applying a changed machine with the first volume removed")
-			machine = &computev1alpha1.Machine{
+			machine = &computev1beta1.Machine{
 				TypeMeta: metav1.TypeMeta{
-					APIVersion: computev1alpha1.SchemeGroupVersion.String(),
+					APIVersion: computev1beta1.SchemeGroupVersion.String(),
 					Kind:       "Machine",
 				},
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace: ns.Name,
 					Name:      "my-machine",
 				},
-				Spec: computev1alpha1.MachineSpec{
+				Spec: computev1beta1.MachineSpec{
 					MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
-					Volumes: []computev1alpha1.Volume{
+					Volumes: []computev1beta1.Volume{
 						{
 							Name: "bar",
-							VolumeSource: computev1alpha1.VolumeSource{
-								EmptyDisk: &computev1alpha1.EmptyDiskVolumeSource{},
+							VolumeSource: computev1beta1.VolumeSource{
+								EmptyDisk: &computev1beta1.EmptyDiskVolumeSource{},
 							},
 						},
 					},
@@ -162,12 +162,12 @@ var _ = Describe("Compute", func() {
 			Expect(k8sClient.Patch(ctx, machine, client.Apply, fieldOwner)).To(Succeed())
 
 			By("inspecting the machine's volumes")
-			Expect(machine.Spec.Volumes).To(Equal([]computev1alpha1.Volume{
+			Expect(machine.Spec.Volumes).To(Equal([]computev1beta1.Volume{
 				{
 					Name:   "bar",
 					Device: pointer.String("odb"),
-					VolumeSource: computev1alpha1.VolumeSource{
-						EmptyDisk: &computev1alpha1.EmptyDiskVolumeSource{},
+					VolumeSource: computev1beta1.VolumeSource{
+						EmptyDisk: &computev1beta1.EmptyDiskVolumeSource{},
 					},
 				},
 			}))
@@ -180,12 +180,12 @@ var _ = Describe("Compute", func() {
 			)
 
 			By("creating a machine on machine pool 1")
-			machine1 := &computev1alpha1.Machine{
+			machine1 := &computev1beta1.Machine{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "machine-",
 				},
-				Spec: computev1alpha1.MachineSpec{
+				Spec: computev1beta1.MachineSpec{
 					MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
 					MachinePoolRef:  &corev1.LocalObjectReference{Name: machinePool1},
 				},
@@ -193,12 +193,12 @@ var _ = Describe("Compute", func() {
 			Expect(k8sClient.Create(ctx, machine1)).To(Succeed())
 
 			By("creating a machine on machine pool 2")
-			machine2 := &computev1alpha1.Machine{
+			machine2 := &computev1beta1.Machine{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "machine-",
 				},
-				Spec: computev1alpha1.MachineSpec{
+				Spec: computev1beta1.MachineSpec{
 					MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
 					MachinePoolRef:  &corev1.LocalObjectReference{Name: machinePool2},
 				},
@@ -206,42 +206,42 @@ var _ = Describe("Compute", func() {
 			Expect(k8sClient.Create(ctx, machine2)).To(Succeed())
 
 			By("creating a machine on no machine pool")
-			machine3 := &computev1alpha1.Machine{
+			machine3 := &computev1beta1.Machine{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "machine-",
 				},
-				Spec: computev1alpha1.MachineSpec{
+				Spec: computev1beta1.MachineSpec{
 					MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
 				},
 			}
 			Expect(k8sClient.Create(ctx, machine3)).To(Succeed())
 
 			By("listing all machines on machine pool 1")
-			machinesOnMachinePool1List := &computev1alpha1.MachineList{}
+			machinesOnMachinePool1List := &computev1beta1.MachineList{}
 			Expect(k8sClient.List(ctx, machinesOnMachinePool1List,
 				client.InNamespace(ns.Name),
-				client.MatchingFields{computev1alpha1.MachineMachinePoolRefNameField: machinePool1},
+				client.MatchingFields{computev1beta1.MachineMachinePoolRefNameField: machinePool1},
 			))
 
 			By("inspecting the items")
 			Expect(machinesOnMachinePool1List.Items).To(ConsistOf(*machine1))
 
 			By("listing all machines on machine pool 2")
-			machinesOnMachinePool2List := &computev1alpha1.MachineList{}
+			machinesOnMachinePool2List := &computev1beta1.MachineList{}
 			Expect(k8sClient.List(ctx, machinesOnMachinePool2List,
 				client.InNamespace(ns.Name),
-				client.MatchingFields{computev1alpha1.MachineMachinePoolRefNameField: machinePool2},
+				client.MatchingFields{computev1beta1.MachineMachinePoolRefNameField: machinePool2},
 			))
 
 			By("inspecting the items")
 			Expect(machinesOnMachinePool2List.Items).To(ConsistOf(*machine2))
 
 			By("listing all machines on no machine pool")
-			machinesOnNoMachinePoolList := &computev1alpha1.MachineList{}
+			machinesOnNoMachinePoolList := &computev1beta1.MachineList{}
 			Expect(k8sClient.List(ctx, machinesOnNoMachinePoolList,
 				client.InNamespace(ns.Name),
-				client.MatchingFields{computev1alpha1.MachineMachinePoolRefNameField: ""},
+				client.MatchingFields{computev1beta1.MachineMachinePoolRefNameField: ""},
 			))
 
 			By("inspecting the items")
@@ -250,46 +250,46 @@ var _ = Describe("Compute", func() {
 
 		It("should allow listing machines by machine class name", func() {
 			By("creating another machine class")
-			machineClass2 := &computev1alpha1.MachineClass{
+			machineClass2 := &computev1beta1.MachineClass{
 				ObjectMeta: metav1.ObjectMeta{
 					GenerateName: "machine-class-",
 				},
-				Capabilities: corev1alpha1.ResourceList{
-					corev1alpha1.ResourceCPU:    resource.MustParse("3"),
-					corev1alpha1.ResourceMemory: resource.MustParse("10Gi"),
+				Capabilities: corev1beta1.ResourceList{
+					corev1beta1.ResourceCPU:    resource.MustParse("3"),
+					corev1beta1.ResourceMemory: resource.MustParse("10Gi"),
 				},
 			}
 			Expect(k8sClient.Create(ctx, machineClass2)).To(Succeed())
 			DeferCleanup(k8sClient.Delete, ctx, machineClass2)
 
 			By("creating a machine")
-			machine1 := &computev1alpha1.Machine{
+			machine1 := &computev1beta1.Machine{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "machine-",
 				},
-				Spec: computev1alpha1.MachineSpec{
+				Spec: computev1beta1.MachineSpec{
 					MachineClassRef: corev1.LocalObjectReference{Name: machineClass.Name},
 				},
 			}
 			Expect(k8sClient.Create(ctx, machine1)).To(Succeed())
 
 			By("creating a machine with the other machine class")
-			machine2 := &computev1alpha1.Machine{
+			machine2 := &computev1beta1.Machine{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "machine-",
 				},
-				Spec: computev1alpha1.MachineSpec{
+				Spec: computev1beta1.MachineSpec{
 					MachineClassRef: corev1.LocalObjectReference{Name: machineClass2.Name},
 				},
 			}
 			Expect(k8sClient.Create(ctx, machine2)).To(Succeed())
 
 			By("listing machines with the first machine class name")
-			machineList := &computev1alpha1.MachineList{}
+			machineList := &computev1beta1.MachineList{}
 			Expect(k8sClient.List(ctx, machineList, client.MatchingFields{
-				computev1alpha1.MachineMachineClassRefNameField: machineClass.Name,
+				computev1beta1.MachineMachineClassRefNameField: machineClass.Name,
 			})).To(Succeed())
 
 			By("inspecting the retrieved list to only have the machine with the correct machine class")
@@ -297,7 +297,7 @@ var _ = Describe("Compute", func() {
 
 			By("listing machines with the second machine class name")
 			Expect(k8sClient.List(ctx, machineList, client.MatchingFields{
-				computev1alpha1.MachineMachineClassRefNameField: machineClass2.Name,
+				computev1beta1.MachineMachineClassRefNameField: machineClass2.Name,
 			})).To(Succeed())
 
 			By("inspecting the retrieved list to only have the machine with the correct machine class")

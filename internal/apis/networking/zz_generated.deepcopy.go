@@ -21,7 +21,7 @@
 package networking
 
 import (
-	v1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	v1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	core "github.com/onmetal/onmetal-api/internal/apis/core"
 	ipam "github.com/onmetal/onmetal-api/internal/apis/ipam"
 	v1 "k8s.io/api/core/v1"
@@ -77,7 +77,7 @@ func (in *IPBlock) DeepCopyInto(out *IPBlock) {
 	in.CIDR.DeepCopyInto(&out.CIDR)
 	if in.Except != nil {
 		in, out := &in.Except, &out.Except
-		*out = make([]v1alpha1.IPPrefix, len(*in))
+		*out = make([]v1beta1.IPPrefix, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -342,7 +342,7 @@ func (in *LoadBalancerStatus) DeepCopyInto(out *LoadBalancerStatus) {
 	*out = *in
 	if in.IPs != nil {
 		in, out := &in.IPs, &out.IPs
-		*out = make([]v1alpha1.IP, len(*in))
+		*out = make([]v1beta1.IP, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -464,7 +464,7 @@ func (in *NATGatewayStatus) DeepCopyInto(out *NATGatewayStatus) {
 	*out = *in
 	if in.IPs != nil {
 		in, out := &in.IPs, &out.IPs
-		*out = make([]v1alpha1.IP, len(*in))
+		*out = make([]v1beta1.IP, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -577,7 +577,7 @@ func (in *NetworkInterfaceSpec) DeepCopyInto(out *NetworkInterfaceSpec) {
 	out.NetworkRef = in.NetworkRef
 	if in.MachineRef != nil {
 		in, out := &in.MachineRef, &out.MachineRef
-		*out = new(v1alpha1.LocalUIDReference)
+		*out = new(v1beta1.LocalUIDReference)
 		**out = **in
 	}
 	if in.IPFamilies != nil {
@@ -633,14 +633,14 @@ func (in *NetworkInterfaceStatus) DeepCopyInto(out *NetworkInterfaceStatus) {
 	}
 	if in.IPs != nil {
 		in, out := &in.IPs, &out.IPs
-		*out = make([]v1alpha1.IP, len(*in))
+		*out = make([]v1beta1.IP, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.Prefixes != nil {
 		in, out := &in.Prefixes, &out.Prefixes
-		*out = make([]v1alpha1.IPPrefix, len(*in))
+		*out = make([]v1beta1.IPPrefix, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -1192,7 +1192,7 @@ func (in *VirtualIPSpec) DeepCopyInto(out *VirtualIPSpec) {
 	*out = *in
 	if in.TargetRef != nil {
 		in, out := &in.TargetRef, &out.TargetRef
-		*out = new(v1alpha1.LocalUIDReference)
+		*out = new(v1beta1.LocalUIDReference)
 		**out = **in
 	}
 	return

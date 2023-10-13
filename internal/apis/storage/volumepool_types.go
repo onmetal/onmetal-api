@@ -21,7 +21,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 )
 
 // VolumePoolSpec defines the desired state of VolumePool
@@ -30,7 +30,7 @@ type VolumePoolSpec struct {
 	ProviderID string
 	// Taints of the VolumePool. Only Volumes who tolerate all the taints
 	// will land in the VolumePool.
-	Taints []commonv1alpha1.Taint
+	Taints []commonv1beta1.Taint
 }
 
 // VolumePoolStatus defines the observed state of VolumePool

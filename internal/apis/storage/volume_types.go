@@ -17,7 +17,7 @@
 package storage
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/apis/core"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -40,7 +40,7 @@ type VolumeSpec struct {
 	// If unset, the scheduler will figure out a suitable VolumePoolRef.
 	VolumePoolRef *corev1.LocalObjectReference
 	// ClaimRef is the reference to the claiming entity of the Volume.
-	ClaimRef *commonv1alpha1.LocalUIDReference
+	ClaimRef *commonv1beta1.LocalUIDReference
 	// Resources is a description of the volume's resources and capacity.
 	Resources core.ResourceList
 	// Image is an optional image to bootstrap the volume with.
@@ -51,7 +51,7 @@ type VolumeSpec struct {
 	Unclaimable bool
 	// Tolerations define tolerations the Volume has. Only a VolumePool whose taints
 	// covered by Tolerations will be considered to host the Volume.
-	Tolerations []commonv1alpha1.Toleration
+	Tolerations []commonv1beta1.Toleration
 	// Encryption is an optional field which provides attributes to encrypt Volume.
 	Encryption *VolumeEncryption
 }

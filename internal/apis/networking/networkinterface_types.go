@@ -17,7 +17,7 @@
 package networking
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -29,7 +29,7 @@ type NetworkInterfaceSpec struct {
 	// NetworkRef is the Network this NetworkInterface is connected to
 	NetworkRef corev1.LocalObjectReference
 	// MachineRef is the Machine this NetworkInterface is used by
-	MachineRef *commonv1alpha1.LocalUIDReference
+	MachineRef *commonv1beta1.LocalUIDReference
 	// IPFamilies defines which IPFamilies this NetworkInterface is supporting
 	IPFamilies []corev1.IPFamily
 	// IPs is the list of provided IPs or ephemeral IPs which should be assigned to
@@ -47,14 +47,14 @@ type NetworkInterfaceSpec struct {
 // IPSource is the definition of how to obtain an IP.
 type IPSource struct {
 	// Value specifies an IP by using an IP literal.
-	Value *commonv1alpha1.IP
+	Value *commonv1beta1.IP
 	// Ephemeral specifies an IP by creating an ephemeral Prefix to allocate the IP with.
 	Ephemeral *EphemeralPrefixSource
 }
 
 type PrefixSource struct {
 	// Value specifies a static prefix to use.
-	Value *commonv1alpha1.IPPrefix
+	Value *commonv1beta1.IPPrefix
 	// Ephemeral specifies a prefix by creating an ephemeral ipam.Prefix to allocate the prefix with.
 	Ephemeral *EphemeralPrefixSource
 }
@@ -76,11 +76,11 @@ type NetworkInterfaceStatus struct {
 	LastStateTransitionTime *metav1.Time
 
 	// IPs represent the effective IP addresses of the NetworkInterface
-	IPs []commonv1alpha1.IP
+	IPs []commonv1beta1.IP
 	// Prefixes represent the prefixes routed to the NetworkInterface.
-	Prefixes []commonv1alpha1.IPPrefix
+	Prefixes []commonv1beta1.IPPrefix
 	// VirtualIP is any virtual ip assigned to the NetworkInterface.
-	VirtualIP *commonv1alpha1.IP
+	VirtualIP *commonv1beta1.IP
 }
 
 // NetworkInterfaceState is the onmetal-api state of a NetworkInterface.

@@ -17,7 +17,7 @@
 package networking
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 )
@@ -31,7 +31,7 @@ type LoadBalancerRouting struct {
 	metav1.ObjectMeta
 
 	// NetworkRef is the network the load balancer is assigned to.
-	NetworkRef commonv1alpha1.LocalUIDReference
+	NetworkRef commonv1beta1.LocalUIDReference
 
 	// Destinations are the destinations for an LoadBalancer.
 	Destinations []LoadBalancerDestination
@@ -40,7 +40,7 @@ type LoadBalancerRouting struct {
 // LoadBalancerDestination is the destination of the load balancer.
 type LoadBalancerDestination struct {
 	// IP is the target IP.
-	IP commonv1alpha1.IP
+	IP commonv1beta1.IP
 	// TargetRef is the target providing the destination.
 	TargetRef *LoadBalancerTargetRef
 }

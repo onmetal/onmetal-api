@@ -20,8 +20,8 @@ import (
 	"strings"
 	"time"
 
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	corev1alpha1listers "github.com/onmetal/onmetal-api/client-go/listers/core/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	corev1beta1listers "github.com/onmetal/onmetal-api/client-go/listers/core/v1beta1"
 	"github.com/onmetal/onmetal-api/client-go/onmetalapi"
 	"golang.org/x/exp/slices"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,14 +31,14 @@ import (
 )
 
 type QuotaAccessor interface {
-	List(ctx context.Context, namespace string) ([]corev1alpha1.ResourceQuota, error)
-	UpdateStatus(ctx context.Context, newQuota, oldQuota *corev1alpha1.ResourceQuota) error
+	List(ctx context.Context, namespace string) ([]corev1beta1.ResourceQuota, error)
+	UpdateStatus(ctx context.Context, newQuota, oldQuota *corev1beta1.ResourceQuota) error
 }
 
 type quotaAccessor struct {
 	client onmetalapi.Interface
 
-	lister corev1alpha1listers.ResourceQuotaLister
+	lister corev1beta1listers.ResourceQuotaLister
 
 	liveLookupCache *lru.Cache
 	liveTTL         time.Duration
@@ -48,7 +48,7 @@ type quotaAccessor struct {
 
 func NewQuotaAccessor(
 	client onmetalapi.Interface,
-	lister corev1alpha1listers.ResourceQuotaLister,
+	lister corev1beta1listers.ResourceQuotaLister,
 ) (QuotaAccessor, error) {
 	if client == nil {
 		return nil, fmt.Errorf("must specify client")
@@ -68,19 +68,19 @@ func NewQuotaAccessor(
 
 type liveLookupEntry struct {
 	expiry time.Time
-	items  []*corev1alpha1.ResourceQuota
+	items  []*corev1beta1.ResourceQuota
 }
 
 var apiObjectVersioner = storage.APIObjectVersioner{}
 
-func (a *quotaAccessor) checkCache(quota *corev1alpha1.ResourceQuota) *corev1alpha1.ResourceQuota {
+func (a *quotaAccessor) checkCache(quota *corev1beta1.ResourceQuota) *corev1beta1.ResourceQuota {
 	key := a.quotaKey(quota)
 	uncastCachedQuota, ok := a.updatedQuotas.Get(key)
 	if !ok {
 		return quota
 	}
 
-	cachedQuota := uncastCachedQuota.(*corev1alpha1.ResourceQuota)
+	cachedQuota := uncastCachedQuota.(*corev1beta1.ResourceQuota)
 	if apiObjectVersioner.CompareResourceVersion(quota, cachedQuota) >= 0 {
 		a.updatedQuotas.Remove(key)
 		return quota
@@ -88,7 +88,7 @@ func (a *quotaAccessor) checkCache(quota *corev1alpha1.ResourceQuota) *corev1alp
 	return cachedQuota
 }
 
-func (a *quotaAccessor) quotaKey(quota *corev1alpha1.ResourceQuota) string {
+func (a *quotaAccessor) quotaKey(quota *corev1beta1.ResourceQuota) string {
 	var sb strings.Builder
 	sb.WriteString(quota.Namespace)
 	sb.WriteString("/")
@@ -96,7 +96,7 @@ func (a *quotaAccessor) quotaKey(quota *corev1alpha1.ResourceQuota) string {
 	return sb.String()
 }
 
-func (a *quotaAccessor) List(ctx context.Context, namespace string) ([]corev1alpha1.ResourceQuota, error) {
+func (a *quotaAccessor) List(ctx context.Context, namespace string) ([]corev1beta1.ResourceQuota, error) {
 	items, err := a.lister.ResourceQuotas(namespace).List(labels.Everything())
 	if err != nil {
 		return nil, fmt.Errorf("error listing quotas: %w", err)
@@ -105,14 +105,14 @@ func (a *quotaAccessor) List(ctx context.Context, namespace string) ([]corev1alp
 	if len(items) == 0 {
 		lruItemObj, ok := a.liveLookupCache.Get(namespace)
 		if !ok || lruItemObj.(liveLookupEntry).expiry.Before(time.Now()) {
-			liveList, err := a.client.CoreV1alpha1().ResourceQuotas(namespace).List(ctx, metav1.ListOptions{})
+			liveList, err := a.client.CoreV1beta1().ResourceQuotas(namespace).List(ctx, metav1.ListOptions{})
 			if err != nil {
 				return nil, err
 			}
 
 			newEntry := liveLookupEntry{
 				expiry: time.Now().Add(a.liveTTL),
-				items:  make([]*corev1alpha1.ResourceQuota, len(liveList.Items)),
+				items:  make([]*corev1beta1.ResourceQuota, len(liveList.Items)),
 			}
 			for i := range liveList.Items {
 				newEntry.items[i] = &liveList.Items[i]
@@ -125,7 +125,7 @@ func (a *quotaAccessor) List(ctx context.Context, namespace string) ([]corev1alp
 		items = slices.Clone(lruEntry.items)
 	}
 
-	res := make([]corev1alpha1.ResourceQuota, len(items))
+	res := make([]corev1beta1.ResourceQuota, len(items))
 	for i := range items {
 		quota := items[i]
 		quota = a.checkCache(quota)
@@ -134,8 +134,8 @@ func (a *quotaAccessor) List(ctx context.Context, namespace string) ([]corev1alp
 	return res, nil
 }
 
-func (a *quotaAccessor) UpdateStatus(ctx context.Context, newQuota, oldQuota *corev1alpha1.ResourceQuota) error {
-	updatedQuota, err := a.client.CoreV1alpha1().ResourceQuotas(newQuota.Namespace).UpdateStatus(ctx, newQuota, metav1.UpdateOptions{})
+func (a *quotaAccessor) UpdateStatus(ctx context.Context, newQuota, oldQuota *corev1beta1.ResourceQuota) error {
+	updatedQuota, err := a.client.CoreV1beta1().ResourceQuotas(newQuota.Namespace).UpdateStatus(ctx, newQuota, metav1.UpdateOptions{})
 	if err != nil {
 		return err
 	}

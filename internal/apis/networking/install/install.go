@@ -16,13 +16,13 @@ package install
 
 import (
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
-	"github.com/onmetal/onmetal-api/internal/apis/networking/v1alpha1"
+	"github.com/onmetal/onmetal-api/internal/apis/networking/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 )
 
 func Install(scheme *runtime.Scheme) {
 	utilruntime.Must(networking.AddToScheme(scheme))
-	utilruntime.Must(v1alpha1.AddToScheme(scheme))
-	utilruntime.Must(scheme.SetVersionPriority(v1alpha1.SchemeGroupVersion))
+	utilruntime.Must(v1beta1.AddToScheme(scheme))
+	utilruntime.Must(scheme.SetVersionPriority(v1beta1.SchemeGroupVersion))
 }

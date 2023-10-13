@@ -21,7 +21,7 @@
 package storage
 
 import (
-	v1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	v1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	core "github.com/onmetal/onmetal-api/internal/apis/core"
 	v1 "k8s.io/api/core/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -258,7 +258,7 @@ func (in *BucketPoolSpec) DeepCopyInto(out *BucketPoolSpec) {
 	*out = *in
 	if in.Taints != nil {
 		in, out := &in.Taints, &out.Taints
-		*out = make([]v1alpha1.Taint, len(*in))
+		*out = make([]v1beta1.Taint, len(*in))
 		copy(*out, *in)
 	}
 	return
@@ -317,7 +317,7 @@ func (in *BucketSpec) DeepCopyInto(out *BucketSpec) {
 	}
 	if in.Tolerations != nil {
 		in, out := &in.Tolerations, &out.Tolerations
-		*out = make([]v1alpha1.Toleration, len(*in))
+		*out = make([]v1beta1.Toleration, len(*in))
 		copy(*out, *in)
 	}
 	return
@@ -655,7 +655,7 @@ func (in *VolumePoolSpec) DeepCopyInto(out *VolumePoolSpec) {
 	*out = *in
 	if in.Taints != nil {
 		in, out := &in.Taints, &out.Taints
-		*out = make([]v1alpha1.Taint, len(*in))
+		*out = make([]v1beta1.Taint, len(*in))
 		copy(*out, *in)
 	}
 	return
@@ -735,7 +735,7 @@ func (in *VolumeSpec) DeepCopyInto(out *VolumeSpec) {
 	}
 	if in.ClaimRef != nil {
 		in, out := &in.ClaimRef, &out.ClaimRef
-		*out = new(v1alpha1.LocalUIDReference)
+		*out = new(v1beta1.LocalUIDReference)
 		**out = **in
 	}
 	if in.Resources != nil {
@@ -752,7 +752,7 @@ func (in *VolumeSpec) DeepCopyInto(out *VolumeSpec) {
 	}
 	if in.Tolerations != nil {
 		in, out := &in.Tolerations, &out.Tolerations
-		*out = make([]v1alpha1.Toleration, len(*in))
+		*out = make([]v1beta1.Toleration, len(*in))
 		copy(*out, *in)
 	}
 	if in.Encryption != nil {

@@ -22,6 +22,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/onmetal/onmetal-api/api/common/v1beta1"
 	"github.com/onmetal/onmetal-api/utils/equality"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/api/validation"

@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"github.com/onmetal/onmetal-api/client-go/informers"
-	corev1alpha1listers "github.com/onmetal/onmetal-api/client-go/listers/core/v1alpha1"
+	corev1beta1listers "github.com/onmetal/onmetal-api/client-go/listers/core/v1beta1"
 	"github.com/onmetal/onmetal-api/client-go/onmetalapi"
 	utilcontext "github.com/onmetal/onmetal-api/utils/context"
 	"github.com/onmetal/onmetal-api/utils/quota"
@@ -47,7 +47,7 @@ type ResourceQuota struct {
 	ctx context.Context
 
 	client   onmetalapi.Interface
-	lister   corev1alpha1listers.ResourceQuotaLister
+	lister   corev1beta1listers.ResourceQuotaLister
 	registry quota.Registry
 
 	*admission.Handler
@@ -68,7 +68,7 @@ func (r *ResourceQuota) SetExternalOnmetalClientSet(client onmetalapi.Interface)
 }
 
 func (r *ResourceQuota) SetExternalOnmetalInformerFactory(f informers.SharedInformerFactory) {
-	r.lister = f.Core().V1alpha1().ResourceQuotas().Lister()
+	r.lister = f.Core().V1beta1().ResourceQuotas().Lister()
 }
 
 func (r *ResourceQuota) init() error {

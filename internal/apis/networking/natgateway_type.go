@@ -17,7 +17,7 @@
 package networking
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -51,7 +51,7 @@ type NATGatewaySpec struct {
 // NATGatewayStatus defines the observed state of NATGateway
 type NATGatewayStatus struct {
 	// IPs are the IPs allocated for the NAT gateway.
-	IPs []commonv1alpha1.IP
+	IPs []commonv1beta1.IP
 }
 
 // +genclient

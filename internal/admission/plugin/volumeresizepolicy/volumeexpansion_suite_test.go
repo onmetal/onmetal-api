@@ -27,7 +27,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/envtest/komega"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -82,7 +82,7 @@ var _ = BeforeSuite(func() {
 
 	DeferCleanup(utilsenvtest.StopWithExtensions, testEnv, testEnvExt)
 
-	Expect(storagev1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(storagev1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
 
 	//+kubebuilder:scaffold:scheme
 
@@ -108,10 +108,10 @@ var _ = BeforeSuite(func() {
 	Expect(utilsenvtest.WaitUntilAPIServicesReadyWithTimeout(apiServiceTimeout, testEnvExt, k8sClient, scheme.Scheme)).To(Succeed())
 })
 
-func SetupTest() (*corev1.Namespace, *storagev1alpha1.VolumePool) {
+func SetupTest() (*corev1.Namespace, *storagev1beta1.VolumePool) {
 	var (
 		ns         = &corev1.Namespace{}
-		volumePool = &storagev1alpha1.VolumePool{}
+		volumePool = &storagev1beta1.VolumePool{}
 	)
 	BeforeEach(func(ctx SpecContext) {
 		*ns = corev1.Namespace{
@@ -124,11 +124,11 @@ func SetupTest() (*corev1.Namespace, *storagev1alpha1.VolumePool) {
 			return client.IgnoreNotFound(k8sClient.Delete(ctx, ns))
 		})
 
-		*volumePool = storagev1alpha1.VolumePool{
+		*volumePool = storagev1beta1.VolumePool{
 			ObjectMeta: metav1.ObjectMeta{
 				Name: "foo",
 			},
-			Spec: storagev1alpha1.VolumePoolSpec{
+			Spec: storagev1beta1.VolumePoolSpec{
 				ProviderID: "foo",
 			},
 		}

@@ -22,7 +22,7 @@ import (
 	"sync"
 	"time"
 
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	"github.com/onmetal/onmetal-api/utils/quota"
 	onmetalutilruntime "github.com/onmetal/onmetal-api/utils/runtime"
 	utilslices "github.com/onmetal/onmetal-api/utils/slices"
@@ -112,7 +112,7 @@ func (e *EvaluatorController) check(ctx context.Context, ns string, waiters []*a
 	e.checkResourceQuotas(ctx, resourceQuotas, waiters, 3)
 }
 
-func (e *EvaluatorController) checkResourceQuotas(ctx context.Context, quotas []corev1alpha1.ResourceQuota, waiters []*admissionWaiter, retries int) {
+func (e *EvaluatorController) checkResourceQuotas(ctx context.Context, quotas []corev1beta1.ResourceQuota, waiters []*admissionWaiter, retries int) {
 	originalQuotas := onmetalutilruntime.DeepCopySliceRefs(quotas)
 
 	var atLeastOneChanged bool
@@ -193,7 +193,7 @@ func (e *EvaluatorController) checkResourceQuotas(ctx context.Context, quotas []
 		return
 	}
 
-	quotasToCheck := utilslices.FilterFunc(quotas, func(quota corev1alpha1.ResourceQuota) bool {
+	quotasToCheck := utilslices.FilterFunc(quotas, func(quota corev1beta1.ResourceQuota) bool {
 		return updateFailedQuotaNames.Has(quota.Name)
 	})
 	e.checkResourceQuotas(ctx, quotasToCheck, waiters, retries-1)
@@ -314,7 +314,7 @@ func getObjects(a admission.Attributes) (obj, oldObj client.Object, err error) {
 	return obj, oldObj, nil
 }
 
-func (e *EvaluatorController) checkRequest(ctx context.Context, quotas []corev1alpha1.ResourceQuota, a admission.Attributes) ([]corev1alpha1.ResourceQuota, error) {
+func (e *EvaluatorController) checkRequest(ctx context.Context, quotas []corev1beta1.ResourceQuota, a admission.Attributes) ([]corev1beta1.ResourceQuota, error) {
 	obj, oldObj, err := getObjects(a)
 	if err != nil {
 		return nil, err
@@ -402,7 +402,7 @@ func (e *EvaluatorController) checkRequest(ctx context.Context, quotas []corev1a
 
 // prettyPrint formats a resource list for usage in errors
 // it outputs resources sorted in increasing order
-func prettyPrint(item corev1alpha1.ResourceList) string {
+func prettyPrint(item corev1beta1.ResourceList) string {
 	keys := make([]string, 0, len(item))
 	for key := range item {
 		keys = append(keys, string(key))
@@ -411,7 +411,7 @@ func prettyPrint(item corev1alpha1.ResourceList) string {
 
 	parts := make([]string, len(keys))
 	for i, key := range keys {
-		value := item[corev1alpha1.ResourceName(key)]
+		value := item[corev1beta1.ResourceName(key)]
 		constraint := fmt.Sprintf("%s=%s", key, &value)
 		parts[i] = constraint
 	}
@@ -419,7 +419,7 @@ func prettyPrint(item corev1alpha1.ResourceList) string {
 }
 
 // hasUsageStats returns true if for each hard constraint in interestingResources there is a value for its current usage
-func hasUsageStats(resourceQuota *corev1alpha1.ResourceQuota, interestingResources sets.Set[corev1alpha1.ResourceName]) bool {
+func hasUsageStats(resourceQuota *corev1beta1.ResourceQuota, interestingResources sets.Set[corev1beta1.ResourceName]) bool {
 	for resourceName := range resourceQuota.Status.Hard {
 		if !interestingResources.Has(resourceName) {
 			continue
@@ -431,7 +431,7 @@ func hasUsageStats(resourceQuota *corev1alpha1.ResourceQuota, interestingResourc
 	return true
 }
 
-func prettyPrintResourceNames(a sets.Set[corev1alpha1.ResourceName]) string {
+func prettyPrintResourceNames(a sets.Set[corev1beta1.ResourceName]) string {
 	var (
 		values = make([]string, len(a))
 		i      int

@@ -17,6 +17,7 @@ package validation
 import (
 	"fmt"
 
+	"github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	commonvalidation "github.com/onmetal/onmetal-api/internal/apis/common/validation"
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
 	corev1 "k8s.io/api/core/v1"

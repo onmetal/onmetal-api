@@ -22,11 +22,11 @@ import (
 
 	"github.com/onmetal/onmetal-api/internal/admission/plugin/volumeresizepolicy"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/client-go/informers"
 	clientset "github.com/onmetal/onmetal-api/client-go/onmetalapi"
 	onmetalopenapi "github.com/onmetal/onmetal-api/client-go/openapi"
@@ -66,11 +66,11 @@ func init() {
 func NewResourceConfig() *serverstorage.ResourceConfig {
 	cfg := serverstorage.NewResourceConfig()
 	cfg.EnableVersions(
-		computev1alpha1.SchemeGroupVersion,
-		corev1alpha1.SchemeGroupVersion,
-		storagev1alpha1.SchemeGroupVersion,
-		networkingv1alpha1.SchemeGroupVersion,
-		ipamv1alpha1.SchemeGroupVersion,
+		computev1beta1.SchemeGroupVersion,
+		corev1beta1.SchemeGroupVersion,
+		storagev1beta1.SchemeGroupVersion,
+		networkingv1beta1.SchemeGroupVersion,
+		ipamv1beta1.SchemeGroupVersion,
 	)
 	return cfg
 }
@@ -107,11 +107,11 @@ func NewOnmetalAPIServerOptions() *OnmetalAPIServerOptions {
 		RecommendedOptions: genericoptions.NewRecommendedOptions(
 			defaultEtcdPathPrefix,
 			api.Codecs.LegacyCodec(
-				computev1alpha1.SchemeGroupVersion,
-				corev1alpha1.SchemeGroupVersion,
-				storagev1alpha1.SchemeGroupVersion,
-				networkingv1alpha1.SchemeGroupVersion,
-				ipamv1alpha1.SchemeGroupVersion,
+				computev1beta1.SchemeGroupVersion,
+				corev1beta1.SchemeGroupVersion,
+				storagev1beta1.SchemeGroupVersion,
+				networkingv1beta1.SchemeGroupVersion,
+				ipamv1beta1.SchemeGroupVersion,
 			),
 		),
 		MachinePoolletConfig: client.MachinePoolletClientConfig{
@@ -132,12 +132,12 @@ func NewOnmetalAPIServerOptions() *OnmetalAPIServerOptions {
 		},
 	}
 	o.RecommendedOptions.Etcd.StorageConfig.EncodeVersioner = runtime.NewMultiGroupVersioner(
-		computev1alpha1.SchemeGroupVersion,
-		schema.GroupKind{Group: computev1alpha1.SchemeGroupVersion.Group},
-		schema.GroupKind{Group: corev1alpha1.SchemeGroupVersion.Group},
-		schema.GroupKind{Group: storagev1alpha1.SchemeGroupVersion.Group},
-		schema.GroupKind{Group: networkingv1alpha1.SchemeGroupVersion.Group},
-		schema.GroupKind{Group: ipamv1alpha1.SchemeGroupVersion.Group},
+		computev1beta1.SchemeGroupVersion,
+		schema.GroupKind{Group: computev1beta1.SchemeGroupVersion.Group},
+		schema.GroupKind{Group: corev1beta1.SchemeGroupVersion.Group},
+		schema.GroupKind{Group: storagev1beta1.SchemeGroupVersion.Group},
+		schema.GroupKind{Group: networkingv1beta1.SchemeGroupVersion.Group},
+		schema.GroupKind{Group: ipamv1beta1.SchemeGroupVersion.Group},
 	)
 	return o
 }

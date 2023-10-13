@@ -17,7 +17,7 @@
 package validation
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	"github.com/onmetal/onmetal-api/internal/apis/core"
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
 	. "github.com/onmetal/onmetal-api/internal/testutils/validation"
@@ -101,7 +101,7 @@ var _ = Describe("NetworkPolicy", func() {
 										Kind: "LoadBalancer",
 									},
 									IPBlock: &networking.IPBlock{
-										CIDR: commonv1alpha1.MustParseIPPrefix("10.0.0.0/16"),
+										CIDR: commonv1beta1.MustParseIPPrefix("10.0.0.0/16"),
 									},
 								},
 							},
@@ -119,9 +119,9 @@ var _ = Describe("NetworkPolicy", func() {
 							From: []networking.NetworkPolicyPeer{
 								{
 									IPBlock: &networking.IPBlock{
-										CIDR: commonv1alpha1.MustParseIPPrefix("10.0.0.0/16"),
-										Except: []commonv1alpha1.IPPrefix{
-											commonv1alpha1.MustParseIPPrefix("10.1.0.0/16"),
+										CIDR: commonv1beta1.MustParseIPPrefix("10.0.0.0/16"),
+										Except: []commonv1beta1.IPPrefix{
+											commonv1beta1.MustParseIPPrefix("10.1.0.0/16"),
 										},
 									},
 								},

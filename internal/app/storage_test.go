@@ -15,8 +15,8 @@
 package app_test
 
 import (
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	. "github.com/onmetal/onmetal-api/utils/testing"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -30,30 +30,30 @@ var _ = Describe("Storage", func() {
 	var (
 		ctx         = SetupContext()
 		ns          = SetupTest(ctx)
-		volumeClass = &storagev1alpha1.VolumeClass{}
-		bucketClass = &storagev1alpha1.BucketClass{}
+		volumeClass = &storagev1beta1.VolumeClass{}
+		bucketClass = &storagev1beta1.BucketClass{}
 	)
 
 	BeforeEach(func() {
-		*volumeClass = storagev1alpha1.VolumeClass{
+		*volumeClass = storagev1beta1.VolumeClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "volume-class-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceTPS:  resource.MustParse("50"),
-				corev1alpha1.ResourceIOPS: resource.MustParse("3000"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceTPS:  resource.MustParse("50"),
+				corev1beta1.ResourceIOPS: resource.MustParse("3000"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, volumeClass)).To(Succeed(), "failed to create test volume class")
 		DeferCleanup(k8sClient.Delete, ctx, volumeClass)
 
-		*bucketClass = storagev1alpha1.BucketClass{
+		*bucketClass = storagev1beta1.BucketClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "bucket-class-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceTPS:  resource.MustParse("50"),
-				corev1alpha1.ResourceIOPS: resource.MustParse("3000"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceTPS:  resource.MustParse("50"),
+				corev1beta1.ResourceIOPS: resource.MustParse("3000"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, bucketClass)).To(Succeed(), "failed to create test bucket class")
@@ -68,77 +68,77 @@ var _ = Describe("Storage", func() {
 			)
 
 			By("creating a volume on volume pool 1")
-			volume1 := &storagev1alpha1.Volume{
+			volume1 := &storagev1beta1.Volume{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "volume-",
 				},
-				Spec: storagev1alpha1.VolumeSpec{
+				Spec: storagev1beta1.VolumeSpec{
 					VolumeClassRef: &corev1.LocalObjectReference{Name: "my-class"},
 					VolumePoolRef:  &corev1.LocalObjectReference{Name: volumePool1},
-					Resources: corev1alpha1.ResourceList{
-						corev1alpha1.ResourceStorage: resource.MustParse("10Gi"),
+					Resources: corev1beta1.ResourceList{
+						corev1beta1.ResourceStorage: resource.MustParse("10Gi"),
 					},
 				},
 			}
 			Expect(k8sClient.Create(ctx, volume1)).To(Succeed())
 
 			By("creating a volume on volume pool 2")
-			volume2 := &storagev1alpha1.Volume{
+			volume2 := &storagev1beta1.Volume{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "volume-",
 				},
-				Spec: storagev1alpha1.VolumeSpec{
+				Spec: storagev1beta1.VolumeSpec{
 					VolumeClassRef: &corev1.LocalObjectReference{Name: "my-class"},
 					VolumePoolRef:  &corev1.LocalObjectReference{Name: volumePool2},
-					Resources: corev1alpha1.ResourceList{
-						corev1alpha1.ResourceStorage: resource.MustParse("10Gi"),
+					Resources: corev1beta1.ResourceList{
+						corev1beta1.ResourceStorage: resource.MustParse("10Gi"),
 					},
 				},
 			}
 			Expect(k8sClient.Create(ctx, volume2)).To(Succeed())
 
 			By("creating a volume on no volume pool")
-			volume3 := &storagev1alpha1.Volume{
+			volume3 := &storagev1beta1.Volume{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "volume-",
 				},
-				Spec: storagev1alpha1.VolumeSpec{
+				Spec: storagev1beta1.VolumeSpec{
 					VolumeClassRef: &corev1.LocalObjectReference{Name: "my-class"},
-					Resources: corev1alpha1.ResourceList{
-						corev1alpha1.ResourceStorage: resource.MustParse("10Gi"),
+					Resources: corev1beta1.ResourceList{
+						corev1beta1.ResourceStorage: resource.MustParse("10Gi"),
 					},
 				},
 			}
 			Expect(k8sClient.Create(ctx, volume3)).To(Succeed())
 
 			By("listing all volumes on volume pool 1")
-			volumesOnVolumePool1List := &storagev1alpha1.VolumeList{}
+			volumesOnVolumePool1List := &storagev1beta1.VolumeList{}
 			Expect(k8sClient.List(ctx, volumesOnVolumePool1List,
 				client.InNamespace(ns.Name),
-				client.MatchingFields{storagev1alpha1.VolumeVolumePoolRefNameField: volumePool1},
+				client.MatchingFields{storagev1beta1.VolumeVolumePoolRefNameField: volumePool1},
 			))
 
 			By("inspecting the items")
 			Expect(volumesOnVolumePool1List.Items).To(ConsistOf(*volume1))
 
 			By("listing all volumes on volume pool 2")
-			volumesOnVolumePool2List := &storagev1alpha1.VolumeList{}
+			volumesOnVolumePool2List := &storagev1beta1.VolumeList{}
 			Expect(k8sClient.List(ctx, volumesOnVolumePool2List,
 				client.InNamespace(ns.Name),
-				client.MatchingFields{storagev1alpha1.VolumeVolumePoolRefNameField: volumePool2},
+				client.MatchingFields{storagev1beta1.VolumeVolumePoolRefNameField: volumePool2},
 			))
 
 			By("inspecting the items")
 			Expect(volumesOnVolumePool2List.Items).To(ConsistOf(*volume2))
 
 			By("listing all volumes on no volume pool")
-			volumesOnNoVolumePoolList := &storagev1alpha1.VolumeList{}
+			volumesOnNoVolumePoolList := &storagev1beta1.VolumeList{}
 			Expect(k8sClient.List(ctx, volumesOnNoVolumePoolList,
 				client.InNamespace(ns.Name),
-				client.MatchingFields{storagev1alpha1.VolumeVolumePoolRefNameField: ""},
+				client.MatchingFields{storagev1beta1.VolumeVolumePoolRefNameField: ""},
 			))
 
 			By("inspecting the items")
@@ -147,52 +147,52 @@ var _ = Describe("Storage", func() {
 
 		It("should allow listing volumes by volume class name", func() {
 			By("creating another volume class")
-			volumeClass2 := &storagev1alpha1.VolumeClass{
+			volumeClass2 := &storagev1beta1.VolumeClass{
 				ObjectMeta: metav1.ObjectMeta{
 					GenerateName: "volume-class-",
 				},
-				Capabilities: corev1alpha1.ResourceList{
-					corev1alpha1.ResourceTPS:  resource.MustParse("30"),
-					corev1alpha1.ResourceIOPS: resource.MustParse("1000"),
+				Capabilities: corev1beta1.ResourceList{
+					corev1beta1.ResourceTPS:  resource.MustParse("30"),
+					corev1beta1.ResourceIOPS: resource.MustParse("1000"),
 				},
 			}
 			Expect(k8sClient.Create(ctx, volumeClass2)).To(Succeed())
 			DeferCleanup(k8sClient.Delete, ctx, volumeClass2)
 
 			By("creating a volume")
-			volume1 := &storagev1alpha1.Volume{
+			volume1 := &storagev1beta1.Volume{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "volume-",
 				},
-				Spec: storagev1alpha1.VolumeSpec{
+				Spec: storagev1beta1.VolumeSpec{
 					VolumeClassRef: &corev1.LocalObjectReference{Name: volumeClass.Name},
-					Resources: corev1alpha1.ResourceList{
-						corev1alpha1.ResourceStorage: resource.MustParse("10Gi"),
+					Resources: corev1beta1.ResourceList{
+						corev1beta1.ResourceStorage: resource.MustParse("10Gi"),
 					},
 				},
 			}
 			Expect(k8sClient.Create(ctx, volume1)).To(Succeed())
 
 			By("creating a volume with the other volume class")
-			volume2 := &storagev1alpha1.Volume{
+			volume2 := &storagev1beta1.Volume{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "volume-",
 				},
-				Spec: storagev1alpha1.VolumeSpec{
+				Spec: storagev1beta1.VolumeSpec{
 					VolumeClassRef: &corev1.LocalObjectReference{Name: volumeClass2.Name},
-					Resources: corev1alpha1.ResourceList{
-						corev1alpha1.ResourceStorage: resource.MustParse("10Gi"),
+					Resources: corev1beta1.ResourceList{
+						corev1beta1.ResourceStorage: resource.MustParse("10Gi"),
 					},
 				},
 			}
 			Expect(k8sClient.Create(ctx, volume2)).To(Succeed())
 
 			By("listing volumes with the first volume class name")
-			volumeList := &storagev1alpha1.VolumeList{}
+			volumeList := &storagev1beta1.VolumeList{}
 			Expect(k8sClient.List(ctx, volumeList, client.MatchingFields{
-				storagev1alpha1.VolumeVolumeClassRefNameField: volumeClass.Name,
+				storagev1beta1.VolumeVolumeClassRefNameField: volumeClass.Name,
 			})).To(Succeed())
 
 			By("inspecting the retrieved list to only have the volume with the correct volume class")
@@ -200,7 +200,7 @@ var _ = Describe("Storage", func() {
 
 			By("listing volumes with the second volume class name")
 			Expect(k8sClient.List(ctx, volumeList, client.MatchingFields{
-				storagev1alpha1.VolumeVolumeClassRefNameField: volumeClass2.Name,
+				storagev1beta1.VolumeVolumeClassRefNameField: volumeClass2.Name,
 			})).To(Succeed())
 
 			By("inspecting the retrieved list to only have the volume with the correct volume class")
@@ -216,12 +216,12 @@ var _ = Describe("Storage", func() {
 			)
 
 			By("creating a bucket on bucket pool 1")
-			bucket1 := &storagev1alpha1.Bucket{
+			bucket1 := &storagev1beta1.Bucket{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "bucket-",
 				},
-				Spec: storagev1alpha1.BucketSpec{
+				Spec: storagev1beta1.BucketSpec{
 					BucketClassRef: &corev1.LocalObjectReference{Name: "my-class"},
 					BucketPoolRef:  &corev1.LocalObjectReference{Name: bucketPool1},
 				},
@@ -229,12 +229,12 @@ var _ = Describe("Storage", func() {
 			Expect(k8sClient.Create(ctx, bucket1)).To(Succeed())
 
 			By("creating a bucket on bucket pool 2")
-			bucket2 := &storagev1alpha1.Bucket{
+			bucket2 := &storagev1beta1.Bucket{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "bucket-",
 				},
-				Spec: storagev1alpha1.BucketSpec{
+				Spec: storagev1beta1.BucketSpec{
 					BucketClassRef: &corev1.LocalObjectReference{Name: "my-class"},
 					BucketPoolRef:  &corev1.LocalObjectReference{Name: bucketPool2},
 				},
@@ -242,42 +242,42 @@ var _ = Describe("Storage", func() {
 			Expect(k8sClient.Create(ctx, bucket2)).To(Succeed())
 
 			By("creating a bucket on no bucket pool")
-			bucket3 := &storagev1alpha1.Bucket{
+			bucket3 := &storagev1beta1.Bucket{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "bucket-",
 				},
-				Spec: storagev1alpha1.BucketSpec{
+				Spec: storagev1beta1.BucketSpec{
 					BucketClassRef: &corev1.LocalObjectReference{Name: "my-class"},
 				},
 			}
 			Expect(k8sClient.Create(ctx, bucket3)).To(Succeed())
 
 			By("listing all buckets on bucket pool 1")
-			bucketsOnBucketPool1List := &storagev1alpha1.BucketList{}
+			bucketsOnBucketPool1List := &storagev1beta1.BucketList{}
 			Expect(k8sClient.List(ctx, bucketsOnBucketPool1List,
 				client.InNamespace(ns.Name),
-				client.MatchingFields{storagev1alpha1.BucketBucketPoolRefNameField: bucketPool1},
+				client.MatchingFields{storagev1beta1.BucketBucketPoolRefNameField: bucketPool1},
 			))
 
 			By("inspecting the items")
 			Expect(bucketsOnBucketPool1List.Items).To(ConsistOf(*bucket1))
 
 			By("listing all buckets on bucket pool 2")
-			bucketsOnBucketPool2List := &storagev1alpha1.BucketList{}
+			bucketsOnBucketPool2List := &storagev1beta1.BucketList{}
 			Expect(k8sClient.List(ctx, bucketsOnBucketPool2List,
 				client.InNamespace(ns.Name),
-				client.MatchingFields{storagev1alpha1.BucketBucketPoolRefNameField: bucketPool2},
+				client.MatchingFields{storagev1beta1.BucketBucketPoolRefNameField: bucketPool2},
 			))
 
 			By("inspecting the items")
 			Expect(bucketsOnBucketPool2List.Items).To(ConsistOf(*bucket2))
 
 			By("listing all buckets on no bucket pool")
-			bucketsOnNoBucketPoolList := &storagev1alpha1.BucketList{}
+			bucketsOnNoBucketPoolList := &storagev1beta1.BucketList{}
 			Expect(k8sClient.List(ctx, bucketsOnNoBucketPoolList,
 				client.InNamespace(ns.Name),
-				client.MatchingFields{storagev1alpha1.BucketBucketPoolRefNameField: ""},
+				client.MatchingFields{storagev1beta1.BucketBucketPoolRefNameField: ""},
 			))
 
 			By("inspecting the items")
@@ -286,46 +286,46 @@ var _ = Describe("Storage", func() {
 
 		It("should allow listing buckets by bucket class name", func() {
 			By("creating another bucket class")
-			bucketClass2 := &storagev1alpha1.BucketClass{
+			bucketClass2 := &storagev1beta1.BucketClass{
 				ObjectMeta: metav1.ObjectMeta{
 					GenerateName: "bucket-class-",
 				},
-				Capabilities: corev1alpha1.ResourceList{
-					corev1alpha1.ResourceTPS:  resource.MustParse("30"),
-					corev1alpha1.ResourceIOPS: resource.MustParse("1000"),
+				Capabilities: corev1beta1.ResourceList{
+					corev1beta1.ResourceTPS:  resource.MustParse("30"),
+					corev1beta1.ResourceIOPS: resource.MustParse("1000"),
 				},
 			}
 			Expect(k8sClient.Create(ctx, bucketClass2)).To(Succeed())
 			DeferCleanup(k8sClient.Delete, ctx, bucketClass2)
 
 			By("creating a bucket")
-			bucket1 := &storagev1alpha1.Bucket{
+			bucket1 := &storagev1beta1.Bucket{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "bucket-",
 				},
-				Spec: storagev1alpha1.BucketSpec{
+				Spec: storagev1beta1.BucketSpec{
 					BucketClassRef: &corev1.LocalObjectReference{Name: bucketClass.Name},
 				},
 			}
 			Expect(k8sClient.Create(ctx, bucket1)).To(Succeed())
 
 			By("creating a bucket with the other bucket class")
-			bucket2 := &storagev1alpha1.Bucket{
+			bucket2 := &storagev1beta1.Bucket{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace:    ns.Name,
 					GenerateName: "bucket-",
 				},
-				Spec: storagev1alpha1.BucketSpec{
+				Spec: storagev1beta1.BucketSpec{
 					BucketClassRef: &corev1.LocalObjectReference{Name: bucketClass2.Name},
 				},
 			}
 			Expect(k8sClient.Create(ctx, bucket2)).To(Succeed())
 
 			By("listing buckets with the first bucket class name")
-			bucketList := &storagev1alpha1.BucketList{}
+			bucketList := &storagev1beta1.BucketList{}
 			Expect(k8sClient.List(ctx, bucketList, client.MatchingFields{
-				storagev1alpha1.BucketBucketClassRefNameField: bucketClass.Name,
+				storagev1beta1.BucketBucketClassRefNameField: bucketClass.Name,
 			})).To(Succeed())
 
 			By("inspecting the retrieved list to only have the bucket with the correct bucket class")
@@ -333,7 +333,7 @@ var _ = Describe("Storage", func() {
 
 			By("listing buckets with the second bucket class name")
 			Expect(k8sClient.List(ctx, bucketList, client.MatchingFields{
-				storagev1alpha1.BucketBucketClassRefNameField: bucketClass2.Name,
+				storagev1beta1.BucketBucketClassRefNameField: bucketClass2.Name,
 			})).To(Succeed())
 
 			By("inspecting the retrieved list to only have the bucket with the correct bucket class")
