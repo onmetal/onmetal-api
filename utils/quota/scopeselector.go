@@ -15,10 +15,10 @@
 package quota
 
 import (
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 )
 
-func GetResourceScopeSelectorRequirements(scopeSelector *corev1alpha1.ResourceScopeSelector) []corev1alpha1.ResourceScopeSelectorRequirement {
+func GetResourceScopeSelectorRequirements(scopeSelector *corev1beta1.ResourceScopeSelector) []corev1beta1.ResourceScopeSelectorRequirement {
 	if scopeSelector == nil {
 		return nil
 	}

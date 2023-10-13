@@ -15,7 +15,7 @@
 package equality
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	"k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/conversion"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -37,8 +37,8 @@ func init() {
 
 func AddFuncs(equality conversion.Equalities) error {
 	return equality.AddFuncs(
-		commonv1alpha1.EqualIPs,
-		commonv1alpha1.EqualIPPrefixes,
-		commonv1alpha1.EqualIPRanges,
+		commonv1beta1.EqualIPs,
+		commonv1beta1.EqualIPPrefixes,
+		commonv1beta1.EqualIPRanges,
 	)
 }

@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	"github.com/onmetal/controller-utils/metautils"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -43,7 +43,7 @@ func NewUsageCalculator(c client.Client, scheme *runtime.Scheme, registry Regist
 	}
 }
 
-func (c *usageCalculator) getMatchingEvaluators(resourceNames sets.Set[corev1alpha1.ResourceName]) []Evaluator {
+func (c *usageCalculator) getMatchingEvaluators(resourceNames sets.Set[corev1beta1.ResourceName]) []Evaluator {
 	var (
 		evaluators         = c.registry.List()
 		matchingEvaluators []Evaluator
@@ -85,9 +85,9 @@ func (c *usageCalculator) calculateUsage(
 	ctx context.Context,
 	evaluators []Evaluator,
 	namespace string,
-	scopeSelector *corev1alpha1.ResourceScopeSelector,
-) (corev1alpha1.ResourceList, error) {
-	usage := corev1alpha1.ResourceList{}
+	scopeSelector *corev1beta1.ResourceScopeSelector,
+) (corev1beta1.ResourceList, error) {
+	usage := corev1beta1.ResourceList{}
 	for _, evaluator := range evaluators {
 		gvk, list, err := c.newList(evaluator.Type())
 		if err != nil {
@@ -98,7 +98,7 @@ func (c *usageCalculator) calculateUsage(
 			return nil, fmt.Errorf("[gvk %s]: error listing objects: %w", gvk, err)
 		}
 
-		grUsage := corev1alpha1.ResourceList{}
+		grUsage := corev1beta1.ResourceList{}
 		if err := metautils.EachListItem(list, func(obj client.Object) error {
 			matches, err := EvaluatorMatchesResourceScopeSelector(evaluator, obj, scopeSelector)
 			if err != nil {
@@ -126,8 +126,8 @@ func (c *usageCalculator) calculateUsage(
 
 func (c *usageCalculator) CalculateUsage(
 	ctx context.Context,
-	resourceQuota *corev1alpha1.ResourceQuota,
-) (corev1alpha1.ResourceList, error) {
+	resourceQuota *corev1beta1.ResourceQuota,
+) (corev1beta1.ResourceList, error) {
 	evaluators := c.getMatchingEvaluators(ResourceNames(resourceQuota.Spec.Hard))
 	return c.calculateUsage(ctx, evaluators, resourceQuota.Namespace, resourceQuota.Spec.ScopeSelector)
 }

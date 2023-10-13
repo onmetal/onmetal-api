@@ -17,15 +17,15 @@ package quota
 import (
 	"context"
 
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type Evaluator interface {
 	Type() client.Object
-	MatchesResourceName(resourceName corev1alpha1.ResourceName) bool
-	MatchesResourceScopeSelectorRequirement(item client.Object, req corev1alpha1.ResourceScopeSelectorRequirement) (bool, error)
-	Usage(ctx context.Context, item client.Object) (corev1alpha1.ResourceList, error)
+	MatchesResourceName(resourceName corev1beta1.ResourceName) bool
+	MatchesResourceScopeSelectorRequirement(item client.Object, req corev1beta1.ResourceScopeSelectorRequirement) (bool, error)
+	Usage(ctx context.Context, item client.Object) (corev1beta1.ResourceList, error)
 }
 
 type Registry interface {
@@ -40,5 +40,5 @@ type Registry interface {
 }
 
 type UsageCalculator interface {
-	CalculateUsage(ctx context.Context, quota *corev1alpha1.ResourceQuota) (corev1alpha1.ResourceList, error)
+	CalculateUsage(ctx context.Context, quota *corev1beta1.ResourceQuota) (corev1beta1.ResourceList, error)
 }
