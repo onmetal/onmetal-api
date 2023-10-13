@@ -19,8 +19,8 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
-	bucketbrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/bucketbroker/api/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
+	bucketbrokerv1beta1 "github.com/onmetal/onmetal-api/broker/bucketbroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/bucketbroker/apiutils"
 	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
@@ -29,7 +29,7 @@ import (
 )
 
 type AggregateOnmetalBucket struct {
-	Bucket       *storagev1alpha1.Bucket
+	Bucket       *storagev1beta1.Bucket
 	AccessSecret *corev1.Secret
 }
 
@@ -40,12 +40,12 @@ func (s *Server) getOnmetalBucketConfig(_ context.Context, bucket *ori.Bucket) (
 			Name: s.bucketPoolName,
 		}
 	}
-	onmetalBucket := &storagev1alpha1.Bucket{
+	onmetalBucket := &storagev1beta1.Bucket{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: s.namespace,
 			Name:      s.generateID(),
 		},
-		Spec: storagev1alpha1.BucketSpec{
+		Spec: storagev1beta1.BucketSpec{
 			BucketClassRef:     &corev1.LocalObjectReference{Name: bucket.Spec.Class},
 			BucketPoolRef:      bucketPoolRef,
 			BucketPoolSelector: s.bucketPoolSelector,
@@ -54,7 +54,7 @@ func (s *Server) getOnmetalBucketConfig(_ context.Context, bucket *ori.Bucket) (
 	if err := apiutils.SetObjectMetadata(onmetalBucket, bucket.Metadata); err != nil {
 		return nil, err
 	}
-	apiutils.SetBucketManagerLabel(onmetalBucket, bucketbrokerv1alpha1.BucketBrokerManager)
+	apiutils.SetBucketManagerLabel(onmetalBucket, bucketbrokerv1beta1.BucketBrokerManager)
 
 	return &AggregateOnmetalBucket{
 		Bucket: onmetalBucket,

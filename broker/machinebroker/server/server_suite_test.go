@@ -21,13 +21,13 @@ import (
 
 	"github.com/onmetal/controller-utils/buildutils"
 	"github.com/onmetal/controller-utils/modutils"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/server"
-	machinepoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1alpha1"
+	machinepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	utilsenvtest "github.com/onmetal/onmetal-api/utils/envtest"
 	"github.com/onmetal/onmetal-api/utils/envtest/apiserver"
 	. "github.com/onsi/ginkgo/v2"
@@ -91,10 +91,10 @@ var _ = BeforeSuite(func() {
 
 	DeferCleanup(utilsenvtest.StopWithExtensions, testEnv, testEnvExt)
 
-	Expect(computev1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
-	Expect(networkingv1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
-	Expect(ipamv1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
-	Expect(storagev1alpha1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(computev1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(networkingv1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(ipamv1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
+	Expect(storagev1beta1.AddToScheme(scheme.Scheme)).To(Succeed())
 
 	// Init package-level k8sClient
 	k8sClient, err = client.New(cfg, client.Options{Scheme: scheme.Scheme})
@@ -136,7 +136,7 @@ func SetupTest() (*corev1.Namespace, *server.Server) {
 		newSrv, err := server.New(cfg, ns.Name, server.Options{
 			BaseURL: baseURL,
 			BrokerDownwardAPILabels: map[string]string{
-				"root-machine-uid": machinepoolletv1alpha1.MachineUIDLabel,
+				"root-machine-uid": machinepoolletv1beta1.MachineUIDLabel,
 			},
 		})
 		Expect(err).NotTo(HaveOccurred())
@@ -152,17 +152,17 @@ func SetupTest() (*corev1.Namespace, *server.Server) {
 	return ns, srv
 }
 
-func SetupMachineClass() *computev1alpha1.MachineClass {
-	machineClass := &computev1alpha1.MachineClass{}
+func SetupMachineClass() *computev1beta1.MachineClass {
+	machineClass := &computev1beta1.MachineClass{}
 
 	BeforeEach(func(ctx SpecContext) {
-		*machineClass = computev1alpha1.MachineClass{
+		*machineClass = computev1beta1.MachineClass{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: "machine-class-",
 			},
-			Capabilities: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceCPU:    resource.MustParse("1"),
-				corev1alpha1.ResourceMemory: resource.MustParse("1Gi"),
+			Capabilities: corev1beta1.ResourceList{
+				corev1beta1.ResourceCPU:    resource.MustParse("1"),
+				corev1beta1.ResourceMemory: resource.MustParse("1Gi"),
 			},
 		}
 		Expect(k8sClient.Create(ctx, machineClass)).To(Succeed())

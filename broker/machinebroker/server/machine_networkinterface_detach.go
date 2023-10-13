@@ -18,7 +18,7 @@ import (
 	"context"
 	"fmt"
 
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	"golang.org/x/exp/slices"
 	"google.golang.org/grpc/codes"
@@ -63,7 +63,7 @@ func (s *Server) DetachNetworkInterface(
 	log = log.WithValues("OnmetalNetworkInterfaceName", onmetalNicName)
 
 	log.V(1).Info("Deleting onmetal network interface")
-	onmetalNic := &networkingv1alpha1.NetworkInterface{
+	onmetalNic := &networkingv1beta1.NetworkInterface{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: s.cluster.Namespace(),
 			Name:      onmetalNicName,

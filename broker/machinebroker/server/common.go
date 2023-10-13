@@ -19,9 +19,9 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/common/cleaner"
 	metautils "github.com/onmetal/onmetal-api/utils/meta"
 	corev1 "k8s.io/api/core/v1"
@@ -31,7 +31,7 @@ import (
 )
 
 var (
-	onmetalMachineGVK = computev1alpha1.SchemeGroupVersion.WithKind("Machine")
+	onmetalMachineGVK = computev1beta1.SchemeGroupVersion.WithKind("Machine")
 )
 
 func (s *Server) loggerFrom(ctx context.Context, keysWithValues ...interface{}) logr.Logger {
@@ -56,7 +56,7 @@ func (s *Server) setupCleaner(ctx context.Context, log logr.Logger, retErr *erro
 	return c, cleanup
 }
 
-func (s *Server) convertOnmetalIPSourcesToIPs(ipSources []networkingv1alpha1.IPSource) ([]string, error) {
+func (s *Server) convertOnmetalIPSourcesToIPs(ipSources []networkingv1beta1.IPSource) ([]string, error) {
 	res := make([]string, len(ipSources))
 	for i, ipSource := range ipSources {
 		if ipSource.Value == nil {
@@ -67,7 +67,7 @@ func (s *Server) convertOnmetalIPSourcesToIPs(ipSources []networkingv1alpha1.IPS
 	return res, nil
 }
 
-func (s *Server) getOnmetalIPsIPFamilies(ips []commonv1alpha1.IP) []corev1.IPFamily {
+func (s *Server) getOnmetalIPsIPFamilies(ips []commonv1beta1.IP) []corev1.IPFamily {
 	res := make([]corev1.IPFamily, len(ips))
 	for i, ip := range ips {
 		res[i] = ip.Family()
@@ -75,20 +75,20 @@ func (s *Server) getOnmetalIPsIPFamilies(ips []commonv1alpha1.IP) []corev1.IPFam
 	return res
 }
 
-func (s *Server) onmetalIPsToOnmetalIPSources(ips []commonv1alpha1.IP) []networkingv1alpha1.IPSource {
-	res := make([]networkingv1alpha1.IPSource, len(ips))
+func (s *Server) onmetalIPsToOnmetalIPSources(ips []commonv1beta1.IP) []networkingv1beta1.IPSource {
+	res := make([]networkingv1beta1.IPSource, len(ips))
 	for i := range ips {
-		res[i] = networkingv1alpha1.IPSource{
+		res[i] = networkingv1beta1.IPSource{
 			Value: &ips[i],
 		}
 	}
 	return res
 }
 
-func (s *Server) parseIPs(ipStrings []string) ([]commonv1alpha1.IP, error) {
-	var ips []commonv1alpha1.IP
+func (s *Server) parseIPs(ipStrings []string) ([]commonv1beta1.IP, error) {
+	var ips []commonv1beta1.IP
 	for _, ipString := range ipStrings {
-		ip, err := commonv1alpha1.ParseIP(ipString)
+		ip, err := commonv1beta1.ParseIP(ipString)
 		if err != nil {
 			return nil, fmt.Errorf("error parsing ip %q: %w", ipString, err)
 		}
@@ -111,18 +111,18 @@ func (s *Server) optionalOwnerReferences(gvk schema.GroupVersionKind, optionalOw
 	}
 }
 
-func (s *Server) optionalLocalUIDReference(optionalObj metav1.Object) *commonv1alpha1.LocalUIDReference {
+func (s *Server) optionalLocalUIDReference(optionalObj metav1.Object) *commonv1beta1.LocalUIDReference {
 	if optionalObj == nil {
 		return nil
 	}
-	return &commonv1alpha1.LocalUIDReference{
+	return &commonv1beta1.LocalUIDReference{
 		Name: optionalObj.GetName(),
 		UID:  optionalObj.GetUID(),
 	}
 }
 
-func (s *Server) localObjectReferenceTo(obj metav1.Object) commonv1alpha1.LocalUIDReference {
-	return commonv1alpha1.LocalUIDReference{
+func (s *Server) localObjectReferenceTo(obj metav1.Object) commonv1beta1.LocalUIDReference {
+	return commonv1beta1.LocalUIDReference{
 		Name: obj.GetName(),
 		UID:  obj.GetUID(),
 	}

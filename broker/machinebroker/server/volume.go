@@ -18,8 +18,8 @@ import (
 	"context"
 	"fmt"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/utils/generic"
 	"golang.org/x/exp/slices"
 	corev1 "k8s.io/api/core/v1"
@@ -27,10 +27,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func onmetalMachineVolumeIndex(onmetalMachine *computev1alpha1.Machine, name string) int {
+func onmetalMachineVolumeIndex(onmetalMachine *computev1beta1.Machine, name string) int {
 	return slices.IndexFunc(
 		onmetalMachine.Spec.Volumes,
-		func(volume computev1alpha1.Volume) bool {
+		func(volume computev1beta1.Volume) bool {
 			return volume.Name == name
 		},
 	)
@@ -38,8 +38,8 @@ func onmetalMachineVolumeIndex(onmetalMachine *computev1alpha1.Machine, name str
 
 func (s *Server) bindOnmetalMachineVolume(
 	ctx context.Context,
-	onmetalMachine *computev1alpha1.Machine,
-	onmetalVolume *storagev1alpha1.Volume,
+	onmetalMachine *computev1beta1.Machine,
+	onmetalVolume *storagev1beta1.Volume,
 ) error {
 	baseOnmetalVolume := onmetalVolume.DeepCopy()
 	if err := ctrl.SetControllerReference(onmetalMachine, onmetalVolume, s.cluster.Scheme()); err != nil {
@@ -52,7 +52,7 @@ func (s *Server) bindOnmetalMachineVolume(
 func (s *Server) aggregateOnmetalVolume(
 	ctx context.Context,
 	rd client.Reader,
-	onmetalVolume *storagev1alpha1.Volume,
+	onmetalVolume *storagev1beta1.Volume,
 ) (*AggregateOnmetalVolume, error) {
 	access := onmetalVolume.Status.Access
 	if access == nil {

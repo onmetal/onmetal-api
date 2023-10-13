@@ -19,11 +19,11 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/common/cleaner"
-	machinebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1alpha1"
+	machinebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/apiutils"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	"google.golang.org/grpc/codes"
@@ -36,7 +36,7 @@ import (
 type OnmetalNetworkInterfaceConfig struct {
 	Name       string
 	NetworkID  string
-	IPs        []commonv1alpha1.IP
+	IPs        []commonv1beta1.IP
 	Attributes map[string]string
 }
 
@@ -60,26 +60,26 @@ func (s *Server) createOnmetalNetworkInterface(
 	c *cleaner.Cleaner,
 	optOnmetalMachine client.Object,
 	cfg *OnmetalNetworkInterfaceConfig,
-) (onmetalMachineNic *computev1alpha1.NetworkInterface, aggOnmetalNic *AggregateOnmetalNetworkInterface, retErr error) {
+) (onmetalMachineNic *computev1beta1.NetworkInterface, aggOnmetalNic *AggregateOnmetalNetworkInterface, retErr error) {
 	log.V(1).Info("Getting network for handle")
 	onmetalNetwork, err := s.networks.GetNetwork(ctx, cfg.NetworkID)
 	if err != nil {
 		return nil, nil, fmt.Errorf("error getting network: %w", err)
 	}
 
-	onmetalNic := &networkingv1alpha1.NetworkInterface{
+	onmetalNic := &networkingv1beta1.NetworkInterface{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: s.cluster.Namespace(),
 			Name:      s.cluster.IDGen().Generate(),
 			Annotations: map[string]string{
-				commonv1alpha1.ManagedByAnnotation: machinebrokerv1alpha1.MachineBrokerManager,
+				commonv1beta1.ManagedByAnnotation: machinebrokerv1beta1.MachineBrokerManager,
 			},
 			Labels: map[string]string{
-				machinebrokerv1alpha1.ManagerLabel: machinebrokerv1alpha1.MachineBrokerManager,
+				machinebrokerv1beta1.ManagerLabel: machinebrokerv1beta1.MachineBrokerManager,
 			},
 			OwnerReferences: s.optionalOwnerReferences(onmetalMachineGVK, optOnmetalMachine),
 		},
-		Spec: networkingv1alpha1.NetworkInterfaceSpec{
+		Spec: networkingv1beta1.NetworkInterfaceSpec{
 			NetworkRef: corev1.LocalObjectReference{Name: onmetalNetwork.Name},
 			MachineRef: s.optionalLocalUIDReference(optOnmetalMachine),
 			IPFamilies: s.getOnmetalIPsIPFamilies(cfg.IPs),
@@ -98,9 +98,9 @@ func (s *Server) createOnmetalNetworkInterface(
 		return nil, nil, fmt.Errorf("error patching network to be owned by network interface: %w", err)
 	}
 
-	return &computev1alpha1.NetworkInterface{
+	return &computev1beta1.NetworkInterface{
 			Name: cfg.Name,
-			NetworkInterfaceSource: computev1alpha1.NetworkInterfaceSource{
+			NetworkInterfaceSource: computev1beta1.NetworkInterfaceSource{
 				NetworkInterfaceRef: &corev1.LocalObjectReference{Name: onmetalNic.Name},
 			},
 		}, &AggregateOnmetalNetworkInterface{
@@ -112,8 +112,8 @@ func (s *Server) createOnmetalNetworkInterface(
 func (s *Server) attachOnmetalNetworkInterface(
 	ctx context.Context,
 	log logr.Logger,
-	onmetalMachine *computev1alpha1.Machine,
-	onmetalMachineNic *computev1alpha1.NetworkInterface,
+	onmetalMachine *computev1beta1.Machine,
+	onmetalMachineNic *computev1beta1.NetworkInterface,
 ) error {
 	baseMachine := onmetalMachine.DeepCopy()
 	onmetalMachine.Spec.NetworkInterfaces = append(onmetalMachine.Spec.NetworkInterfaces, *onmetalMachineNic)

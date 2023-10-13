@@ -18,8 +18,8 @@ import (
 	"context"
 	"fmt"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
-	bucketbrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/bucketbroker/api/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
+	bucketbrokerv1beta1 "github.com/onmetal/onmetal-api/broker/bucketbroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/common"
 	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
 	"google.golang.org/grpc/codes"
@@ -34,14 +34,14 @@ func (s *Server) listManagedAndCreated(ctx context.Context, list client.ObjectLi
 	return s.client.List(ctx, list,
 		client.InNamespace(s.namespace),
 		client.MatchingLabels{
-			bucketbrokerv1alpha1.ManagerLabel: bucketbrokerv1alpha1.BucketBrokerManager,
-			bucketbrokerv1alpha1.CreatedLabel: "true",
+			bucketbrokerv1beta1.ManagerLabel: bucketbrokerv1beta1.BucketBrokerManager,
+			bucketbrokerv1beta1.CreatedLabel: "true",
 		},
 	)
 }
 
 func (s *Server) listAggregateOnmetalBuckets(ctx context.Context) ([]AggregateOnmetalBucket, error) {
-	onmetalBucketList := &storagev1alpha1.BucketList{}
+	onmetalBucketList := &storagev1beta1.BucketList{}
 	if err := s.listManagedAndCreated(ctx, onmetalBucketList); err != nil {
 		return nil, fmt.Errorf("error listing onmetal buckets: %w", err)
 	}
@@ -87,10 +87,10 @@ func (s *Server) clientGetSecretFunc(ctx context.Context) func(string) (*corev1.
 }
 
 func (s *Server) getOnmetalBucketAccessSecretIfRequired(
-	onmetalBucket *storagev1alpha1.Bucket,
+	onmetalBucket *storagev1beta1.Bucket,
 	getSecret func(string) (*corev1.Secret, error),
 ) (*corev1.Secret, error) {
-	if onmetalBucket.Status.State != storagev1alpha1.BucketStateAvailable {
+	if onmetalBucket.Status.State != storagev1beta1.BucketStateAvailable {
 		return nil, nil
 	}
 
@@ -109,7 +109,7 @@ func (s *Server) getOnmetalBucketAccessSecretIfRequired(
 }
 
 func (s *Server) aggregateOnmetalBucket(
-	onmetalBucket *storagev1alpha1.Bucket,
+	onmetalBucket *storagev1beta1.Bucket,
 	getSecret func(string) (*corev1.Secret, error),
 ) (*AggregateOnmetalBucket, error) {
 	accessSecret, err := s.getOnmetalBucketAccessSecretIfRequired(onmetalBucket, getSecret)
@@ -124,7 +124,7 @@ func (s *Server) aggregateOnmetalBucket(
 }
 
 func (s *Server) getAggregateOnmetalBucket(ctx context.Context, id string) (*AggregateOnmetalBucket, error) {
-	onmetalBucket := &storagev1alpha1.Bucket{}
+	onmetalBucket := &storagev1beta1.Bucket{}
 	if err := s.getManagedAndCreated(ctx, id, onmetalBucket); err != nil {
 		if !apierrors.IsNotFound(err) {
 			return nil, fmt.Errorf("error getting onmetal bucket %s: %w", id, err)

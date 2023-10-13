@@ -17,7 +17,7 @@ package server_test
 import (
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
-	machinepoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1alpha1"
+	machinepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
@@ -36,7 +36,7 @@ var _ = Describe("ListMachines", func() {
 				Machine: &ori.Machine{
 					Metadata: &orimeta.ObjectMetadata{
 						Labels: map[string]string{
-							machinepoolletv1alpha1.MachineUIDLabel: "foobar",
+							machinepoolletv1beta1.MachineUIDLabel: "foobar",
 						},
 					},
 					Spec: &ori.MachineSpec{

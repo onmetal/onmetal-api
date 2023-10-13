@@ -18,7 +18,7 @@ import (
 	"context"
 	"fmt"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	"golang.org/x/exp/slices"
 	"google.golang.org/grpc/codes"
@@ -56,7 +56,7 @@ func (s *Server) DetachVolume(ctx context.Context, req *ori.DetachVolumeRequest)
 	case onmetalMachineVolume.VolumeRef != nil:
 		onmetalVolumeName := onmetalMachineVolume.VolumeRef.Name
 		log = log.WithValues("OnmetalVolumeName", onmetalVolumeName)
-		onmetalVolume := &storagev1alpha1.Volume{
+		onmetalVolume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace: s.cluster.Namespace(),
 				Name:      onmetalVolumeName,

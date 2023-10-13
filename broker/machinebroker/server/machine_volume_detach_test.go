@@ -15,8 +15,8 @@
 package server_test
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -68,7 +68,7 @@ var _ = Describe("DetachVolume", func() {
 		})).Error().NotTo(HaveOccurred())
 
 		By("getting the onmetal machine")
-		onmetalMachine := &computev1alpha1.Machine{}
+		onmetalMachine := &computev1beta1.Machine{}
 		onmetalMachineKey := client.ObjectKey{Namespace: ns.Name, Name: machineID}
 		Expect(k8sClient.Get(ctx, onmetalMachineKey, onmetalMachine)).To(Succeed())
 
@@ -76,7 +76,7 @@ var _ = Describe("DetachVolume", func() {
 		Expect(onmetalMachine.Spec.Volumes).To(BeEmpty())
 
 		By("listing for any onmetal volume in the namespace")
-		volumeList := &storagev1alpha1.VolumeList{}
+		volumeList := &storagev1beta1.VolumeList{}
 		Expect(k8sClient.List(ctx, volumeList, client.InNamespace(ns.Name))).To(Succeed())
 
 		By("asserting the list to be empty")
@@ -86,13 +86,13 @@ var _ = Describe("DetachVolume", func() {
 		secretList := &corev1.SecretList{}
 		Expect(k8sClient.List(ctx, secretList,
 			client.InNamespace(ns.Name),
-			client.MatchingFields{"type": string(storagev1alpha1.SecretTypeVolumeAuth)},
+			client.MatchingFields{"type": string(storagev1beta1.SecretTypeVolumeAuth)},
 		)).To(Succeed())
 
 		By("asserting the list contains a single secret with an owner reference to a volume")
 		Expect(secretList.Items).To(ConsistOf(
 			HaveField("ObjectMeta.OwnerReferences", ConsistOf(MatchFields(IgnoreExtras, Fields{
-				"APIVersion": Equal(storagev1alpha1.SchemeGroupVersion.String()),
+				"APIVersion": Equal(storagev1beta1.SchemeGroupVersion.String()),
 				"Kind":       Equal("Volume"),
 			}))),
 		))

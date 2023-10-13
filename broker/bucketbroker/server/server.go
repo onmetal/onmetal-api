@@ -22,11 +22,11 @@ import (
 	"strconv"
 
 	"github.com/go-logr/logr"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
-	bucketbrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/bucketbroker/api/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
+	bucketbrokerv1beta1 "github.com/onmetal/onmetal-api/broker/bucketbroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/bucketbroker/apiutils"
 	"github.com/onmetal/onmetal-api/broker/common/cleaner"
 	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
@@ -46,10 +46,10 @@ var scheme = runtime.NewScheme()
 
 func init() {
 	utilruntime.Must(kubernetes.AddToScheme(scheme))
-	utilruntime.Must(computev1alpha1.AddToScheme(scheme))
-	utilruntime.Must(networkingv1alpha1.AddToScheme(scheme))
-	utilruntime.Must(storagev1alpha1.AddToScheme(scheme))
-	utilruntime.Must(ipamv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(computev1beta1.AddToScheme(scheme))
+	utilruntime.Must(networkingv1beta1.AddToScheme(scheme))
+	utilruntime.Must(storagev1beta1.AddToScheme(scheme))
+	utilruntime.Must(ipamv1beta1.AddToScheme(scheme))
 }
 
 type Server struct {
@@ -139,7 +139,7 @@ func (s *Server) getManagedAndCreated(ctx context.Context, name string, obj clie
 	if err := s.client.Get(ctx, key, obj); err != nil {
 		return err
 	}
-	if !apiutils.IsManagedBy(obj, bucketbrokerv1alpha1.BucketBrokerManager) || !apiutils.IsCreated(obj) {
+	if !apiutils.IsManagedBy(obj, bucketbrokerv1beta1.BucketBrokerManager) || !apiutils.IsCreated(obj) {
 		gvk, err := apiutil.GVKForObject(obj, s.client.Scheme())
 		if err != nil {
 			return err

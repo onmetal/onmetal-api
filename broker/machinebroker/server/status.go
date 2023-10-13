@@ -20,17 +20,17 @@ import (
 
 	"k8s.io/apimachinery/pkg/api/resource"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func (s *Server) getTargetOnmetalMachinePools(ctx context.Context) ([]computev1alpha1.MachinePool, error) {
+func (s *Server) getTargetOnmetalMachinePools(ctx context.Context) ([]computev1beta1.MachinePool, error) {
 	if s.cluster.MachinePoolName() != "" {
-		onmetalMachinePool := &computev1alpha1.MachinePool{}
+		onmetalMachinePool := &computev1beta1.MachinePool{}
 		onmetalMachinePoolKey := client.ObjectKey{Name: s.cluster.MachinePoolName()}
 		if err := s.cluster.Client().Get(ctx, onmetalMachinePoolKey, onmetalMachinePool); err != nil {
 			if !apierrors.IsNotFound(err) {
@@ -40,7 +40,7 @@ func (s *Server) getTargetOnmetalMachinePools(ctx context.Context) ([]computev1a
 		}
 	}
 
-	machinePoolList := &computev1alpha1.MachinePoolList{}
+	machinePoolList := &computev1beta1.MachinePoolList{}
 	if err := s.cluster.Client().List(ctx, machinePoolList,
 		client.MatchingLabels(s.cluster.MachinePoolSelector()),
 	); err != nil {
@@ -49,7 +49,7 @@ func (s *Server) getTargetOnmetalMachinePools(ctx context.Context) ([]computev1a
 	return machinePoolList.Items, nil
 }
 
-func (s *Server) gatherAvailableMachineClassNames(onmetalMachinePools []computev1alpha1.MachinePool) sets.Set[string] {
+func (s *Server) gatherAvailableMachineClassNames(onmetalMachinePools []computev1beta1.MachinePool) sets.Set[string] {
 	res := sets.New[string]()
 	for _, onmetalMachinePool := range onmetalMachinePools {
 		for _, availableMachineClass := range onmetalMachinePool.Status.AvailableMachineClasses {
@@ -59,11 +59,11 @@ func (s *Server) gatherAvailableMachineClassNames(onmetalMachinePools []computev
 	return res
 }
 
-func (s *Server) gatherMachineClassQuantity(onmetalMachinePools []computev1alpha1.MachinePool) map[string]*resource.Quantity {
+func (s *Server) gatherMachineClassQuantity(onmetalMachinePools []computev1beta1.MachinePool) map[string]*resource.Quantity {
 	res := map[string]*resource.Quantity{}
 	for _, onmetalMachinePool := range onmetalMachinePools {
 		for resourceName, resourceQuantity := range onmetalMachinePool.Status.Capacity {
-			if corev1alpha1.IsClassCountResource(resourceName) {
+			if corev1beta1.IsClassCountResource(resourceName) {
 				if _, ok := res[string(resourceName)]; !ok {
 					res[string(resourceName)] = resource.NewQuantity(0, resource.DecimalSI)
 				}
@@ -76,9 +76,9 @@ func (s *Server) gatherMachineClassQuantity(onmetalMachinePools []computev1alpha
 
 func (s *Server) filterOnmetalMachineClasses(
 	availableMachineClassNames sets.Set[string],
-	machineClasses []computev1alpha1.MachineClass,
-) []computev1alpha1.MachineClass {
-	var filtered []computev1alpha1.MachineClass
+	machineClasses []computev1beta1.MachineClass,
+) []computev1beta1.MachineClass {
+	var filtered []computev1beta1.MachineClass
 	for _, machineClass := range machineClasses {
 		if !availableMachineClassNames.Has(machineClass.Name) {
 			continue
@@ -89,7 +89,7 @@ func (s *Server) filterOnmetalMachineClasses(
 	return filtered
 }
 
-func (s *Server) convertOnmetalMachineClassStatus(machineClass *computev1alpha1.MachineClass, quantity *resource.Quantity) (*ori.MachineClassStatus, error) {
+func (s *Server) convertOnmetalMachineClassStatus(machineClass *computev1beta1.MachineClass, quantity *resource.Quantity) (*ori.MachineClassStatus, error) {
 	cpu := machineClass.Capabilities.CPU()
 	memory := machineClass.Capabilities.Memory()
 
@@ -126,7 +126,7 @@ func (s *Server) Status(ctx context.Context, req *ori.StatusRequest) (*ori.Statu
 	machineClassQuantity := s.gatherMachineClassQuantity(onmetalMachinePools)
 
 	log.V(1).Info("Listing onmetal machine classes")
-	onmetalMachineClassList := &computev1alpha1.MachineClassList{}
+	onmetalMachineClassList := &computev1beta1.MachineClassList{}
 	if err := s.cluster.Client().List(ctx, onmetalMachineClassList); err != nil {
 		return nil, fmt.Errorf("error listing onmetal machine classes: %w", err)
 	}
@@ -134,7 +134,7 @@ func (s *Server) Status(ctx context.Context, req *ori.StatusRequest) (*ori.Statu
 	availableOnmetalMachineClasses := s.filterOnmetalMachineClasses(availableOnmetalMachineClassNames, onmetalMachineClassList.Items)
 	machineClassStatus := make([]*ori.MachineClassStatus, 0, len(availableOnmetalMachineClasses))
 	for _, onmetalMachineClass := range availableOnmetalMachineClasses {
-		quantity, ok := machineClassQuantity[string(corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeMachineClass, onmetalMachineClass.Name))]
+		quantity, ok := machineClassQuantity[string(corev1beta1.ClassCountFor(corev1beta1.ClassTypeMachineClass, onmetalMachineClass.Name))]
 		if !ok {
 			log.V(1).Info("Ignored class - missing quantity", "MachineClass", onmetalMachineClass.Name)
 			continue

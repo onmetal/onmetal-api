@@ -18,10 +18,10 @@ import (
 	"context"
 	"fmt"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
-	machinebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
+	machinebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/apiutils"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	clientutils "github.com/onmetal/onmetal-api/utils/client"
@@ -34,12 +34,12 @@ import (
 )
 
 func (s *Server) listAggregateOnmetalMachines(ctx context.Context) ([]AggregateOnmetalMachine, error) {
-	onmetalMachineList := &computev1alpha1.MachineList{}
+	onmetalMachineList := &computev1beta1.MachineList{}
 	if err := s.cluster.Client().List(ctx, onmetalMachineList,
 		client.InNamespace(s.cluster.Namespace()),
 		client.MatchingLabels{
-			machinebrokerv1alpha1.ManagerLabel: machinebrokerv1alpha1.MachineBrokerManager,
-			machinebrokerv1alpha1.CreatedLabel: "true",
+			machinebrokerv1beta1.ManagerLabel: machinebrokerv1beta1.MachineBrokerManager,
+			machinebrokerv1beta1.CreatedLabel: "true",
 		},
 	); err != nil {
 		return nil, fmt.Errorf("error listing onmetal machines: %w", err)
@@ -48,12 +48,12 @@ func (s *Server) listAggregateOnmetalMachines(ctx context.Context) ([]AggregateO
 	listOpts := []client.ListOption{
 		client.InNamespace(s.cluster.Namespace()),
 		client.MatchingLabels{
-			machinebrokerv1alpha1.ManagerLabel: machinebrokerv1alpha1.MachineBrokerManager,
+			machinebrokerv1beta1.ManagerLabel: machinebrokerv1beta1.MachineBrokerManager,
 		},
 	}
 	rd, err := clientutils.NewCachingReaderBuilder(s.cluster.Client()).
 		List(&corev1.SecretList{}, listOpts...).
-		List(&networkingv1alpha1.NetworkList{}, listOpts...).
+		List(&networkingv1beta1.NetworkList{}, listOpts...).
 		Build(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("error building caching reader: %w", err)
@@ -75,7 +75,7 @@ func (s *Server) listAggregateOnmetalMachines(ctx context.Context) ([]AggregateO
 func (s *Server) aggregateOnmetalMachine(
 	ctx context.Context,
 	rd client.Reader,
-	onmetalMachine *computev1alpha1.Machine,
+	onmetalMachine *computev1beta1.Machine,
 ) (*AggregateOnmetalMachine, error) {
 	var ignitionSecret *corev1.Secret
 	if ignitionRef := onmetalMachine.Spec.IgnitionRef; ignitionRef != nil {
@@ -92,7 +92,7 @@ func (s *Server) aggregateOnmetalMachine(
 	for _, machineNic := range onmetalMachine.Spec.NetworkInterfaces {
 		switch {
 		case machineNic.NetworkInterfaceRef != nil:
-			onmetalNic := &networkingv1alpha1.NetworkInterface{}
+			onmetalNic := &networkingv1beta1.NetworkInterface{}
 			onmetalNicKey := client.ObjectKey{Namespace: s.cluster.Namespace(), Name: machineNic.NetworkInterfaceRef.Name}
 			if err := rd.Get(ctx, onmetalNicKey, onmetalNic); err != nil {
 				return nil, fmt.Errorf("error getting onmetal network interface: %w", err)
@@ -111,7 +111,7 @@ func (s *Server) aggregateOnmetalMachine(
 	for _, machineVolume := range onmetalMachine.Spec.Volumes {
 		switch {
 		case machineVolume.VolumeRef != nil:
-			onmetalVolume := &storagev1alpha1.Volume{}
+			onmetalVolume := &storagev1beta1.Volume{}
 			onmetalVolumeKey := client.ObjectKey{Namespace: s.cluster.Namespace(), Name: machineVolume.VolumeRef.Name}
 			if err := rd.Get(ctx, onmetalVolumeKey, onmetalVolume); err != nil {
 				return nil, fmt.Errorf("error getting onmetal volume: %w", err)
@@ -134,8 +134,8 @@ func (s *Server) aggregateOnmetalMachine(
 	}, nil
 }
 
-func (s *Server) getOnmetalMachine(ctx context.Context, id string) (*computev1alpha1.Machine, error) {
-	onmetalMachine := &computev1alpha1.Machine{}
+func (s *Server) getOnmetalMachine(ctx context.Context, id string) (*computev1beta1.Machine, error) {
+	onmetalMachine := &computev1beta1.Machine{}
 	onmetalMachineKey := client.ObjectKey{Namespace: s.cluster.Namespace(), Name: id}
 	if err := s.cluster.Client().Get(ctx, onmetalMachineKey, onmetalMachine); err != nil {
 		if !apierrors.IsNotFound(err) {
@@ -143,7 +143,7 @@ func (s *Server) getOnmetalMachine(ctx context.Context, id string) (*computev1al
 		}
 		return nil, status.Errorf(codes.NotFound, "machine %s not found", id)
 	}
-	if !apiutils.IsManagedBy(onmetalMachine, machinebrokerv1alpha1.MachineBrokerManager) || !apiutils.IsCreated(onmetalMachine) {
+	if !apiutils.IsManagedBy(onmetalMachine, machinebrokerv1beta1.MachineBrokerManager) || !apiutils.IsCreated(onmetalMachine) {
 		return nil, status.Errorf(codes.NotFound, "machine %s not found", id)
 	}
 	return onmetalMachine, nil

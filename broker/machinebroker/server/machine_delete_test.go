@@ -15,12 +15,12 @@
 package server_test
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
-	machinepoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1alpha1"
+	machinepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gstruct"
@@ -37,7 +37,7 @@ var _ = Describe("DeleteMachine", func() {
 			Machine: &ori.Machine{
 				Metadata: &orimeta.ObjectMetadata{
 					Labels: map[string]string{
-						machinepoolletv1alpha1.MachineUIDLabel: "foobar",
+						machinepoolletv1beta1.MachineUIDLabel: "foobar",
 					},
 				},
 				Spec: &ori.MachineSpec{
@@ -78,33 +78,33 @@ var _ = Describe("DeleteMachine", func() {
 		})).Error().NotTo(HaveOccurred())
 
 		By("listing for onmetal machines in the namespace")
-		onmetalMachineList := &computev1alpha1.MachineList{}
+		onmetalMachineList := &computev1beta1.MachineList{}
 		Expect(k8sClient.List(ctx, onmetalMachineList, client.InNamespace(ns.Name))).To(Succeed())
 
 		By("asserting there are no onmetal machines in the returned list")
 		Expect(onmetalMachineList.Items).To(BeEmpty())
 
 		By("listing for onmetal network interfaces in the namespace")
-		onmetalNicList := &networkingv1alpha1.NetworkInterfaceList{}
+		onmetalNicList := &networkingv1beta1.NetworkInterfaceList{}
 		Expect(k8sClient.List(ctx, onmetalNicList, client.InNamespace(ns.Name))).To(Succeed())
 
 		By("asserting there is a single onmetal network interface with an owner reference to the onmetal machine")
 		Expect(onmetalNicList.Items).To(ConsistOf(
 			HaveField("ObjectMeta.OwnerReferences", ConsistOf(MatchFields(IgnoreExtras, Fields{
-				"APIVersion": Equal(computev1alpha1.SchemeGroupVersion.String()),
+				"APIVersion": Equal(computev1beta1.SchemeGroupVersion.String()),
 				"Kind":       Equal("Machine"),
 				"Name":       Equal(machineID),
 			}))),
 		))
 
 		By("listing for onmetal volumes in the namespace")
-		onmetalVolumeList := &storagev1alpha1.VolumeList{}
+		onmetalVolumeList := &storagev1beta1.VolumeList{}
 		Expect(k8sClient.List(ctx, onmetalVolumeList, client.InNamespace(ns.Name))).To(Succeed())
 
 		By("asserting there is a single onmetal volume with an owner reference to the onmetal machine")
 		Expect(onmetalVolumeList.Items).To(ConsistOf(
 			HaveField("ObjectMeta.OwnerReferences", ConsistOf(MatchFields(IgnoreExtras, Fields{
-				"APIVersion": Equal(computev1alpha1.SchemeGroupVersion.String()),
+				"APIVersion": Equal(computev1beta1.SchemeGroupVersion.String()),
 				"Kind":       Equal("Machine"),
 				"Name":       Equal(machineID),
 			}))),

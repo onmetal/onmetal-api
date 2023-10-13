@@ -18,8 +18,8 @@ import (
 	"context"
 	"fmt"
 
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -27,9 +27,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func (s *Server) getTargetOnmetalVolumePools(ctx context.Context) ([]storagev1alpha1.VolumePool, error) {
+func (s *Server) getTargetOnmetalVolumePools(ctx context.Context) ([]storagev1beta1.VolumePool, error) {
 	if s.volumePoolName != "" {
-		onmetalVolumePool := &storagev1alpha1.VolumePool{}
+		onmetalVolumePool := &storagev1beta1.VolumePool{}
 		onmetalVolumePoolKey := client.ObjectKey{Name: s.volumePoolName}
 		if err := s.client.Get(ctx, onmetalVolumePoolKey, onmetalVolumePool); err != nil {
 			if !apierrors.IsNotFound(err) {
@@ -39,7 +39,7 @@ func (s *Server) getTargetOnmetalVolumePools(ctx context.Context) ([]storagev1al
 		}
 	}
 
-	volumePoolList := &storagev1alpha1.VolumePoolList{}
+	volumePoolList := &storagev1beta1.VolumePoolList{}
 	if err := s.client.List(ctx, volumePoolList,
 		client.MatchingLabels(s.volumePoolSelector),
 	); err != nil {
@@ -48,7 +48,7 @@ func (s *Server) getTargetOnmetalVolumePools(ctx context.Context) ([]storagev1al
 	return volumePoolList.Items, nil
 }
 
-func (s *Server) gatherAvailableVolumeClassNames(onmetalVolumePools []storagev1alpha1.VolumePool) sets.Set[string] {
+func (s *Server) gatherAvailableVolumeClassNames(onmetalVolumePools []storagev1beta1.VolumePool) sets.Set[string] {
 	res := sets.New[string]()
 	for _, onmetalVolumePool := range onmetalVolumePools {
 		for _, availableVolumeClass := range onmetalVolumePool.Status.AvailableVolumeClasses {
@@ -58,11 +58,11 @@ func (s *Server) gatherAvailableVolumeClassNames(onmetalVolumePools []storagev1a
 	return res
 }
 
-func (s *Server) gatherVolumeClassQuantity(onmetalVolumePools []storagev1alpha1.VolumePool) map[string]*resource.Quantity {
+func (s *Server) gatherVolumeClassQuantity(onmetalVolumePools []storagev1beta1.VolumePool) map[string]*resource.Quantity {
 	res := map[string]*resource.Quantity{}
 	for _, onmetalVolumePool := range onmetalVolumePools {
 		for resourceName, resourceQuantity := range onmetalVolumePool.Status.Capacity {
-			if corev1alpha1.IsClassCountResource(resourceName) {
+			if corev1beta1.IsClassCountResource(resourceName) {
 				if _, ok := res[string(resourceName)]; !ok {
 					res[string(resourceName)] = resource.NewQuantity(0, resource.BinarySI)
 				}
@@ -75,9 +75,9 @@ func (s *Server) gatherVolumeClassQuantity(onmetalVolumePools []storagev1alpha1.
 
 func (s *Server) filterOnmetalVolumeClasses(
 	availableVolumeClassNames sets.Set[string],
-	volumeClasses []storagev1alpha1.VolumeClass,
-) []storagev1alpha1.VolumeClass {
-	var filtered []storagev1alpha1.VolumeClass
+	volumeClasses []storagev1beta1.VolumeClass,
+) []storagev1beta1.VolumeClass {
+	var filtered []storagev1beta1.VolumeClass
 	for _, volumeClass := range volumeClasses {
 		if !availableVolumeClassNames.Has(volumeClass.Name) {
 			continue
@@ -88,7 +88,7 @@ func (s *Server) filterOnmetalVolumeClasses(
 	return filtered
 }
 
-func (s *Server) convertOnmetalVolumeClassStatus(volumeClass *storagev1alpha1.VolumeClass, quantity *resource.Quantity) (*ori.VolumeClassStatus, error) {
+func (s *Server) convertOnmetalVolumeClassStatus(volumeClass *storagev1beta1.VolumeClass, quantity *resource.Quantity) (*ori.VolumeClassStatus, error) {
 	tps := volumeClass.Capabilities.TPS()
 	iops := volumeClass.Capabilities.IOPS()
 
@@ -125,7 +125,7 @@ func (s *Server) Status(ctx context.Context, req *ori.StatusRequest) (*ori.Statu
 	volumeClassQuantity := s.gatherVolumeClassQuantity(onmetalVolumePools)
 
 	log.V(1).Info("Listing onmetal volume classes")
-	onmetalVolumeClassList := &storagev1alpha1.VolumeClassList{}
+	onmetalVolumeClassList := &storagev1beta1.VolumeClassList{}
 	if err := s.client.List(ctx, onmetalVolumeClassList); err != nil {
 		return nil, fmt.Errorf("error listing onmetal volume classes: %w", err)
 	}
@@ -133,7 +133,7 @@ func (s *Server) Status(ctx context.Context, req *ori.StatusRequest) (*ori.Statu
 	availableOnmetalVolumeClasses := s.filterOnmetalVolumeClasses(availableOnmetalVolumeClassNames, onmetalVolumeClassList.Items)
 	volumeClassStatus := make([]*ori.VolumeClassStatus, 0, len(availableOnmetalVolumeClasses))
 	for _, onmetalVolumeClass := range availableOnmetalVolumeClasses {
-		quantity, ok := volumeClassQuantity[string(corev1alpha1.ClassCountFor(corev1alpha1.ClassTypeVolumeClass, onmetalVolumeClass.Name))]
+		quantity, ok := volumeClassQuantity[string(corev1beta1.ClassCountFor(corev1beta1.ClassTypeVolumeClass, onmetalVolumeClass.Name))]
 		if !ok {
 			log.V(1).Info("Ignored class - missing quantity", "VolumeClass", onmetalVolumeClass.Name)
 			continue

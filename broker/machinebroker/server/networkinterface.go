@@ -18,18 +18,18 @@ import (
 	"context"
 	"fmt"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	"github.com/onmetal/onmetal-api/utils/generic"
 	"golang.org/x/exp/slices"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func onmetalMachineNetworkInterfaceIndex(onmetalMachine *computev1alpha1.Machine, name string) int {
+func onmetalMachineNetworkInterfaceIndex(onmetalMachine *computev1beta1.Machine, name string) int {
 	return slices.IndexFunc(
 		onmetalMachine.Spec.NetworkInterfaces,
-		func(nic computev1alpha1.NetworkInterface) bool {
+		func(nic computev1beta1.NetworkInterface) bool {
 			return nic.Name == name
 		},
 	)
@@ -37,8 +37,8 @@ func onmetalMachineNetworkInterfaceIndex(onmetalMachine *computev1alpha1.Machine
 
 func (s *Server) bindOnmetalMachineNetworkInterface(
 	ctx context.Context,
-	onmetalMachine *computev1alpha1.Machine,
-	onmetalNetworkInterface *networkingv1alpha1.NetworkInterface,
+	onmetalMachine *computev1beta1.Machine,
+	onmetalNetworkInterface *networkingv1beta1.NetworkInterface,
 ) error {
 	baseOnmetalNetworkInterface := onmetalNetworkInterface.DeepCopy()
 	if err := ctrl.SetControllerReference(onmetalMachine, onmetalNetworkInterface, s.cluster.Scheme()); err != nil {
@@ -51,9 +51,9 @@ func (s *Server) bindOnmetalMachineNetworkInterface(
 func (s *Server) aggregateOnmetalNetworkInterface(
 	ctx context.Context,
 	rd client.Reader,
-	onmetalNic *networkingv1alpha1.NetworkInterface,
+	onmetalNic *networkingv1beta1.NetworkInterface,
 ) (*AggregateOnmetalNetworkInterface, error) {
-	onmetalNetwork := &networkingv1alpha1.Network{}
+	onmetalNetwork := &networkingv1beta1.Network{}
 	onmetalNetworkKey := client.ObjectKey{Namespace: s.cluster.Namespace(), Name: onmetalNic.Spec.NetworkRef.Name}
 	if err := rd.Get(ctx, onmetalNetworkKey, onmetalNetwork); err != nil {
 		return nil, fmt.Errorf("error getting onmetal network %s: %w", onmetalNic.Name, err)

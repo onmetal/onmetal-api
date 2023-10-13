@@ -18,14 +18,14 @@ import (
 	"context"
 	"fmt"
 
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func (s *Server) setOnmetalVolumeResources(ctx context.Context, onmetalVolume *storagev1alpha1.Volume, resources corev1alpha1.ResourceList) error {
+func (s *Server) setOnmetalVolumeResources(ctx context.Context, onmetalVolume *storagev1beta1.Volume, resources corev1beta1.ResourceList) error {
 	baseOnmetalVolume := onmetalVolume.DeepCopy()
 	onmetalVolume.Spec.Resources = resources
 
@@ -46,8 +46,8 @@ func (s *Server) ExpandVolume(ctx context.Context, req *ori.ExpandVolumeRequest)
 	}
 
 	log.V(1).Info("Expanding volume")
-	if err := s.setOnmetalVolumeResources(ctx, onmetalVolume.Volume, corev1alpha1.ResourceList{
-		corev1alpha1.ResourceStorage: *resource.NewQuantity(int64(req.Resources.StorageBytes), resource.DecimalSI),
+	if err := s.setOnmetalVolumeResources(ctx, onmetalVolume.Volume, corev1beta1.ResourceList{
+		corev1beta1.ResourceStorage: *resource.NewQuantity(int64(req.Resources.StorageBytes), resource.DecimalSI),
 	}); err != nil {
 		return nil, fmt.Errorf("failed to expand volume: %w", err)
 	}

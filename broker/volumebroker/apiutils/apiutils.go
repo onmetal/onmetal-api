@@ -20,8 +20,8 @@ import (
 	"fmt"
 
 	"github.com/onmetal/controller-utils/metautils"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
-	volumebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/volumebroker/api/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
+	volumebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/volumebroker/api/v1beta1"
 	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -65,15 +65,15 @@ func SetObjectMetadata(o metav1.Object, metadata *orimeta.ObjectMetadata) error 
 }
 
 func SetCreatedLabel(o metav1.Object) {
-	metautils.SetLabel(o, volumebrokerv1alpha1.CreatedLabel, "true")
+	metautils.SetLabel(o, volumebrokerv1beta1.CreatedLabel, "true")
 }
 
 func IsCreated(o metav1.Object) bool {
-	return metautils.HasLabel(o, volumebrokerv1alpha1.CreatedLabel)
+	return metautils.HasLabel(o, volumebrokerv1beta1.CreatedLabel)
 }
 
 func SetPurpose(o metav1.Object, purpose string) {
-	metautils.SetLabel(o, volumebrokerv1alpha1.PurposeLabel, purpose)
+	metautils.SetLabel(o, volumebrokerv1beta1.PurposeLabel, purpose)
 }
 
 func PatchControlledBy(ctx context.Context, c client.Client, owner, controlled client.Object) error {
@@ -102,14 +102,14 @@ func SetLabelsAnnotation(o metav1.Object, labels map[string]string) error {
 	if err != nil {
 		return fmt.Errorf("error marshalling labels: %w", err)
 	}
-	metautils.SetAnnotation(o, volumebrokerv1alpha1.LabelsAnnotation, string(data))
+	metautils.SetAnnotation(o, volumebrokerv1beta1.LabelsAnnotation, string(data))
 	return nil
 }
 
 func GetLabelsAnnotation(o metav1.Object) (map[string]string, error) {
-	data, ok := o.GetAnnotations()[volumebrokerv1alpha1.LabelsAnnotation]
+	data, ok := o.GetAnnotations()[volumebrokerv1beta1.LabelsAnnotation]
 	if !ok {
-		return nil, fmt.Errorf("object has no labels at %s", volumebrokerv1alpha1.LabelsAnnotation)
+		return nil, fmt.Errorf("object has no labels at %s", volumebrokerv1beta1.LabelsAnnotation)
 	}
 
 	var labels map[string]string
@@ -125,14 +125,14 @@ func SetAnnotationsAnnotation(o metav1.Object, annotations map[string]string) er
 	if err != nil {
 		return fmt.Errorf("error marshalling annotations: %w", err)
 	}
-	metautils.SetAnnotation(o, volumebrokerv1alpha1.AnnotationsAnnotation, string(data))
+	metautils.SetAnnotation(o, volumebrokerv1beta1.AnnotationsAnnotation, string(data))
 	return nil
 }
 
 func GetAnnotationsAnnotation(o metav1.Object) (map[string]string, error) {
-	data, ok := o.GetAnnotations()[volumebrokerv1alpha1.AnnotationsAnnotation]
+	data, ok := o.GetAnnotations()[volumebrokerv1beta1.AnnotationsAnnotation]
 	if !ok {
-		return nil, fmt.Errorf("object has no annotations at %s", volumebrokerv1alpha1.AnnotationsAnnotation)
+		return nil, fmt.Errorf("object has no annotations at %s", volumebrokerv1beta1.AnnotationsAnnotation)
 	}
 
 	var annotations map[string]string
@@ -143,11 +143,11 @@ func GetAnnotationsAnnotation(o metav1.Object) (map[string]string, error) {
 	return annotations, nil
 }
 
-func SetVolumeManagerLabel(volume *storagev1alpha1.Volume, manager string) {
-	metautils.SetLabel(volume, volumebrokerv1alpha1.ManagerLabel, manager)
+func SetVolumeManagerLabel(volume *storagev1beta1.Volume, manager string) {
+	metautils.SetLabel(volume, volumebrokerv1beta1.ManagerLabel, manager)
 }
 
 func IsManagedBy(o metav1.Object, manager string) bool {
-	actual, ok := o.GetLabels()[volumebrokerv1alpha1.ManagerLabel]
+	actual, ok := o.GetLabels()[volumebrokerv1beta1.ManagerLabel]
 	return ok && actual == manager
 }

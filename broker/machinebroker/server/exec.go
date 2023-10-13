@@ -20,7 +20,7 @@ import (
 	"net/http"
 
 	"github.com/go-logr/logr"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	"github.com/onmetal/onmetal-api/client-go/onmetalapi"
 	onmetalapiclientgoscheme "github.com/onmetal/onmetal-api/client-go/onmetalapi/scheme"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
@@ -69,7 +69,7 @@ func (s *Server) ServeExec(w http.ResponseWriter, req *http.Request, token strin
 		Resource("machines").
 		Name(request.MachineId).
 		SubResource("exec").
-		VersionedParams(&computev1alpha1.MachineExecOptions{}, onmetalapiclientgoscheme.ParameterCodec).
+		VersionedParams(&computev1beta1.MachineExecOptions{}, onmetalapiclientgoscheme.ParameterCodec).
 		URL()
 
 	executor, err := remotecommand.NewSPDYExecutor(s.cluster.Config(), http.MethodGet, reqURL)

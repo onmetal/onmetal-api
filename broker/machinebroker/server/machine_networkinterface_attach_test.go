@@ -15,9 +15,9 @@
 package server_test
 
 import (
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -56,7 +56,7 @@ var _ = Describe("AttachNetworkInterface", func() {
 		})).Error().NotTo(HaveOccurred())
 
 		By("getting the onmetal machine")
-		onmetalMachine := &computev1alpha1.Machine{}
+		onmetalMachine := &computev1beta1.Machine{}
 		onmetalMachineKey := client.ObjectKey{Namespace: ns.Name, Name: machineID}
 		Expect(k8sClient.Get(ctx, onmetalMachineKey, onmetalMachine)).To(Succeed())
 
@@ -71,27 +71,27 @@ var _ = Describe("AttachNetworkInterface", func() {
 		})))
 
 		By("getting the corresponding onmetal network interface")
-		nic := &networkingv1alpha1.NetworkInterface{}
+		nic := &networkingv1beta1.NetworkInterface{}
 		nicName := onmetalMachine.Spec.NetworkInterfaces[0].NetworkInterfaceRef.Name
 		nicKey := client.ObjectKey{Namespace: ns.Name, Name: nicName}
 		Expect(k8sClient.Get(ctx, nicKey, nic)).To(Succeed())
 
 		By("inspecting the onmetal network interface")
-		Expect(nic.Spec.IPs).To(Equal([]networkingv1alpha1.IPSource{
-			{Value: commonv1alpha1.MustParseNewIP("10.0.0.1")},
+		Expect(nic.Spec.IPs).To(Equal([]networkingv1beta1.IPSource{
+			{Value: commonv1beta1.MustParseNewIP("10.0.0.1")},
 		}))
 
 		By("getting the referenced onmetal network")
-		network := &networkingv1alpha1.Network{}
+		network := &networkingv1beta1.Network{}
 		networkKey := client.ObjectKey{Namespace: ns.Name, Name: nic.Spec.NetworkRef.Name}
 		Expect(k8sClient.Get(ctx, networkKey, network)).To(Succeed())
 
 		By("inspecting the onmetal network")
-		Expect(network.Spec).To(Equal(networkingv1alpha1.NetworkSpec{
+		Expect(network.Spec).To(Equal(networkingv1beta1.NetworkSpec{
 			ProviderID: "network-id",
 		}))
-		Expect(network.Status).To(Equal(networkingv1alpha1.NetworkStatus{
-			State: networkingv1alpha1.NetworkStateAvailable,
+		Expect(network.Status).To(Equal(networkingv1beta1.NetworkStatus{
+			State: networkingv1beta1.NetworkStateAvailable,
 		}))
 	})
 })

@@ -20,7 +20,7 @@ import (
 	"fmt"
 
 	"github.com/onmetal/controller-utils/metautils"
-	machinebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1alpha1"
+	machinebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1beta1"
 	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -65,11 +65,11 @@ func SetObjectMetadata(o metav1.Object, metadata *orimeta.ObjectMetadata) error 
 }
 
 func SetCreatedLabel(o metav1.Object) {
-	metautils.SetLabel(o, machinebrokerv1alpha1.CreatedLabel, "true")
+	metautils.SetLabel(o, machinebrokerv1beta1.CreatedLabel, "true")
 }
 
 func IsCreated(o metav1.Object) bool {
-	return metautils.HasLabel(o, machinebrokerv1alpha1.CreatedLabel)
+	return metautils.HasLabel(o, machinebrokerv1beta1.CreatedLabel)
 }
 
 func PatchControlledBy(ctx context.Context, c client.Client, owner, controlled client.Object) error {
@@ -126,14 +126,14 @@ func SetLabelsAnnotation(o metav1.Object, labels map[string]string) error {
 	if err != nil {
 		return fmt.Errorf("error marshalling labels: %w", err)
 	}
-	metautils.SetAnnotation(o, machinebrokerv1alpha1.LabelsAnnotation, string(data))
+	metautils.SetAnnotation(o, machinebrokerv1beta1.LabelsAnnotation, string(data))
 	return nil
 }
 
 func GetLabelsAnnotation(o metav1.Object) (map[string]string, error) {
-	data, ok := o.GetAnnotations()[machinebrokerv1alpha1.LabelsAnnotation]
+	data, ok := o.GetAnnotations()[machinebrokerv1beta1.LabelsAnnotation]
 	if !ok {
-		return nil, fmt.Errorf("object has no labels at %s", machinebrokerv1alpha1.LabelsAnnotation)
+		return nil, fmt.Errorf("object has no labels at %s", machinebrokerv1beta1.LabelsAnnotation)
 	}
 
 	return DecodeLabelsAnnotations(data)
@@ -161,20 +161,20 @@ func SetAnnotationsAnnotation(o metav1.Object, annotations map[string]string) er
 		return err
 	}
 
-	metautils.SetAnnotation(o, machinebrokerv1alpha1.AnnotationsAnnotation, annotation)
+	metautils.SetAnnotation(o, machinebrokerv1beta1.AnnotationsAnnotation, annotation)
 	return nil
 }
 
 func GetAnnotationsAnnotation(o metav1.Object) (map[string]string, error) {
-	data, ok := o.GetAnnotations()[machinebrokerv1alpha1.AnnotationsAnnotation]
+	data, ok := o.GetAnnotations()[machinebrokerv1beta1.AnnotationsAnnotation]
 	if !ok {
-		return nil, fmt.Errorf("object has no annotations at %s", machinebrokerv1alpha1.AnnotationsAnnotation)
+		return nil, fmt.Errorf("object has no annotations at %s", machinebrokerv1beta1.AnnotationsAnnotation)
 	}
 
 	return DecodeAnnotationsAnnotation(data)
 }
 
 func IsManagedBy(o metav1.Object, manager string) bool {
-	actual, ok := o.GetLabels()[machinebrokerv1alpha1.ManagerLabel]
+	actual, ok := o.GetLabels()[machinebrokerv1beta1.ManagerLabel]
 	return ok && actual == manager
 }

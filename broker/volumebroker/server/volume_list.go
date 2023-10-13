@@ -18,9 +18,9 @@ import (
 	"context"
 	"fmt"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/common"
-	volumebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/volumebroker/api/v1alpha1"
+	volumebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/volumebroker/api/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -34,14 +34,14 @@ func (s *Server) listManagedAndCreated(ctx context.Context, list client.ObjectLi
 	return s.client.List(ctx, list,
 		client.InNamespace(s.namespace),
 		client.MatchingLabels{
-			volumebrokerv1alpha1.ManagerLabel: volumebrokerv1alpha1.VolumeBrokerManager,
-			volumebrokerv1alpha1.CreatedLabel: "true",
+			volumebrokerv1beta1.ManagerLabel: volumebrokerv1beta1.VolumeBrokerManager,
+			volumebrokerv1beta1.CreatedLabel: "true",
 		},
 	)
 }
 
 func (s *Server) listAggregateOnmetalVolumes(ctx context.Context) ([]AggregateOnmetalVolume, error) {
-	onmetalVolumeList := &storagev1alpha1.VolumeList{}
+	onmetalVolumeList := &storagev1beta1.VolumeList{}
 	if err := s.listManagedAndCreated(ctx, onmetalVolumeList); err != nil {
 		return nil, fmt.Errorf("error listing onmetal volumes: %w", err)
 	}
@@ -88,10 +88,10 @@ func (s *Server) clientGetSecretFunc(ctx context.Context) func(string) (*corev1.
 }
 
 func (s *Server) getOnmetalVolumeAccessSecretIfRequired(
-	onmetalVolume *storagev1alpha1.Volume,
+	onmetalVolume *storagev1beta1.Volume,
 	getSecret func(string) (*corev1.Secret, error),
 ) (*corev1.Secret, error) {
-	if onmetalVolume.Status.State != storagev1alpha1.VolumeStateAvailable {
+	if onmetalVolume.Status.State != storagev1beta1.VolumeStateAvailable {
 		return nil, nil
 	}
 
@@ -110,7 +110,7 @@ func (s *Server) getOnmetalVolumeAccessSecretIfRequired(
 }
 
 func (s *Server) getOnmetalVolumeEncryptionSecretIfRequired(
-	onmetalVolume *storagev1alpha1.Volume,
+	onmetalVolume *storagev1beta1.Volume,
 	getSecret func(string) (*corev1.Secret, error),
 ) (*corev1.Secret, error) {
 	if onmetalVolume.Spec.Encryption == nil {
@@ -122,7 +122,7 @@ func (s *Server) getOnmetalVolumeEncryptionSecretIfRequired(
 }
 
 func (s *Server) aggregateOnmetalVolume(
-	onmetalVolume *storagev1alpha1.Volume,
+	onmetalVolume *storagev1beta1.Volume,
 	getSecret func(string) (*corev1.Secret, error),
 ) (*AggregateOnmetalVolume, error) {
 	accessSecret, err := s.getOnmetalVolumeAccessSecretIfRequired(onmetalVolume, getSecret)
@@ -143,7 +143,7 @@ func (s *Server) aggregateOnmetalVolume(
 }
 
 func (s *Server) getAggregateOnmetalVolume(ctx context.Context, id string) (*AggregateOnmetalVolume, error) {
-	onmetalVolume := &storagev1alpha1.Volume{}
+	onmetalVolume := &storagev1beta1.Volume{}
 	if err := s.getManagedAndCreated(ctx, id, onmetalVolume); err != nil {
 		if !apierrors.IsNotFound(err) {
 			return nil, fmt.Errorf("error getting onmetal volume %s: %w", id, err)

@@ -19,13 +19,13 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	computecomputev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/common/cleaner"
-	machinebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1alpha1"
+	machinebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/apiutils"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
-	machinepoolletv1alpha1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1alpha1"
+	machinepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	"github.com/onmetal/onmetal-api/utils/maps"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -34,7 +34,7 @@ import (
 type OnmetalMachineConfig struct {
 	Labels                  map[string]string
 	Annotations             map[string]string
-	Power                   computev1alpha1.Power
+	Power                   computecomputev1beta1.Power
 	MachineClassName        string
 	Image                   string
 	IgnitionData            []byte
@@ -49,12 +49,12 @@ func (s *Server) onmetalMachinePoolRef() *corev1.LocalObjectReference {
 	return &corev1.LocalObjectReference{Name: s.cluster.MachinePoolName()}
 }
 
-func (s *Server) prepareOnmetalMachinePower(power ori.Power) (computev1alpha1.Power, error) {
+func (s *Server) prepareOnmetalMachinePower(power ori.Power) (computecomputev1beta1.Power, error) {
 	switch power {
 	case ori.Power_POWER_ON:
-		return computev1alpha1.PowerOn, nil
+		return computecomputev1beta1.PowerOn, nil
 	case ori.Power_POWER_OFF:
-		return computev1alpha1.PowerOff, nil
+		return computecomputev1beta1.PowerOff, nil
 	default:
 		return "", fmt.Errorf("unknown power state %v", power)
 	}
@@ -64,12 +64,12 @@ func (s *Server) prepareOnmetalMachineLabels(machine *ori.Machine) (map[string]s
 	labels := make(map[string]string)
 
 	for downwardAPILabelName, defaultLabelName := range s.brokerDownwardAPILabels {
-		value := machine.GetMetadata().GetLabels()[machinepoolletv1alpha1.DownwardAPILabel(downwardAPILabelName)]
+		value := machine.GetMetadata().GetLabels()[machinepoolletv1beta1.DownwardAPILabel(downwardAPILabelName)]
 		if value == "" {
 			value = machine.GetMetadata().GetLabels()[defaultLabelName]
 		}
 		if value != "" {
-			labels[machinepoolletv1alpha1.DownwardAPILabel(downwardAPILabelName)] = value
+			labels[machinepoolletv1beta1.DownwardAPILabel(downwardAPILabelName)] = value
 		}
 	}
 
@@ -88,8 +88,8 @@ func (s *Server) prepareOnmetalMachineAnnotations(machine *ori.Machine) (map[str
 	}
 
 	return map[string]string{
-		machinebrokerv1alpha1.AnnotationsAnnotation: annotationsValue,
-		machinebrokerv1alpha1.LabelsAnnotation:      labelsValue,
+		machinebrokerv1beta1.AnnotationsAnnotation: annotationsValue,
+		machinebrokerv1beta1.LabelsAnnotation:      labelsValue,
 	}, nil
 }
 
@@ -155,7 +155,7 @@ func (s *Server) createOnmetalMachine(
 	defer cleanup()
 
 	var (
-		ignitionRef    *commonv1alpha1.SecretKeySelector
+		ignitionRef    *commonv1beta1.SecretKeySelector
 		ignitionSecret *corev1.Secret
 	)
 	if ignitionData := cfg.IgnitionData; len(ignitionData) > 0 {
@@ -165,9 +165,9 @@ func (s *Server) createOnmetalMachine(
 				Namespace: s.cluster.Namespace(),
 				Name:      s.cluster.IDGen().Generate(),
 			},
-			Type: computev1alpha1.SecretTypeIgnition,
+			Type: computecomputev1beta1.SecretTypeIgnition,
 			Data: map[string][]byte{
-				computev1alpha1.DefaultIgnitionKey: ignitionData,
+				computecomputev1beta1.DefaultIgnitionKey: ignitionData,
 			},
 		}
 		if err := s.cluster.Client().Create(ctx, ignitionSecret); err != nil {
@@ -175,11 +175,11 @@ func (s *Server) createOnmetalMachine(
 		}
 		c.Add(cleaner.CleanupObject(s.cluster.Client(), ignitionSecret))
 
-		ignitionRef = &commonv1alpha1.SecretKeySelector{Name: ignitionSecret.Name}
+		ignitionRef = &commonv1beta1.SecretKeySelector{Name: ignitionSecret.Name}
 	}
 
 	var (
-		onmetalMachineNics []computev1alpha1.NetworkInterface
+		onmetalMachineNics []computecomputev1beta1.NetworkInterface
 		aggOnmetalNics     = make(map[string]*AggregateOnmetalNetworkInterface)
 	)
 	for _, nicCfg := range cfg.NetworkInterfaceConfigs {
@@ -193,7 +193,7 @@ func (s *Server) createOnmetalMachine(
 	}
 
 	var (
-		onmetalMachineVolumes []computev1alpha1.Volume
+		onmetalMachineVolumes []computecomputev1beta1.Volume
 		aggOnmetalVolumes     = make(map[string]*AggregateOnmetalVolume)
 	)
 	for _, volumeCfg := range cfg.VolumeConfigs {
@@ -208,16 +208,16 @@ func (s *Server) createOnmetalMachine(
 		}
 	}
 
-	onmetalMachine := &computev1alpha1.Machine{
+	onmetalMachine := &computecomputev1beta1.Machine{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace:   s.cluster.Namespace(),
 			Name:        s.cluster.IDGen().Generate(),
 			Annotations: cfg.Annotations,
 			Labels: maps.AppendMap(cfg.Labels, map[string]string{
-				machinebrokerv1alpha1.ManagerLabel: machinebrokerv1alpha1.MachineBrokerManager,
+				machinebrokerv1beta1.ManagerLabel: machinebrokerv1beta1.MachineBrokerManager,
 			}),
 		},
-		Spec: computev1alpha1.MachineSpec{
+		Spec: computecomputev1beta1.MachineSpec{
 			MachineClassRef:     corev1.LocalObjectReference{Name: cfg.MachineClassName},
 			MachinePoolSelector: s.cluster.MachinePoolSelector(),
 			MachinePoolRef:      s.onmetalMachinePoolRef(),

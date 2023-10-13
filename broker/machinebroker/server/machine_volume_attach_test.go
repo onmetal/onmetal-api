@@ -15,8 +15,8 @@
 package server_test
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -66,7 +66,7 @@ var _ = Describe("AttachVolume", func() {
 		})).Error().ShouldNot(HaveOccurred())
 
 		By("getting the onmetal machine")
-		onmetalMachine := &computev1alpha1.Machine{}
+		onmetalMachine := &computev1beta1.Machine{}
 		onmetalMachineKey := client.ObjectKey{Namespace: ns.Name, Name: machineID}
 		Expect(k8sClient.Get(ctx, onmetalMachineKey, onmetalMachine)).To(Succeed())
 
@@ -82,7 +82,7 @@ var _ = Describe("AttachVolume", func() {
 		})))
 
 		By("getting the corresponding onmetal volume")
-		volume := &storagev1alpha1.Volume{}
+		volume := &storagev1beta1.Volume{}
 		volumeName := onmetalMachine.Spec.Volumes[0].VolumeRef.Name
 		volumeKey := client.ObjectKey{Namespace: ns.Name, Name: volumeName}
 		Expect(k8sClient.Get(ctx, volumeKey, volume)).To(Succeed())
@@ -107,7 +107,7 @@ var _ = Describe("AttachVolume", func() {
 
 		By("inspecting the onmetal volume access secret")
 		Expect(metav1.IsControlledBy(secret, volume)).To(BeTrue(), "secret should be controlled by volume")
-		Expect(secret.Type).To(Equal(storagev1alpha1.SecretTypeVolumeAuth))
+		Expect(secret.Type).To(Equal(storagev1beta1.SecretTypeVolumeAuth))
 		Expect(secret.Data).To(Equal(map[string][]byte{"key": []byte("supersecret")}))
 	})
 })

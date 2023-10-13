@@ -17,8 +17,8 @@ package server
 import (
 	"fmt"
 
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/volumebroker/apiutils"
 	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
 )
@@ -59,20 +59,20 @@ func (s *Server) convertAggregateOnmetalVolume(volume *AggregateOnmetalVolume) (
 	}, nil
 }
 
-var onmetalVolumeStateToORIState = map[storagev1alpha1.VolumeState]ori.VolumeState{
-	storagev1alpha1.VolumeStatePending:   ori.VolumeState_VOLUME_PENDING,
-	storagev1alpha1.VolumeStateAvailable: ori.VolumeState_VOLUME_AVAILABLE,
-	storagev1alpha1.VolumeStateError:     ori.VolumeState_VOLUME_ERROR,
+var onmetalVolumeStateToORIState = map[storagev1beta1.VolumeState]ori.VolumeState{
+	storagev1beta1.VolumeStatePending:   ori.VolumeState_VOLUME_PENDING,
+	storagev1beta1.VolumeStateAvailable: ori.VolumeState_VOLUME_AVAILABLE,
+	storagev1beta1.VolumeStateError:     ori.VolumeState_VOLUME_ERROR,
 }
 
-func (s *Server) convertOnmetalVolumeState(state storagev1alpha1.VolumeState) (ori.VolumeState, error) {
+func (s *Server) convertOnmetalVolumeState(state storagev1beta1.VolumeState) (ori.VolumeState, error) {
 	if state, ok := onmetalVolumeStateToORIState[state]; ok {
 		return state, nil
 	}
 	return 0, fmt.Errorf("unknown onmetal volume state %q", state)
 }
 
-func (s *Server) convertOnmetalVolumeResources(resources corev1alpha1.ResourceList) (*ori.VolumeResources, error) {
+func (s *Server) convertOnmetalVolumeResources(resources corev1beta1.ResourceList) (*ori.VolumeResources, error) {
 	storage := resources.Storage()
 	if storage.IsZero() {
 		return nil, fmt.Errorf("volume does not specify storage resource")
@@ -94,7 +94,7 @@ func (s *Server) convertOnmetalVolumeEncryption(volume *AggregateOnmetalVolume) 
 }
 
 func (s *Server) convertOnmetalVolumeAccess(volume *AggregateOnmetalVolume) (*ori.VolumeAccess, error) {
-	if volume.Volume.Status.State != storagev1alpha1.VolumeStateAvailable {
+	if volume.Volume.Status.State != storagev1beta1.VolumeStateAvailable {
 		return nil, nil
 	}
 

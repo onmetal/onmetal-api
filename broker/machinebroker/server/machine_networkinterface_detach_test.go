@@ -15,8 +15,8 @@
 package server_test
 
 import (
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -58,7 +58,7 @@ var _ = Describe("DetachNetworkInterface", func() {
 		})).Error().NotTo(HaveOccurred())
 
 		By("getting the onmetal machine")
-		onmetalMachine := &computev1alpha1.Machine{}
+		onmetalMachine := &computev1beta1.Machine{}
 		onmetalMachineKey := client.ObjectKey{Namespace: ns.Name, Name: machineID}
 		Expect(k8sClient.Get(ctx, onmetalMachineKey, onmetalMachine)).To(Succeed())
 
@@ -66,20 +66,20 @@ var _ = Describe("DetachNetworkInterface", func() {
 		Expect(onmetalMachine.Spec.NetworkInterfaces).To(BeEmpty())
 
 		By("listing for any onmetal network interfaces in the namespace")
-		nicList := &networkingv1alpha1.NetworkInterfaceList{}
+		nicList := &networkingv1beta1.NetworkInterfaceList{}
 		Expect(k8sClient.List(ctx, nicList, client.InNamespace(ns.Name))).To(Succeed())
 
 		By("asserting the list to be empty")
 		Expect(nicList.Items).To(BeEmpty())
 
 		By("listing all onmetal networks in the namespace")
-		networkList := &networkingv1alpha1.NetworkList{}
+		networkList := &networkingv1beta1.NetworkList{}
 		Expect(k8sClient.List(ctx, networkList, client.InNamespace(ns.Name))).To(Succeed())
 
 		By("asserting the list contains a single onmetal network with an owner reference to a network interface")
 		Expect(networkList.Items).To(ConsistOf(
 			HaveField("ObjectMeta.OwnerReferences", ConsistOf(MatchFields(IgnoreExtras, Fields{
-				"APIVersion": Equal(networkingv1alpha1.SchemeGroupVersion.String()),
+				"APIVersion": Equal(networkingv1beta1.SchemeGroupVersion.String()),
 				"Kind":       Equal("NetworkInterface"),
 			}))),
 		))

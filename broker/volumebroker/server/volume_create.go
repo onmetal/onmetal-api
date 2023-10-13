@@ -19,9 +19,9 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
-	volumebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/volumebroker/api/v1alpha1"
+	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
+	volumebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/volumebroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/volumebroker/apiutils"
 	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
@@ -31,7 +31,7 @@ import (
 )
 
 type AggregateOnmetalVolume struct {
-	Volume           *storagev1alpha1.Volume
+	Volume           *storagev1beta1.Volume
 	EncryptionSecret *corev1.Secret
 	AccessSecret     *corev1.Secret
 }
@@ -54,29 +54,29 @@ func (s *Server) getOnmetalVolumeConfig(_ context.Context, volume *ori.Volume) (
 			Type: corev1.SecretTypeOpaque,
 			Data: encryption.SecretData,
 		}
-		apiutils.SetPurpose(encryptionSecret, volumebrokerv1alpha1.VolumeEncryptionPurpose)
+		apiutils.SetPurpose(encryptionSecret, volumebrokerv1beta1.VolumeEncryptionPurpose)
 	}
 
-	var encryption *storagev1alpha1.VolumeEncryption
+	var encryption *storagev1beta1.VolumeEncryption
 	if encryptionSecret != nil {
-		encryption = &storagev1alpha1.VolumeEncryption{
+		encryption = &storagev1beta1.VolumeEncryption{
 			SecretRef: corev1.LocalObjectReference{
 				Name: encryptionSecret.Name,
 			},
 		}
 	}
 
-	onmetalVolume := &storagev1alpha1.Volume{
+	onmetalVolume := &storagev1beta1.Volume{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: s.namespace,
 			Name:      s.idGen.Generate(),
 		},
-		Spec: storagev1alpha1.VolumeSpec{
+		Spec: storagev1beta1.VolumeSpec{
 			VolumeClassRef:     &corev1.LocalObjectReference{Name: volume.Spec.Class},
 			VolumePoolSelector: s.volumePoolSelector,
 			VolumePoolRef:      volumePoolRef,
-			Resources: corev1alpha1.ResourceList{
-				corev1alpha1.ResourceStorage: *resource.NewQuantity(int64(volume.Spec.Resources.StorageBytes), resource.DecimalSI),
+			Resources: corev1beta1.ResourceList{
+				corev1beta1.ResourceStorage: *resource.NewQuantity(int64(volume.Spec.Resources.StorageBytes), resource.DecimalSI),
 			},
 			Image:              volume.Spec.Image,
 			ImagePullSecretRef: nil, // TODO: Fill if necessary
@@ -86,7 +86,7 @@ func (s *Server) getOnmetalVolumeConfig(_ context.Context, volume *ori.Volume) (
 	if err := apiutils.SetObjectMetadata(onmetalVolume, volume.Metadata); err != nil {
 		return nil, err
 	}
-	apiutils.SetVolumeManagerLabel(onmetalVolume, volumebrokerv1alpha1.VolumeBrokerManager)
+	apiutils.SetVolumeManagerLabel(onmetalVolume, volumebrokerv1beta1.VolumeBrokerManager)
 
 	return &AggregateOnmetalVolume{
 		Volume:           onmetalVolume,

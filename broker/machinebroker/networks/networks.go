@@ -21,9 +21,9 @@ import (
 	"sync"
 
 	"github.com/go-logr/logr"
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	machinebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	machinebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/cluster"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/rand"
@@ -53,21 +53,21 @@ func NewManager(cluster cluster.Cluster) *Manager {
 }
 
 type waiter struct {
-	network *networkingv1alpha1.Network
+	network *networkingv1beta1.Network
 	error   error
 	done    chan struct{}
 }
 
-func (e *Manager) getNetworkForProviderID(ctx context.Context, providerID string) (*networkingv1alpha1.Network, error) {
-	networkList := &networkingv1alpha1.NetworkList{}
+func (e *Manager) getNetworkForProviderID(ctx context.Context, providerID string) (*networkingv1beta1.Network, error) {
+	networkList := &networkingv1beta1.NetworkList{}
 	if err := e.cluster.Client().List(ctx, networkList,
 		client.InNamespace(e.cluster.Namespace()),
-		client.MatchingLabels{machinebrokerv1alpha1.ManagerLabel: machinebrokerv1alpha1.MachineBrokerManager},
+		client.MatchingLabels{machinebrokerv1beta1.ManagerLabel: machinebrokerv1beta1.MachineBrokerManager},
 	); err != nil {
 		return nil, fmt.Errorf("error listing networks: %w", err)
 	}
 
-	var matching *networkingv1alpha1.Network
+	var matching *networkingv1beta1.Network
 	for i := range networkList.Items {
 		network := &networkList.Items[i]
 		if network.Spec.ProviderID != providerID {
@@ -92,7 +92,7 @@ func (e *Manager) providerIDHash(providerID string) string {
 	return rand.SafeEncodeString(fmt.Sprint(h.Sum32()))
 }
 
-func (e *Manager) getOrCreateNetworkForProviderID(ctx context.Context, log logr.Logger, providerID string) (*networkingv1alpha1.Network, error) {
+func (e *Manager) getOrCreateNetworkForProviderID(ctx context.Context, log logr.Logger, providerID string) (*networkingv1beta1.Network, error) {
 	network, err := e.getNetworkForProviderID(ctx, providerID)
 	if err != nil {
 		return nil, fmt.Errorf("error getting network for providerID: %w", err)
@@ -103,7 +103,7 @@ func (e *Manager) getOrCreateNetworkForProviderID(ctx context.Context, log logr.
 	}
 
 	log.V(1).Info("No network found for providerID, creating a new one")
-	network = &networkingv1alpha1.Network{
+	network = &networkingv1beta1.Network{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: e.cluster.Namespace(),
 			// TODO: Make this evaluator use a cache and include a collision count in the providerID hash, use
@@ -111,13 +111,13 @@ func (e *Manager) getOrCreateNetworkForProviderID(ctx context.Context, log logr.
 			// Kubernetes' deployment controller.
 			GenerateName: fmt.Sprintf("net-%s-", e.providerIDHash(providerID)),
 			Annotations: map[string]string{
-				commonv1alpha1.ManagedByAnnotation: machinebrokerv1alpha1.MachineBrokerManager,
+				commonv1beta1.ManagedByAnnotation: machinebrokerv1beta1.MachineBrokerManager,
 			},
 			Labels: map[string]string{
-				machinebrokerv1alpha1.ManagerLabel: machinebrokerv1alpha1.MachineBrokerManager,
+				machinebrokerv1beta1.ManagerLabel: machinebrokerv1beta1.MachineBrokerManager,
 			},
 		},
-		Spec: networkingv1alpha1.NetworkSpec{
+		Spec: networkingv1beta1.NetworkSpec{
 			ProviderID: providerID,
 		},
 	}
@@ -127,23 +127,23 @@ func (e *Manager) getOrCreateNetworkForProviderID(ctx context.Context, log logr.
 	return network, nil
 }
 
-func (e *Manager) setNetworkAsAvailable(ctx context.Context, network *networkingv1alpha1.Network) error {
+func (e *Manager) setNetworkAsAvailable(ctx context.Context, network *networkingv1beta1.Network) error {
 	baseNetwork := network.DeepCopy()
-	network.Status.State = networkingv1alpha1.NetworkStateAvailable
+	network.Status.State = networkingv1beta1.NetworkStateAvailable
 	if err := e.cluster.Client().Status().Patch(ctx, network, client.MergeFrom(baseNetwork)); err != nil {
 		return fmt.Errorf("error patching network status: %w", err)
 	}
 	return nil
 }
 
-func (e *Manager) doWork(ctx context.Context, providerID string) (*networkingv1alpha1.Network, error) {
+func (e *Manager) doWork(ctx context.Context, providerID string) (*networkingv1beta1.Network, error) {
 	log := ctrl.LoggerFrom(ctx)
 	network, err := e.getOrCreateNetworkForProviderID(ctx, log, providerID)
 	if err != nil {
 		return nil, fmt.Errorf("error getting / creating network for providerID: %w", err)
 	}
 
-	if network.Status.State != networkingv1alpha1.NetworkStateAvailable {
+	if network.Status.State != networkingv1beta1.NetworkStateAvailable {
 		log.V(1).Info("Setting network state to available")
 		if err := e.setNetworkAsAvailable(ctx, network); err != nil {
 			return nil, fmt.Errorf("error setting network as available: %w", err)
@@ -215,7 +215,7 @@ func (e *Manager) getOrCreateWaiter(providerID string) *waiter {
 	return w
 }
 
-func (e *Manager) emit(providerID string, network *networkingv1alpha1.Network, err error) {
+func (e *Manager) emit(providerID string, network *networkingv1beta1.Network, err error) {
 	e.waitersByProviderIDMu.Lock()
 	defer e.waitersByProviderIDMu.Unlock()
 
@@ -229,7 +229,7 @@ func (e *Manager) emit(providerID string, network *networkingv1alpha1.Network, e
 	close(w.done)
 }
 
-func (e *Manager) GetNetwork(ctx context.Context, providerID string) (*networkingv1alpha1.Network, error) {
+func (e *Manager) GetNetwork(ctx context.Context, providerID string) (*networkingv1beta1.Network, error) {
 	w := e.getOrCreateWaiter(providerID)
 	select {
 	case <-ctx.Done():

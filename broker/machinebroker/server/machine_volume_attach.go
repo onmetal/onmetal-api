@@ -19,11 +19,11 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
+	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/common/cleaner"
-	machinebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1alpha1"
+	machinebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	metautils "github.com/onmetal/onmetal-api/utils/meta"
 	corev1 "k8s.io/api/core/v1"
@@ -89,25 +89,25 @@ func (s *Server) createOnmetalVolume(
 	c *cleaner.Cleaner,
 	optOnmetalMachine client.Object,
 	cfg *OnmetalVolumeConfig,
-) (onmetalMachineVolume *computev1alpha1.Volume, aggOnmetalVolume *AggregateOnmetalVolume, retErr error) {
-	var onmetalVolumeSrc computev1alpha1.VolumeSource
+) (onmetalMachineVolume *computev1beta1.Volume, aggOnmetalVolume *AggregateOnmetalVolume, retErr error) {
+	var onmetalVolumeSrc computev1beta1.VolumeSource
 	switch {
 	case cfg.Remote != nil:
 		log.V(1).Info("Creating onmetal volume")
 		remote := cfg.Remote
-		onmetalVolume := &storagev1alpha1.Volume{
+		onmetalVolume := &storagev1beta1.Volume{
 			ObjectMeta: metav1.ObjectMeta{
 				Namespace:       s.cluster.Namespace(),
 				Name:            s.cluster.IDGen().Generate(),
 				OwnerReferences: s.optionalOwnerReferences(onmetalMachineGVK, optOnmetalMachine),
 				Annotations: map[string]string{
-					commonv1alpha1.ManagedByAnnotation: machinebrokerv1alpha1.MachineBrokerManager,
+					commonv1beta1.ManagedByAnnotation: machinebrokerv1beta1.MachineBrokerManager,
 				},
 				Labels: map[string]string{
-					machinebrokerv1alpha1.ManagerLabel: machinebrokerv1alpha1.MachineBrokerManager,
+					machinebrokerv1beta1.ManagerLabel: machinebrokerv1beta1.MachineBrokerManager,
 				},
 			},
-			Spec: storagev1alpha1.VolumeSpec{
+			Spec: storagev1beta1.VolumeSpec{
 				ClaimRef: s.optionalLocalUIDReference(optOnmetalMachine),
 			},
 		}
@@ -128,15 +128,15 @@ func (s *Server) createOnmetalVolume(
 					Name:      s.cluster.IDGen().Generate(),
 					OwnerReferences: []metav1.OwnerReference{
 						metautils.MakeControllerRef(
-							storagev1alpha1.SchemeGroupVersion.WithKind("Volume"),
+							storagev1beta1.SchemeGroupVersion.WithKind("Volume"),
 							onmetalVolume,
 						),
 					},
 					Labels: map[string]string{
-						machinebrokerv1alpha1.ManagerLabel: machinebrokerv1alpha1.MachineBrokerManager,
+						machinebrokerv1beta1.ManagerLabel: machinebrokerv1beta1.MachineBrokerManager,
 					},
 				},
-				Type: storagev1alpha1.SecretTypeVolumeAuth,
+				Type: storagev1beta1.SecretTypeVolumeAuth,
 				Data: secretData,
 			}
 			if err := s.cluster.Client().Create(ctx, accessSecret); err != nil {
@@ -148,8 +148,8 @@ func (s *Server) createOnmetalVolume(
 
 		log.V(1).Info("Patching onmetal volume status")
 		baseOnmetalVolume := onmetalVolume.DeepCopy()
-		onmetalVolume.Status.State = storagev1alpha1.VolumeStateAvailable
-		onmetalVolume.Status.Access = &storagev1alpha1.VolumeAccess{
+		onmetalVolume.Status.State = storagev1beta1.VolumeStateAvailable
+		onmetalVolume.Status.Access = &storagev1beta1.VolumeAccess{
 			SecretRef:        secretRef,
 			Driver:           remote.Driver,
 			Handle:           remote.Handle,
@@ -165,11 +165,11 @@ func (s *Server) createOnmetalVolume(
 		}
 		onmetalVolumeSrc.VolumeRef = &corev1.LocalObjectReference{Name: onmetalVolume.Name}
 	case cfg.EmptyDisk != nil:
-		onmetalVolumeSrc.EmptyDisk = &computev1alpha1.EmptyDiskVolumeSource{
+		onmetalVolumeSrc.EmptyDisk = &computev1beta1.EmptyDiskVolumeSource{
 			SizeLimit: cfg.EmptyDisk.SizeLimit,
 		}
 	}
-	return &computev1alpha1.Volume{
+	return &computev1beta1.Volume{
 		Name:         cfg.Name,
 		Device:       &cfg.Device,
 		VolumeSource: onmetalVolumeSrc,
@@ -179,8 +179,8 @@ func (s *Server) createOnmetalVolume(
 func (s *Server) attachOnmetalVolume(
 	ctx context.Context,
 	log logr.Logger,
-	onmetalMachine *computev1alpha1.Machine,
-	onmetalMachineVolume *computev1alpha1.Volume,
+	onmetalMachine *computev1beta1.Machine,
+	onmetalMachineVolume *computev1beta1.Volume,
 ) error {
 	baseOnmetalMachine := onmetalMachine.DeepCopy()
 	onmetalMachine.Spec.Volumes = append(onmetalMachine.Spec.Volumes, *onmetalMachineVolume)

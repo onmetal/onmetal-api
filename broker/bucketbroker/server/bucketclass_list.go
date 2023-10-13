@@ -18,16 +18,16 @@ import (
 	"context"
 	"fmt"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func (s *Server) getTargetOnmetalBucketPools(ctx context.Context) ([]storagev1alpha1.BucketPool, error) {
+func (s *Server) getTargetOnmetalBucketPools(ctx context.Context) ([]storagev1beta1.BucketPool, error) {
 	if s.bucketPoolName != "" {
-		onmetalBucketPool := &storagev1alpha1.BucketPool{}
+		onmetalBucketPool := &storagev1beta1.BucketPool{}
 		onmetalBucketPoolKey := client.ObjectKey{Name: s.bucketPoolName}
 		if err := s.client.Get(ctx, onmetalBucketPoolKey, onmetalBucketPool); err != nil {
 			if !apierrors.IsNotFound(err) {
@@ -37,7 +37,7 @@ func (s *Server) getTargetOnmetalBucketPools(ctx context.Context) ([]storagev1al
 		}
 	}
 
-	bucketPoolList := &storagev1alpha1.BucketPoolList{}
+	bucketPoolList := &storagev1beta1.BucketPoolList{}
 	if err := s.client.List(ctx, bucketPoolList,
 		client.MatchingLabels(s.bucketPoolSelector),
 	); err != nil {
@@ -46,7 +46,7 @@ func (s *Server) getTargetOnmetalBucketPools(ctx context.Context) ([]storagev1al
 	return bucketPoolList.Items, nil
 }
 
-func (s *Server) gatherAvailableBucketClassNames(onmetalBucketPools []storagev1alpha1.BucketPool) sets.Set[string] {
+func (s *Server) gatherAvailableBucketClassNames(onmetalBucketPools []storagev1beta1.BucketPool) sets.Set[string] {
 	res := sets.New[string]()
 	for _, onmetalBucketPool := range onmetalBucketPools {
 		for _, availableBucketClass := range onmetalBucketPool.Status.AvailableBucketClasses {
@@ -58,9 +58,9 @@ func (s *Server) gatherAvailableBucketClassNames(onmetalBucketPools []storagev1a
 
 func (s *Server) filterOnmetalBucketClasses(
 	availableBucketClassNames sets.Set[string],
-	bucketClasses []storagev1alpha1.BucketClass,
-) []storagev1alpha1.BucketClass {
-	var filtered []storagev1alpha1.BucketClass
+	bucketClasses []storagev1beta1.BucketClass,
+) []storagev1beta1.BucketClass {
+	var filtered []storagev1beta1.BucketClass
 	for _, bucketClass := range bucketClasses {
 		if !availableBucketClassNames.Has(bucketClass.Name) {
 			continue
@@ -71,7 +71,7 @@ func (s *Server) filterOnmetalBucketClasses(
 	return filtered
 }
 
-func (s *Server) convertOnmetalBucketClass(bucketClass *storagev1alpha1.BucketClass) (*ori.BucketClass, error) {
+func (s *Server) convertOnmetalBucketClass(bucketClass *storagev1beta1.BucketClass) (*ori.BucketClass, error) {
 	tps := bucketClass.Capabilities.TPS()
 	iops := bucketClass.Capabilities.IOPS()
 
@@ -102,7 +102,7 @@ func (s *Server) ListBucketClasses(ctx context.Context, req *ori.ListBucketClass
 	}
 
 	log.V(1).Info("Listing onmetal bucket classes")
-	onmetalBucketClassList := &storagev1alpha1.BucketClassList{}
+	onmetalBucketClassList := &storagev1beta1.BucketClassList{}
 	if err := s.client.List(ctx, onmetalBucketClassList); err != nil {
 		return nil, fmt.Errorf("error listing onmetal bucket classes: %w", err)
 	}

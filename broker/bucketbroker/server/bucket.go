@@ -17,7 +17,7 @@ package server
 import (
 	"fmt"
 
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/bucketbroker/apiutils"
 	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
 )
@@ -50,13 +50,13 @@ func (s *Server) convertAggregateOnmetalBucket(bucket *AggregateOnmetalBucket) (
 	}, nil
 }
 
-var onmetalBucketStateToORIState = map[storagev1alpha1.BucketState]ori.BucketState{
-	storagev1alpha1.BucketStatePending:   ori.BucketState_BUCKET_PENDING,
-	storagev1alpha1.BucketStateAvailable: ori.BucketState_BUCKET_AVAILABLE,
-	storagev1alpha1.BucketStateError:     ori.BucketState_BUCKET_ERROR,
+var onmetalBucketStateToORIState = map[storagev1beta1.BucketState]ori.BucketState{
+	storagev1beta1.BucketStatePending:   ori.BucketState_BUCKET_PENDING,
+	storagev1beta1.BucketStateAvailable: ori.BucketState_BUCKET_AVAILABLE,
+	storagev1beta1.BucketStateError:     ori.BucketState_BUCKET_ERROR,
 }
 
-func (s *Server) convertOnmetalBucketState(state storagev1alpha1.BucketState) (ori.BucketState, error) {
+func (s *Server) convertOnmetalBucketState(state storagev1beta1.BucketState) (ori.BucketState, error) {
 	if state, ok := onmetalBucketStateToORIState[state]; ok {
 		return state, nil
 	}
@@ -64,7 +64,7 @@ func (s *Server) convertOnmetalBucketState(state storagev1alpha1.BucketState) (o
 }
 
 func (s *Server) convertOnmetalBucketAccess(bucket *AggregateOnmetalBucket) (*ori.BucketAccess, error) {
-	if bucket.Bucket.Status.State != storagev1alpha1.BucketStateAvailable {
+	if bucket.Bucket.Status.State != storagev1beta1.BucketStateAvailable {
 		return nil, nil
 	}
 

@@ -17,9 +17,9 @@ package server
 import (
 	"fmt"
 
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
+	computecomputev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
+	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
+	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/apiutils"
 	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
@@ -27,7 +27,7 @@ import (
 
 type AggregateOnmetalMachine struct {
 	IgnitionSecret *corev1.Secret
-	Machine        *computev1alpha1.Machine
+	Machine        *computecomputev1beta1.Machine
 	// NetworkInterfaces is a mapping of machine network interface name to actual network interface.
 	NetworkInterfaces map[string]*AggregateOnmetalNetworkInterface
 	// Volumes is a mapping of machine volume name to actual volume.
@@ -35,42 +35,42 @@ type AggregateOnmetalMachine struct {
 }
 
 type AggregateOnmetalVolume struct {
-	Volume       *storagev1alpha1.Volume
+	Volume       *storagev1beta1.Volume
 	AccessSecret *corev1.Secret
 }
 
 type AggregateOnmetalNetworkInterface struct {
-	Network          *networkingv1alpha1.Network
-	NetworkInterface *networkingv1alpha1.NetworkInterface
+	Network          *networkingv1beta1.Network
+	NetworkInterface *networkingv1beta1.NetworkInterface
 }
 
-var onmetalMachineStateToMachineState = map[computev1alpha1.MachineState]ori.MachineState{
-	computev1alpha1.MachineStatePending:    ori.MachineState_MACHINE_PENDING,
-	computev1alpha1.MachineStateRunning:    ori.MachineState_MACHINE_RUNNING,
-	computev1alpha1.MachineStateShutdown:   ori.MachineState_MACHINE_SUSPENDED,
-	computev1alpha1.MachineStateTerminated: ori.MachineState_MACHINE_TERMINATED,
+var onmetalMachineStateToMachineState = map[computecomputev1beta1.MachineState]ori.MachineState{
+	computecomputev1beta1.MachineStatePending:    ori.MachineState_MACHINE_PENDING,
+	computecomputev1beta1.MachineStateRunning:    ori.MachineState_MACHINE_RUNNING,
+	computecomputev1beta1.MachineStateShutdown:   ori.MachineState_MACHINE_SUSPENDED,
+	computecomputev1beta1.MachineStateTerminated: ori.MachineState_MACHINE_TERMINATED,
 }
 
-func (s *Server) convertOnmetalMachineState(state computev1alpha1.MachineState) (ori.MachineState, error) {
+func (s *Server) convertOnmetalMachineState(state computecomputev1beta1.MachineState) (ori.MachineState, error) {
 	if res, ok := onmetalMachineStateToMachineState[state]; ok {
 		return res, nil
 	}
 	return 0, fmt.Errorf("unknown onmetal machine state %q", state)
 }
 
-var onmetalNetworkInterfaceStateToNetworkInterfaceAttachmentState = map[computev1alpha1.NetworkInterfaceState]ori.NetworkInterfaceState{
-	computev1alpha1.NetworkInterfaceStatePending:  ori.NetworkInterfaceState_NETWORK_INTERFACE_PENDING,
-	computev1alpha1.NetworkInterfaceStateAttached: ori.NetworkInterfaceState_NETWORK_INTERFACE_ATTACHED,
+var onmetalNetworkInterfaceStateToNetworkInterfaceAttachmentState = map[computecomputev1beta1.NetworkInterfaceState]ori.NetworkInterfaceState{
+	computecomputev1beta1.NetworkInterfaceStatePending:  ori.NetworkInterfaceState_NETWORK_INTERFACE_PENDING,
+	computecomputev1beta1.NetworkInterfaceStateAttached: ori.NetworkInterfaceState_NETWORK_INTERFACE_ATTACHED,
 }
 
-func (s *Server) convertOnmetalNetworkInterfaceState(state computev1alpha1.NetworkInterfaceState) (ori.NetworkInterfaceState, error) {
+func (s *Server) convertOnmetalNetworkInterfaceState(state computecomputev1beta1.NetworkInterfaceState) (ori.NetworkInterfaceState, error) {
 	if res, ok := onmetalNetworkInterfaceStateToNetworkInterfaceAttachmentState[state]; ok {
 		return res, nil
 	}
 	return 0, fmt.Errorf("unknown onmetal network interface attachment state %q", state)
 }
 
-func (s *Server) convertOnmetalNetworkInterfaceStatus(status computev1alpha1.NetworkInterfaceStatus) (*ori.NetworkInterfaceStatus, error) {
+func (s *Server) convertOnmetalNetworkInterfaceStatus(status computecomputev1beta1.NetworkInterfaceStatus) (*ori.NetworkInterfaceStatus, error) {
 	state, err := s.convertOnmetalNetworkInterfaceState(status.State)
 	if err != nil {
 		return nil, err
@@ -83,19 +83,19 @@ func (s *Server) convertOnmetalNetworkInterfaceStatus(status computev1alpha1.Net
 	}, nil
 }
 
-var onmetalVolumeStateToVolumeAttachmentState = map[computev1alpha1.VolumeState]ori.VolumeState{
-	computev1alpha1.VolumeStatePending:  ori.VolumeState_VOLUME_PENDING,
-	computev1alpha1.VolumeStateAttached: ori.VolumeState_VOLUME_ATTACHED,
+var onmetalVolumeStateToVolumeAttachmentState = map[computecomputev1beta1.VolumeState]ori.VolumeState{
+	computecomputev1beta1.VolumeStatePending:  ori.VolumeState_VOLUME_PENDING,
+	computecomputev1beta1.VolumeStateAttached: ori.VolumeState_VOLUME_ATTACHED,
 }
 
-func (s *Server) convertOnmetalVolumeState(state computev1alpha1.VolumeState) (ori.VolumeState, error) {
+func (s *Server) convertOnmetalVolumeState(state computecomputev1beta1.VolumeState) (ori.VolumeState, error) {
 	if res, ok := onmetalVolumeStateToVolumeAttachmentState[state]; ok {
 		return res, nil
 	}
 	return 0, fmt.Errorf("unknown onmetal volume attachment state %q", state)
 }
 
-func (s *Server) convertOnmetalVolumeStatus(status computev1alpha1.VolumeStatus) (*ori.VolumeStatus, error) {
+func (s *Server) convertOnmetalVolumeStatus(status computecomputev1beta1.VolumeStatus) (*ori.VolumeStatus, error) {
 	state, err := s.convertOnmetalVolumeState(status.State)
 	if err != nil {
 		return nil, err
@@ -109,7 +109,7 @@ func (s *Server) convertOnmetalVolumeStatus(status computev1alpha1.VolumeStatus)
 }
 
 func (s *Server) convertOnmetalVolume(
-	onmetalMachineVolume computev1alpha1.Volume,
+	onmetalMachineVolume computecomputev1beta1.Volume,
 	onmetalVolume *AggregateOnmetalVolume,
 ) (*ori.Volume, error) {
 	var (
@@ -152,7 +152,7 @@ func (s *Server) convertOnmetalVolume(
 }
 
 func (s *Server) convertOnmetalNetworkInterfaceAttachment(
-	onmetalMachineNic computev1alpha1.NetworkInterface,
+	onmetalMachineNic computecomputev1beta1.NetworkInterface,
 	onmetalNic *AggregateOnmetalNetworkInterface,
 ) (*ori.NetworkInterface, error) {
 	switch {
@@ -181,7 +181,7 @@ func (s *Server) convertAggregateOnmetalMachine(aggOnmetalMachine *AggregateOnme
 
 	var ignitionData []byte
 	if ignitionSecret := aggOnmetalMachine.IgnitionSecret; ignitionSecret != nil {
-		ignitionData = ignitionSecret.Data[computev1alpha1.DefaultIgnitionKey]
+		ignitionData = ignitionSecret.Data[computecomputev1beta1.DefaultIgnitionKey]
 	}
 
 	var imageSpec *ori.ImageSpec
