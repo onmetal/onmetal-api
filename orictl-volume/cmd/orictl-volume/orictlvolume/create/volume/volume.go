@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"os"
 
-	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1beta1"
 	"github.com/onmetal/onmetal-api/orictl-volume/cmd/orictl-volume/orictlvolume/common"
 	clicommon "github.com/onmetal/onmetal-api/orictl/cmd"
 	"github.com/onmetal/onmetal-api/orictl/decoder"

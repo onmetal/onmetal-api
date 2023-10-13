@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"time"
 
-	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1beta1"
 	oriremotebucket "github.com/onmetal/onmetal-api/ori/remote/bucket"
 	"github.com/onmetal/onmetal-api/orictl-bucket/renderers"
 	orictlcmd "github.com/onmetal/onmetal-api/orictl/cmd"

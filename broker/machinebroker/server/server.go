@@ -23,7 +23,7 @@ import (
 	"github.com/onmetal/onmetal-api/broker/common/request"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/cluster"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/networks"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	"k8s.io/client-go/rest"
 )
 

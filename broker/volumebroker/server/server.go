@@ -27,7 +27,7 @@ import (
 	"github.com/onmetal/onmetal-api/broker/common/idgen"
 	volumebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/volumebroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/volumebroker/apiutils"
-	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"

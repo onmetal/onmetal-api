@@ -23,7 +23,7 @@ import (
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	machinebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/apiutils"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	clientutils "github.com/onmetal/onmetal-api/utils/client"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

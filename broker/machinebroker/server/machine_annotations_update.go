@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	"github.com/onmetal/onmetal-api/broker/machinebroker/apiutils"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 

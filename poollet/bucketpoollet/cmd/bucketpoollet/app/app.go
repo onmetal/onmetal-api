@@ -25,7 +25,7 @@ import (
 	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
 	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
-	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1beta1"
 	oriremotebucket "github.com/onmetal/onmetal-api/ori/remote/bucket"
 	"github.com/onmetal/onmetal-api/poollet/bucketpoollet/bcm"
 	bucketpoolletconfig "github.com/onmetal/onmetal-api/poollet/bucketpoollet/client/config"

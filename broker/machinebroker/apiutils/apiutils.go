@@ -21,7 +21,7 @@ import (
 
 	"github.com/onmetal/controller-utils/metautils"
 	machinebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1beta1"
-	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
+	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"

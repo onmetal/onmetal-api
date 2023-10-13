@@ -18,7 +18,7 @@ import (
 	"context"
 	"errors"
 
-	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"sigs.k8s.io/controller-runtime/pkg/manager"

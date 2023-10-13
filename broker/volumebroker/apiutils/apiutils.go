@@ -22,7 +22,7 @@ import (
 	"github.com/onmetal/controller-utils/metautils"
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	volumebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/volumebroker/api/v1beta1"
-	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
+	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"

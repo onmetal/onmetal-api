@@ -15,7 +15,7 @@
 package tableconverters
 
 import (
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	"github.com/onmetal/onmetal-api/orictl/api"
 	"github.com/onmetal/onmetal-api/orictl/tableconverter"
 	"k8s.io/apimachinery/pkg/api/resource"

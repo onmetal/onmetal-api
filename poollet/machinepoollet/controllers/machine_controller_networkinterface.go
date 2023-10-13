@@ -25,7 +25,7 @@ import (
 	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	ipamv1beta1 "github.com/onmetal/onmetal-api/api/ipam/v1beta1"
 	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/machinepoollet/controllers/events"
 	"github.com/onmetal/onmetal-api/utils/claimmanager"

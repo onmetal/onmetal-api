@@ -28,7 +28,7 @@ import (
 	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	oriremotemachine "github.com/onmetal/onmetal-api/ori/remote/machine"
 	"github.com/onmetal/onmetal-api/poollet/machinepoollet/addresses"
 	machinepoolletclient "github.com/onmetal/onmetal-api/poollet/machinepoollet/client"

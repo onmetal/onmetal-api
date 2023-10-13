@@ -22,7 +22,7 @@ import (
 	"os"
 	"time"
 
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	"github.com/onmetal/onmetal-api/orictl-machine/cmd/orictl-machine/orictlmachine/common"
 	clicommon "github.com/onmetal/onmetal-api/orictl/cmd"
 	"github.com/spf13/cobra"

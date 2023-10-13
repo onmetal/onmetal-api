@@ -19,7 +19,7 @@ import (
 
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/bucketbroker/apiutils"
-	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1beta1"
 )
 
 func (s *Server) convertAggregateOnmetalBucket(bucket *AggregateOnmetalBucket) (*ori.Bucket, error) {

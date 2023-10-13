@@ -19,7 +19,7 @@ import (
 
 	"github.com/blang/semver/v4"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/version"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 )
 
 func (s *Server) Version(ctx context.Context, req *ori.VersionRequest) (*ori.VersionResponse, error) {

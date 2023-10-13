@@ -21,7 +21,7 @@ import (
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	bucketbrokerv1beta1 "github.com/onmetal/onmetal-api/broker/bucketbroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/common"
-	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1beta1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	corev1 "k8s.io/api/core/v1"

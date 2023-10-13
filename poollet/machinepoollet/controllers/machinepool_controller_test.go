@@ -17,7 +17,7 @@ package controllers_test
 import (
 	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	"github.com/onmetal/onmetal-api/ori/testing/machine"
 	testingmachine "github.com/onmetal/onmetal-api/ori/testing/machine"
 	"github.com/onmetal/onmetal-api/utils/quota"

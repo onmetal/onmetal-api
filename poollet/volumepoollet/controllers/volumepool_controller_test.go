@@ -17,7 +17,7 @@ package controllers_test
 import (
 	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
-	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1beta1"
 	"github.com/onmetal/onmetal-api/ori/testing/volume"
 	"github.com/onmetal/onmetal-api/utils/quota"
 	. "github.com/onsi/ginkgo/v2"

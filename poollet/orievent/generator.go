@@ -26,7 +26,7 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/gogo/protobuf/proto"
-	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
+	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1beta1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apiserver/pkg/server/healthz"
 	ctrl "sigs.k8s.io/controller-runtime"

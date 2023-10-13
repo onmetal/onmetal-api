@@ -26,7 +26,7 @@ import (
 
 	"github.com/go-logr/logr"
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
-	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/volumepoollet/vcm"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
 	corev1 "k8s.io/api/core/v1"

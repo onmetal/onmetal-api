@@ -26,7 +26,7 @@ import (
 	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	storageclient "github.com/onmetal/onmetal-api/internal/client/storage"
-	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1beta1"
 	oriremotevolume "github.com/onmetal/onmetal-api/ori/remote/volume"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
 	volumepoolletconfig "github.com/onmetal/onmetal-api/poollet/volumepoollet/client/config"

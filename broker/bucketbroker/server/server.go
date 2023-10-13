@@ -29,7 +29,7 @@ import (
 	bucketbrokerv1beta1 "github.com/onmetal/onmetal-api/broker/bucketbroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/bucketbroker/apiutils"
 	"github.com/onmetal/onmetal-api/broker/common/cleaner"
-	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"

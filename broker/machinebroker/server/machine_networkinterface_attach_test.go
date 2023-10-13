@@ -18,7 +18,7 @@ import (
 	commonv1beta1 "github.com/onmetal/onmetal-api/api/common/v1beta1"
 	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	networkingv1beta1 "github.com/onmetal/onmetal-api/api/networking/v1beta1"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	. "github.com/onsi/gomega/gstruct"

@@ -22,7 +22,7 @@ import (
 
 	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"sigs.k8s.io/controller-runtime/pkg/client"

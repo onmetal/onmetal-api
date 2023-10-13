@@ -23,7 +23,7 @@ import (
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	volumebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/volumebroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/volumebroker/apiutils"
-	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1beta1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

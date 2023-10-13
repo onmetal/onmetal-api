@@ -20,8 +20,8 @@ import (
 
 	"github.com/go-logr/logr"
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
-	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
-	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1beta1"
+	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1beta1"
 	bucketpoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/bucketpoollet/api/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"

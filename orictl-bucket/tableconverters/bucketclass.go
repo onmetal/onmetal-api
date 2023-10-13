@@ -15,7 +15,7 @@
 package tableconverters
 
 import (
-	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1beta1"
 	"github.com/onmetal/onmetal-api/orictl/api"
 	"github.com/onmetal/onmetal-api/orictl/tableconverter"
 )

@@ -17,7 +17,7 @@ package tableconverter
 import (
 	"sort"
 
-	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
+	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1beta1"
 	"github.com/onmetal/onmetal-api/orictl/api"
 )
 

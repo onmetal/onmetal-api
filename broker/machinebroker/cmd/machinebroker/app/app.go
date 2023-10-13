@@ -29,7 +29,7 @@ import (
 	commongrpc "github.com/onmetal/onmetal-api/broker/common/grpc"
 	machinebrokerhttp "github.com/onmetal/onmetal-api/broker/machinebroker/http"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/server"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"golang.org/x/sync/errgroup"

@@ -24,7 +24,7 @@ import (
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/common/cleaner"
 	machinebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1beta1"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	metautils "github.com/onmetal/onmetal-api/utils/meta"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"

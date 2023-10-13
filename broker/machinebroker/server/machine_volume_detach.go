@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	"golang.org/x/exp/slices"
 	"google.golang.org/grpc/codes"
 	grpcstatus "google.golang.org/grpc/status"

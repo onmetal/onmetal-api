@@ -23,7 +23,7 @@ import (
 	computev1beta1 "github.com/onmetal/onmetal-api/api/compute/v1beta1"
 	"github.com/onmetal/onmetal-api/client-go/onmetalapi"
 	onmetalapiclientgoscheme "github.com/onmetal/onmetal-api/client-go/onmetalapi/scheme"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	remotecommandserver "github.com/onmetal/onmetal-api/poollet/machinepoollet/ori/streaming/remotecommand"
 	"k8s.io/client-go/tools/remotecommand"
 )
@@ -63,7 +63,7 @@ func (s *Server) ServeExec(w http.ResponseWriter, req *http.Request, token strin
 		return
 	}
 
-	reqURL := onmetalClientset.ComputeV1alpha1().RESTClient().
+	reqURL := onmetalClientset.ComputeV1beta1().RESTClient().
 		Post().
 		Namespace(s.cluster.Namespace()).
 		Resource("machines").

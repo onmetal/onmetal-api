@@ -15,8 +15,8 @@
 package server_test
 
 import (
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
-	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
+	orimeta "github.com/onmetal/onmetal-api/ori/apis/meta/v1beta1"
 	machinepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

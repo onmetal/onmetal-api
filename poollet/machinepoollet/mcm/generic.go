@@ -23,7 +23,7 @@ import (
 	"github.com/go-logr/logr"
 	"github.com/gogo/protobuf/proto"
 	"github.com/onmetal/onmetal-api/ori/apis/machine"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
 	"golang.org/x/exp/maps"
 	"k8s.io/apimachinery/pkg/util/sets"

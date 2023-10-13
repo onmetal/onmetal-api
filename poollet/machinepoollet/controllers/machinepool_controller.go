@@ -24,7 +24,7 @@ import (
 	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	"github.com/onmetal/onmetal-api/ori/apis/machine"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	"github.com/onmetal/onmetal-api/poollet/machinepoollet/mcm"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
 	"github.com/onmetal/onmetal-api/utils/quota"

@@ -19,7 +19,7 @@ import (
 	"net/url"
 	"strconv"
 
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	machinepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	"google.golang.org/grpc/codes"
 	grpcstatus "google.golang.org/grpc/status"

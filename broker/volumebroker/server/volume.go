@@ -20,7 +20,7 @@ import (
 	corev1beta1 "github.com/onmetal/onmetal-api/api/core/v1beta1"
 	storagev1beta1 "github.com/onmetal/onmetal-api/api/storage/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/volumebroker/apiutils"
-	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1beta1"
 )
 
 func (s *Server) convertAggregateOnmetalVolume(volume *AggregateOnmetalVolume) (*ori.Volume, error) {

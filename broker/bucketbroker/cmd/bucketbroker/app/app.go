@@ -23,7 +23,7 @@ import (
 	"github.com/onmetal/controller-utils/configutils"
 	"github.com/onmetal/onmetal-api/broker/bucketbroker/server"
 	"github.com/onmetal/onmetal-api/broker/common"
-	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/bucket/v1beta1"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"google.golang.org/grpc"

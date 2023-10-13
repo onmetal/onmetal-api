@@ -24,7 +24,7 @@ import (
 	"github.com/onmetal/onmetal-api/broker/common/cleaner"
 	machinebrokerv1beta1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1beta1"
 	"github.com/onmetal/onmetal-api/broker/machinebroker/apiutils"
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	machinepoolletv1beta1 "github.com/onmetal/onmetal-api/poollet/machinepoollet/api/v1beta1"
 	"github.com/onmetal/onmetal-api/utils/maps"
 	corev1 "k8s.io/api/core/v1"

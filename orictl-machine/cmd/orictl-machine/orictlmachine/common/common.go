@@ -19,7 +19,7 @@ import (
 	"text/template"
 	"time"
 
-	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/machine/v1beta1"
 	oriremotemachine "github.com/onmetal/onmetal-api/ori/remote/machine"
 	"github.com/onmetal/onmetal-api/orictl-machine/clientcmd"
 	"github.com/onmetal/onmetal-api/orictl-machine/tableconverters"

@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"time"
 
-	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1beta1"
 	oriremotevolume "github.com/onmetal/onmetal-api/ori/remote/volume"
 	"github.com/onmetal/onmetal-api/orictl-volume/renderers"
 	clicommon "github.com/onmetal/onmetal-api/orictl/cmd"
