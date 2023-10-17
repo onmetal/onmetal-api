@@ -1,0 +1,130 @@
+# this secret enables the apiserver to use the etcd deployed in the seed namespace
+---
+apiVersion: v1
+data:
+  server-ca.crt: ...
+  server-client.crt: ...
+  server-client.key: ...
+immutable: false
+kind: Secret
+metadata:
+  name: etcd-client-secret
+  namespace: onmetal-system
+type: Opaque
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    control-plane: apiserver
+  name: old-onmetal-apiserver
+  namespace: onmetal-system
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      control-plane: apiserver
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: apiserver
+      labels:
+        control-plane: apiserver
+    spec:
+      # not applicable in a shoot cluster
+      #      affinity:
+      #        podAntiAffinity:
+      #          preferredDuringSchedulingIgnoredDuringExecution:
+      #            - podAffinityTerm:
+      #                labelSelector:
+      #                  matchExpressions:
+      #                    - key: control-plane
+      #                      operator: In
+      #                      values:
+      #                        - apiserver
+      #                topologyKey: topology.kubernetes.io/zone
+      #              weight: 100
+      containers:
+        - args:
+            - --etcd-cafile=/etc/kubernetes/pki/etcd/server-ca.crt
+            - --etcd-certfile=/etc/kubernetes/pki/etcd/server-client.crt
+            - --etcd-keyfile=/etc/kubernetes/pki/etcd/server-client.key
+            # grab from "kubectl get service -n onmetal-etcd
+            - --etcd-servers=http://100.65.88.136:2379
+            - --secure-port=9443
+            - --audit-log-path=-
+            - --feature-gates=APIPriorityAndFairness=false
+            - --audit-log-maxage=0
+            - --audit-log-maxbackup=0
+            - --tls-cert-file=/tmp/k8s-apiserver/serving-certs/tls.crt
+            - --tls-private-key-file=/tmp/k8s-apiserver/serving-certs/tls.key
+          command:
+            - /onmetal-apiserver
+          image: mtr.devops.telekom.de/osc/onmetal/onmetal-api-apiserver:18072023-025504b
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          name: apiserver
+          ports:
+            - containerPort: 9443
+              name: apiserver
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 9443
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 0
+          volumeMounts:
+            # added "/etcd" to mount the secret certificates correctly
+            - mountPath: /etc/kubernetes/pki/etcd
+              name: k8s-certs
+              readOnly: true
+            - mountPath: /tmp/k8s-apiserver/serving-certs
+              name: cert
+              readOnly: true
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      # not applicable in a shoot cluster
+      # nodeSelector:
+      #  node-role.kubernetes.io/control-plane: "true"
+      securityContext:
+        runAsNonRoot: false
+      serviceAccountName: old-onmetal-apiserver
+      terminationGracePeriodSeconds: 10
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+          operator: Equal
+      volumes:
+        #        - hostPath:
+        #            path: /media/data/k3s/server/tls
+        #            type: Directory
+        #          name: k8s-certs
+        # replaced with a secret resource to simulate setup with etcdless where it is using the cluster etcd
+        - name: k8s-certs
+          secret:
+            defaultMode: 420
+            secretName: etcd-client-secret
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: apiserver-cert

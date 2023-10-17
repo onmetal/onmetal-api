@@ -1,0 +1,106 @@
+# deploy etcd
+## create client certs
+mkdir etcd
+cd etcd
+
+openssl genrsa 2048 > ca-key.pem
+openssl req -new -x509 -nodes -days 1000 -key ca-key.pem > ca-cert.pem
+openssl req -newkey rsa:2048 -days 1000 -nodes -keyout client-key.pem > client-req.pem
+openssl x509 -req -in client-req.pem -days 1000 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 > client-cert.pem
+
+## create secret
+kubectl create ns onmetal-etcd
+kubectl create secret generic etcd-client-certs --from-file=ca.crt=ca-cert.pem --from-file=tls.crt=client-cert.pem --from-file=tls.key=client-key.pem -n onmetal-etcd
+
+## create deployment
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+
+helm install etcd bitnami/etcd \
+ --set auth.rbac.create=false \
+ --set auth.peer.secureTransport=false --set auth.peer.useAutoTLS=false \
+ --set auth.client.secureTransport=false --set auth.client.enableAuthentication=true --set auth.client.existingSecret=etcd-client-certs \
+ --set auth.client.caFilename=ca.crt --set auth.client.certFilename=tls.crt --set auth.client.certKeyFilename=tls.key \
+ --set replicaCount=1 --namespace=onmetal-etcd
+
+# generate manifests
+cd ../old
+kustomize-v4.5.2 build api/onmetal-api > generated.yaml
+cd ../new
+kustomize-v4.5.2 build api/onmetal-api > generated.yaml
+
+## fix all APIService objects
+### original
+```
+---
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: onmetal-system/onmetal-apiserver-cert
+  name: v1alpha1.storage.api.onmetal.de
+spec:
+  group: storage.api.onmetal.de
+  groupPriorityMinimum: 2000
+  service:
+    name: old-onmetal-apiserver-service
+    namespace: onmetal-system
+  version: v1alpha1
+  versionPriority: 100
+```
+
+### change annotation
+```
+---
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: onmetal-system/onmetal-apiserver-cert
+  name: v1alpha1.storage.api.onmetal.de
+spec:
+  group: storage.api.onmetal.de
+  groupPriorityMinimum: 2000
+  service:
+    name: old-onmetal-apiserver-service
+    namespace: onmetal-system
+  version: v1alpha1
+  versionPriority: 100
+```
+
+## fix all certificate objects
+### original
+```
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: old-onmetal-apiserver-cert
+  namespace: onmetal-system
+spec:
+  dnsNames:
+  - onmetal-apiserver-service.onmetal-system.svc
+  - onmetal-apiserver-service.onmetal-system.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: old-onmetal-apiserver-selfsigned-issuer
+  secretName: apiserver-cert
+```
+
+### change dnsNames
+```
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: old-onmetal-apiserver-cert
+  namespace: onmetal-system
+spec:
+  dnsNames:
+  - old-onmetal-apiserver-service.onmetal-system.svc
+  - old-onmetal-apiserver-service.onmetal-system.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: old-onmetal-apiserver-selfsigned-issuer
+  secretName: apiserver-cert
+```

@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - github.com/onmetal/onmetal-api/config/etcdless?ref=7f6080285acdb852b6de8b0b3965e0ee33039185
+
+images:
+  - name: apiserver
+    newName: mtr.devops.telekom.de/osc/onmetal/onmetal-api-apiserver
+    newTag: 18072023-025504b
+  - name: controller
+    newName: mtr.devops.telekom.de/osc/onmetal/onmetal-api-controller-manager
+    newTag: 18072023-025504b
+
+patchesStrategicMerge:
+  - patch-apiserver-deployment.yaml
+  - patch-apiserver-service.yaml
+  - patch-manager-deployment.yaml
