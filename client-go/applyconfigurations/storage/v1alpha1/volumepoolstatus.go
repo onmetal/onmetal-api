@@ -31,6 +31,8 @@ type VolumePoolStatusApplyConfiguration struct {
 	AvailableVolumeClasses []v1.LocalObjectReference               `json:"availableVolumeClasses,omitempty"`
 	Capacity               *corev1alpha1.ResourceList              `json:"capacity,omitempty"`
 	Allocatable            *corev1alpha1.ResourceList              `json:"allocatable,omitempty"`
+	Available              *corev1alpha1.ResourceList              `json:"available,omitempty"`
+	Used                   *corev1alpha1.ResourceList              `json:"used,omitempty"`
 }
 
 // VolumePoolStatusApplyConfiguration constructs an declarative configuration of the VolumePoolStatus type for use with
@@ -83,5 +85,21 @@ func (b *VolumePoolStatusApplyConfiguration) WithCapacity(value corev1alpha1.Res
 // If called multiple times, the Allocatable field is set to the value of the last call.
 func (b *VolumePoolStatusApplyConfiguration) WithAllocatable(value corev1alpha1.ResourceList) *VolumePoolStatusApplyConfiguration {
 	b.Allocatable = &value
+	return b
+}
+
+// WithAvailable sets the Available field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the Available field is set to the value of the last call.
+func (b *VolumePoolStatusApplyConfiguration) WithAvailable(value corev1alpha1.ResourceList) *VolumePoolStatusApplyConfiguration {
+	b.Available = &value
+	return b
+}
+
+// WithUsed sets the Used field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the Used field is set to the value of the last call.
+func (b *VolumePoolStatusApplyConfiguration) WithUsed(value corev1alpha1.ResourceList) *VolumePoolStatusApplyConfiguration {
+	b.Used = &value
 	return b
 }

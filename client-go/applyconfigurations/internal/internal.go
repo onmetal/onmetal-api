@@ -1586,6 +1586,11 @@ var schemaYAML = typed.YAMLObject(`types:
         map:
           elementType:
             namedType: io.k8s.apimachinery.pkg.api.resource.Quantity
+    - name: available
+      type:
+        map:
+          elementType:
+            namedType: io.k8s.apimachinery.pkg.api.resource.Quantity
     - name: availableVolumeClasses
       type:
         list:
@@ -1606,6 +1611,11 @@ var schemaYAML = typed.YAMLObject(`types:
     - name: state
       type:
         scalar: string
+    - name: used
+      type:
+        map:
+          elementType:
+            namedType: io.k8s.apimachinery.pkg.api.resource.Quantity
 - name: com.github.onmetal.onmetal-api.api.storage.v1alpha1.VolumeSpec
   map:
     fields:
@@ -1658,9 +1668,15 @@ var schemaYAML = typed.YAMLObject(`types:
           elementType:
             namedType: com.github.onmetal.onmetal-api.api.storage.v1alpha1.VolumeCondition
           elementRelationship: atomic
+    - name: lastPhaseTransitionTime
+      type:
+        namedType: io.k8s.apimachinery.pkg.apis.meta.v1.Time
     - name: lastStateTransitionTime
       type:
         namedType: io.k8s.apimachinery.pkg.apis.meta.v1.Time
+    - name: phase
+      type:
+        scalar: string
     - name: state
       type:
         scalar: string

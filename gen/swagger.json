@@ -67603,6 +67603,13 @@
 						"$ref": "#/definitions/io.k8s.apimachinery.pkg.api.resource.Quantity"
 					}
 				},
+				"available": {
+					"description": "Available list the available capacity of a VolumePool.",
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/io.k8s.apimachinery.pkg.api.resource.Quantity"
+					}
+				},
 				"availableVolumeClasses": {
 					"description": "AvailableVolumeClasses list the references of any supported VolumeClass of this pool",
 					"type": "array",
@@ -67625,6 +67632,13 @@
 				},
 				"state": {
 					"type": "string"
+				},
+				"used": {
+					"description": "Used indicates how much capacity has been used in a VolumePool.",
+					"type": "object",
+					"additionalProperties": {
+						"$ref": "#/definitions/io.k8s.apimachinery.pkg.api.resource.Quantity"
+					}
 				}
 			}
 		},
@@ -67698,9 +67712,17 @@
 						"$ref": "#/definitions/com.github.onmetal.onmetal-api.api.storage.v1alpha1.VolumeCondition"
 					}
 				},
+				"lastPhaseTransitionTime": {
+					"description": "LastPhaseTransitionTime is the last time the Phase transitioned between values.",
+					"$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+				},
 				"lastStateTransitionTime": {
 					"description": "LastStateTransitionTime is the last time the State transitioned between values.",
 					"$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+				},
+				"phase": {
+					"description": "Phase represents the binding phase of a Volume.",
+					"type": "string"
 				},
 				"state": {
 					"description": "State represents the infrastructure state of a Volume.",

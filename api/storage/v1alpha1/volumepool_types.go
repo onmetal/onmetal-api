@@ -43,6 +43,10 @@ type VolumePoolStatus struct {
 	Capacity corev1alpha1.ResourceList `json:"capacity,omitempty"`
 	// Allocatable represents the resources of a machine pool that are available for scheduling.
 	Allocatable corev1alpha1.ResourceList `json:"allocatable,omitempty"`
+	// Available list the available capacity of a VolumePool.
+	Available corev1alpha1.ResourceList `json:"available,omitempty"`
+	// Used indicates how much capacity has been used in a VolumePool.
+	Used corev1alpha1.ResourceList `json:"used,omitempty"`
 }
 
 type VolumePoolState string

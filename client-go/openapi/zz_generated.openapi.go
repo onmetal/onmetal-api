@@ -5722,6 +5722,36 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumePoolStatus(ref common.Referen
 							},
 						},
 					},
+					"available": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Available list the available capacity of a VolumePool.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+									},
+								},
+							},
+						},
+					},
+					"used": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Used indicates how much capacity has been used in a VolumePool.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -5851,6 +5881,19 @@ func schema_onmetal_api_api_storage_v1alpha1_VolumeStatus(ref common.ReferenceCa
 					"lastStateTransitionTime": {
 						SchemaProps: spec.SchemaProps{
 							Description: "LastStateTransitionTime is the last time the State transitioned between values.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase represents the binding phase of a Volume.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"lastPhaseTransitionTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LastPhaseTransitionTime is the last time the Phase transitioned between values.",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},

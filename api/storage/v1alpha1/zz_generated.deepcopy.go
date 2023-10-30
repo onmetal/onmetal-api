@@ -700,6 +700,20 @@ func (in *VolumePoolStatus) DeepCopyInto(out *VolumePoolStatus) {
 			(*out)[key] = val.DeepCopy()
 		}
 	}
+	if in.Available != nil {
+		in, out := &in.Available, &out.Available
+		*out = make(corev1alpha1.ResourceList, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val.DeepCopy()
+		}
+	}
+	if in.Used != nil {
+		in, out := &in.Used, &out.Used
+		*out = make(corev1alpha1.ResourceList, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val.DeepCopy()
+		}
+	}
 	return
 }
 
@@ -778,6 +792,10 @@ func (in *VolumeStatus) DeepCopyInto(out *VolumeStatus) {
 	*out = *in
 	if in.LastStateTransitionTime != nil {
 		in, out := &in.LastStateTransitionTime, &out.LastStateTransitionTime
+		*out = (*in).DeepCopy()
+	}
+	if in.LastPhaseTransitionTime != nil {
+		in, out := &in.LastPhaseTransitionTime, &out.LastPhaseTransitionTime
 		*out = (*in).DeepCopy()
 	}
 	if in.Access != nil {
