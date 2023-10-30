@@ -65227,6 +65227,11 @@
 					"description": "MachineID is the provider specific machine ID in the format '<type>://<machine_id>'.",
 					"type": "string"
 				},
+				"machinePoolObservedGeneration": {
+					"description": "MachinePoolObservedGeneration is the last generation the MachinePool observed of the Machine.",
+					"type": "integer",
+					"format": "int64"
+				},
 				"networkInterfaces": {
 					"description": "NetworkInterfaces is the list of network interface states for the machine.",
 					"type": "array",
@@ -65297,12 +65302,24 @@
 						"$ref": "#/definitions/com.github.onmetal.onmetal-api.api.common.v1alpha1.IP"
 					}
 				},
+				"lastPhaseTransitionTime": {
+					"description": "LastPhaseTransitionTime is the last time the Phase transitioned.",
+					"$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+				},
 				"lastStateTransitionTime": {
 					"description": "LastStateTransitionTime is the last time the State transitioned.",
 					"$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
 				},
 				"name": {
 					"description": "Name is the name of the NetworkInterface to whom the status belongs to.",
+					"type": "string"
+				},
+				"networkHandle": {
+					"description": "NetworkHandle is the handle of the network the NetworkInterface is in.",
+					"type": "string"
+				},
+				"phase": {
+					"description": "Phase is the NetworkInterface binding phase of the NetworkInterface.",
 					"type": "string"
 				},
 				"state": {
@@ -65355,12 +65372,20 @@
 					"description": "Handle is the MachinePool internal handle of the volume.",
 					"type": "string"
 				},
+				"lastPhaseTransitionTime": {
+					"description": "LastPhaseTransitionTime is the last time the Phase transitioned.",
+					"$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+				},
 				"lastStateTransitionTime": {
 					"description": "LastStateTransitionTime is the last time the State transitioned.",
 					"$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
 				},
 				"name": {
 					"description": "Name is the name of a volume attachment.",
+					"type": "string"
+				},
+				"phase": {
+					"description": "Phase represents the binding phase of a Volume.",
 					"type": "string"
 				},
 				"state": {

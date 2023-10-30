@@ -28,10 +28,13 @@ import (
 type NetworkInterfaceStatusApplyConfiguration struct {
 	Name                    *string                                `json:"name,omitempty"`
 	Handle                  *string                                `json:"handle,omitempty"`
+	NetworkHandle           *string                                `json:"networkHandle,omitempty"`
 	IPs                     []v1alpha1.IP                          `json:"ips,omitempty"`
 	VirtualIP               *v1alpha1.IP                           `json:"virtualIP,omitempty"`
 	State                   *computev1alpha1.NetworkInterfaceState `json:"state,omitempty"`
 	LastStateTransitionTime *v1.Time                               `json:"lastStateTransitionTime,omitempty"`
+	Phase                   *computev1alpha1.NetworkInterfacePhase `json:"phase,omitempty"`
+	LastPhaseTransitionTime *v1.Time                               `json:"lastPhaseTransitionTime,omitempty"`
 }
 
 // NetworkInterfaceStatusApplyConfiguration constructs an declarative configuration of the NetworkInterfaceStatus type for use with
@@ -53,6 +56,14 @@ func (b *NetworkInterfaceStatusApplyConfiguration) WithName(value string) *Netwo
 // If called multiple times, the Handle field is set to the value of the last call.
 func (b *NetworkInterfaceStatusApplyConfiguration) WithHandle(value string) *NetworkInterfaceStatusApplyConfiguration {
 	b.Handle = &value
+	return b
+}
+
+// WithNetworkHandle sets the NetworkHandle field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the NetworkHandle field is set to the value of the last call.
+func (b *NetworkInterfaceStatusApplyConfiguration) WithNetworkHandle(value string) *NetworkInterfaceStatusApplyConfiguration {
+	b.NetworkHandle = &value
 	return b
 }
 
@@ -87,5 +98,21 @@ func (b *NetworkInterfaceStatusApplyConfiguration) WithState(value computev1alph
 // If called multiple times, the LastStateTransitionTime field is set to the value of the last call.
 func (b *NetworkInterfaceStatusApplyConfiguration) WithLastStateTransitionTime(value v1.Time) *NetworkInterfaceStatusApplyConfiguration {
 	b.LastStateTransitionTime = &value
+	return b
+}
+
+// WithPhase sets the Phase field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the Phase field is set to the value of the last call.
+func (b *NetworkInterfaceStatusApplyConfiguration) WithPhase(value computev1alpha1.NetworkInterfacePhase) *NetworkInterfaceStatusApplyConfiguration {
+	b.Phase = &value
+	return b
+}
+
+// WithLastPhaseTransitionTime sets the LastPhaseTransitionTime field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the LastPhaseTransitionTime field is set to the value of the last call.
+func (b *NetworkInterfaceStatusApplyConfiguration) WithLastPhaseTransitionTime(value v1.Time) *NetworkInterfaceStatusApplyConfiguration {
+	b.LastPhaseTransitionTime = &value
 	return b
 }

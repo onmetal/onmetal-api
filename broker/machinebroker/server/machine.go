@@ -77,9 +77,10 @@ func (s *Server) convertOnmetalNetworkInterfaceStatus(status computev1alpha1.Net
 	}
 
 	return &ori.NetworkInterfaceStatus{
-		Name:   status.Name,
-		Handle: status.Handle,
-		State:  state,
+		Name:          status.Name,
+		Handle:        status.Handle,
+		NetworkHandle: status.Handle,
+		State:         state,
 	}, nil
 }
 

@@ -4691,6 +4691,11 @@
 						"description": "MachineID is the provider specific machine ID in the format '\u003ctype\u003e://\u003cmachine_id\u003e'.",
 						"type": "string"
 					},
+					"machinePoolObservedGeneration": {
+						"description": "MachinePoolObservedGeneration is the last generation the MachinePool observed of the Machine.",
+						"type": "integer",
+						"format": "int64"
+					},
 					"networkInterfaces": {
 						"description": "NetworkInterfaces is the list of network interface states for the machine.",
 						"type": "array",
@@ -4785,6 +4790,14 @@
 							]
 						}
 					},
+					"lastPhaseTransitionTime": {
+						"description": "LastPhaseTransitionTime is the last time the Phase transitioned.",
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+							}
+						]
+					},
 					"lastStateTransitionTime": {
 						"description": "LastStateTransitionTime is the last time the State transitioned.",
 						"allOf": [
@@ -4797,6 +4810,14 @@
 						"description": "Name is the name of the NetworkInterface to whom the status belongs to.",
 						"type": "string",
 						"default": ""
+					},
+					"networkHandle": {
+						"description": "NetworkHandle is the handle of the network the NetworkInterface is in.",
+						"type": "string"
+					},
+					"phase": {
+						"description": "Phase is the NetworkInterface binding phase of the NetworkInterface.",
+						"type": "string"
 					},
 					"state": {
 						"description": "State represents the attachment state of a NetworkInterface.",
@@ -4865,6 +4886,14 @@
 						"description": "Handle is the MachinePool internal handle of the volume.",
 						"type": "string"
 					},
+					"lastPhaseTransitionTime": {
+						"description": "LastPhaseTransitionTime is the last time the Phase transitioned.",
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/io.k8s.apimachinery.pkg.apis.meta.v1.Time"
+							}
+						]
+					},
 					"lastStateTransitionTime": {
 						"description": "LastStateTransitionTime is the last time the State transitioned.",
 						"allOf": [
@@ -4877,6 +4906,10 @@
 						"description": "Name is the name of a volume attachment.",
 						"type": "string",
 						"default": ""
+					},
+					"phase": {
+						"description": "Phase represents the binding phase of a Volume.",
+						"type": "string"
 					},
 					"state": {
 						"description": "State represents the attachment state of a Volume.",

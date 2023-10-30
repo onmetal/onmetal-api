@@ -351,6 +351,9 @@ var schemaYAML = typed.YAMLObject(`types:
     - name: machineID
       type:
         scalar: string
+    - name: machinePoolObservedGeneration
+      type:
+        scalar: numeric
     - name: networkInterfaces
       type:
         list:
@@ -394,6 +397,9 @@ var schemaYAML = typed.YAMLObject(`types:
           elementType:
             namedType: com.github.onmetal.onmetal-api.api.common.v1alpha1.IP
           elementRelationship: atomic
+    - name: lastPhaseTransitionTime
+      type:
+        namedType: io.k8s.apimachinery.pkg.apis.meta.v1.Time
     - name: lastStateTransitionTime
       type:
         namedType: io.k8s.apimachinery.pkg.apis.meta.v1.Time
@@ -401,6 +407,12 @@ var schemaYAML = typed.YAMLObject(`types:
       type:
         scalar: string
       default: ""
+    - name: networkHandle
+      type:
+        scalar: string
+    - name: phase
+      type:
+        scalar: string
     - name: state
       type:
         scalar: string
@@ -432,6 +444,9 @@ var schemaYAML = typed.YAMLObject(`types:
     - name: handle
       type:
         scalar: string
+    - name: lastPhaseTransitionTime
+      type:
+        namedType: io.k8s.apimachinery.pkg.apis.meta.v1.Time
     - name: lastStateTransitionTime
       type:
         namedType: io.k8s.apimachinery.pkg.apis.meta.v1.Time
@@ -439,6 +454,9 @@ var schemaYAML = typed.YAMLObject(`types:
       type:
         scalar: string
       default: ""
+    - name: phase
+      type:
+        scalar: string
     - name: state
       type:
         scalar: string

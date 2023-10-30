@@ -610,6 +610,10 @@ func (in *NetworkInterfaceStatus) DeepCopyInto(out *NetworkInterfaceStatus) {
 		in, out := &in.LastStateTransitionTime, &out.LastStateTransitionTime
 		*out = (*in).DeepCopy()
 	}
+	if in.LastPhaseTransitionTime != nil {
+		in, out := &in.LastPhaseTransitionTime, &out.LastPhaseTransitionTime
+		*out = (*in).DeepCopy()
+	}
 	return
 }
 
@@ -681,6 +685,10 @@ func (in *VolumeStatus) DeepCopyInto(out *VolumeStatus) {
 	*out = *in
 	if in.LastStateTransitionTime != nil {
 		in, out := &in.LastStateTransitionTime, &out.LastStateTransitionTime
+		*out = (*in).DeepCopy()
+	}
+	if in.LastPhaseTransitionTime != nil {
+		in, out := &in.LastPhaseTransitionTime, &out.LastPhaseTransitionTime
 		*out = (*in).DeepCopy()
 	}
 	return

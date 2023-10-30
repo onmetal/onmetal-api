@@ -1559,6 +1559,13 @@ func schema_onmetal_api_api_compute_v1alpha1_MachineStatus(ref common.ReferenceC
 							Format:      "int64",
 						},
 					},
+					"machinePoolObservedGeneration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MachinePoolObservedGeneration is the last generation the MachinePool observed of the Machine.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
 					"state": {
 						SchemaProps: spec.SchemaProps{
 							Description: "State is the infrastructure state of the machine.\n\nPossible enum values:\n - `\"Pending\"` means the Machine has been accepted by the system, but not yet completely started. This includes time before being bound to a MachinePool, as well as time spent setting up the Machine on that MachinePool.\n - `\"Running\"` means the machine is running on a MachinePool.\n - `\"Shutdown\"` means the machine is shut down.\n - `\"Terminated\"` means the machine has been permanently stopped and cannot be started.",
@@ -1687,6 +1694,13 @@ func schema_onmetal_api_api_compute_v1alpha1_NetworkInterfaceStatus(ref common.R
 							Format:      "",
 						},
 					},
+					"networkHandle": {
+						SchemaProps: spec.SchemaProps{
+							Description: "NetworkHandle is the handle of the network the NetworkInterface is in.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"ips": {
 						SchemaProps: spec.SchemaProps{
 							Description: "IPs are the ips allocated for the network interface.",
@@ -1717,6 +1731,19 @@ func schema_onmetal_api_api_compute_v1alpha1_NetworkInterfaceStatus(ref common.R
 					"lastStateTransitionTime": {
 						SchemaProps: spec.SchemaProps{
 							Description: "LastStateTransitionTime is the last time the State transitioned.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase is the NetworkInterface binding phase of the NetworkInterface.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"lastPhaseTransitionTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LastPhaseTransitionTime is the last time the Phase transitioned.",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
@@ -1843,6 +1870,19 @@ func schema_onmetal_api_api_compute_v1alpha1_VolumeStatus(ref common.ReferenceCa
 					"lastStateTransitionTime": {
 						SchemaProps: spec.SchemaProps{
 							Description: "LastStateTransitionTime is the last time the State transitioned.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase represents the binding phase of a Volume.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"lastPhaseTransitionTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LastPhaseTransitionTime is the last time the Phase transitioned.",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
 						},
 					},
