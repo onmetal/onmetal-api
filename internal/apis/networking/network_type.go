@@ -17,12 +17,18 @@
 package networking
 
 import (
+	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 )
 
 // NetworkSpec defines the desired state of Network
 type NetworkSpec struct {
+	// Handle is the identifier of the network provider.
+	Handle string
+	// InternetGateway is a flag that indicates whether the network has an internet gateway.
+	InternetGateway bool `json:"internetGateway,omitempty"`
+	// Peerings are the network peerings with this network.
 	// ProviderID is the provider-internal ID of the network.
 	ProviderID string
 	// Peerings are the network peerings with this network.
@@ -61,10 +67,24 @@ type NetworkPeeringNetworkRef struct {
 type NetworkPeering struct {
 	// Name is the semantical name of the network peering.
 	Name string
+	// Prefixes is a list of CIDRs that we want only to be exposed to the peered network, if no prefixes are specified no filtering will be done.
+	Prefixes *[]commonv1alpha1.IPPrefix
+	// TODO this will explode
+	// THIS IS THE OLD WAY
+
+	// NetworkRef is the reference to the network to peer with.
+	// If the UID is empty, it will be populated once when the peering is successfully bound.
+	// If namespace is empty it is implied that the target network resides in the same network.
+	NetworkRef commonv1alpha1.UIDReference
+}
+
+/*
+	// THIS IS THE NEW WAY
 	// NetworkRef is the reference to the network to peer with.
 	// An empty namespace indicates that the target network resides in the same namespace as the source network.
 	NetworkRef NetworkPeeringNetworkRef
 }
+*/
 
 // NetworkStatus defines the observed state of Network
 type NetworkStatus struct {
@@ -85,6 +105,14 @@ type NetworkState string
 type NetworkPeeringStatus struct {
 	// Name is the name of the network peering.
 	Name string
+	// NetworkHandle is the handle of the peered network.
+	NetworkHandle string
+	// Prefixes is a list of CIDRs that we want only to be exposed to the peered network, if no prefixes are specified no filtering will be done.
+	Prefixes *[]commonv1alpha1.IPPrefix
+	// Phase represents the binding phase of a network peering.
+	Phase NetworkPeeringPhase
+	// LastPhaseTransitionTime is the last time the Phase transitioned.
+	LastPhaseTransitionTime *metav1.Time
 }
 
 const (
@@ -94,6 +122,16 @@ const (
 	NetworkStateAvailable NetworkState = "Available"
 	// NetworkStateError means the network is in an error state.
 	NetworkStateError NetworkState = "Error"
+)
+
+// NetworkPeeringPhase is the phase a NetworkPeering can be in.
+type NetworkPeeringPhase string
+
+const (
+	// NetworkPeeringPhasePending signals that the network peering is not bound.
+	NetworkPeeringPhasePending NetworkPeeringPhase = "Pending"
+	// NetworkPeeringPhaseBound signals that the network peering is bound.
+	NetworkPeeringPhaseBound NetworkPeeringPhase = "Bound"
 )
 
 // +genclient

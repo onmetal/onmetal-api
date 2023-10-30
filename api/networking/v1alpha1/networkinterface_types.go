@@ -75,12 +75,21 @@ type NetworkInterfaceStatus struct {
 	// LastStateTransitionTime is the last time the State transitioned from one value to another.
 	LastStateTransitionTime *metav1.Time `json:"lastStateTransitionTime,omitempty"`
 
+	// NetworkHandle is the handle of the network the network interface is part of.
+	NetworkHandle string `json:"networkHandle,omitempty"`
 	// IPs represent the effective IP addresses of the NetworkInterface.
 	IPs []commonv1alpha1.IP `json:"ips,omitempty"`
 	// Prefixes represent the prefixes routed to the NetworkInterface.
 	Prefixes []commonv1alpha1.IPPrefix `json:"prefixes,omitempty"`
 	// VirtualIP is any virtual ip assigned to the NetworkInterface.
 	VirtualIP *commonv1alpha1.IP `json:"virtualIP,omitempty"`
+
+	// Phase is the NetworkInterfacePhase of the NetworkInterface.
+	Phase NetworkInterfacePhase `json:"phase,omitempty"`
+	// MachinePoolRef is the machine pool the network interface is currently on, if any.
+	MachinePoolRef *corev1.LocalObjectReference `json:"machinePoolRef,omitempty"`
+	// LastPhaseTransitionTime is the last time the Phase transitioned from one value to another.
+	LastPhaseTransitionTime *metav1.Time `json:"lastPhaseTransitionTime,omitempty"`
 }
 
 // NetworkInterfaceState is the onmetal-api state of a NetworkInterface.
@@ -93,6 +102,18 @@ const (
 	NetworkInterfaceStateAvailable NetworkInterfaceState = "Available"
 	// NetworkInterfaceStateError is used for any NetworkInterface where any property has an error.
 	NetworkInterfaceStateError NetworkInterfaceState = "Error"
+)
+
+// NetworkInterfacePhase is the binding phase of a NetworkInterface.
+type NetworkInterfacePhase string
+
+const (
+	// NetworkInterfacePhaseUnbound is used for any NetworkInterface that is not bound.
+	NetworkInterfacePhaseUnbound NetworkInterfacePhase = "Unbound"
+	// NetworkInterfacePhasePending is used for any NetworkInterface that is currently awaiting binding.
+	NetworkInterfacePhasePending NetworkInterfacePhase = "Pending"
+	// NetworkInterfacePhaseBound is used for any NetworkInterface that is properly bound.
+	NetworkInterfacePhaseBound NetworkInterfacePhase = "Bound"
 )
 
 // +genclient

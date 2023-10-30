@@ -20,6 +20,7 @@ package v1alpha1
 import (
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	v1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -28,9 +29,13 @@ import (
 type NetworkInterfaceStatusApplyConfiguration struct {
 	State                   *v1alpha1.NetworkInterfaceState `json:"state,omitempty"`
 	LastStateTransitionTime *v1.Time                        `json:"lastStateTransitionTime,omitempty"`
+	NetworkHandle           *string                         `json:"networkHandle,omitempty"`
 	IPs                     []commonv1alpha1.IP             `json:"ips,omitempty"`
 	Prefixes                []commonv1alpha1.IPPrefix       `json:"prefixes,omitempty"`
 	VirtualIP               *commonv1alpha1.IP              `json:"virtualIP,omitempty"`
+	Phase                   *v1alpha1.NetworkInterfacePhase `json:"phase,omitempty"`
+	MachinePoolRef          *corev1.LocalObjectReference    `json:"machinePoolRef,omitempty"`
+	LastPhaseTransitionTime *v1.Time                        `json:"lastPhaseTransitionTime,omitempty"`
 }
 
 // NetworkInterfaceStatusApplyConfiguration constructs an declarative configuration of the NetworkInterfaceStatus type for use with
@@ -52,6 +57,14 @@ func (b *NetworkInterfaceStatusApplyConfiguration) WithState(value v1alpha1.Netw
 // If called multiple times, the LastStateTransitionTime field is set to the value of the last call.
 func (b *NetworkInterfaceStatusApplyConfiguration) WithLastStateTransitionTime(value v1.Time) *NetworkInterfaceStatusApplyConfiguration {
 	b.LastStateTransitionTime = &value
+	return b
+}
+
+// WithNetworkHandle sets the NetworkHandle field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the NetworkHandle field is set to the value of the last call.
+func (b *NetworkInterfaceStatusApplyConfiguration) WithNetworkHandle(value string) *NetworkInterfaceStatusApplyConfiguration {
+	b.NetworkHandle = &value
 	return b
 }
 
@@ -80,5 +93,29 @@ func (b *NetworkInterfaceStatusApplyConfiguration) WithPrefixes(values ...common
 // If called multiple times, the VirtualIP field is set to the value of the last call.
 func (b *NetworkInterfaceStatusApplyConfiguration) WithVirtualIP(value commonv1alpha1.IP) *NetworkInterfaceStatusApplyConfiguration {
 	b.VirtualIP = &value
+	return b
+}
+
+// WithPhase sets the Phase field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the Phase field is set to the value of the last call.
+func (b *NetworkInterfaceStatusApplyConfiguration) WithPhase(value v1alpha1.NetworkInterfacePhase) *NetworkInterfaceStatusApplyConfiguration {
+	b.Phase = &value
+	return b
+}
+
+// WithMachinePoolRef sets the MachinePoolRef field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the MachinePoolRef field is set to the value of the last call.
+func (b *NetworkInterfaceStatusApplyConfiguration) WithMachinePoolRef(value corev1.LocalObjectReference) *NetworkInterfaceStatusApplyConfiguration {
+	b.MachinePoolRef = &value
+	return b
+}
+
+// WithLastPhaseTransitionTime sets the LastPhaseTransitionTime field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the LastPhaseTransitionTime field is set to the value of the last call.
+func (b *NetworkInterfaceStatusApplyConfiguration) WithLastPhaseTransitionTime(value v1.Time) *NetworkInterfaceStatusApplyConfiguration {
+	b.LastPhaseTransitionTime = &value
 	return b
 }

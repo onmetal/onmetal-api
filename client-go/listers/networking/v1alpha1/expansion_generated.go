@@ -41,6 +41,14 @@ type NATGatewayListerExpansion interface{}
 // NATGatewayNamespaceLister.
 type NATGatewayNamespaceListerExpansion interface{}
 
+// NATGatewayRoutingListerExpansion allows custom methods to be added to
+// NATGatewayRoutingLister.
+type NATGatewayRoutingListerExpansion interface{}
+
+// NATGatewayRoutingNamespaceListerExpansion allows custom methods to be added to
+// NATGatewayRoutingNamespaceLister.
+type NATGatewayRoutingNamespaceListerExpansion interface{}
+
 // NetworkListerExpansion allows custom methods to be added to
 // NetworkLister.
 type NetworkListerExpansion interface{}

@@ -18,7 +18,7 @@
 package v1alpha1
 
 import (
-	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
+	apinetworkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	v1alpha1 "github.com/onmetal/onmetal-api/client-go/applyconfigurations/common/v1alpha1"
 	internal "github.com/onmetal/onmetal-api/client-go/applyconfigurations/internal"
 	v1 "github.com/onmetal/onmetal-api/client-go/applyconfigurations/meta/v1"
@@ -27,58 +27,58 @@ import (
 	managedfields "k8s.io/apimachinery/pkg/util/managedfields"
 )
 
-// LoadBalancerRoutingApplyConfiguration represents an declarative configuration of the LoadBalancerRouting type for use
+// NATGatewayRoutingApplyConfiguration represents an declarative configuration of the NATGatewayRouting type for use
 // with apply.
-type LoadBalancerRoutingApplyConfiguration struct {
+type NATGatewayRoutingApplyConfiguration struct {
 	v1.TypeMetaApplyConfiguration    `json:",inline"`
 	*v1.ObjectMetaApplyConfiguration `json:"metadata,omitempty"`
-	NetworkRef                       *v1alpha1.LocalUIDReferenceApplyConfiguration  `json:"networkRef,omitempty"`
-	Destinations                     []v1alpha1.LocalUIDReferenceApplyConfiguration `json:"destinations,omitempty"`
+	NetworkRef                       *v1alpha1.LocalUIDReferenceApplyConfiguration `json:"networkRef,omitempty"`
+	Destinations                     []NATGatewayDestinationApplyConfiguration     `json:"destinations,omitempty"`
 }
 
-// LoadBalancerRouting constructs an declarative configuration of the LoadBalancerRouting type for use with
+// NATGatewayRouting constructs an declarative configuration of the NATGatewayRouting type for use with
 // apply.
-func LoadBalancerRouting(name, namespace string) *LoadBalancerRoutingApplyConfiguration {
-	b := &LoadBalancerRoutingApplyConfiguration{}
+func NATGatewayRouting(name, namespace string) *NATGatewayRoutingApplyConfiguration {
+	b := &NATGatewayRoutingApplyConfiguration{}
 	b.WithName(name)
 	b.WithNamespace(namespace)
-	b.WithKind("LoadBalancerRouting")
+	b.WithKind("NATGatewayRouting")
 	b.WithAPIVersion("networking.api.onmetal.de/v1alpha1")
 	return b
 }
 
-// ExtractLoadBalancerRouting extracts the applied configuration owned by fieldManager from
-// loadBalancerRouting. If no managedFields are found in loadBalancerRouting for fieldManager, a
-// LoadBalancerRoutingApplyConfiguration is returned with only the Name, Namespace (if applicable),
+// ExtractNATGatewayRouting extracts the applied configuration owned by fieldManager from
+// nATGatewayRouting. If no managedFields are found in nATGatewayRouting for fieldManager, a
+// NATGatewayRoutingApplyConfiguration is returned with only the Name, Namespace (if applicable),
 // APIVersion and Kind populated. It is possible that no managed fields were found for because other
 // field managers have taken ownership of all the fields previously owned by fieldManager, or because
 // the fieldManager never owned fields any fields.
-// loadBalancerRouting must be a unmodified LoadBalancerRouting API object that was retrieved from the Kubernetes API.
-// ExtractLoadBalancerRouting provides a way to perform a extract/modify-in-place/apply workflow.
+// nATGatewayRouting must be a unmodified NATGatewayRouting API object that was retrieved from the Kubernetes API.
+// ExtractNATGatewayRouting provides a way to perform a extract/modify-in-place/apply workflow.
 // Note that an extracted apply configuration will contain fewer fields than what the fieldManager previously
 // applied if another fieldManager has updated or force applied any of the previously applied fields.
 // Experimental!
-func ExtractLoadBalancerRouting(loadBalancerRouting *networkingv1alpha1.LoadBalancerRouting, fieldManager string) (*LoadBalancerRoutingApplyConfiguration, error) {
-	return extractLoadBalancerRouting(loadBalancerRouting, fieldManager, "")
+func ExtractNATGatewayRouting(nATGatewayRouting *apinetworkingv1alpha1.NATGatewayRouting, fieldManager string) (*NATGatewayRoutingApplyConfiguration, error) {
+	return extractNATGatewayRouting(nATGatewayRouting, fieldManager, "")
 }
 
-// ExtractLoadBalancerRoutingStatus is the same as ExtractLoadBalancerRouting except
+// ExtractNATGatewayRoutingStatus is the same as ExtractNATGatewayRouting except
 // that it extracts the status subresource applied configuration.
 // Experimental!
-func ExtractLoadBalancerRoutingStatus(loadBalancerRouting *networkingv1alpha1.LoadBalancerRouting, fieldManager string) (*LoadBalancerRoutingApplyConfiguration, error) {
-	return extractLoadBalancerRouting(loadBalancerRouting, fieldManager, "status")
+func ExtractNATGatewayRoutingStatus(nATGatewayRouting *apinetworkingv1alpha1.NATGatewayRouting, fieldManager string) (*NATGatewayRoutingApplyConfiguration, error) {
+	return extractNATGatewayRouting(nATGatewayRouting, fieldManager, "status")
 }
 
-func extractLoadBalancerRouting(loadBalancerRouting *networkingv1alpha1.LoadBalancerRouting, fieldManager string, subresource string) (*LoadBalancerRoutingApplyConfiguration, error) {
-	b := &LoadBalancerRoutingApplyConfiguration{}
-	err := managedfields.ExtractInto(loadBalancerRouting, internal.Parser().Type("com.github.onmetal.onmetal-api.api.networking.v1alpha1.LoadBalancerRouting"), fieldManager, b, subresource)
+func extractNATGatewayRouting(nATGatewayRouting *apinetworkingv1alpha1.NATGatewayRouting, fieldManager string, subresource string) (*NATGatewayRoutingApplyConfiguration, error) {
+	b := &NATGatewayRoutingApplyConfiguration{}
+	err := managedfields.ExtractInto(nATGatewayRouting, internal.Parser().Type("com.github.onmetal.onmetal-api.api.networking.v1alpha1.NATGatewayRouting"), fieldManager, b, subresource)
 	if err != nil {
 		return nil, err
 	}
-	b.WithName(loadBalancerRouting.Name)
-	b.WithNamespace(loadBalancerRouting.Namespace)
+	b.WithName(nATGatewayRouting.Name)
+	b.WithNamespace(nATGatewayRouting.Namespace)
 
-	b.WithKind("LoadBalancerRouting")
+	b.WithKind("NATGatewayRouting")
 	b.WithAPIVersion("networking.api.onmetal.de/v1alpha1")
 	return b, nil
 }
@@ -86,7 +86,7 @@ func extractLoadBalancerRouting(loadBalancerRouting *networkingv1alpha1.LoadBala
 // WithKind sets the Kind field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Kind field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithKind(value string) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithKind(value string) *NATGatewayRoutingApplyConfiguration {
 	b.Kind = &value
 	return b
 }
@@ -94,7 +94,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithKind(value string) *LoadBala
 // WithAPIVersion sets the APIVersion field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the APIVersion field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithAPIVersion(value string) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithAPIVersion(value string) *NATGatewayRoutingApplyConfiguration {
 	b.APIVersion = &value
 	return b
 }
@@ -102,7 +102,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithAPIVersion(value string) *Lo
 // WithName sets the Name field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Name field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithName(value string) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithName(value string) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.Name = &value
 	return b
@@ -111,7 +111,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithName(value string) *LoadBala
 // WithGenerateName sets the GenerateName field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the GenerateName field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithGenerateName(value string) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithGenerateName(value string) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.GenerateName = &value
 	return b
@@ -120,7 +120,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithGenerateName(value string) *
 // WithNamespace sets the Namespace field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Namespace field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithNamespace(value string) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithNamespace(value string) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.Namespace = &value
 	return b
@@ -129,7 +129,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithNamespace(value string) *Loa
 // WithUID sets the UID field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the UID field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithUID(value types.UID) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithUID(value types.UID) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.UID = &value
 	return b
@@ -138,7 +138,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithUID(value types.UID) *LoadBa
 // WithResourceVersion sets the ResourceVersion field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ResourceVersion field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithResourceVersion(value string) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithResourceVersion(value string) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.ResourceVersion = &value
 	return b
@@ -147,7 +147,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithResourceVersion(value string
 // WithGeneration sets the Generation field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Generation field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithGeneration(value int64) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithGeneration(value int64) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.Generation = &value
 	return b
@@ -156,7 +156,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithGeneration(value int64) *Loa
 // WithCreationTimestamp sets the CreationTimestamp field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the CreationTimestamp field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithCreationTimestamp(value metav1.Time) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithCreationTimestamp(value metav1.Time) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.CreationTimestamp = &value
 	return b
@@ -165,7 +165,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithCreationTimestamp(value meta
 // WithDeletionTimestamp sets the DeletionTimestamp field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the DeletionTimestamp field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithDeletionTimestamp(value metav1.Time) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithDeletionTimestamp(value metav1.Time) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.DeletionTimestamp = &value
 	return b
@@ -174,7 +174,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithDeletionTimestamp(value meta
 // WithDeletionGracePeriodSeconds sets the DeletionGracePeriodSeconds field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the DeletionGracePeriodSeconds field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithDeletionGracePeriodSeconds(value int64) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithDeletionGracePeriodSeconds(value int64) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.DeletionGracePeriodSeconds = &value
 	return b
@@ -184,7 +184,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithDeletionGracePeriodSeconds(v
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, the entries provided by each call will be put on the Labels field,
 // overwriting an existing map entries in Labels field with the same key.
-func (b *LoadBalancerRoutingApplyConfiguration) WithLabels(entries map[string]string) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithLabels(entries map[string]string) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	if b.Labels == nil && len(entries) > 0 {
 		b.Labels = make(map[string]string, len(entries))
@@ -199,7 +199,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithLabels(entries map[string]st
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, the entries provided by each call will be put on the Annotations field,
 // overwriting an existing map entries in Annotations field with the same key.
-func (b *LoadBalancerRoutingApplyConfiguration) WithAnnotations(entries map[string]string) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithAnnotations(entries map[string]string) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	if b.Annotations == nil && len(entries) > 0 {
 		b.Annotations = make(map[string]string, len(entries))
@@ -213,7 +213,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithAnnotations(entries map[stri
 // WithOwnerReferences adds the given value to the OwnerReferences field in the declarative configuration
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, values provided by each call will be appended to the OwnerReferences field.
-func (b *LoadBalancerRoutingApplyConfiguration) WithOwnerReferences(values ...*v1.OwnerReferenceApplyConfiguration) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithOwnerReferences(values ...*v1.OwnerReferenceApplyConfiguration) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	for i := range values {
 		if values[i] == nil {
@@ -227,7 +227,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithOwnerReferences(values ...*v
 // WithFinalizers adds the given value to the Finalizers field in the declarative configuration
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, values provided by each call will be appended to the Finalizers field.
-func (b *LoadBalancerRoutingApplyConfiguration) WithFinalizers(values ...string) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithFinalizers(values ...string) *NATGatewayRoutingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	for i := range values {
 		b.Finalizers = append(b.Finalizers, values[i])
@@ -235,7 +235,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithFinalizers(values ...string)
 	return b
 }
 
-func (b *LoadBalancerRoutingApplyConfiguration) ensureObjectMetaApplyConfigurationExists() {
+func (b *NATGatewayRoutingApplyConfiguration) ensureObjectMetaApplyConfigurationExists() {
 	if b.ObjectMetaApplyConfiguration == nil {
 		b.ObjectMetaApplyConfiguration = &v1.ObjectMetaApplyConfiguration{}
 	}
@@ -244,7 +244,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) ensureObjectMetaApplyConfigurati
 // WithNetworkRef sets the NetworkRef field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the NetworkRef field is set to the value of the last call.
-func (b *LoadBalancerRoutingApplyConfiguration) WithNetworkRef(value *v1alpha1.LocalUIDReferenceApplyConfiguration) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithNetworkRef(value *v1alpha1.LocalUIDReferenceApplyConfiguration) *NATGatewayRoutingApplyConfiguration {
 	b.NetworkRef = value
 	return b
 }
@@ -252,7 +252,7 @@ func (b *LoadBalancerRoutingApplyConfiguration) WithNetworkRef(value *v1alpha1.L
 // WithDestinations adds the given value to the Destinations field in the declarative configuration
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, values provided by each call will be appended to the Destinations field.
-func (b *LoadBalancerRoutingApplyConfiguration) WithDestinations(values ...*v1alpha1.LocalUIDReferenceApplyConfiguration) *LoadBalancerRoutingApplyConfiguration {
+func (b *NATGatewayRoutingApplyConfiguration) WithDestinations(values ...*NATGatewayDestinationApplyConfiguration) *NATGatewayRoutingApplyConfiguration {
 	for i := range values {
 		if values[i] == nil {
 			panic("nil value passed to WithDestinations")

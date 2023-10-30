@@ -30,6 +30,7 @@ type NetworkingV1alpha1Interface interface {
 	LoadBalancersGetter
 	LoadBalancerRoutingsGetter
 	NATGatewaysGetter
+	NATGatewayRoutingsGetter
 	NetworksGetter
 	NetworkInterfacesGetter
 	NetworkPoliciesGetter
@@ -51,6 +52,10 @@ func (c *NetworkingV1alpha1Client) LoadBalancerRoutings(namespace string) LoadBa
 
 func (c *NetworkingV1alpha1Client) NATGateways(namespace string) NATGatewayInterface {
 	return newNATGateways(c, namespace)
+}
+
+func (c *NetworkingV1alpha1Client) NATGatewayRoutings(namespace string) NATGatewayRoutingInterface {
+	return newNATGatewayRoutings(c, namespace)
 }
 
 func (c *NetworkingV1alpha1Client) Networks(namespace string) NetworkInterface {

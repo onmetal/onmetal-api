@@ -17,12 +17,17 @@
 package v1alpha1
 
 import (
+	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 )
 
 // NetworkSpec defines the desired state of Network
 type NetworkSpec struct {
+	// Handle is the identifier of the network provider.
+	Handle string `json:"handle"`
+	// InternetGateway is a flag that indicates whether the network has an internet gateway.
+	InternetGateway bool `json:"internetGateway,omitempty"`
 	// ProviderID is the provider-internal ID of the network.
 	ProviderID string `json:"providerID,omitempty"`
 	// Peerings are the network peerings with this network.
@@ -48,6 +53,27 @@ type NetworkPeeringClaimRef struct {
 	UID types.UID `json:"uid,omitempty"`
 }
 
+// NetworkPeering defines a network peering with another network.
+type NetworkPeering struct {
+	// Name is the semantical name of the network peering.
+	Name string `json:"name"`
+	// Prefixes is a list of CIDRs that we want only to be exposed to the peered network, if no prefixes are specified no filtering will be done.
+	Prefixes *[]commonv1alpha1.IPPrefix `json:"prefixes,omitempty"`
+	// TODO this will explode
+	// THIS IS THE OLD WAY
+	// NetworkRef is the reference to the network to peer with.
+	// If the UID is empty, it will be populated once when the peering is successfully bound.
+	// If namespace is empty it is implied that the target network resides in the same network.
+	NetworkRef commonv1alpha1.UIDReference `json:"networkRef"`
+}
+
+/*
+	// THIS IS THE NEW WAY
+	// NetworkRef is the reference to the network to peer with.
+	// An empty namespace indicates that the target network resides in the same namespace as the source network.
+	NetworkRef NetworkPeeringNetworkRef `json:"networkRef"`
+}
+
 // NetworkPeeringNetworkRef is a reference to a network to peer with.
 type NetworkPeeringNetworkRef struct {
 	// Namespace is the namespace of the referenced entity. If empty,
@@ -56,15 +82,7 @@ type NetworkPeeringNetworkRef struct {
 	// Name is the name of the referenced entity.
 	Name string `json:"name"`
 }
-
-// NetworkPeering defines a network peering with another network.
-type NetworkPeering struct {
-	// Name is the semantical name of the network peering.
-	Name string `json:"name"`
-	// NetworkRef is the reference to the network to peer with.
-	// An empty namespace indicates that the target network resides in the same namespace as the source network.
-	NetworkRef NetworkPeeringNetworkRef `json:"networkRef"`
-}
+*/
 
 // NetworkStatus defines the observed state of Network
 type NetworkStatus struct {
@@ -85,6 +103,14 @@ type NetworkState string
 type NetworkPeeringStatus struct {
 	// Name is the name of the network peering.
 	Name string `json:"name"`
+	// NetworkHandle is the handle of the peered network.
+	NetworkHandle string `json:"networkHandle,omitempty"`
+	// Prefixes is a list of CIDRs that we want only to be exposed to the peered network.
+	Prefixes *[]commonv1alpha1.IPPrefix `json:"prefixes,omitempty"`
+	// Phase represents the binding phase of a network peering.
+	Phase NetworkPeeringPhase `json:"phase,omitempty"`
+	// LastPhaseTransitionTime is the last time the Phase transitioned.
+	LastPhaseTransitionTime *metav1.Time `json:"lastPhaseTransitionTime,omitempty"`
 }
 
 const (
@@ -94,6 +120,16 @@ const (
 	NetworkStateAvailable NetworkState = "Available"
 	// NetworkStateError means the network is in an error state.
 	NetworkStateError NetworkState = "Error"
+)
+
+// NetworkPeeringPhase is the phase a NetworkPeering can be in.
+type NetworkPeeringPhase string
+
+const (
+	// NetworkPeeringPhasePending signals that the network peering is not bound.
+	NetworkPeeringPhasePending NetworkPeeringPhase = "Pending"
+	// NetworkPeeringPhaseBound signals that the network peering is bound.
+	NetworkPeeringPhaseBound NetworkPeeringPhase = "Bound"
 )
 
 // +genclient

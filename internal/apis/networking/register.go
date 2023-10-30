@@ -57,6 +57,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&LoadBalancerRoutingList{},
 		&NATGateway{},
 		&NATGatewayList{},
+		&NATGatewayRouting{},
+		&NATGatewayRoutingList{},
 	)
 	return nil
 }

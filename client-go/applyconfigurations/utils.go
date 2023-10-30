@@ -48,6 +48,8 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &commonv1alpha1.TaintApplyConfiguration{}
 	case v1alpha1.SchemeGroupVersion.WithKind("Toleration"):
 		return &commonv1alpha1.TolerationApplyConfiguration{}
+	case v1alpha1.SchemeGroupVersion.WithKind("UIDReference"):
+		return &commonv1alpha1.UIDReferenceApplyConfiguration{}
 
 		// Group=compute.api.onmetal.de, Version=v1alpha1
 	case computev1alpha1.SchemeGroupVersion.WithKind("DaemonEndpoint"):
@@ -148,8 +150,6 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationsnetworkingv1alpha1.IPSourceApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("LoadBalancer"):
 		return &applyconfigurationsnetworkingv1alpha1.LoadBalancerApplyConfiguration{}
-	case networkingv1alpha1.SchemeGroupVersion.WithKind("LoadBalancerDestination"):
-		return &applyconfigurationsnetworkingv1alpha1.LoadBalancerDestinationApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("LoadBalancerPort"):
 		return &applyconfigurationsnetworkingv1alpha1.LoadBalancerPortApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("LoadBalancerRouting"):
@@ -158,10 +158,18 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationsnetworkingv1alpha1.LoadBalancerSpecApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("LoadBalancerStatus"):
 		return &applyconfigurationsnetworkingv1alpha1.LoadBalancerStatusApplyConfiguration{}
-	case networkingv1alpha1.SchemeGroupVersion.WithKind("LoadBalancerTargetRef"):
-		return &applyconfigurationsnetworkingv1alpha1.LoadBalancerTargetRefApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("NATGateway"):
 		return &applyconfigurationsnetworkingv1alpha1.NATGatewayApplyConfiguration{}
+	case networkingv1alpha1.SchemeGroupVersion.WithKind("NATGatewayDestination"):
+		return &applyconfigurationsnetworkingv1alpha1.NATGatewayDestinationApplyConfiguration{}
+	case networkingv1alpha1.SchemeGroupVersion.WithKind("NATGatewayDestinationIP"):
+		return &applyconfigurationsnetworkingv1alpha1.NATGatewayDestinationIPApplyConfiguration{}
+	case networkingv1alpha1.SchemeGroupVersion.WithKind("NATGatewayIP"):
+		return &applyconfigurationsnetworkingv1alpha1.NATGatewayIPApplyConfiguration{}
+	case networkingv1alpha1.SchemeGroupVersion.WithKind("NATGatewayIPStatus"):
+		return &applyconfigurationsnetworkingv1alpha1.NATGatewayIPStatusApplyConfiguration{}
+	case networkingv1alpha1.SchemeGroupVersion.WithKind("NATGatewayRouting"):
+		return &applyconfigurationsnetworkingv1alpha1.NATGatewayRoutingApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("NATGatewaySpec"):
 		return &applyconfigurationsnetworkingv1alpha1.NATGatewaySpecApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("NATGatewayStatus"):
@@ -180,8 +188,6 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationsnetworkingv1alpha1.NetworkPeeringApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("NetworkPeeringClaimRef"):
 		return &applyconfigurationsnetworkingv1alpha1.NetworkPeeringClaimRefApplyConfiguration{}
-	case networkingv1alpha1.SchemeGroupVersion.WithKind("NetworkPeeringNetworkRef"):
-		return &applyconfigurationsnetworkingv1alpha1.NetworkPeeringNetworkRefApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("NetworkPeeringStatus"):
 		return &applyconfigurationsnetworkingv1alpha1.NetworkPeeringStatusApplyConfiguration{}
 	case networkingv1alpha1.SchemeGroupVersion.WithKind("NetworkPolicy"):
