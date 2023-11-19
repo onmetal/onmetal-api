@@ -6,7 +6,7 @@ require (
 	github.com/bits-and-blooms/bitset v1.8.0
 	github.com/blang/semver/v4 v4.0.0
 	github.com/go-chi/chi/v5 v5.0.8
-	github.com/go-logr/logr v1.2.4
+	github.com/go-logr/logr v1.3.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/google/go-cmp v0.5.9
 	github.com/onmetal/controller-utils v0.8.0
@@ -24,7 +24,7 @@ require (
 	k8s.io/apiserver v0.27.3
 	k8s.io/client-go v0.27.3
 	k8s.io/component-base v0.27.3
-	k8s.io/klog/v2 v2.100.1
+	k8s.io/klog/v2 v2.110.1
 	k8s.io/kube-aggregator v0.27.3
 	k8s.io/kube-openapi v0.0.0-20230501164219-8b0f38b5fd1f
 	k8s.io/kubectl v0.27.3
