@@ -187,47 +187,47 @@ docker-build: \
 
 .PHONY: docker-build-onmetal-apiserver
 docker-build-onmetal-apiserver: ## Build onmetal-apiserver.
-	docker build $(BUILDARGS) --target apiserver -t ${APISERVER_IMG} .
+	docker build $(BUILDARGS) --target apiserver -t ${APISERVER_IMG} .  --load
 
 .PHONY: docker-build-onmetal-controller-manager
 docker-build-onmetal-controller-manager: ## Build onmetal-controller-manager.
-	docker build $(BUILDARGS) --target manager -t ${CONTROLLER_IMG} .
+	docker build $(BUILDARGS) --target manager -t ${CONTROLLER_IMG} . --load
 
 .PHONY: docker-build-machinepoollet
 docker-build-machinepoollet: ## Build machinepoollet image.
-	docker build $(BUILDARGS) --target machinepoollet -t ${MACHINEPOOLLET_IMG} .
+	docker build $(BUILDARGS) --target machinepoollet -t ${MACHINEPOOLLET_IMG} . --load
 
 .PHONY: docker-build-machinebroker
 docker-build-machinebroker: ## Build machinebroker image.
-	docker build $(BUILDARGS) --target machinebroker -t ${MACHINEBROKER_IMG} .
+	docker build $(BUILDARGS) --target machinebroker -t ${MACHINEBROKER_IMG} . --load
 
 .PHONY: docker-build-orictl-machine
 docker-build-orictl-machine: ## Build orictl-machine image.
-	docker build $(BUILDARGS) --target orictl-machine -t ${ORICTL_MACHINE_IMG} .
+	docker build $(BUILDARGS) --target orictl-machine -t ${ORICTL_MACHINE_IMG} . --load
 
 .PHONY: docker-build-volumepoollet
 docker-build-volumepoollet: ## Build volumepoollet image.
-	docker build $(BUILDARGS) --target volumepoollet -t ${VOLUMEPOOLLET_IMG} .
+	docker build $(BUILDARGS) --target volumepoollet -t ${VOLUMEPOOLLET_IMG} . --load
 
 .PHONY: docker-build-volumebroker
 docker-build-volumebroker: ## Build volumebroker image.
-	docker build $(BUILDARGS) --target volumebroker -t ${VOLUMEBROKER_IMG} .
+	docker build $(BUILDARGS) --target volumebroker -t ${VOLUMEBROKER_IMG} . --load
 
 .PHONY: docker-build-orictl-volume
 docker-build-orictl-volume: ## Build orictl-volume image.
-	docker build $(BUILDARGS) --target orictl-volume -t ${ORICTL_VOLUME_IMG} .
+	docker build $(BUILDARGS) --target orictl-volume -t ${ORICTL_VOLUME_IMG} . --load
 
 .PHONY: docker-build-bucketpoollet
 docker-build-bucketpoollet: ## Build bucketpoollet image.
-	docker build $(BUILDARGS) --target bucketpoollet -t ${BUCKETPOOLLET_IMG} .
+	docker build $(BUILDARGS) --target bucketpoollet -t ${BUCKETPOOLLET_IMG} . --load
 
 .PHONY: docker-build-bucketbroker
 docker-build-bucketbroker: ## Build bucketbroker image.
-	docker build $(BUILDARGS) --target bucketbroker -t ${BUCKETBROKER_IMG} .
+	docker build $(BUILDARGS) --target bucketbroker -t ${BUCKETBROKER_IMG} . --load
 
 .PHONY: docker-build-orictl-bucket
 docker-build-orictl-bucket: ## Build orictl-bucket image.
-	docker build $(BUILDARGS) --target orictl-bucket -t ${ORICTL_BUCKET_IMG} .
+	docker build $(BUILDARGS) --target orictl-bucket -t ${ORICTL_BUCKET_IMG} . --load
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
