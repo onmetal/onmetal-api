@@ -100,6 +100,9 @@ func (m *LoadBalancers) getLoadBalancerByKey(ctx context.Context, key loadBalanc
 	case 0:
 		return nil, nil, false, nil
 	case 1:
+		if len(loadBalancers) == 0 {
+			return nil, nil, false, nil
+		}
 		loadBalancer := loadBalancers[0]
 		loadBalancerRouting := &networkingv1alpha1.LoadBalancerRouting{}
 		if err := m.cluster.Client().Get(ctx, client.ObjectKeyFromObject(&loadBalancer), loadBalancerRouting); err != nil {
