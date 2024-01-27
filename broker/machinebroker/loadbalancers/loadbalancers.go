@@ -61,7 +61,7 @@ func (m *LoadBalancers) filterLoadBalancers(
 	loadBalancers []networkingv1alpha1.LoadBalancer,
 	ports []machinebrokerv1alpha1.LoadBalancerPort,
 ) []networkingv1alpha1.LoadBalancer {
-	portsKey := machinebrokerv1alpha1.LoadBalancerPortsKey(ports)
+	//portsKey := machinebrokerv1alpha1.LoadBalancerPortsKey(ports)
 
 	var filtered []networkingv1alpha1.LoadBalancer
 	for _, loadBalancer := range loadBalancers {
@@ -69,10 +69,10 @@ func (m *LoadBalancers) filterLoadBalancers(
 			continue
 		}
 
-		targetPorts := apiutils.ConvertNetworkingLoadBalancerPortsToLoadBalancerPorts(loadBalancer.Spec.Ports)
-		if machinebrokerv1alpha1.LoadBalancerPortsKey(targetPorts) != portsKey {
-			continue
-		}
+		//targetPorts := apiutils.ConvertNetworkingLoadBalancerPortsToLoadBalancerPorts(loadBalancer.Spec.Ports)
+		//if machinebrokerv1alpha1.LoadBalancerPortsKey(targetPorts) != portsKey {
+		//	continue
+		//}
 
 		filtered = append(filtered, loadBalancer)
 	}
@@ -248,6 +248,14 @@ func (m *LoadBalancers) Create(
 		c.Add(cleaner.DeleteObjectIfExistsFunc(m.cluster.Client(), newLoadBalancer))
 		loadBalancer = newLoadBalancer
 		loadBalancerRouting = newLoadBalancerRouting
+	} else {
+		base := loadBalancer.DeepCopy()
+
+		ports := apiutils.ConvertLoadBalancerPortsToNetworkingLoadBalancerPorts(key.target.Ports)
+		loadBalancer.Spec.Ports = ports
+		if err = m.cluster.Client().Patch(ctx, loadBalancer, client.MergeFrom(base)); err != nil {
+			return fmt.Errorf("error update balancer ports: %w", err)
+		}
 	}
 
 	if err := m.addLoadBalancerRoutingDestination(ctx, loadBalancerRouting, networkInterface); err != nil {
