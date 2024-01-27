@@ -453,6 +453,12 @@ func (r *MachineReconciler) updateORINetworkInterfaceLoadBalancerTargets(
 	delLoadBalancerTargets := utilmaps.KeysDifference(actualLoadBalancerTargets, desiredLoadBalancerTargets)
 	newLoadBalancerTargets := utilmaps.KeysDifference(desiredLoadBalancerTargets, actualLoadBalancerTargets)
 
+	if len(newLoadBalancerTargets) == 0 && len(actualLoadBalancerTargets) == 0 && len(desiredLoadBalancerTargets) >= 1 {
+		for k := range desiredLoadBalancerTargets {
+			newLoadBalancerTargets.Insert(k)
+		}
+	}
+
 	var errs []error
 	for key := range delLoadBalancerTargets {
 		delTgt := actualLoadBalancerTargets[key]
