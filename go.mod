@@ -20,8 +20,8 @@ require (
 	golang.org/x/sync v0.7.0
 	golang.org/x/sys v0.20.0
 	google.golang.org/grpc v1.63.2
-	k8s.io/api v0.30.0
-	k8s.io/apimachinery v0.30.0
+	k8s.io/api v0.30.1
+	k8s.io/apimachinery v0.30.1
 	k8s.io/apiserver v0.30.0
 	k8s.io/client-go v0.30.0
 	k8s.io/component-base v0.30.0
