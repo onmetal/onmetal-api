@@ -1,7 +1,7 @@
 module github.com/onmetal/onmetal-api
 
 go 1.21
-toolchain go1.22.2
+toolchain go1.22.3
 
 require (
 	github.com/bits-and-blooms/bitset v1.13.0
@@ -18,7 +18,7 @@ require (
 	go4.org/netipx v0.0.0-20220812043211-3cc044ffd68d
 	golang.org/x/exp v0.0.0-20221212164502-fae10dda9338
 	golang.org/x/sync v0.7.0
-	golang.org/x/sys v0.20.0
+	golang.org/x/sys v0.21.0
 	google.golang.org/grpc v1.64.0
 	k8s.io/api v0.30.1
 	k8s.io/apimachinery v0.30.1
