@@ -1,7 +1,7 @@
 module github.com/onmetal/onmetal-api
 
 go 1.21
-toolchain go1.22.3
+toolchain go1.22.4
 
 require (
 	github.com/bits-and-blooms/bitset v1.13.0
@@ -25,7 +25,7 @@ require (
 	k8s.io/apiserver v0.30.2
 	k8s.io/client-go v0.30.2
 	k8s.io/component-base v0.30.2
-	k8s.io/klog/v2 v2.120.1
+	k8s.io/klog/v2 v2.130.0
 	k8s.io/kube-aggregator v0.30.2
 	k8s.io/kube-openapi v0.0.0-20240228011516-70dd3763d340
 	k8s.io/kubectl v0.30.2
