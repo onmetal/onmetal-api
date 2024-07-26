@@ -12,7 +12,7 @@ require (
 	github.com/google/go-cmp v0.6.0
 	github.com/onmetal/controller-utils v0.8.3
 	github.com/onsi/ginkgo/v2 v2.19.0
-	github.com/onsi/gomega v1.33.1
+	github.com/onsi/gomega v1.34.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
 	go4.org/netipx v0.0.0-20220812043211-3cc044ffd68d
@@ -109,6 +109,8 @@ require (
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/tools v0.21.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20240528184218-531527333157 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240528184218-531527333157 // indirect
 	google.golang.org/protobuf v1.34.1 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
