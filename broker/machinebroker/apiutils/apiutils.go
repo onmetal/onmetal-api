@@ -262,11 +262,21 @@ func GetDependents(o metav1.Object) ([]string, error) {
 }
 
 func SetDependents(o metav1.Object, dependents []string) error {
-	dependentsData, err := json.Marshal(dependents)
+	// Filter out empty strings from dependents
+	var filteredDependents []string
+	for _, dependent := range dependents {
+		if dependent != "" {
+			filteredDependents = append(filteredDependents, dependent)
+		}
+	}
+
+	// Marshal the filtered dependents slice to JSON
+	dependentsData, err := json.Marshal(filteredDependents)
 	if err != nil {
 		return fmt.Errorf("error marshalling dependents: %w", err)
 	}
 
+	// Set the annotation with the marshalled data
 	metautils.SetAnnotation(o, machinebrokerv1alpha1.DependentsAnnotation, string(dependentsData))
 	return nil
 }

@@ -31,6 +31,7 @@ import (
 	. "github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/utils/pointer"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	. "sigs.k8s.io/controller-runtime/pkg/envtest/komega"
 )
@@ -328,6 +329,36 @@ var _ = Describe("MachineController", func() {
 				},
 			}))
 		}).Should(Succeed())
+
+		loadBalancer.Spec.Ports[0].Port = 81
+		loadBalancer.Spec.Ports[0].EndPort = pointer.Int32(81)
+		Expect(k8sClient.Update(ctx, loadBalancer)).To(Succeed())
+
+		By("waiting for the runtime to report the machine and network interface")
+		Eventually(func(g Gomega) {
+			g.Expect(srv.Machines).To(HaveLen(1))
+			g.Expect(srv.NetworkInterfaces).To(HaveLen(1))
+
+			_, oriMachine := GetSingleMapEntry(srv.Machines)
+			_, oriNetworkInterface := GetSingleMapEntry(srv.NetworkInterfaces)
+
+			g.Expect(oriMachine.Spec.NetworkInterfaces).To(ConsistOf(&ori.NetworkInterfaceAttachment{
+				Name:               "primary",
+				NetworkInterfaceId: oriNetworkInterface.Metadata.Id,
+			}))
+
+			g.Expect(oriNetworkInterface.Spec.LoadBalancerTargets).To(ConsistOf(&ori.LoadBalancerTargetSpec{
+				Ip: "10.0.0.1",
+				Ports: []*ori.LoadBalancerPort{
+					{
+						Protocol: ori.Protocol_TCP,
+						Port:     81,
+						EndPort:  81,
+					},
+				},
+			}))
+		}).Should(Succeed())
+
 	})
 
 	It("should correctly reconcile nats", func() {
