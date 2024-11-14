@@ -38,6 +38,9 @@ type Options struct {
 	Namespace          string
 	VolumePoolName     string
 	VolumePoolSelector map[string]string
+
+	QPS   float32
+	Burst int
 }
 
 func (o *Options) AddFlags(fs *pflag.FlagSet) {
@@ -47,6 +50,9 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.Namespace, "namespace", o.Namespace, "Target Kubernetes namespace to use.")
 	fs.StringVar(&o.VolumePoolName, "volume-pool-name", o.VolumePoolName, "Name of the target volume pool to pin volumes to, if any.")
 	fs.StringToStringVar(&o.VolumePoolSelector, "volume-pool-selector", o.VolumePoolSelector, "Selector of the target volume pools to pin volumes to, if any.")
+
+	fs.Float32VarP(&o.QPS, "QPS", "", 100, "Kubernetes client qps.")
+	fs.IntVar(&o.Burst, "Burst", 200, "Kubernetes client burst.")
 }
 
 func Command() *cobra.Command {
@@ -84,6 +90,10 @@ func Run(ctx context.Context, opts Options) error {
 	if err != nil {
 		return err
 	}
+
+	cfg.QPS = opts.QPS
+	cfg.Burst = opts.Burst
+	setupLog.Info("Config", "QPS", cfg.QPS, "Burst", cfg.Burst)
 
 	srv, err := server.New(cfg, server.Options{
 		Namespace:          opts.Namespace,

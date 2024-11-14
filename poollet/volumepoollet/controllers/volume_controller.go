@@ -19,7 +19,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-
 	"github.com/go-logr/logr"
 	"github.com/onmetal/controller-utils/clientutils"
 	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
@@ -39,9 +38,11 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/tools/record"
+	"k8s.io/client-go/util/workqueue"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 )
@@ -542,6 +543,11 @@ func (r *VolumeReconciler) updateStatus(ctx context.Context, log logr.Logger, vo
 func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	log := ctrl.Log.WithName("volumepoollet")
 
+	// Create a no-op rate limiter that allows immediate requeueing
+	noRateLimiter := workqueue.NewMaxOfRateLimiter(
+		workqueue.NewItemExponentialFailureRateLimiter(0, 0),
+	)
+
 	return ctrl.NewControllerManagedBy(mgr).
 		For(
 			&storagev1alpha1.Volume{},
@@ -551,6 +557,11 @@ func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager) error {
 				predicates.ResourceIsNotExternallyManaged(log),
 			),
 		).
+		WithOptions(
+			controller.Options{
+				MaxConcurrentReconciles: 10,
+				RateLimiter:             noRateLimiter,
+			}).
 		Complete(r)
 }
 

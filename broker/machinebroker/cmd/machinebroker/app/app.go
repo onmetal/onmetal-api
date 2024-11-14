@@ -48,6 +48,9 @@ type Options struct {
 	Namespace           string
 	MachinePoolName     string
 	MachinePoolSelector map[string]string
+
+	QPS   float32
+	Burst int
 }
 
 func (o *Options) AddFlags(fs *pflag.FlagSet) {
@@ -62,6 +65,9 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.Namespace, "namespace", o.Namespace, "Target Kubernetes namespace to use.")
 	fs.StringVar(&o.MachinePoolName, "machine-pool-name", o.MachinePoolName, "Name of the target machine pool to pin machines to, if any.")
 	fs.StringToStringVar(&o.MachinePoolSelector, "machine-pool-selector", o.MachinePoolSelector, "Selector of the target machine pools to pin machines to, if any.")
+
+	fs.Float32VarP(&o.QPS, "QPS", "", 100, "Kubernetes client qps.")
+	fs.IntVar(&o.Burst, "Burst", 200, "Kubernetes client burst.")
 }
 
 func Command() *cobra.Command {
@@ -99,6 +105,10 @@ func Run(ctx context.Context, opts Options) error {
 	if err != nil {
 		return err
 	}
+
+	cfg.QPS = opts.QPS
+	cfg.Burst = opts.Burst
+	setupLog.Info("Config", "QPS", cfg.QPS, "Burst", cfg.Burst)
 
 	if opts.Namespace == "" {
 		return fmt.Errorf("must specify namespace")

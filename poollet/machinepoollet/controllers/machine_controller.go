@@ -17,6 +17,8 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"k8s.io/client-go/util/workqueue"
+	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"strconv"
 
 	"github.com/go-logr/logr"
@@ -1011,6 +1013,11 @@ func (r *MachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	log := ctrl.Log.WithName("machinepoollet")
 	ctx := ctrl.LoggerInto(context.TODO(), log)
 
+	// Create a no-op rate limiter that allows immediate requeueing
+	noRateLimiter := workqueue.NewMaxOfRateLimiter(
+		workqueue.NewItemExponentialFailureRateLimiter(0, 0),
+	)
+
 	return ctrl.NewControllerManagedBy(mgr).
 		For(
 			&computev1alpha1.Machine{},
@@ -1044,5 +1051,10 @@ func (r *MachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			&source.Kind{Type: &networkingv1alpha1.Network{}},
 			r.enqueueMachinesReferencingNetwork(ctx, log),
 		).
+		WithOptions(
+			controller.Options{
+				MaxConcurrentReconciles: 10,
+				RateLimiter:             noRateLimiter,
+			}).
 		Complete(r)
 }

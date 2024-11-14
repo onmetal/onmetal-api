@@ -358,7 +358,7 @@ func (r *NATGatewayReconciler) reconcile(ctx context.Context, log logr.Logger, n
 func (r *NATGatewayReconciler) patchStatus(ctx context.Context, natGateway *networkingv1alpha1.NATGateway, portsInUse int32) error {
 	natGatewayBase := natGateway.DeepCopy()
 	natGateway.Status.PortsUsed = pointer.Int32(portsInUse)
-	return r.Patch(ctx, natGateway, client.MergeFrom(natGatewayBase))
+	return r.Status().Patch(ctx, natGateway, client.MergeFrom(natGatewayBase))
 }
 
 func (r *NATGatewayReconciler) selectTargets(ctx context.Context, log logr.Logger, natGateway *networkingv1alpha1.NATGateway) (map[types.UID]string, error) {
