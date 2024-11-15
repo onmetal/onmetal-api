@@ -36,6 +36,7 @@ import (
 	kubernetes "k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/rest"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 )
@@ -102,18 +103,44 @@ var _ ori.VolumeRuntimeServer = (*Server)(nil)
 //+kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=storage.api.onmetal.de,resources=volumes,verbs=get;list;watch;create;update;patch;delete
 
-func New(cfg *rest.Config, opts Options) (*Server, error) {
+func New(ctx context.Context, cfg *rest.Config, opts Options) (*Server, error) {
 	setOptionsDefaults(&opts)
 
-	c, err := client.New(cfg, client.Options{
+	// Create the cache
+	cachedCache, err := cache.New(cfg, cache.Options{
+		Scheme:    scheme,
+		Namespace: opts.Namespace, // Optional: Limit cache to a specific namespace
+	})
+	if err != nil {
+		return nil, fmt.Errorf("error creating cache: %w", err)
+	}
+
+	// Start and sync the cache
+	go func() {
+		if err := cachedCache.Start(ctx); err != nil {
+			fmt.Printf("Error starting cache: %v\n", err)
+		}
+	}()
+	if !cachedCache.WaitForCacheSync(ctx) {
+		return nil, fmt.Errorf("failed to sync cache")
+	}
+
+	// Create the uncached client for writes
+	uncachedClient, err := client.New(cfg, client.Options{
 		Scheme: scheme,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("error creating client: %w", err)
+		return nil, fmt.Errorf("error creating uncached client: %w", err)
 	}
 
+	// Create the delegating client
+	cachedClient, err := client.NewDelegatingClient(client.NewDelegatingClientInput{
+		CacheReader: cachedCache,    // Use cache for reads
+		Client:      uncachedClient, // Use direct client for writes
+	})
+
 	return &Server{
-		client:             c,
+		client:             cachedClient,
 		idGen:              opts.IDGen,
 		namespace:          opts.Namespace,
 		volumePoolName:     opts.VolumePoolName,

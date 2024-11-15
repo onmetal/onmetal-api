@@ -51,8 +51,8 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.VolumePoolName, "volume-pool-name", o.VolumePoolName, "Name of the target volume pool to pin volumes to, if any.")
 	fs.StringToStringVar(&o.VolumePoolSelector, "volume-pool-selector", o.VolumePoolSelector, "Selector of the target volume pools to pin volumes to, if any.")
 
-	fs.Float32VarP(&o.QPS, "QPS", "", 100, "Kubernetes client qps.")
-	fs.IntVar(&o.Burst, "Burst", 200, "Kubernetes client burst.")
+	fs.Float32VarP(&o.QPS, "qps", "", 100, "Kubernetes client qps.")
+	fs.IntVar(&o.Burst, "burst", 200, "Kubernetes client burst.")
 }
 
 func Command() *cobra.Command {
@@ -93,9 +93,9 @@ func Run(ctx context.Context, opts Options) error {
 
 	cfg.QPS = opts.QPS
 	cfg.Burst = opts.Burst
-	setupLog.Info("Config", "QPS", cfg.QPS, "Burst", cfg.Burst)
+	setupLog.Info("Kubernetes client config", "QPS", cfg.QPS, "Burst", cfg.Burst)
 
-	srv, err := server.New(cfg, server.Options{
+	srv, err := server.New(ctx, cfg, server.Options{
 		Namespace:          opts.Namespace,
 		VolumePoolName:     opts.VolumePoolName,
 		VolumePoolSelector: opts.VolumePoolSelector,

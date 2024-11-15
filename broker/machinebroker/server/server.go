@@ -15,6 +15,7 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"path"
@@ -78,13 +79,13 @@ type Options struct {
 	MachinePoolSelector     map[string]string
 }
 
-func New(cfg *rest.Config, namespace string, opts Options) (*Server, error) {
+func New(ctx context.Context, cfg *rest.Config, namespace string, opts Options) (*Server, error) {
 	baseURL, err := url.ParseRequestURI(opts.BaseURL)
 	if err != nil {
 		return nil, fmt.Errorf("invalid base url %q: %w", opts.BaseURL, err)
 	}
 
-	c, err := cluster.New(cfg, namespace, cluster.Options{
+	c, err := cluster.New(ctx, cfg, namespace, cluster.Options{
 		MachinePoolName:     opts.MachinePoolName,
 		MachinePoolSelector: opts.MachinePoolSelector,
 	})

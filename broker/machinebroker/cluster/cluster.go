@@ -15,7 +15,9 @@
 package cluster
 
 import (
+	"context"
 	"fmt"
+	"sigs.k8s.io/controller-runtime/pkg/cache"
 
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
@@ -71,20 +73,46 @@ func setOptionsDefaults(o *Options) {
 	}
 }
 
-func New(cfg *rest.Config, namespace string, opts Options) (Cluster, error) {
+func New(ctx context.Context, cfg *rest.Config, namespace string, opts Options) (Cluster, error) {
 	setOptionsDefaults(&opts)
 
-	c, err := client.New(cfg, client.Options{
+	// Create the cache
+	cachedCache, err := cache.New(cfg, cache.Options{
+		Scheme:    scheme,
+		Namespace: namespace, // Optional: Limit cache to a specific namespace
+	})
+	if err != nil {
+		return nil, fmt.Errorf("error creating cache: %w", err)
+	}
+
+	// Start and sync the cache
+	go func() {
+		if err := cachedCache.Start(ctx); err != nil {
+			fmt.Printf("Error starting cache: %v\n", err)
+		}
+	}()
+	if !cachedCache.WaitForCacheSync(ctx) {
+		return nil, fmt.Errorf("failed to sync cache")
+	}
+
+	// Create the uncached client for writes
+	uncachedClient, err := client.New(cfg, client.Options{
 		Scheme: scheme,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("error creating client: %w", err)
+		return nil, fmt.Errorf("error creating uncached client: %w", err)
 	}
+
+	// Create the delegating client
+	cachedClient, err := client.NewDelegatingClient(client.NewDelegatingClientInput{
+		CacheReader: cachedCache,    // Use cache for reads
+		Client:      uncachedClient, // Use direct client for writes
+	})
 
 	return &cluster{
 		namespace:           namespace,
 		config:              cfg,
-		client:              c,
+		client:              cachedClient,
 		scheme:              scheme,
 		idGen:               opts.IDGen,
 		machinePoolName:     opts.MachinePoolName,

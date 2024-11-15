@@ -87,6 +87,10 @@ type Options struct {
 
 	QPS   float32
 	Burst int
+
+	ChannelCapacity int
+	RelistPeriod    time.Duration
+	RelistThreshold time.Duration
 }
 
 func (o *Options) AddFlags(fs *pflag.FlagSet) {
@@ -114,8 +118,12 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 
 	fs.StringVar(&o.WatchFilterValue, "watch-filter", "", "Value to filter for while watching.")
 
-	fs.Float32VarP(&o.QPS, "QPS", "", 100, "Kubernetes client qps.")
-	fs.IntVar(&o.Burst, "Burst", 200, "Kubernetes client burst.")
+	fs.Float32VarP(&o.QPS, "qps", "", 100, "Kubernetes client qps.")
+	fs.IntVar(&o.Burst, "burst", 200, "Kubernetes client burst.")
+
+	fs.IntVar(&o.ChannelCapacity, "ori-channel-capacity", 10240, "The ori event channel capacity.")
+	fs.DurationVar(&o.RelistPeriod, "ori-relist-period", 5*time.Second, "The ori event channel relisting period.")
+	fs.DurationVar(&o.RelistThreshold, "ori-relist-threshold", 3*time.Minute, "The ori event channel relisting threshold.")
 }
 
 func (o *Options) MarkFlagsRequired(cmd *cobra.Command) {
@@ -213,7 +221,9 @@ func Run(ctx context.Context, opts Options) error {
 
 	cfg.QPS = opts.QPS
 	cfg.Burst = opts.Burst
-	setupLog.Info("Config", "QPS", cfg.QPS, "Burst", cfg.Burst)
+	setupLog.Info("Kubernetes client config", "QPS", cfg.QPS, "Burst", cfg.Burst)
+	setupLog.Info("Ori client config", "ChannelCapacity", opts.ChannelCapacity,
+		"RelistPeriod", opts.RelistPeriod, "RelistThreshold", opts.RelistThreshold)
 
 	leaderElectionCfg, err := configutils.GetConfig(
 		configutils.Kubeconfig(opts.LeaderElectionKubeconfig),
@@ -281,7 +291,11 @@ func Run(ctx context.Context, opts Options) error {
 			return nil, err
 		}
 		return res.Machines, nil
-	}, orievent.GeneratorOptions{})
+	}, orievent.GeneratorOptions{
+		ChannelCapacity: opts.ChannelCapacity,
+		RelistPeriod:    opts.RelistPeriod,
+		RelistThreshold: opts.RelistThreshold,
+	})
 	if err := mgr.Add(machineEvents); err != nil {
 		return fmt.Errorf("error adding machine event generator: %w", err)
 	}
@@ -295,7 +309,11 @@ func Run(ctx context.Context, opts Options) error {
 			return nil, err
 		}
 		return res.Volumes, nil
-	}, orievent.GeneratorOptions{})
+	}, orievent.GeneratorOptions{
+		ChannelCapacity: opts.ChannelCapacity,
+		RelistPeriod:    opts.RelistPeriod,
+		RelistThreshold: opts.RelistThreshold,
+	})
 	if err := mgr.Add(volumeEvents); err != nil {
 		return fmt.Errorf("error adding volume event generator: %w", err)
 	}
@@ -309,7 +327,11 @@ func Run(ctx context.Context, opts Options) error {
 			return nil, err
 		}
 		return res.NetworkInterfaces, nil
-	}, orievent.GeneratorOptions{})
+	}, orievent.GeneratorOptions{
+		ChannelCapacity: opts.ChannelCapacity,
+		RelistPeriod:    opts.RelistPeriod,
+		RelistThreshold: opts.RelistThreshold,
+	})
 	if err := mgr.Add(networkInterfaceEvents); err != nil {
 		return fmt.Errorf("error adding network interface event generator: %w", err)
 	}

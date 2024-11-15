@@ -17,6 +17,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"sort"
 
 	"github.com/go-logr/logr"
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
@@ -177,6 +178,15 @@ func (s *Server) convertOnmetalLoadBalancerTargets(loadBalancerTargets []machine
 			Ports:            ports,
 		}
 	}
+
+	// Sort the `res` slice by `Ip`, then by `LoadBalancerType`
+	sort.Slice(res, func(i, j int) bool {
+		if res[i].Ip != res[j].Ip {
+			return res[i].Ip < res[j].Ip
+		}
+		return res[i].LoadBalancerType < res[j].LoadBalancerType
+	})
+
 	return res, nil
 }
 

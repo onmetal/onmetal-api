@@ -66,8 +66,8 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&o.MachinePoolName, "machine-pool-name", o.MachinePoolName, "Name of the target machine pool to pin machines to, if any.")
 	fs.StringToStringVar(&o.MachinePoolSelector, "machine-pool-selector", o.MachinePoolSelector, "Selector of the target machine pools to pin machines to, if any.")
 
-	fs.Float32VarP(&o.QPS, "QPS", "", 100, "Kubernetes client qps.")
-	fs.IntVar(&o.Burst, "Burst", 200, "Kubernetes client burst.")
+	fs.Float32VarP(&o.QPS, "qps", "", 100, "Kubernetes client qps.")
+	fs.IntVar(&o.Burst, "burst", 200, "Kubernetes client burst.")
 }
 
 func Command() *cobra.Command {
@@ -108,7 +108,7 @@ func Run(ctx context.Context, opts Options) error {
 
 	cfg.QPS = opts.QPS
 	cfg.Burst = opts.Burst
-	setupLog.Info("Config", "QPS", cfg.QPS, "Burst", cfg.Burst)
+	setupLog.Info("Kubernetes client config", "QPS", cfg.QPS, "Burst", cfg.Burst)
 
 	if opts.Namespace == "" {
 		return fmt.Errorf("must specify namespace")
@@ -131,7 +131,7 @@ func Run(ctx context.Context, opts Options) error {
 		"BrokerDownwardAPILabels", opts.BrokerDownwardAPILabels,
 	)
 
-	srv, err := server.New(cfg, opts.Namespace, server.Options{
+	srv, err := server.New(ctx, cfg, opts.Namespace, server.Options{
 		BaseURL:                 baseURL,
 		BrokerDownwardAPILabels: opts.BrokerDownwardAPILabels,
 		MachinePoolName:         opts.MachinePoolName,
