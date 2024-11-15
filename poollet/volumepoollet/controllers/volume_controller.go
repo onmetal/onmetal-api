@@ -45,6 +45,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
+	"time"
 )
 
 type VolumeReconciler struct {
@@ -135,7 +136,7 @@ func (r *VolumeReconciler) deleteGone(ctx context.Context, log logr.Logger, volu
 	}
 	if !ok {
 		log.V(1).Info("Not all ori volumes are gone, requeueing")
-		return ctrl.Result{Requeue: true}, nil
+		return ctrl.Result{Requeue: true, RequeueAfter: 5 * time.Second}, nil
 	}
 
 	log.V(1).Info("Deleted gone")
@@ -208,7 +209,7 @@ func (r *VolumeReconciler) delete(ctx context.Context, log logr.Logger, volume *
 	}
 	if !ok {
 		log.V(1).Info("Not all ori volumes are gone, requeueing")
-		return ctrl.Result{Requeue: true}, nil
+		return ctrl.Result{Requeue: true, RequeueAfter: 5 * time.Second}, nil
 	}
 
 	log.V(1).Info("Deleted all ori volumes, removing finalizer")
