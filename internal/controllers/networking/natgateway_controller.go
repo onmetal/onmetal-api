@@ -17,6 +17,9 @@ package networking
 import (
 	"context"
 	"fmt"
+	"reflect"
+	"sort"
+	"strings"
 
 	"github.com/bits-and-blooms/bitset"
 	"github.com/go-logr/logr"
@@ -27,6 +30,7 @@ import (
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
 	corev1 "k8s.io/api/core/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -348,8 +352,11 @@ func (r *NATGatewayReconciler) reconcile(ctx context.Context, log logr.Logger, n
 	}
 	log.V(1).Info("Successfully applied routing")
 
-	if err := r.patchStatus(ctx, natGateway, portsInUse); err != nil {
-		return ctrl.Result{}, fmt.Errorf("unable to patch status: %w", err)
+	if natGateway.Status.PortsUsed == nil || *natGateway.Status.PortsUsed != portsInUse {
+		log.V(1).Info("Patching status")
+		if err := r.patchStatus(ctx, natGateway, portsInUse); err != nil {
+			return ctrl.Result{}, fmt.Errorf("unable to patch status: %w", err)
+		}
 	}
 
 	return ctrl.Result{}, nil
@@ -412,10 +419,67 @@ func (r *NATGatewayReconciler) applyRouting(ctx context.Context, natGateway *net
 	if err := ctrl.SetControllerReference(natGateway, natGatewayRouting, r.Scheme); err != nil {
 		return fmt.Errorf("error setting controller reference: %w", err)
 	}
-	if err := r.Patch(ctx, natGatewayRouting, client.Apply, natGatewayFieldOwner, client.ForceOwnership); err != nil {
-		return fmt.Errorf("error applying natgateway routing: %w", err)
+
+	// Fetch the existing NATGatewayRouting
+	existingRouting := &networkingv1alpha1.NATGatewayRouting{}
+	err := r.Get(ctx, client.ObjectKeyFromObject(natGatewayRouting), existingRouting)
+	if err != nil {
+		if apierrors.IsNotFound(err) {
+			// NATGatewayRouting doesn't exist, create it
+			if err := r.Patch(ctx, natGatewayRouting, client.Apply, natGatewayFieldOwner, client.ForceOwnership); err != nil {
+				return fmt.Errorf("error applying natgateway routing: %w", err)
+			}
+			return nil
+		}
+		// Some other error occurred
+		return fmt.Errorf("error fetching existing natgateway routing: %w", err)
 	}
+
+	// Compare the existing Destinations with the desired state, ignoring order
+	if !compareDestinations(existingRouting.Destinations, destinations) {
+		if err := r.Patch(ctx, natGatewayRouting, client.Apply, natGatewayFieldOwner, client.ForceOwnership); err != nil {
+			return fmt.Errorf("error updating natgateway routing: %w", err)
+		}
+	}
+
 	return nil
+}
+
+func compareDestinations(a, b []networkingv1alpha1.NATGatewayDestination) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	// Convert slices into maps using string representations
+	destMapA := make(map[string]struct{}, len(a))
+	destMapB := make(map[string]struct{}, len(b))
+
+	for _, dest := range a {
+		destMapA[destKey(dest)] = struct{}{}
+	}
+	for _, dest := range b {
+		destMapB[destKey(dest)] = struct{}{}
+	}
+
+	// Compare the two maps
+	return reflect.DeepEqual(destMapA, destMapB)
+}
+
+// destKey creates a unique string representation of NATGatewayDestination
+func destKey(dest networkingv1alpha1.NATGatewayDestination) string {
+	// Convert IPs to a sorted string for order-agnostic comparison
+	ipStrings := make([]string, len(dest.IPs))
+	for i, ip := range dest.IPs {
+		ipStrings[i] = ipKey(ip)
+	}
+	sort.Strings(ipStrings) // Sort to ensure consistent ordering
+
+	return fmt.Sprintf("Name:%s|UID:%s|IPs:%s", dest.Name, dest.UID, strings.Join(ipStrings, ","))
+}
+
+// ipKey creates a unique string representation of NATGatewayDestinationIP
+func ipKey(ip networkingv1alpha1.NATGatewayDestinationIP) string {
+	return fmt.Sprintf("IP:%s|Port:%d|EndPort:%d", ip.IP, ip.Port, ip.EndPort)
 }
 
 func (r *NATGatewayReconciler) SetupWithManager(mgr ctrl.Manager) error {
