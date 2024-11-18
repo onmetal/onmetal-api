@@ -219,7 +219,7 @@ func SetupTest() (*corev1.Namespace, *storagev1alpha1.VolumePool, *storagev1alph
 			VolumeRuntime:     srv,
 			VolumeClassMapper: volumeClassMapper,
 			VolumePoolName:    vp.Name,
-		}).SetupWithManager(k8sManager)).To(Succeed())
+		}).SetupWithManager(k8sManager, 1)).To(Succeed())
 
 		Expect((&controllers.VolumePoolReconciler{
 			Client:            k8sManager.GetClient(),

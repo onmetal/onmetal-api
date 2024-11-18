@@ -18,9 +18,10 @@ import (
 	"context"
 	goflag "flag"
 	"fmt"
-	"github.com/onmetal/controller-utils/configutils"
 	"os"
 	"time"
+
+	"github.com/onmetal/controller-utils/configutils"
 
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
@@ -73,8 +74,9 @@ type Options struct {
 
 	WatchFilterValue string
 
-	QPS   float32
-	Burst int
+	QPS                     float32
+	Burst                   int
+	MaxConcurrentReconciles int
 
 	ChannelCapacity int
 	RelistPeriod    time.Duration
@@ -101,6 +103,7 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 
 	fs.Float32VarP(&o.QPS, "qps", "", 100, "Kubernetes client qps.")
 	fs.IntVar(&o.Burst, "burst", 200, "Kubernetes client burst.")
+	fs.IntVar(&o.MaxConcurrentReconciles, "max-concurrent-reconciles", 10, "Maximum number of concurrent reconciles.")
 
 	fs.IntVar(&o.ChannelCapacity, "ori-channel-capacity", 10240, "The ori event channel capacity.")
 	fs.DurationVar(&o.RelistPeriod, "ori-relist-period", 5*time.Second, "The ori event channel relisting period.")
@@ -245,7 +248,7 @@ func Run(ctx context.Context, opts Options) error {
 			VolumeClassMapper: volumeClassMapper,
 			VolumePoolName:    opts.VolumePoolName,
 			WatchFilterValue:  opts.WatchFilterValue,
-		}).SetupWithManager(mgr); err != nil {
+		}).SetupWithManager(mgr, opts.MaxConcurrentReconciles); err != nil {
 			return fmt.Errorf("error setting up volume reconciler with manager: %w", err)
 		}
 

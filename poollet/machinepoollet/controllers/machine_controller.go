@@ -17,9 +17,10 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"strconv"
+
 	"k8s.io/client-go/util/workqueue"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
-	"strconv"
 
 	"github.com/go-logr/logr"
 	"github.com/onmetal/controller-utils/clientutils"
@@ -1009,7 +1010,7 @@ func (r *MachineReconciler) enqueueMachinesReferencingNetwork(ctx context.Contex
 	})
 }
 
-func (r *MachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *MachineReconciler) SetupWithManager(mgr ctrl.Manager, maxConcurrentReconciles int) error {
 	log := ctrl.Log.WithName("machinepoollet")
 	ctx := ctrl.LoggerInto(context.TODO(), log)
 
@@ -1053,7 +1054,7 @@ func (r *MachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		).
 		WithOptions(
 			controller.Options{
-				MaxConcurrentReconciles: 10,
+				MaxConcurrentReconciles: maxConcurrentReconciles,
 				RateLimiter:             noRateLimiter,
 			}).
 		Complete(r)

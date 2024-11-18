@@ -226,7 +226,7 @@ func SetupTest(ctx context.Context) (*corev1.Namespace, *computev1alpha1.Machine
 			DownwardAPILabels: map[string]string{
 				fooDownwardAPILabel: fmt.Sprintf("metadata.annotations['%s']", fooAnnotation),
 			},
-		}).SetupWithManager(k8sManager)).To(Succeed())
+		}).SetupWithManager(k8sManager, 1)).To(Succeed())
 
 		go func() {
 			defer GinkgoRecover()

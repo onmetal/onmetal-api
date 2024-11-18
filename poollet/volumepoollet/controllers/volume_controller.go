@@ -19,6 +19,8 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"time"
+
 	"github.com/go-logr/logr"
 	"github.com/onmetal/controller-utils/clientutils"
 	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
@@ -45,7 +47,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
-	"time"
 )
 
 type VolumeReconciler struct {
@@ -541,7 +542,7 @@ func (r *VolumeReconciler) updateStatus(ctx context.Context, log logr.Logger, vo
 	return nil
 }
 
-func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager, maxConcurrentReconciles int) error {
 	log := ctrl.Log.WithName("volumepoollet")
 
 	// Create a no-op rate limiter that allows immediate requeueing
@@ -560,7 +561,7 @@ func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		).
 		WithOptions(
 			controller.Options{
-				MaxConcurrentReconciles: 10,
+				MaxConcurrentReconciles: maxConcurrentReconciles,
 				RateLimiter:             noRateLimiter,
 			}).
 		Complete(r)
