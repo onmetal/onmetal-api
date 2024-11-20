@@ -20,14 +20,6 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/types"
-	ctrl "sigs.k8s.io/controller-runtime"
-	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
@@ -35,11 +27,17 @@ import (
 	machinebroker "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1alpha1"
 	"github.com/onmetal/onmetal-api/internal/client/networking"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/types"
+	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/handler"
 )
 
-var (
-	loadBalancerFieldOwner = client.FieldOwner(networkingv1alpha1.Resource("loadbalancers").String())
-)
+var loadBalancerFieldOwner = client.FieldOwner(networkingv1alpha1.Resource("loadbalancers").String())
 
 type LoadBalancerReconciler struct {
 	client.Client
@@ -234,14 +232,14 @@ func (r *LoadBalancerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		For(&networkingv1alpha1.LoadBalancer{}).
 		Owns(&networkingv1alpha1.LoadBalancerRouting{}).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.NetworkInterface{}},
+			&networkingv1alpha1.NetworkInterface{},
 			r.enqueueByLoadBalancerMatchingNetworkInterface(ctx, log),
 		).
 		Complete(r)
 }
 
 func (r *LoadBalancerReconciler) enqueueByLoadBalancerMatchingNetworkInterface(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		nic := obj.(*networkingv1alpha1.NetworkInterface)
 		log = log.WithValues("NetworkInterfaceKey", client.ObjectKeyFromObject(nic))
 

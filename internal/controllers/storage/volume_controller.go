@@ -23,12 +23,14 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
+
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	"github.com/onmetal/onmetal-api/internal/controllers/storage/events"
 	apiequality "github.com/onmetal/onmetal-api/utils/equality"
+
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -40,7 +42,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 // VolumeReconciler reconciles a Volume object
@@ -296,8 +297,8 @@ func (r *VolumeReconciler) SetupWithManager(mgr ctrl.Manager) error {
 				},
 			}),
 		).
-		Watches(&source.Kind{Type: &computev1alpha1.Machine{}},
-			handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+		Watches(&computev1alpha1.Machine{},
+			handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 				machine := obj.(*computev1alpha1.Machine)
 
 				volumeNames := computev1alpha1.MachineVolumeNames(machine)

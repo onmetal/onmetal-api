@@ -20,16 +20,17 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
+
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	"github.com/onmetal/onmetal-api/ori/apis/machine"
 	"github.com/onmetal/onmetal-api/poollet/machinepoollet/mcm"
+
 	corev1 "k8s.io/api/core/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 type MachinePoolReconciler struct {
@@ -137,8 +138,8 @@ func (r *MachinePoolReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			),
 		).
 		Watches(
-			&source.Kind{Type: &computev1alpha1.MachineClass{}},
-			handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+			&computev1alpha1.MachineClass{},
+			handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 				return []ctrl.Request{{NamespacedName: client.ObjectKey{Name: r.MachinePoolName}}}
 			}),
 		).

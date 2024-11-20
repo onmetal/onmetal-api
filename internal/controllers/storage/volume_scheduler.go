@@ -20,7 +20,11 @@ import (
 	"math/rand"
 
 	"github.com/go-logr/logr"
+
+	"github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 	storageclient "github.com/onmetal/onmetal-api/internal/client/storage"
+
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -31,10 +35,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
-	"sigs.k8s.io/controller-runtime/pkg/source"
-
-	"github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 )
 
 type VolumeScheduler struct {
@@ -140,8 +140,10 @@ func (s *VolumeScheduler) SetupWithManager(mgr manager.Manager) error {
 			})),
 		).
 		// Enqueue unscheduled volumes if a volume pool w/ required volume classes becomes available.
-		Watches(&source.Kind{Type: &storagev1alpha1.VolumePool{}},
-			handler.EnqueueRequestsFromMapFunc(func(object client.Object) []ctrl.Request {
+
+		Watches(
+			&storagev1alpha1.VolumePool{},
+			handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, object client.Object) []ctrl.Request {
 				pool := object.(*storagev1alpha1.VolumePool)
 				if !pool.DeletionTimestamp.IsZero() {
 					return nil

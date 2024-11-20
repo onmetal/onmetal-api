@@ -20,9 +20,11 @@ import (
 	"math/rand"
 
 	"github.com/go-logr/logr"
+	"go4.org/netipx"
+
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
 	"github.com/onmetal/onmetal-api/internal/client/ipam"
-	"go4.org/netipx"
+
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -32,7 +34,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 type PrefixAllocationScheduler struct {
@@ -181,14 +182,14 @@ func (s *PrefixAllocationScheduler) SetupWithManager(mgr manager.Manager) error 
 		Named("prefixallocationscheduler").
 		For(&ipamv1alpha1.PrefixAllocation{}).
 		Watches(
-			&source.Kind{Type: &ipamv1alpha1.Prefix{}},
+			&ipamv1alpha1.Prefix{},
 			s.enqueueByMatchingPrefix(ctx, log),
 		).
 		Complete(s)
 }
 
 func (s *PrefixAllocationScheduler) enqueueByMatchingPrefix(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		prefix := obj.(*ipamv1alpha1.Prefix)
 		if !isPrefixAllocatedAndNotDeleting(prefix) {
 			return nil

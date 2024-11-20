@@ -20,8 +20,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/onmetal/controller-utils/buildutils"
-	"github.com/onmetal/controller-utils/modutils"
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
@@ -36,8 +34,9 @@ import (
 	"github.com/onmetal/onmetal-api/utils/envtest/apiserver"
 	"github.com/onmetal/onmetal-api/utils/envtest/controllermanager"
 	"github.com/onmetal/onmetal-api/utils/envtest/process"
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
+
+	"github.com/onmetal/controller-utils/buildutils"
+	"github.com/onmetal/controller-utils/modutils"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -47,9 +46,13 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
-	. "sigs.k8s.io/controller-runtime/pkg/envtest/komega"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
+	metricserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
+
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+	. "sigs.k8s.io/controller-runtime/pkg/envtest/komega"
 )
 
 var (
@@ -195,9 +198,10 @@ func SetupTest(ctx context.Context) (*corev1.Namespace, *computev1alpha1.Machine
 		})
 
 		k8sManager, err := ctrl.NewManager(cfg, ctrl.Options{
-			Scheme:             scheme.Scheme,
-			Host:               "127.0.0.1",
-			MetricsBindAddress: "0",
+			Scheme: scheme.Scheme,
+			Metrics: metricserver.Options{
+				BindAddress: "0",
+			},
 		})
 		Expect(err).ToNot(HaveOccurred())
 

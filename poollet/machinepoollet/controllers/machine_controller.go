@@ -23,7 +23,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 
 	"github.com/go-logr/logr"
-	"github.com/onmetal/controller-utils/clientutils"
+	"golang.org/x/exp/maps"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
@@ -39,9 +42,8 @@ import (
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
 	"github.com/onmetal/onmetal-api/utils/predicates"
 	utilslices "github.com/onmetal/onmetal-api/utils/slices"
-	"golang.org/x/exp/maps"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+
+	"github.com/onmetal/controller-utils/clientutils"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -55,7 +57,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 type MachineReconciler struct {
@@ -809,7 +810,7 @@ func (r *MachineReconciler) matchingWatchLabel() client.ListOption {
 }
 
 func (r *MachineReconciler) enqueueMachinesReferencingVolume(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		volume := obj.(*storagev1alpha1.Volume)
 
 		machineList := &computev1alpha1.MachineList{}
@@ -829,7 +830,7 @@ func (r *MachineReconciler) enqueueMachinesReferencingVolume(ctx context.Context
 }
 
 func (r *MachineReconciler) enqueueMachinesReferencingSecret(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		secret := obj.(*corev1.Secret)
 		machineList := &computev1alpha1.MachineList{}
 		if err := r.List(ctx, machineList,
@@ -848,7 +849,7 @@ func (r *MachineReconciler) enqueueMachinesReferencingSecret(ctx context.Context
 }
 
 func (r *MachineReconciler) enqueueMachinesReferencingNetworkInterface(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		nic := obj.(*networkingv1alpha1.NetworkInterface)
 		machineList := &computev1alpha1.MachineList{}
 		if err := r.List(ctx, machineList,
@@ -867,7 +868,7 @@ func (r *MachineReconciler) enqueueMachinesReferencingNetworkInterface(ctx conte
 }
 
 func (r *MachineReconciler) enqueueMachinesReferencingLoadBalancerRouting(ctx context.Context, log logr.Logger) handler.EventHandler { //nolint:unused
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []reconcile.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []reconcile.Request {
 		loadBalancerRouting := obj.(*networkingv1alpha1.LoadBalancerRouting)
 		destinationSet := utilslices.ToSetFunc(
 			loadBalancerRouting.Destinations,
@@ -922,7 +923,7 @@ func (r *MachineReconciler) enqueueMachinesReferencingLoadBalancerRouting(ctx co
 }
 
 func (r *MachineReconciler) enqueueMachinesReferencingNATGatewayRouting(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []reconcile.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []reconcile.Request {
 		natGatewayRouting := obj.(*networkingv1alpha1.NATGatewayRouting)
 		destinationSet := utilslices.ToSetFunc(
 			natGatewayRouting.Destinations,
@@ -977,7 +978,7 @@ func (r *MachineReconciler) enqueueMachinesReferencingNATGatewayRouting(ctx cont
 }
 
 func (r *MachineReconciler) enqueueMachinesReferencingNetwork(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []reconcile.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []reconcile.Request {
 		network := obj.(*networkingv1alpha1.Network)
 
 		networkInterfaceMachinePoolID := machinepoolletclient.NetworkNameAndHandle(network.Name, network.Spec.Handle)
@@ -1029,27 +1030,27 @@ func (r *MachineReconciler) SetupWithManager(mgr ctrl.Manager, maxConcurrentReco
 			),
 		).
 		Watches(
-			&source.Kind{Type: &corev1.Secret{}},
+			&corev1.Secret{},
 			r.enqueueMachinesReferencingSecret(ctx, log),
 		).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.NetworkInterface{}},
+			&networkingv1alpha1.NetworkInterface{},
 			r.enqueueMachinesReferencingNetworkInterface(ctx, log),
 		).
 		Watches(
-			&source.Kind{Type: &storagev1alpha1.Volume{}},
+			&storagev1alpha1.Volume{},
 			r.enqueueMachinesReferencingVolume(ctx, log),
 		).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.LoadBalancerRouting{}},
+			&networkingv1alpha1.LoadBalancerRouting{},
 			r.enqueueMachinesReferencingLoadBalancerRouting(ctx, log),
 		).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.NATGatewayRouting{}},
+			&networkingv1alpha1.NATGatewayRouting{},
 			r.enqueueMachinesReferencingNATGatewayRouting(ctx, log),
 		).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.Network{}},
+			&networkingv1alpha1.Network{},
 			r.enqueueMachinesReferencingNetwork(ctx, log),
 		).
 		WithOptions(

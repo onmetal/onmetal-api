@@ -18,13 +18,14 @@ import (
 	"context"
 	"fmt"
 
-	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
-
 	"github.com/go-logr/logr"
+
+	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	machinebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/machinebroker/api/v1alpha1"
 	networkingclient "github.com/onmetal/onmetal-api/internal/client/networking"
 	clientutils "github.com/onmetal/onmetal-api/utils/client"
+
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -33,7 +34,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 type peeringStatusData struct {
@@ -57,7 +57,7 @@ func (r *NetworkBindReconciler) Reconcile(ctx context.Context, req ctrl.Request)
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	//TODO remove this once we have a better way to handle this
+	// TODO remove this once we have a better way to handle this
 	if _, exists := network.Labels[machinebrokerv1alpha1.CreatedLabel]; exists {
 		return ctrl.Result{}, nil
 	}
@@ -272,7 +272,7 @@ func (r *NetworkBindReconciler) reconcilePeering(
 }
 
 func (r *NetworkBindReconciler) enqueuePeeringReferencedNetworks() handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		network := obj.(*networkingv1alpha1.Network)
 		reqs := sets.New[ctrl.Request]()
 		for _, peering := range network.Spec.Peerings {
@@ -290,7 +290,7 @@ func (r *NetworkBindReconciler) enqueuePeeringReferencedNetworks() handler.Event
 }
 
 func (r *NetworkBindReconciler) enqueuePeeringUsingNetworks(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		network := obj.(*networkingv1alpha1.Network)
 
 		usingNetworkList := &networkingv1alpha1.NetworkList{}
@@ -314,11 +314,11 @@ func (r *NetworkBindReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Named("networkbind").
 		For(&networkingv1alpha1.Network{}).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.Network{}},
+			&networkingv1alpha1.Network{},
 			r.enqueuePeeringReferencedNetworks(),
 		).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.Network{}},
+			&networkingv1alpha1.Network{},
 			r.enqueuePeeringUsingNetworks(ctx, log),
 		).
 		Complete(r)

@@ -22,12 +22,14 @@ import (
 	"strings"
 
 	"github.com/go-logr/logr"
+
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	networkingclient "github.com/onmetal/onmetal-api/internal/client/networking"
 	"github.com/onmetal/onmetal-api/internal/controllers/networking/events"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
+
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -36,7 +38,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 type NetworkInterfaceReconciler struct {
@@ -161,7 +162,7 @@ func (r *NetworkInterfaceReconciler) updateStatus(
 	return nil
 }
 
-func (r *NetworkInterfaceReconciler) getNetworkHandle(ctx context.Context, nic *networkingv1alpha1.NetworkInterface) (networkHandle string, notReadyReason string, err error) {
+func (r *NetworkInterfaceReconciler) getNetworkHandle(ctx context.Context, nic *networkingv1alpha1.NetworkInterface) (networkHandle, notReadyReason string, err error) {
 	network := &networkingv1alpha1.Network{}
 	networkKey := client.ObjectKey{Namespace: nic.Namespace, Name: nic.Spec.NetworkRef.Name}
 	if err := r.Get(ctx, networkKey, network); err != nil {
@@ -374,18 +375,18 @@ func (r *NetworkInterfaceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&ipamv1alpha1.Prefix{}).
 		Owns(&networkingv1alpha1.VirtualIP{}).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.Network{}},
+			&networkingv1alpha1.Network{},
 			r.enqueueByNetworkInterfaceNetworkReferences(ctx, log),
 		).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.VirtualIP{}},
+			&networkingv1alpha1.VirtualIP{},
 			r.enqueueByNetworkInterfaceVirtualIPReferences(ctx, log),
 		).
 		Complete(r)
 }
 
 func (r *NetworkInterfaceReconciler) enqueueByNetworkInterfaceVirtualIPReferences(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		vip := obj.(*networkingv1alpha1.VirtualIP)
 		log = log.WithValues("VirtualIPKey", client.ObjectKeyFromObject(vip))
 
@@ -407,7 +408,7 @@ func (r *NetworkInterfaceReconciler) enqueueByNetworkInterfaceVirtualIPReference
 }
 
 func (r *NetworkInterfaceReconciler) enqueueByNetworkInterfaceNetworkReferences(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		network := obj.(*networkingv1alpha1.Network)
 		log = log.WithValues("NetworkKey", client.ObjectKeyFromObject(network))
 

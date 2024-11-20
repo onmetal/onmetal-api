@@ -22,7 +22,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/onmetal/controller-utils/configutils"
+	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
+
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
@@ -37,8 +39,8 @@ import (
 	"github.com/onmetal/onmetal-api/poollet/machinepoollet/server"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
 	"github.com/onmetal/onmetal-api/utils/client/config"
-	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
+
+	"github.com/onmetal/controller-utils/configutils"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -46,13 +48,13 @@ import (
 	"k8s.io/client-go/rest"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/cache"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
+	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 )
 
-var (
-	scheme = runtime.NewScheme()
-)
+var scheme = runtime.NewScheme()
 
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
@@ -237,21 +239,19 @@ func Run(ctx context.Context, opts Options) error {
 	mgr, err := ctrl.NewManager(cfg, ctrl.Options{
 		Logger:                  logger,
 		Scheme:                  scheme,
-		MetricsBindAddress:      opts.MetricsAddr,
-		Port:                    9443,
+		Metrics:                 metricsserver.Options{BindAddress: opts.MetricsAddr},
 		HealthProbeBindAddress:  opts.ProbeAddr,
 		LeaderElection:          opts.EnableLeaderElection,
 		LeaderElectionID:        "bfafcebe.api.onmetal.de",
 		LeaderElectionNamespace: opts.LeaderElectionNamespace,
 		LeaderElectionConfig:    leaderElectionCfg,
+		Cache:                   cache.Options{ByObject: map[client.Object]cache.ByObject{}},
 		NewCache: func(config *rest.Config, cacheOpts cache.Options) (cache.Cache, error) {
-			cacheOpts.SelectorsByObject = cache.SelectorsByObject{
-				&computev1alpha1.Machine{}: cache.ObjectSelector{
-					Field: fields.OneTermEqualSelector(
-						computev1alpha1.MachineMachinePoolRefNameField,
-						opts.MachinePoolName,
-					),
-				},
+			cacheOpts.ByObject[&computev1alpha1.Machine{}] = cache.ByObject{
+				Field: fields.OneTermEqualSelector(
+					computev1alpha1.MachineMachinePoolRefNameField,
+					opts.MachinePoolName,
+				),
 			}
 			return cache.New(config, cacheOpts)
 		},

@@ -23,12 +23,14 @@ import (
 
 	"github.com/bits-and-blooms/bitset"
 	"github.com/go-logr/logr"
+	"golang.org/x/exp/maps"
+	"golang.org/x/exp/slices"
+
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	"github.com/onmetal/onmetal-api/internal/client/networking"
 	"github.com/onmetal/onmetal-api/utils/generic"
-	"golang.org/x/exp/maps"
-	"golang.org/x/exp/slices"
+
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -43,7 +45,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 const (
@@ -52,9 +53,7 @@ const (
 	NoOfEphemeralPorts       = MaxEphemeralPort + 1 - MinEphemeralPort
 )
 
-var (
-	natGatewayFieldOwner = client.FieldOwner(networkingv1alpha1.Resource("natgateways").String())
-)
+var natGatewayFieldOwner = client.FieldOwner(networkingv1alpha1.Resource("natgateways").String())
 
 type NATGatewayReconciler struct {
 	record.EventRecorder
@@ -217,9 +216,7 @@ func (r *NATGatewayReconciler) assignPorts(
 
 	slots := newSlots(mapper.SlotsPerIP(), ips)
 
-	var (
-		destinationsByUID = make(map[types.UID]networkingv1alpha1.NATGatewayDestination)
-	)
+	destinationsByUID := make(map[types.UID]networkingv1alpha1.NATGatewayDestination)
 
 	log.V(2).Info("Determining destinations to re-use")
 	for _, destination := range natGatewayRouting.Destinations {
@@ -493,14 +490,14 @@ func (r *NATGatewayReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			builder.WithPredicates(&predicate.ResourceVersionChangedPredicate{}),
 		).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.NetworkInterface{}},
+			&networkingv1alpha1.NetworkInterface{},
 			r.enqueueByNetworkInterface(ctx, log),
 		).
 		Complete(r)
 }
 
 func (r *NATGatewayReconciler) enqueueByNetworkInterface(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		nic := obj.(*networkingv1alpha1.NetworkInterface)
 		log = log.WithValues("NetworkInterfaceKey", client.ObjectKeyFromObject(nic))
 

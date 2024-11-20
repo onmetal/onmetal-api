@@ -23,7 +23,7 @@ import (
 	"reflect"
 
 	"github.com/go-logr/logr"
-	"github.com/onmetal/controller-utils/metautils"
+
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
@@ -31,6 +31,8 @@ import (
 	"github.com/onmetal/onmetal-api/internal/client/compute"
 	"github.com/onmetal/onmetal-api/internal/controllers/compute/events"
 	client2 "github.com/onmetal/onmetal-api/utils/client"
+
+	"github.com/onmetal/controller-utils/metautils"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -40,7 +42,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 const (
@@ -422,18 +423,18 @@ func (r *MachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&networkingv1alpha1.NetworkInterface{}).
 		Owns(&storagev1alpha1.Volume{}).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.NetworkInterface{}},
+			&networkingv1alpha1.NetworkInterface{},
 			r.enqueueByMachineNetworkInterfaceReferences(ctx, log),
 		).
 		Watches(
-			&source.Kind{Type: &storagev1alpha1.Volume{}},
+			&storagev1alpha1.Volume{},
 			r.enqueueByMachineVolumeReferences(ctx, log),
 		).
 		Complete(r)
 }
 
 func (r *MachineReconciler) enqueueByMachineNetworkInterfaceReferences(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		nic := obj.(*networkingv1alpha1.NetworkInterface)
 		log = log.WithValues("NetworkInterfaceKey", client.ObjectKeyFromObject(nic))
 
@@ -457,7 +458,7 @@ func (r *MachineReconciler) enqueueByMachineNetworkInterfaceReferences(ctx conte
 }
 
 func (r *MachineReconciler) enqueueByMachineVolumeReferences(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		volume := obj.(*storagev1alpha1.Volume)
 		log = log.WithValues("VolumeKey", client.ObjectKeyFromObject(volume))
 

@@ -20,7 +20,11 @@ import (
 	"math/rand"
 
 	"github.com/go-logr/logr"
+
+	"github.com/onmetal/onmetal-api/api/common/v1alpha1"
+	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
+
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -33,10 +37,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
-	"sigs.k8s.io/controller-runtime/pkg/source"
-
-	"github.com/onmetal/onmetal-api/api/common/v1alpha1"
-	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 )
 
 type MachineScheduler struct {
@@ -168,17 +168,17 @@ func (s *MachineScheduler) SetupWithManager(mgr manager.Manager) error {
 		).
 		// Enqueue unscheduled machines if a machine pool w/ required machine classes becomes available.
 		Watches(
-			&source.Kind{Type: &computev1alpha1.MachinePool{}},
+			&computev1alpha1.MachinePool{},
 			handler.Funcs{
-				CreateFunc: func(event event.CreateEvent, queue workqueue.RateLimitingInterface) {
+				CreateFunc: func(ctx context.Context, event event.CreateEvent, queue workqueue.RateLimitingInterface) {
 					pool := event.Object.(*computev1alpha1.MachinePool)
 					s.enqueueMatchingUnscheduledMachines(ctx, pool, queue)
 				},
-				UpdateFunc: func(event event.UpdateEvent, queue workqueue.RateLimitingInterface) {
+				UpdateFunc: func(ctx context.Context, event event.UpdateEvent, queue workqueue.RateLimitingInterface) {
 					pool := event.ObjectNew.(*computev1alpha1.MachinePool)
 					s.enqueueMatchingUnscheduledMachines(ctx, pool, queue)
 				},
-				GenericFunc: func(event event.GenericEvent, queue workqueue.RateLimitingInterface) {
+				GenericFunc: func(ctx context.Context, event event.GenericEvent, queue workqueue.RateLimitingInterface) {
 					pool := event.Object.(*computev1alpha1.MachinePool)
 					s.enqueueMatchingUnscheduledMachines(ctx, pool, queue)
 				},

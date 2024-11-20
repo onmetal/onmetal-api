@@ -25,12 +25,14 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
-	"github.com/onmetal/controller-utils/clientutils"
+	"go4.org/netipx"
+
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
 	ipamclient "github.com/onmetal/onmetal-api/internal/client/ipam"
 	"github.com/onmetal/onmetal-api/utils/equality"
-	"go4.org/netipx"
+
+	"github.com/onmetal/controller-utils/clientutils"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -40,7 +42,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 const (
@@ -52,7 +53,7 @@ func (r *PrefixReconciler) acquireAllocation(
 	prefix *ipamv1alpha1.Prefix,
 	set *netipx.IPSet,
 	allocation *ipamv1alpha1.PrefixAllocation,
-) (res netip.Prefix, newSet *netipx.IPSet, ok bool, terminal bool) {
+) (res netip.Prefix, newSet *netipx.IPSet, ok, terminal bool) {
 	if !prefixCompatibleWithAllocation(prefix, allocation) {
 		return netip.Prefix{}, set, false, true
 	}
@@ -617,22 +618,22 @@ func (r *PrefixReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		For(&ipamv1alpha1.Prefix{}).
 		Owns(&ipamv1alpha1.PrefixAllocation{}).
 		Watches(
-			&source.Kind{Type: &ipamv1alpha1.PrefixAllocation{}},
+			&ipamv1alpha1.PrefixAllocation{},
 			r.enqueueByAllocationPrefixRef(),
 		).
 		Watches(
-			&source.Kind{Type: &ipamv1alpha1.Prefix{}},
+			&ipamv1alpha1.Prefix{},
 			r.enqueueByPrefixParentRef(ctx, log),
 		).
 		Watches(
-			&source.Kind{Type: &ipamv1alpha1.Prefix{}},
+			&ipamv1alpha1.Prefix{},
 			r.enqueueByPrefixParentSelector(ctx, log),
 		).
 		Complete(r)
 }
 
 func (r *PrefixReconciler) enqueueByAllocationPrefixRef() handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		allocation := obj.(*ipamv1alpha1.PrefixAllocation)
 		prefixRef := allocation.Spec.PrefixRef
 		if prefixRef == nil {
@@ -650,7 +651,7 @@ func (r *PrefixReconciler) enqueueByAllocationPrefixRef() handler.EventHandler {
 }
 
 func (r *PrefixReconciler) enqueueByPrefixParentSelector(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		prefix := obj.(*ipamv1alpha1.Prefix)
 		if !isPrefixAllocatedAndNotDeleting(prefix) {
 			return nil
@@ -689,7 +690,7 @@ func (r *PrefixReconciler) enqueueByPrefixParentSelector(ctx context.Context, lo
 }
 
 func (r *PrefixReconciler) enqueueByPrefixParentRef(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		prefix := obj.(*ipamv1alpha1.Prefix)
 		if !isPrefixAllocatedAndNotDeleting(prefix) {
 			return nil

@@ -22,9 +22,12 @@ import (
 	"sort"
 
 	"github.com/go-logr/logr"
-	"github.com/onmetal/controller-utils/clientutils"
+
+	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 	storageclient "github.com/onmetal/onmetal-api/internal/client/storage"
 	"github.com/onmetal/onmetal-api/utils/slices"
+
+	"github.com/onmetal/controller-utils/clientutils"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/workqueue"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -32,9 +35,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/source"
-
-	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 )
 
 // VolumeClassReconciler reconciles a VolumeClass object
@@ -136,9 +136,9 @@ func (r *VolumeClassReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&storagev1alpha1.VolumeClass{}).
 		Watches(
-			&source.Kind{Type: &storagev1alpha1.Volume{}},
+			&storagev1alpha1.Volume{},
 			handler.Funcs{
-				DeleteFunc: func(event event.DeleteEvent, queue workqueue.RateLimitingInterface) {
+				DeleteFunc: func(ctx context.Context, event event.DeleteEvent, queue workqueue.RateLimitingInterface) {
 					volume := event.Object.(*storagev1alpha1.Volume)
 					volumeClassRef := volume.Spec.VolumeClassRef
 					if volumeClassRef == nil {

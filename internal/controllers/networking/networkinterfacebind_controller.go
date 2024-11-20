@@ -21,12 +21,14 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
+
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	"github.com/onmetal/onmetal-api/internal/client/compute"
 	networkingclient "github.com/onmetal/onmetal-api/internal/client/networking"
 	"github.com/onmetal/onmetal-api/internal/controllers/networking/events"
+
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -35,7 +37,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 type NetworkInterfaceBindReconciler struct {
@@ -271,18 +272,18 @@ func (r *NetworkInterfaceBindReconciler) SetupWithManager(mgr ctrl.Manager) erro
 		Named("networkinterfacebind").
 		For(&networkingv1alpha1.NetworkInterface{}).
 		Watches(
-			&source.Kind{Type: &computev1alpha1.Machine{}},
+			&computev1alpha1.Machine{},
 			r.enqueueByMachineNetworkInterfaceReference(),
 		).
 		Watches(
-			&source.Kind{Type: &computev1alpha1.Machine{}},
+			&computev1alpha1.Machine{},
 			r.enqueueByMachineNameEqualNetworkInterfaceMachineRefName(ctx, log),
 		).
 		Complete(r)
 }
 
 func (r *NetworkInterfaceBindReconciler) enqueueByMachineNetworkInterfaceReference() handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		machine := obj.(*computev1alpha1.Machine)
 
 		var reqs []ctrl.Request
@@ -295,7 +296,7 @@ func (r *NetworkInterfaceBindReconciler) enqueueByMachineNetworkInterfaceReferen
 }
 
 func (r *NetworkInterfaceBindReconciler) enqueueByMachineNameEqualNetworkInterfaceMachineRefName(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		machine := obj.(*computev1alpha1.Machine)
 
 		nicList := &networkingv1alpha1.NetworkInterfaceList{}

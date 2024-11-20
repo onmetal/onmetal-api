@@ -22,10 +22,12 @@ import (
 	"sort"
 
 	"github.com/go-logr/logr"
-	"github.com/onmetal/controller-utils/clientutils"
+
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	computeclient "github.com/onmetal/onmetal-api/internal/client/compute"
 	"github.com/onmetal/onmetal-api/utils/slices"
+
+	"github.com/onmetal/controller-utils/clientutils"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/workqueue"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -33,7 +35,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 // MachineClassReconciler reconciles a MachineClassRef object
@@ -136,9 +137,9 @@ func (r *MachineClassReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&computev1alpha1.MachineClass{}).
 		Watches(
-			&source.Kind{Type: &computev1alpha1.Machine{}},
+			&computev1alpha1.Machine{},
 			handler.Funcs{
-				DeleteFunc: func(event event.DeleteEvent, queue workqueue.RateLimitingInterface) {
+				DeleteFunc: func(ctx context.Context, event event.DeleteEvent, queue workqueue.RateLimitingInterface) {
 					machine := event.Object.(*computev1alpha1.Machine)
 					queue.Add(ctrl.Request{NamespacedName: types.NamespacedName{Name: machine.Spec.MachineClassRef.Name}})
 				},

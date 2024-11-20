@@ -19,10 +19,12 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
+
 	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 	"github.com/onmetal/onmetal-api/poollet/orievent"
 	"github.com/onmetal/onmetal-api/poollet/volumepoollet/vcm"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -66,7 +68,7 @@ func (r *VolumePoolAnnotatorReconciler) SetupWithManager(mgr ctrl.Manager) error
 		return err
 	}
 
-	if err := c.Watch(src, handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	if err := c.Watch(src, handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		return []ctrl.Request{{NamespacedName: client.ObjectKey{Name: r.VolumePoolName}}}
 	})); err != nil {
 		return err

@@ -19,10 +19,12 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
-	"github.com/onmetal/controller-utils/metautils"
+
 	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
 	onmetalapiclient "github.com/onmetal/onmetal-api/utils/client"
 	"github.com/onmetal/onmetal-api/utils/quota"
+
+	"github.com/onmetal/controller-utils/metautils"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -33,7 +35,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 type ResourceQuotaReconciler struct {
@@ -194,7 +195,7 @@ func (r *ResourceQuotaReconciler) updateStatus(
 }
 
 func (r *ResourceQuotaReconciler) enqueueResourceQuotasByNamespace(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		namespace := obj.(*corev1.Namespace)
 		log := log.WithValues("Namespace", namespace.Name)
 
@@ -250,7 +251,7 @@ func (r *ResourceQuotaReconciler) SetupWithManager(mgr ctrl.Manager) error {
 			builder.WithPredicates(resourceQuotaDirtyPredicate),
 		).
 		Watches(
-			&source.Kind{Type: &corev1.Namespace{}},
+			&corev1.Namespace{},
 			r.enqueueResourceQuotasByNamespace(ctx, log),
 			builder.WithPredicates(HasReplenishResourceQuotaPredicate),
 		).

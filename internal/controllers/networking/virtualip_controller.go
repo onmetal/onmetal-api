@@ -23,10 +23,12 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
+
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	networkingclient "github.com/onmetal/onmetal-api/internal/client/networking"
 	"github.com/onmetal/onmetal-api/internal/controllers/networking/events"
+
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -35,7 +37,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 // VirtualIPReconciler reconciles a VirtualIP object
@@ -306,18 +307,18 @@ func (r *VirtualIPReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&networkingv1alpha1.VirtualIP{}).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.NetworkInterface{}},
+			&networkingv1alpha1.NetworkInterface{},
 			r.enqueueByTargetNameReferencingNetworkInterface(ctx, log),
 		).
 		Watches(
-			&source.Kind{Type: &networkingv1alpha1.NetworkInterface{}},
+			&networkingv1alpha1.NetworkInterface{},
 			r.enqueueByNameEqualNetworkInterfaceVirtualIPName(ctx, log),
 		).
 		Complete(r)
 }
 
 func (r *VirtualIPReconciler) enqueueByTargetNameReferencingNetworkInterface(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		nic := obj.(*networkingv1alpha1.NetworkInterface)
 
 		virtualIPs := &networkingv1alpha1.VirtualIPList{}
@@ -342,7 +343,7 @@ func (r *VirtualIPReconciler) enqueueByTargetNameReferencingNetworkInterface(ctx
 }
 
 func (r *VirtualIPReconciler) enqueueByNameEqualNetworkInterfaceVirtualIPName(ctx context.Context, log logr.Logger) handler.EventHandler {
-	return handler.EnqueueRequestsFromMapFunc(func(obj client.Object) []ctrl.Request {
+	return handler.EnqueueRequestsFromMapFunc(func(ctx context.Context, obj client.Object) []ctrl.Request {
 		nic := obj.(*networkingv1alpha1.NetworkInterface)
 
 		nicVirtualIP := nic.Spec.VirtualIP
