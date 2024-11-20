@@ -18,17 +18,17 @@ import (
 	"context"
 	"fmt"
 
-	"sigs.k8s.io/controller-runtime/pkg/cache"
-
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
 	storagev1alpha1 "github.com/onmetal/onmetal-api/api/storage/v1alpha1"
 	"github.com/onmetal/onmetal-api/broker/common/idgen"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	kubernetes "k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/rest"
+	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -77,43 +77,41 @@ func setOptionsDefaults(o *Options) {
 func New(ctx context.Context, cfg *rest.Config, namespace string, opts Options) (Cluster, error) {
 	setOptionsDefaults(&opts)
 
-	// Create the cache
-	cachedCache, err := cache.New(cfg, cache.Options{
-		Scheme:    scheme,
-		Namespace: namespace, // Optional: Limit cache to a specific namespace
+	readCache, err := cache.New(cfg, cache.Options{
+		Scheme: scheme,
+		DefaultNamespaces: map[string]cache.Config{
+			namespace: {},
+		},
 	})
 	if err != nil {
 		return nil, fmt.Errorf("error creating cache: %w", err)
 	}
 
-	// Start and sync the cache
 	go func() {
-		if err := cachedCache.Start(ctx); err != nil {
+		if err := readCache.Start(ctx); err != nil {
 			fmt.Printf("Error starting cache: %v\n", err)
 		}
 	}()
-	if !cachedCache.WaitForCacheSync(ctx) {
+
+	if !readCache.WaitForCacheSync(ctx) {
 		return nil, fmt.Errorf("failed to sync cache")
 	}
 
 	// Create the uncached client for writes
-	uncachedClient, err := client.New(cfg, client.Options{
+	c, err := client.New(cfg, client.Options{
 		Scheme: scheme,
+		Cache: &client.CacheOptions{
+			Reader: readCache,
+		},
 	})
 	if err != nil {
-		return nil, fmt.Errorf("error creating uncached client: %w", err)
+		return nil, fmt.Errorf("error creating client: %w", err)
 	}
-
-	// Create the delegating client
-	cachedClient, err := client.NewDelegatingClient(client.NewDelegatingClientInput{
-		CacheReader: cachedCache,    // Use cache for reads
-		Client:      uncachedClient, // Use direct client for writes
-	})
 
 	return &cluster{
 		namespace:           namespace,
 		config:              cfg,
-		client:              cachedClient,
+		client:              c,
 		scheme:              scheme,
 		idGen:               opts.IDGen,
 		machinePoolName:     opts.MachinePoolName,

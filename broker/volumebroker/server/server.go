@@ -19,6 +19,7 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
+
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	ipamv1alpha1 "github.com/onmetal/onmetal-api/api/ipam/v1alpha1"
 	networkingv1alpha1 "github.com/onmetal/onmetal-api/api/networking/v1alpha1"
@@ -28,6 +29,7 @@ import (
 	volumebrokerv1alpha1 "github.com/onmetal/onmetal-api/broker/volumebroker/api/v1alpha1"
 	"github.com/onmetal/onmetal-api/broker/volumebroker/apiutils"
 	ori "github.com/onmetal/onmetal-api/ori/apis/volume/v1alpha1"
+
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -106,41 +108,39 @@ var _ ori.VolumeRuntimeServer = (*Server)(nil)
 func New(ctx context.Context, cfg *rest.Config, opts Options) (*Server, error) {
 	setOptionsDefaults(&opts)
 
-	// Create the cache
-	cachedCache, err := cache.New(cfg, cache.Options{
-		Scheme:    scheme,
-		Namespace: opts.Namespace, // Optional: Limit cache to a specific namespace
+	readCache, err := cache.New(cfg, cache.Options{
+		Scheme: scheme,
+		DefaultNamespaces: map[string]cache.Config{
+			opts.Namespace: {},
+		},
 	})
 	if err != nil {
 		return nil, fmt.Errorf("error creating cache: %w", err)
 	}
 
-	// Start and sync the cache
 	go func() {
-		if err := cachedCache.Start(ctx); err != nil {
+		if err := readCache.Start(ctx); err != nil {
 			fmt.Printf("Error starting cache: %v\n", err)
 		}
 	}()
-	if !cachedCache.WaitForCacheSync(ctx) {
+
+	if !readCache.WaitForCacheSync(ctx) {
 		return nil, fmt.Errorf("failed to sync cache")
 	}
 
 	// Create the uncached client for writes
-	uncachedClient, err := client.New(cfg, client.Options{
+	c, err := client.New(cfg, client.Options{
 		Scheme: scheme,
+		Cache: &client.CacheOptions{
+			Reader: readCache,
+		},
 	})
 	if err != nil {
-		return nil, fmt.Errorf("error creating uncached client: %w", err)
+		return nil, fmt.Errorf("error creating client: %w", err)
 	}
 
-	// Create the delegating client
-	cachedClient, err := client.NewDelegatingClient(client.NewDelegatingClientInput{
-		CacheReader: cachedCache,    // Use cache for reads
-		Client:      uncachedClient, // Use direct client for writes
-	})
-
 	return &Server{
-		client:             cachedClient,
+		client:             c,
 		idGen:              opts.IDGen,
 		namespace:          opts.Namespace,
 		volumePoolName:     opts.VolumePoolName,
