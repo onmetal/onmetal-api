@@ -19,6 +19,7 @@ import (
 
 	"github.com/onmetal/onmetal-api/internal/apis/ipam"
 	"github.com/onmetal/onmetal-api/internal/registry/ipam/prefix"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -44,8 +45,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (PrefixStorage, error) {
 		NewListFunc: func() runtime.Object {
 			return &ipam.PrefixList{}
 		},
-		PredicateFunc:            prefix.MatchPrefix,
-		DefaultQualifiedResource: ipam.Resource("prefixs"),
+		PredicateFunc:             prefix.MatchPrefix,
+		DefaultQualifiedResource:  ipam.Resource("prefixs"),
+		SingularQualifiedResource: ipam.Resource("prefix"),
 
 		CreateStrategy: prefix.Strategy,
 		UpdateStrategy: prefix.Strategy,

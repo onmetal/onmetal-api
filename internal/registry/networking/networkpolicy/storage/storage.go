@@ -21,6 +21,7 @@ import (
 
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
 	"github.com/onmetal/onmetal-api/internal/registry/networking/networkpolicy"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -50,8 +51,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (NetworkPolicyStorage, err
 		NewListFunc: func() runtime.Object {
 			return &networking.NetworkPolicyList{}
 		},
-		PredicateFunc:            networkpolicy.MatchNetworkPolicy,
-		DefaultQualifiedResource: networking.Resource("networkpolicies"),
+		PredicateFunc:             networkpolicy.MatchNetworkPolicy,
+		DefaultQualifiedResource:  networking.Resource("networkpolicies"),
+		SingularQualifiedResource: networking.Resource("networkpolicy"),
 
 		CreateStrategy: networkpolicy.Strategy,
 		UpdateStrategy: networkpolicy.Strategy,

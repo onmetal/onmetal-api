@@ -17,6 +17,7 @@ package storage
 import (
 	"github.com/onmetal/onmetal-api/internal/apis/compute"
 	"github.com/onmetal/onmetal-api/internal/registry/compute/machineclass"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
@@ -38,8 +39,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (MachineClassStorage, erro
 		NewListFunc: func() runtime.Object {
 			return &compute.MachineClassList{}
 		},
-		PredicateFunc:            machineclass.MatchMachineClass,
-		DefaultQualifiedResource: compute.Resource("machineclasses"),
+		PredicateFunc:             machineclass.MatchMachineClass,
+		DefaultQualifiedResource:  compute.Resource("machineclasses"),
+		SingularQualifiedResource: compute.Resource("machineclass"),
 
 		CreateStrategy: machineclass.Strategy,
 		UpdateStrategy: machineclass.Strategy,

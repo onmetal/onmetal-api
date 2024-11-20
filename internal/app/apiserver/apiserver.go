@@ -20,7 +20,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/onmetal/onmetal-api/internal/admission/plugin/volumeresizepolicy"
+	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 
 	computev1alpha1 "github.com/onmetal/onmetal-api/api/compute/v1alpha1"
 	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
@@ -33,6 +34,7 @@ import (
 	onmetalapiinitializer "github.com/onmetal/onmetal-api/internal/admission/initializer"
 	"github.com/onmetal/onmetal-api/internal/admission/plugin/machinevolumedevices"
 	"github.com/onmetal/onmetal-api/internal/admission/plugin/resourcequota"
+	"github.com/onmetal/onmetal-api/internal/admission/plugin/volumeresizepolicy"
 	"github.com/onmetal/onmetal-api/internal/api"
 	"github.com/onmetal/onmetal-api/internal/apis/compute"
 	"github.com/onmetal/onmetal-api/internal/apiserver"
@@ -40,8 +42,7 @@ import (
 	"github.com/onmetal/onmetal-api/internal/quota/evaluator/onmetal"
 	apiequality "github.com/onmetal/onmetal-api/utils/equality"
 	"github.com/onmetal/onmetal-api/utils/quota"
-	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
+
 	"k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -221,6 +222,10 @@ func (o *OnmetalAPIServerOptions) Config() (*apiserver.Config, error) {
 	serverConfig.OpenAPIConfig = genericapiserver.DefaultOpenAPIConfig(onmetalopenapi.GetOpenAPIDefinitions, openapi.NewDefinitionNamer(api.Scheme))
 	serverConfig.OpenAPIConfig.Info.Title = "onmetal-api"
 	serverConfig.OpenAPIConfig.Info.Version = "0.1"
+
+	serverConfig.OpenAPIV3Config = genericapiserver.DefaultOpenAPIV3Config(onmetalopenapi.GetOpenAPIDefinitions, openapi.NewDefinitionNamer(api.Scheme))
+	serverConfig.OpenAPIV3Config.Info.Title = "onmetal-api"
+	serverConfig.OpenAPIV3Config.Info.Version = "0.1"
 
 	if err := o.RecommendedOptions.ApplyTo(serverConfig); err != nil {
 		return nil, err

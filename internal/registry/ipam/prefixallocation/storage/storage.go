@@ -19,6 +19,7 @@ import (
 
 	"github.com/onmetal/onmetal-api/internal/apis/ipam"
 	"github.com/onmetal/onmetal-api/internal/registry/ipam/prefixallocation"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -44,8 +45,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (PrefixAllocationStorage, 
 		NewListFunc: func() runtime.Object {
 			return &ipam.PrefixAllocationList{}
 		},
-		PredicateFunc:            prefixallocation.MatchPrefixAllocation,
-		DefaultQualifiedResource: ipam.Resource("prefixallocations"),
+		PredicateFunc:             prefixallocation.MatchPrefixAllocation,
+		DefaultQualifiedResource:  ipam.Resource("prefixallocations"),
+		SingularQualifiedResource: ipam.Resource("prefixallocation"),
 
 		CreateStrategy: prefixallocation.Strategy,
 		UpdateStrategy: prefixallocation.Strategy,

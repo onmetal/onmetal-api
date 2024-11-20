@@ -19,6 +19,7 @@ package storage
 import (
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
 	"github.com/onmetal/onmetal-api/internal/registry/networking/loadbalancerrouting"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
@@ -44,8 +45,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (LoadBalancerRoutingStorag
 		NewListFunc: func() runtime.Object {
 			return &networking.LoadBalancerRoutingList{}
 		},
-		PredicateFunc:            loadbalancerrouting.MatchLoadBalancerRouting,
-		DefaultQualifiedResource: networking.Resource("loadbalancerroutings"),
+		PredicateFunc:             loadbalancerrouting.MatchLoadBalancerRouting,
+		DefaultQualifiedResource:  networking.Resource("loadbalancerroutings"),
+		SingularQualifiedResource: networking.Resource("loadbalancerrouting"),
 
 		CreateStrategy: loadbalancerrouting.Strategy,
 		UpdateStrategy: loadbalancerrouting.Strategy,

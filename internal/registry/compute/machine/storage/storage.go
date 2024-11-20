@@ -23,6 +23,7 @@ import (
 	"github.com/onmetal/onmetal-api/internal/apis/compute"
 	"github.com/onmetal/onmetal-api/internal/machinepoollet/client"
 	"github.com/onmetal/onmetal-api/internal/registry/compute/machine"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/proxy"
@@ -51,8 +52,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter, k client.ConnectionInfoGet
 		NewListFunc: func() runtime.Object {
 			return &compute.MachineList{}
 		},
-		PredicateFunc:            machine.MatchMachine,
-		DefaultQualifiedResource: compute.Resource("machines"),
+		PredicateFunc:             machine.MatchMachine,
+		DefaultQualifiedResource:  compute.Resource("machines"),
+		SingularQualifiedResource: compute.Resource("machine"),
 
 		CreateStrategy: machine.Strategy,
 		UpdateStrategy: machine.Strategy,

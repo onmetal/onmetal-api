@@ -19,6 +19,7 @@ import (
 
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
 	"github.com/onmetal/onmetal-api/internal/registry/networking/networkinterface"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -48,8 +49,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (NetworkInterfaceStorage, 
 		NewListFunc: func() runtime.Object {
 			return &networking.NetworkInterfaceList{}
 		},
-		PredicateFunc:            networkinterface.MatchNetworkInterface,
-		DefaultQualifiedResource: networking.Resource("networkinterfaces"),
+		PredicateFunc:             networkinterface.MatchNetworkInterface,
+		DefaultQualifiedResource:  networking.Resource("networkinterfaces"),
+		SingularQualifiedResource: networking.Resource("networkinterface"),
 
 		CreateStrategy: networkinterface.Strategy,
 		UpdateStrategy: networkinterface.Strategy,

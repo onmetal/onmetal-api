@@ -21,6 +21,7 @@ import (
 
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
 	"github.com/onmetal/onmetal-api/internal/registry/networking/loadbalancer"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -50,8 +51,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (LoadBalancerStorage, erro
 		NewListFunc: func() runtime.Object {
 			return &networking.LoadBalancerList{}
 		},
-		PredicateFunc:            loadbalancer.MatchLoadBalancer,
-		DefaultQualifiedResource: networking.Resource("loadbalanceres"),
+		PredicateFunc:             loadbalancer.MatchLoadBalancer,
+		DefaultQualifiedResource:  networking.Resource("loadbalanceres"),
+		SingularQualifiedResource: networking.Resource("loadbalancer"),
 
 		CreateStrategy: loadbalancer.Strategy,
 		UpdateStrategy: loadbalancer.Strategy,

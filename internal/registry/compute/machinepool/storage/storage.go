@@ -23,6 +23,7 @@ import (
 	"github.com/onmetal/onmetal-api/internal/apis/compute/v1alpha1"
 	"github.com/onmetal/onmetal-api/internal/machinepoollet/client"
 	"github.com/onmetal/onmetal-api/internal/registry/compute/machinepool"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -49,8 +50,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter, machinePoolletClientConfig
 		NewListFunc: func() runtime.Object {
 			return &compute.MachinePoolList{}
 		},
-		PredicateFunc:            machinepool.MatchMachinePool,
-		DefaultQualifiedResource: compute.Resource("machinepools"),
+		PredicateFunc:             machinepool.MatchMachinePool,
+		DefaultQualifiedResource:  compute.Resource("machinepools"),
+		SingularQualifiedResource: compute.Resource("machinepool"),
 
 		CreateStrategy: machinepool.Strategy,
 		UpdateStrategy: machinepool.Strategy,

@@ -21,6 +21,7 @@ import (
 
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
 	"github.com/onmetal/onmetal-api/internal/registry/networking/natgateway"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -50,8 +51,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (NATGatewayStorage, error)
 		NewListFunc: func() runtime.Object {
 			return &networking.NATGatewayList{}
 		},
-		PredicateFunc:            natgateway.MatchNATGateway,
-		DefaultQualifiedResource: networking.Resource("natgatewayes"),
+		PredicateFunc:             natgateway.MatchNATGateway,
+		DefaultQualifiedResource:  networking.Resource("natgatewayes"),
+		SingularQualifiedResource: networking.Resource("natgateway"),
 
 		CreateStrategy: natgateway.Strategy,
 		UpdateStrategy: natgateway.Strategy,
