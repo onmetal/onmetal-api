@@ -17,6 +17,7 @@ package storage
 import (
 	"github.com/onmetal/onmetal-api/internal/apis/storage"
 	registryvolumeclass "github.com/onmetal/onmetal-api/internal/registry/storage/volumeclass"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
@@ -38,8 +39,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (VolumeClassStorage, error
 		NewListFunc: func() runtime.Object {
 			return &storage.VolumeClassList{}
 		},
-		PredicateFunc:            registryvolumeclass.MatchVolumeClass,
-		DefaultQualifiedResource: storage.Resource("volumeclasses"),
+		PredicateFunc:             registryvolumeclass.MatchVolumeClass,
+		DefaultQualifiedResource:  storage.Resource("volumeclasses"),
+		SingularQualifiedResource: storage.Resource("volumeclass"),
 
 		CreateStrategy: registryvolumeclass.Strategy,
 		UpdateStrategy: registryvolumeclass.Strategy,

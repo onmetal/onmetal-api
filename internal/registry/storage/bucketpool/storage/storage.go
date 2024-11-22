@@ -19,6 +19,7 @@ import (
 
 	"github.com/onmetal/onmetal-api/internal/apis/storage"
 	"github.com/onmetal/onmetal-api/internal/registry/storage/bucketpool"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -44,8 +45,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (BucketPoolStorage, error)
 		NewListFunc: func() runtime.Object {
 			return &storage.BucketPoolList{}
 		},
-		PredicateFunc:            bucketpool.MatchBucketPool,
-		DefaultQualifiedResource: storage.Resource("bucketpools"),
+		PredicateFunc:             bucketpool.MatchBucketPool,
+		DefaultQualifiedResource:  storage.Resource("bucketpools"),
+		SingularQualifiedResource: storage.Resource("bucketpool"),
 
 		CreateStrategy: bucketpool.Strategy,
 		UpdateStrategy: bucketpool.Strategy,

@@ -520,7 +520,6 @@ func (r *VolumeReconciler) updateStatus(ctx context.Context, log logr.Logger, vo
 				VolumeAttributes: oriAccess.Attributes,
 			}
 		}
-
 	}
 
 	base := volume.DeepCopy()

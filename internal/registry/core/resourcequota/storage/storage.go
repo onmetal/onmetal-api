@@ -19,6 +19,7 @@ import (
 
 	"github.com/onmetal/onmetal-api/internal/apis/core"
 	"github.com/onmetal/onmetal-api/internal/registry/core/resourcequota"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -44,8 +45,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (ResourceQuotaStorage, err
 		NewListFunc: func() runtime.Object {
 			return &core.ResourceQuotaList{}
 		},
-		PredicateFunc:            resourcequota.MatchResourceQuota,
-		DefaultQualifiedResource: core.Resource("resourcequotas"),
+		PredicateFunc:             resourcequota.MatchResourceQuota,
+		DefaultQualifiedResource:  core.Resource("resourcequotas"),
+		SingularQualifiedResource: core.Resource("resourcequota"),
 
 		CreateStrategy: resourcequota.Strategy,
 		UpdateStrategy: resourcequota.Strategy,

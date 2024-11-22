@@ -19,6 +19,7 @@ import (
 
 	"github.com/onmetal/onmetal-api/internal/apis/storage"
 	"github.com/onmetal/onmetal-api/internal/registry/storage/volume"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -45,8 +46,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (VolumeStorage, error) {
 		NewListFunc: func() runtime.Object {
 			return &storage.VolumeList{}
 		},
-		PredicateFunc:            volume.MatchVolume,
-		DefaultQualifiedResource: storage.Resource("volumes"),
+		PredicateFunc:             volume.MatchVolume,
+		DefaultQualifiedResource:  storage.Resource("volumes"),
+		SingularQualifiedResource: storage.Resource("volume"),
 
 		CreateStrategy: volume.Strategy,
 		UpdateStrategy: volume.Strategy,

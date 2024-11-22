@@ -19,6 +19,7 @@ package storage
 import (
 	"github.com/onmetal/onmetal-api/internal/apis/networking"
 	"github.com/onmetal/onmetal-api/internal/registry/networking/natgatewayrouting"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
@@ -44,8 +45,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (NATGatewayRoutingStorage,
 		NewListFunc: func() runtime.Object {
 			return &networking.NATGatewayRoutingList{}
 		},
-		PredicateFunc:            natgatewayrouting.MatchNATGatewayRouting,
-		DefaultQualifiedResource: networking.Resource("natgatewayroutings"),
+		PredicateFunc:             natgatewayrouting.MatchNATGatewayRouting,
+		DefaultQualifiedResource:  networking.Resource("natgatewayroutings"),
+		SingularQualifiedResource: networking.Resource("natgatewayrouting"),
 
 		CreateStrategy: natgatewayrouting.Strategy,
 		UpdateStrategy: natgatewayrouting.Strategy,

@@ -17,6 +17,7 @@ package storage
 import (
 	"github.com/onmetal/onmetal-api/internal/apis/storage"
 	registrybucketclass "github.com/onmetal/onmetal-api/internal/registry/storage/bucketclass"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
@@ -38,8 +39,9 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) (BucketClassStorage, error
 		NewListFunc: func() runtime.Object {
 			return &storage.BucketClassList{}
 		},
-		PredicateFunc:            registrybucketclass.MatchBucketClass,
-		DefaultQualifiedResource: storage.Resource("bucketclasses"),
+		PredicateFunc:             registrybucketclass.MatchBucketClass,
+		DefaultQualifiedResource:  storage.Resource("bucketclasses"),
+		SingularQualifiedResource: storage.Resource("bucketclass"),
 
 		CreateStrategy: registrybucketclass.Strategy,
 		UpdateStrategy: registrybucketclass.Strategy,
