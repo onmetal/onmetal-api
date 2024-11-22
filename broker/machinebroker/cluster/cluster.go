@@ -46,6 +46,7 @@ type Cluster interface {
 	Namespace() string
 	Config() *rest.Config
 	Client() client.Client
+	UncachedClient() client.Client
 	Scheme() *runtime.Scheme
 	IDGen() idgen.IDGen
 	MachinePoolName() string
@@ -56,6 +57,7 @@ type cluster struct {
 	namespace           string
 	config              *rest.Config
 	client              client.Client
+	uncachedClient      client.Client
 	scheme              *runtime.Scheme
 	idGen               idgen.IDGen
 	machinePoolName     string
@@ -82,6 +84,7 @@ func New(ctx context.Context, cfg *rest.Config, namespace string, opts Options) 
 		DefaultNamespaces: map[string]cache.Config{
 			namespace: {},
 		},
+		ReaderFailOnMissingInformer: true,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("error creating cache: %w", err)
@@ -105,13 +108,22 @@ func New(ctx context.Context, cfg *rest.Config, namespace string, opts Options) 
 		},
 	})
 	if err != nil {
-		return nil, fmt.Errorf("error creating client: %w", err)
+		return nil, fmt.Errorf("error creating cached client: %w", err)
+	}
+
+	// Create the uncached client for writes
+	uncachedClient, err := client.New(cfg, client.Options{
+		Scheme: scheme,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("error creating uncached client: %w", err)
 	}
 
 	return &cluster{
 		namespace:           namespace,
 		config:              cfg,
 		client:              c,
+		uncachedClient:      uncachedClient,
 		scheme:              scheme,
 		idGen:               opts.IDGen,
 		machinePoolName:     opts.MachinePoolName,
@@ -129,6 +141,10 @@ func (c *cluster) Config() *rest.Config {
 
 func (c *cluster) Client() client.Client {
 	return c.client
+}
+
+func (c *cluster) UncachedClient() client.Client {
+	return c.uncachedClient
 }
 
 func (c *cluster) Scheme() *runtime.Scheme {

@@ -296,7 +296,7 @@ func (m *LoadBalancers) Delete(
 	if err := m.removeLoadBalancerRoutingDestination(ctx, loadBalancerRouting, obj); err != nil {
 		errs = append(errs, fmt.Errorf("error removing load balancer routing destination: %w", err))
 	}
-	if err := apiutils.DeleteAndGarbageCollect(ctx, m.cluster.Client(), loadBalancer, obj.GetName()); err != nil {
+	if err := apiutils.DeleteAndGarbageCollect(ctx, m.cluster.UncachedClient(), loadBalancer, obj.GetName()); err != nil {
 		errs = append(errs, fmt.Errorf("error deleting / garbage collecting: %w", err))
 	}
 

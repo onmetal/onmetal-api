@@ -336,6 +336,11 @@ func PatchCreatedWithDependent(ctx context.Context, c client.Client, o client.Ob
 }
 
 func DeleteAndGarbageCollect(ctx context.Context, c client.Client, o client.Object, dependent string) error {
+	// Fetch the latest state using the uncached client
+	if err := c.Get(ctx, client.ObjectKeyFromObject(o), o); err != nil {
+		return fmt.Errorf("error fetching object from API server: %w", err)
+	}
+
 	dependents, err := GetDependents(o)
 	if err != nil {
 		return fmt.Errorf("error getting dependents: %w", err)
@@ -360,9 +365,6 @@ func DeleteAndGarbageCollect(ctx context.Context, c client.Client, o client.Obje
 		return nil
 	}
 
-	if !updated {
-		return nil
-	}
 	base := o.DeepCopyObject().(client.Object)
 	if err := SetDependents(o, dependents); err != nil {
 		return fmt.Errorf("error setting dependents: %w", err)

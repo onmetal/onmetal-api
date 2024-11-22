@@ -184,5 +184,5 @@ func (m *Networks) Delete(ctx context.Context, handle, id string) error {
 		return nil
 	}
 
-	return apiutils.DeleteAndGarbageCollect(ctx, m.cluster.Client(), network, id)
+	return apiutils.DeleteAndGarbageCollect(ctx, m.cluster.UncachedClient(), network, id)
 }

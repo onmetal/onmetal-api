@@ -285,7 +285,7 @@ func (m *NATGateways) Delete(
 	if err := m.removeNATGatewayRoutingDestination(ctx, natGatewayRouting, networkInterface); err != nil {
 		errs = append(errs, fmt.Errorf("error removing nat gateway routing destination: %w", err))
 	}
-	if err := apiutils.DeleteAndGarbageCollect(ctx, m.cluster.Client(), natGateway, networkInterface.Name); err != nil {
+	if err := apiutils.DeleteAndGarbageCollect(ctx, m.cluster.UncachedClient(), natGateway, networkInterface.Name); err != nil {
 		errs = append(errs, fmt.Errorf("error deleting / garbage collecting: %w", err))
 	}
 
