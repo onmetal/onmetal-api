@@ -419,15 +419,6 @@ func (r *MachineReconciler) oriMachineAnnotations(machine *computev1alpha1.Machi
 		machinepoolletv1alpha1.MachineGenerationAnnotation: strconv.FormatInt(machine.Generation, 10),
 	}
 
-	for name, fieldPath := range r.DownwardAPIAnnotations {
-		value, err := fieldpath.ExtractFieldPathAsString(machine, fieldPath)
-		if err != nil {
-			return nil, fmt.Errorf("error extracting downward api annotation %q: %w", name, err)
-		}
-
-		annotations[machinepoolletv1alpha1.DownwardAPIAnnotation(name)] = value
-	}
-
 	return annotations, nil
 }
 
@@ -611,13 +602,23 @@ func (r *MachineReconciler) updateORIAnnotations(ctx context.Context, log logr.L
 
 	actualAnnotations := oriMachine.Metadata.Annotations
 
-	if !maps.Equal(desiredAnnotations, actualAnnotations) {
+	desiredLabels, err := r.oriMachineLabels(machine)
+	if err != nil {
+		return fmt.Errorf("error getting ori machine labels: %w", err)
+	}
+
+	actualLabels := oriMachine.Metadata.Labels
+
+	if maps.Equal(desiredAnnotations, actualAnnotations) && maps.Equal(desiredLabels, actualLabels) {
 		return nil
 	}
 
+	oriMachine.Metadata.Labels = desiredLabels
+	oriMachine.Metadata.Annotations = desiredAnnotations
+
 	if _, err := r.MachineRuntime.UpdateMachineAnnotations(ctx, &ori.UpdateMachineAnnotationsRequest{
-		MachineId:   oriMachine.Metadata.Id,
-		Annotations: desiredAnnotations,
+		MachineId: oriMachine.Metadata.Id,
+		Metadata:  oriMachine.Metadata,
 	}); err != nil {
 		return fmt.Errorf("error updating machine annotations: %w", err)
 	}

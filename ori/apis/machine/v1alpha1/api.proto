@@ -273,7 +273,7 @@ message DeleteMachineResponse {
 
 message UpdateMachineAnnotationsRequest {
   string machine_id = 1;
-  map<string, string> annotations = 2;
+  meta.v1alpha1.ObjectMetadata metadata = 2;
 }
 
 message UpdateMachineAnnotationsResponse {

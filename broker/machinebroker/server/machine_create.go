@@ -18,6 +18,7 @@ import (
 	"context"
 	"fmt"
 	"math/big"
+	"strings"
 
 	"github.com/go-logr/logr"
 	commonv1alpha1 "github.com/onmetal/onmetal-api/api/common/v1alpha1"
@@ -281,6 +282,30 @@ func (s *Server) CreateMachine(ctx context.Context, req *ori.CreateMachineReques
 	cfg, err := s.getOnmetalMachineConfig(req.Machine)
 	if err != nil {
 		return nil, fmt.Errorf("error getting onmetal machine config: %w", err)
+	}
+
+	labels := map[string]string{}
+	for key := range cfg.Machine.Labels {
+		if strings.HasPrefix(key, machinepoolletv1alpha1.DownwardAPIPrefix) {
+			labels[key] = cfg.Machine.Labels[key]
+		}
+	}
+
+	if len(labels) > 0 {
+		log.V(1).Info("Check if onmetal machine exists", "Labels", labels)
+		machineList := &computev1alpha1.MachineList{}
+		err = s.cluster.UncachedClient().List(ctx, machineList, client.InNamespace(s.cluster.Namespace()), client.MatchingLabels(labels))
+		if err != nil {
+			return nil, fmt.Errorf("error listing onmetal machines: %w", err)
+		}
+
+		if len(machineList.Items) > 0 {
+			var machineNames []string
+			for _, machine := range machineList.Items {
+				machineNames = append(machineNames, machine.Name)
+			}
+			return nil, fmt.Errorf("error found %d already existing onmetal machines: %s", len(machineList.Items), strings.Join(machineNames, ", "))
+		}
 	}
 
 	log.V(1).Info("Creating onmetal machine")

@@ -213,7 +213,8 @@ func (r *FakeRuntimeService) UpdateMachineAnnotations(ctx context.Context, req *
 		return nil, status.Errorf(codes.NotFound, "machine %q not found", machineID)
 	}
 
-	machine.Metadata.Annotations = req.Annotations
+	machine.Metadata.Annotations = req.Metadata.Annotations
+	machine.Metadata.Labels = req.Metadata.Labels
 	return &ori.UpdateMachineAnnotationsResponse{}, nil
 }
 

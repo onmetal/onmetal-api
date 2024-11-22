@@ -84,7 +84,6 @@ func New(ctx context.Context, cfg *rest.Config, namespace string, opts Options) 
 		DefaultNamespaces: map[string]cache.Config{
 			namespace: {},
 		},
-		ReaderFailOnMissingInformer: true,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("error creating cache: %w", err)
