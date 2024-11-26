@@ -4,7 +4,7 @@ go 1.21
 toolchain go1.22.9
 
 require (
-	github.com/bits-and-blooms/bitset v1.15.0
+	github.com/bits-and-blooms/bitset v1.17.0
 	github.com/blang/semver/v4 v4.0.0
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-logr/logr v1.4.2
