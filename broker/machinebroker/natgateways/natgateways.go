@@ -75,7 +75,7 @@ func (m *NATGateways) filterNATGateways(natGateways []networkingv1alpha1.NATGate
 
 func (m *NATGateways) getNATGatewayByKey(ctx context.Context, key natGatewayKey) (*networkingv1alpha1.NATGateway, *networkingv1alpha1.NATGatewayRouting, bool, error) {
 	natGatewayList := &networkingv1alpha1.NATGatewayList{}
-	if err := m.cluster.Client().List(ctx, natGatewayList,
+	if err := m.cluster.UncachedClient().List(ctx, natGatewayList,
 		client.InNamespace(m.cluster.Namespace()),
 		client.MatchingLabels{
 			machinebrokerv1alpha1.ManagerLabel:       machinebrokerv1alpha1.MachineBrokerManager,
@@ -95,7 +95,7 @@ func (m *NATGateways) getNATGatewayByKey(ctx context.Context, key natGatewayKey)
 	case 1:
 		natGateway := natGateways[0]
 		natGatewayRouting := &networkingv1alpha1.NATGatewayRouting{}
-		if err := m.cluster.Client().Get(ctx, client.ObjectKeyFromObject(&natGateway), natGatewayRouting); err != nil {
+		if err := m.cluster.UncachedClient().Get(ctx, client.ObjectKeyFromObject(&natGateway), natGatewayRouting); err != nil {
 			return nil, nil, false, fmt.Errorf("error getting nat gateway routing: %w", err)
 		}
 		return &natGateway, natGatewayRouting, true, nil

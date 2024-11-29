@@ -81,7 +81,7 @@ func (m *LoadBalancers) filterLoadBalancers(
 
 func (m *LoadBalancers) getLoadBalancerByKey(ctx context.Context, key loadBalancerKey) (*networkingv1alpha1.LoadBalancer, *networkingv1alpha1.LoadBalancerRouting, bool, error) {
 	loadBalancerList := &networkingv1alpha1.LoadBalancerList{}
-	if err := m.cluster.Client().List(ctx, loadBalancerList,
+	if err := m.cluster.UncachedClient().List(ctx, loadBalancerList,
 		client.InNamespace(m.cluster.Namespace()),
 		client.MatchingLabels{
 			machinebrokerv1alpha1.ManagerLabel:          machinebrokerv1alpha1.MachineBrokerManager,
@@ -105,7 +105,7 @@ func (m *LoadBalancers) getLoadBalancerByKey(ctx context.Context, key loadBalanc
 		}
 		loadBalancer := loadBalancers[0]
 		loadBalancerRouting := &networkingv1alpha1.LoadBalancerRouting{}
-		if err := m.cluster.Client().Get(ctx, client.ObjectKeyFromObject(&loadBalancer), loadBalancerRouting); err != nil {
+		if err := m.cluster.UncachedClient().Get(ctx, client.ObjectKeyFromObject(&loadBalancer), loadBalancerRouting); err != nil {
 			return nil, nil, false, fmt.Errorf("error getting load balancer routing: %w", err)
 		}
 		return &loadBalancer, loadBalancerRouting, true, nil
