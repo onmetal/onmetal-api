@@ -17,6 +17,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/go-logr/logr"
 	corev1alpha1 "github.com/onmetal/onmetal-api/api/core/v1alpha1"
@@ -70,6 +71,7 @@ func (s *Server) getOnmetalVolumeConfig(_ context.Context, volume *ori.Volume) (
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: s.namespace,
 			Name:      s.idGen.Generate(),
+			Labels:    volume.Metadata.Labels,
 		},
 		Spec: storagev1alpha1.VolumeSpec{
 			VolumeClassRef:     &corev1.LocalObjectReference{Name: volume.Spec.Class},
@@ -109,6 +111,23 @@ func (s *Server) createOnmetalVolume(ctx context.Context, log logr.Logger, volum
 			}
 			return nil
 		})
+	}
+
+	if len(volume.Volume.Labels) > 0 {
+		log.V(1).Info("Check if onmetal volume exists", "Labels", volume.Volume.Labels)
+		volumeList := &storagev1alpha1.VolumeList{}
+		err := s.uncachedClient.List(ctx, volumeList, client.InNamespace(s.namespace), client.MatchingLabels(volume.Volume.Labels))
+		if err != nil {
+			return fmt.Errorf("error listing onmetal volumes: %w", err)
+		}
+
+		if len(volumeList.Items) > 0 {
+			var volumeNames []string
+			for _, volume := range volumeList.Items {
+				volumeNames = append(volumeNames, volume.Name)
+			}
+			return fmt.Errorf("error found %d already existing onmetal volumes: %s", len(volumeList.Items), strings.Join(volumeNames, ", "))
+		}
 	}
 
 	log.V(1).Info("Creating onmetal volume")

@@ -54,8 +54,9 @@ func init() {
 }
 
 type Server struct {
-	client client.Client
-	idGen  idgen.IDGen
+	client         client.Client
+	uncachedClient client.Client
+	idGen          idgen.IDGen
 
 	namespace          string
 	volumePoolName     string
@@ -139,8 +140,17 @@ func New(ctx context.Context, cfg *rest.Config, opts Options) (*Server, error) {
 		return nil, fmt.Errorf("error creating client: %w", err)
 	}
 
+	// Create the uncached client for writes
+	uncachedClient, err := client.New(cfg, client.Options{
+		Scheme: scheme,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("error creating uncached client: %w", err)
+	}
+
 	return &Server{
 		client:             c,
+		uncachedClient:     uncachedClient,
 		idGen:              opts.IDGen,
 		namespace:          opts.Namespace,
 		volumePoolName:     opts.VolumePoolName,
