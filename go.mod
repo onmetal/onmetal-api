@@ -20,11 +20,11 @@ require (
 	golang.org/x/sync v0.10.0
 	golang.org/x/sys v0.29.0
 	google.golang.org/grpc v1.69.4
-	k8s.io/api v0.32.0
-	k8s.io/apimachinery v0.32.0
+	k8s.io/api v0.32.1
+	k8s.io/apimachinery v0.32.1
 	k8s.io/apiserver v0.32.0
-	k8s.io/client-go v0.32.0
-	k8s.io/component-base v0.32.0
+	k8s.io/client-go v0.32.1
+	k8s.io/component-base v0.32.1
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kube-aggregator v0.32.0
 	k8s.io/kube-openapi v0.0.0-20241105132330-32ad38e42d3f
