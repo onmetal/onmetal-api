@@ -9,7 +9,7 @@ require (
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-logr/logr v1.4.2
 	github.com/gogo/protobuf v1.3.2
-	github.com/google/go-cmp v0.6.0
+	github.com/google/go-cmp v0.7.0
 	github.com/onmetal/controller-utils v0.8.3
 	github.com/onsi/ginkgo/v2 v2.22.2
 	github.com/onsi/gomega v1.36.2
