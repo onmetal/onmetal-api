@@ -1,6 +1,7 @@
 module github.com/onmetal/onmetal-api
 
-go 1.21
+go 1.24.0
+
 toolchain go1.24.1
 
 require (
@@ -19,7 +20,7 @@ require (
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56
 	golang.org/x/sync v0.14.0
 	golang.org/x/sys v0.33.0
-	google.golang.org/grpc v1.72.0
+	google.golang.org/grpc v1.72.1
 	k8s.io/api v0.33.0
 	k8s.io/apimachinery v0.33.0
 	k8s.io/apiserver v0.33.0
