@@ -20,7 +20,7 @@ require (
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56
 	golang.org/x/sync v0.14.0
 	golang.org/x/sys v0.33.0
-	google.golang.org/grpc v1.72.1
+	google.golang.org/grpc v1.72.2
 	k8s.io/api v0.33.1
 	k8s.io/apimachinery v0.33.1
 	k8s.io/apiserver v0.33.1
