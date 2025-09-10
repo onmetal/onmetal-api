@@ -22,7 +22,7 @@ require (
 	golang.org/x/sys v0.36.0
 	google.golang.org/grpc v1.75.0
 	k8s.io/api v0.34.0
-	k8s.io/apimachinery v0.34.0
+	k8s.io/apimachinery v0.34.1
 	k8s.io/apiserver v0.34.0
 	k8s.io/client-go v0.34.0
 	k8s.io/component-base v0.34.0
