@@ -81,7 +81,7 @@ func Run(ctx context.Context, streams clicommon.Streams, client ori.MachineRunti
 		return err
 	}
 
-	if _, err := client.AttachVolume(ctx, &ori.AttachVolumeRequest{Volume: volume}); err != nil {
+	if _, err := client.AttachVolume(ctx, &ori.AttachVolumeRequest{Volume: volume, MachineId: opts.MachineID}); err != nil {
 		return err
 	}
 
