@@ -3,7 +3,7 @@ module github.com/onmetal/onmetal-api
 go 1.26.0
 
 require (
-	github.com/bits-and-blooms/bitset v1.24.4
+	github.com/bits-and-blooms/bitset v1.24.5
 	github.com/blang/semver/v4 v4.0.0
 	github.com/go-chi/chi/v5 v5.3.1
 	github.com/go-logr/logr v1.4.3
